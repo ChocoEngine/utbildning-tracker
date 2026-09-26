@@ -44,7 +44,7 @@ internal fun TodayScreen(onSettings: () -> Unit, repository: TrackerRepository, 
     val scope = rememberCoroutineScope()
     var error by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().testTag("screen_today")) {
-        AppHeader(title = stringResource(R.string.nav_today), onSettings = onSettings)
+        AppHeader(title = "", onSettings = onSettings)
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
         TodayContent(sessions, now, ZoneId.systemDefault(), locale, onSession, onSkip = { id ->
             scope.launch { try { repository.setSessionResult(id, SessionResult.SKIPPED); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } }

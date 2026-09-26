@@ -13,13 +13,15 @@ import com.utbildning.tracker.domain.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 data class CourseDraft(
     val id: String? = null, val name: String = "", val category: String = "",
     val color: Int = 0, val mode: CourseMode = CourseMode.SCHEDULED,
     val completed: Boolean = false, val topics: List<EditableTopic> = emptyList(),
     val text: String = "", val editingText: String? = null, val topicsChanged: Boolean = false,
-    val paused: Boolean = false,
+    val paused: Boolean = false, val modeChosen: Boolean = false,
 )
 
 internal class CoursesViewModel(private val repository: TrackerRepository) : ViewModel() {
@@ -34,6 +36,9 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     var deleteCategory by mutableStateOf<CategoryEntity?>(null); private set
     var lifecycleAction by mutableStateOf<String?>(null); private set
     var completionOffer by mutableStateOf(false); private set
+    var creating by mutableStateOf(false); private set
+    private val writes = Mutex()
+    private var pendingWrites = 0
     private var sessions: List<SessionEntity> = emptyList()
     private var topicProgress = emptyMap<String, Pair<Int, Int>>()
     private var detailJob: Job? = null
@@ -59,12 +64,13 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     fun open(id: String? = null) = work {
         detailJob?.cancel()
         colors = repository.availableColors(id)
-        if (id == null) draft = CourseDraft(color = colors.firstOrNull() ?: 0)
+        if (id == null) { draft = CourseDraft(color = colors.firstOrNull() ?: 0); creating = true }
         else {
+            creating = false
             val details = repository.getCourseDetails(id) ?: return@work
             val topics = repository.getTopicEditorTopics(id)
             draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
-                details.course.mode, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused)
+                details.course.mode, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused, modeChosen = true)
             detailJob = viewModelScope.launch {
                 repository.observeCourseDetails(id).collect { current ->
                     current ?: return@collect
@@ -77,8 +83,83 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             }
         }
     }
-    fun cancel() { detailJob?.cancel(); draft = null; error = null; completionOffer = false; lifecycleAction = null }
-    fun back() { if (draft?.editingText != null) change { it.copy(editingText = null) } else cancel() }
+    fun cancel() { creating = false; detailJob?.cancel(); draft = null; error = null; completionOffer = false; lifecycleAction = null }
+    fun back() { if (draft?.editingText != null) change { it.copy(editingText = null) } else leave() }
+    fun continueCreation() {
+        val current = draft ?: return
+        error = when {
+            current.name.trim().isEmpty() -> "EMPTY_NAME"
+            current.name.trim().codePointCount(0, current.name.trim().length) > 50 -> "NAME_TOO_LONG"
+            else -> null
+        }
+        if (error == null) { change { it.copy(name = it.name.trim()) }; creating = false }
+    }
+    fun chooseMode(mode: CourseMode) {
+        if (draft?.id != null) return
+        change { it.copy(mode = mode, modeChosen = true) }
+        if (mode == CourseMode.SCHEDULED) work { createDraft() }
+    }
+    private suspend fun createDraft() {
+        val current = draft ?: return
+        if (current.id != null || !current.modeChosen) return
+        val saved = repository.saveCourseForm(name = current.name, colorId = current.color,
+            mode = current.mode, categoryName = current.category, topicText = current.text)
+        attach(saved.id)
+    }
+    private suspend fun attach(id: String) {
+        val details = repository.getCourseDetails(id) ?: return
+        val topics = repository.getTopicEditorTopics(id)
+        draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
+            details.course.mode, details.course.isCompleted, topics, TopicListEditor.editableText(topics),
+            paused = details.course.isPaused, modeChosen = true)
+        colors = repository.availableColors(id)
+        detailJob?.cancel()
+        detailJob = viewModelScope.launch {
+            repository.observeCourseDetails(id).collect { current ->
+                current ?: return@collect
+                val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, current.completions.any { it.topicId == topic.id }) }
+                draft?.takeIf { it.id == id }?.let { old ->
+                    draft = old.copy(topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused,
+                        text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
+                    completionOffer = repository.shouldOfferCompletion(id)
+                }
+            }
+        }
+    }
+    fun commitName() = commitField("name")
+    fun commitCategory() = commitField("category")
+    fun selectCategory(value: String) { change { it.copy(category = value) }; commitCategory() }
+    fun selectColor(value: Int) { change { it.copy(color = value) }; commitField("color") }
+    private fun commitField(field: String) {
+        val snapshot = draft ?: return
+        val id = snapshot.id ?: return
+        work {
+            val current = repository.getCourseDetails(id) ?: return@work
+            val name = if (field == "name") snapshot.name else current.course.name
+            val category = if (field == "category") snapshot.category else current.category?.name.orEmpty()
+            val color = if (field == "color") snapshot.color else current.course.colorId
+            if (name.trim() != current.course.name || category.trim() != current.category?.name.orEmpty() || color != current.course.colorId)
+                repository.updateCourse(id, name, color, category)
+        }
+    }
+    fun leave(after: () -> Unit = {}) {
+        val snapshot = draft
+        work {
+            if (snapshot?.id != null) flush(snapshot)
+            cancel()
+            after()
+        }
+    }
+    fun openSchedule(after: (String) -> Unit) {
+        val snapshot = draft ?: return
+        work { if (snapshot.id != null) { flush(snapshot); after(snapshot.id) } }
+    }
+    private suspend fun flush(snapshot: CourseDraft) {
+        val id = snapshot.id ?: return
+        val current = repository.getCourseDetails(id) ?: return
+        if (snapshot.name.trim() != current.course.name || snapshot.category.trim() != current.category?.name.orEmpty() || snapshot.color != current.course.colorId)
+            repository.updateCourse(id, snapshot.name, snapshot.color, snapshot.category)
+    }
     fun requestLifecycle(action: String) { lifecycleAction = action }
     fun dismissLifecycle() { lifecycleAction = null }
     fun keepActive() = work { draft?.id?.let { repository.dismissCompletionPrompt(it) }; completionOffer = false }
@@ -98,17 +179,18 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     }
     fun applyTopics() {
         val current = draft ?: return
-        try {
-            TopicListEditor.plan(current.editingText.orEmpty(), current.topics)
-            draft = current.copy(text = current.editingText.orEmpty(), editingText = null, topicsChanged = true)
-            error = null
-        } catch (conflict: TopicListConflictException) { error = "lines:${conflict.lineNumbers.joinToString() }" }
-    }
-    fun save() = work {
-        val current = draft ?: return@work
-        repository.saveCourseForm(current.id, current.name, current.color, current.mode, current.category,
-            if (current.id == null || current.topicsChanged || current.editingText != null) current.editingText ?: current.text else null)
-        cancel()
+        val text = current.editingText ?: return
+        work {
+            TopicListEditor.plan(text, current.topics)
+            if (current.id == null) {
+                val saved = repository.saveCourseForm(name = current.name, colorId = current.color,
+                    mode = current.mode, categoryName = current.category, topicText = text)
+                attach(saved.id)
+            } else {
+                repository.saveTopicList(current.id, text)
+                change { it.copy(text = text, editingText = null, topicsChanged = false) }
+            }
+        }
     }
     fun toggle(id: String) = work {
         val current = draft ?: return@work
@@ -125,15 +207,18 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     }
     fun dismissCategoryDelete() { deleteCategory = null }
     private fun work(block: suspend () -> Unit) {
-        if (busy) return
+        pendingWrites++; busy = true
         viewModelScope.launch {
-            busy = true; error = null
-            try { block() }
-            catch (cancel: CancellationException) { throw cancel }
-            catch (conflict: TopicListConflictException) { error = "lines:${conflict.lineNumbers.joinToString()}" }
-            catch (failure: RepositoryException) { error = failure.error.name }
-            catch (_: Exception) { error = "STORAGE" }
-            finally { busy = false }
+            try {
+                writes.withLock {
+                    error = null
+                    try { block() }
+                    catch (cancel: CancellationException) { throw cancel }
+                    catch (conflict: TopicListConflictException) { error = "lines:${conflict.lineNumbers.joinToString()}" }
+                    catch (failure: RepositoryException) { error = failure.error.name }
+                    catch (_: Exception) { error = "STORAGE" }
+                }
+            } finally { pendingWrites--; busy = pendingWrites > 0 }
         }
     }
 }

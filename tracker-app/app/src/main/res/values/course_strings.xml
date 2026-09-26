@@ -35,4 +35,6 @@
     <string name="course_limit">The limit is 10 unfinished courses</string>
     <string name="course_color_unavailable">This color is occupied. Choose another color.</string>
     <string name="course_save_error">Could not save changes. Try again.</string>
+    <string name="course_continue">Continue</string>
+    <string name="course_name_too_long">Use no more than 50 characters</string>
 </resources>

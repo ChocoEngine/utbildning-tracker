@@ -84,6 +84,7 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
             }
         }
     }
+    var courseExit by remember { mutableStateOf<((() -> Unit) -> Unit)?>(null) }
     val entry by navController.currentBackStackEntryAsState()
     val route = entry?.destination?.route ?: MainDestination.Today.route
     Scaffold(
@@ -101,13 +102,14 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
                                 modifier = Modifier.testTag("nav_${destination.route}"),
                                 selected = route == destination.route,
                                 onClick = {
-                                    navController.navigate(destination.route) {
+                                    val navigate = { navController.navigate(destination.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
                                         }
                                         launchSingleTop = true
                                         restoreState = true
-                                    }
+                                    } }
+                                    if (route == "courses" && courseExit != null) courseExit!!(navigate) else navigate()
                                 },
                                 icon = {
                                     Icon(
@@ -149,7 +151,7 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
                 else AppHeader(stringResource(R.string.nav_calendar), onSettings = openSettings)
             }
             composable(MainDestination.Courses.route) {
-                if (repository != null) CoursesScreen(openSettings, repository) { navController.navigate("schedule/$it") }
+                if (repository != null) CoursesScreen(openSettings, repository, onExitHandler = { courseExit = it }) { navController.navigate("schedule/$it") }
                 else AppHeader(stringResource(R.string.nav_courses), onSettings = openSettings)
             }
             composable("settings") {

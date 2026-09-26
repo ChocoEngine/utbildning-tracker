@@ -44,6 +44,19 @@ class CalendarTodayScreenTest {
         compose.onNodeWithTag("session_done_first").assertExists()
     }
 
+    @Test fun calendarShowsOneInkAndPerSessionBarsWithSkippedMarks() {
+        val date = LocalDate.of(2028, 2, 29)
+        val sessions = listOf(
+            lesson("pending", date, 600, result = SessionResult.PENDING).copy(colorIdSnapshot = 0),
+            lesson("done", date, 630, result = SessionResult.DONE).copy(colorIdSnapshot = 1),
+            lesson("skip_a", date, 660, result = SessionResult.SKIPPED).copy(colorIdSnapshot = 2),
+            lesson("skip_b", date, 690, result = SessionResult.SKIPPED).copy(colorIdSnapshot = 3),
+        )
+        compose.setContent { TrackerTheme { CalendarContent(YearMonth.from(date), date, sessions, Locale.ENGLISH, {}, {}, {}, {}) } }
+        val description = compose.onNodeWithTag("calendar_day_${date.toEpochDay()}").fetchSemanticsNode().config.toString()
+        assertTrue(description.contains("Planned")); assertTrue(description.contains("Done")); assertTrue(description.contains("Skipped"))
+    }
+
     @Test fun todayOmitsPastShowsNearestFutureAndQuestionsFollowEndOrNinetyMinutes() {
         val day = LocalDate.of(2026, 9, 26)
         val now = mutableStateOf(Instant.parse("2026-09-26T11:29:00Z"))

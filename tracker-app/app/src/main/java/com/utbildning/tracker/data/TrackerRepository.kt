@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 enum class RepositoryError {
-    EMPTY_NAME, INVALID_COLOR, TOPICS_REQUIRED, INVALID_TOPIC, COURSE_LIMIT,
+    EMPTY_NAME, NAME_TOO_LONG, INVALID_COLOR, TOPICS_REQUIRED, INVALID_TOPIC, COURSE_LIMIT,
     COLOR_UNAVAILABLE, COURSE_NOT_FOUND, CATEGORY_NOT_FOUND, CATEGORY_NAME_CONFLICT,
     COURSE_COMPLETED, CATEGORY_IN_USE, INVALID_SCHEDULE, SCHEDULE_EXISTS, SESSION_NOT_FOUND,
 }
@@ -190,7 +190,7 @@ class TrackerRepository(
         categoryName: String = "",
         topics: List<String> = emptyList(),
     ): CourseEntity = database.withTransaction {
-        val title = checkedName(name)
+        val title = checkedCourseName(name)
         checkColor(colorId)
         val topicTitles = topics.map { it.trim() }
         if (topicTitles.any { it.isEmpty() }) fail(RepositoryError.INVALID_TOPIC)
@@ -220,7 +220,7 @@ class TrackerRepository(
         categoryName: String = "",
     ): CourseEntity = database.withTransaction {
         val existing = dao.getCourse(courseId) ?: fail(RepositoryError.COURSE_NOT_FOUND)
-        val title = checkedName(name)
+        val title = checkedCourseName(name)
         checkColor(colorId)
         if (existing.isCompleted) {
             if (colorId != existing.colorId) fail(RepositoryError.INVALID_COLOR)
@@ -278,6 +278,10 @@ class TrackerRepository(
         if (dao.getColorReservations().any { it.colorId == colorId && it.courseId != courseId }) {
             fail(RepositoryError.COLOR_UNAVAILABLE)
         }
+    }
+
+    private fun checkedCourseName(name: String): String = checkedName(name).also {
+        if (it.codePointCount(0, it.length) > 50) fail(RepositoryError.NAME_TOO_LONG)
     }
 
     private fun checkedName(name: String): String = name.trim().also {

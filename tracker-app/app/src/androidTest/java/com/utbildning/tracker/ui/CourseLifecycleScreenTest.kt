@@ -79,6 +79,24 @@ class CourseLifecycleScreenTest {
         assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
     }
 
+    @Test fun pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse() {
+        val free = repositoryCourseUnscheduled()
+        show(free.id)
+        compose.onNodeWithTag("course_pause").assertDoesNotExist()
+        click("course_cancel")
+        val scheduled = seed()
+        click("course_row_${scheduled.id}")
+        compose.onNodeWithTag("course_pause").assertExists()
+        click("course_pause")
+        clickDialog("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(scheduled.id) }!!.isPaused }
+        assertFalse(runBlocking { dao.getCourse(free.id) }!!.isPaused)
+    }
+
+    private fun repositoryCourseUnscheduled() = runBlocking {
+        repository.createCourse("Free", 1, CourseMode.UNSCHEDULED, topics = listOf("Pointers"))
+    }
+
     @Test fun deletionRequiresConfirmationAndDoesNotTouchOtherCourse() {
         val course = seed()
         val other = runBlocking { repository.createCourse("Other", 1, CourseMode.SCHEDULED) }

@@ -1,6 +1,7 @@
 package com.utbildning.tracker.ui.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,11 +11,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
@@ -80,12 +84,35 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                     val skipped = stringResource(R.string.session_skipped)
                     val planned = stringResource(R.string.session_planned)
                     val description = date.format(DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.FULL).withLocale(locale)) + rows.joinToString(prefix = if (rows.isEmpty()) "" else "; ", separator = "; ") { it.courseNameSnapshot + ": " + when(it.result) { SessionResult.DONE -> done; SessionResult.SKIPPED -> skipped; SessionResult.PENDING -> planned } }
-                    Column(Modifier.weight(1f).height(76.dp).padding(2.dp).background(if (date == selected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp)).clickable { onDay(date) }.semantics { contentDescription = description }.testTag("calendar_day_${date.toEpochDay()}").padding(4.dp)) {
+                    Column(Modifier.weight(1f).height(76.dp).padding(2.dp).background(if (date == selected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp)).clickable { onDay(date) }.semantics(mergeDescendants = false) { contentDescription = description }.testTag("calendar_day_${date.toEpochDay()}").padding(4.dp), horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
                         Text(number.toString(), style = MaterialTheme.typography.bodyMedium)
-                        rows.forEach { session ->
-                            Box(Modifier.fillMaxWidth().height(2.dp).background(CourseColors[session.colorIdSnapshot].copy(alpha = if (session.result == SessionResult.DONE) 1f else .3f), RoundedCornerShape(3.dp)))
+                        if (rows.isNotEmpty()) {
+                            Box(Modifier.fillMaxWidth().height(34.dp).semantics { testTag = "calendar_ink_${date.toEpochDay()}" }, contentAlignment = androidx.compose.ui.Alignment.Center) {
+                                val color = MaterialTheme.colorScheme.onSurface
+                                Canvas(Modifier.fillMaxSize()) {
+                                    val blob = Path().apply {
+                                        moveTo(size.width * .08f, size.height * .48f)
+                                        cubicTo(size.width * .04f, size.height * .18f, size.width * .30f, size.height * .08f, size.width * .48f, size.height * .18f)
+                                        cubicTo(size.width * .72f, size.height * .02f, size.width * .98f, size.height * .22f, size.width * .92f, size.height * .52f)
+                                        cubicTo(size.width * .99f, size.height * .82f, size.width * .68f, size.height * .98f, size.width * .48f, size.height * .84f)
+                                        cubicTo(size.width * .24f, size.height * .98f, size.width * .04f, size.height * .78f, size.width * .08f, size.height * .48f)
+                                        close()
+                                    }
+                                    drawPath(blob, color.copy(alpha = .16f))
+                                }
+                                Column(Modifier.fillMaxWidth(.78f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                    rows.forEach { session ->
+                                        val skippedSession = session.result == SessionResult.SKIPPED
+                                        Box(Modifier.fillMaxWidth().height(4.dp).background(CourseColors[session.colorIdSnapshot].copy(alpha = if (session.result == SessionResult.DONE) 1f else .3f), RoundedCornerShape(4.dp)).testTag("calendar_bar_${session.id}"), contentAlignment = androidx.compose.ui.Alignment.CenterEnd) {
+                                            if (skippedSession) Canvas(Modifier.size(7.dp)) {
+                                                val mark = Path().apply { moveTo(0f, 0f); lineTo(size.width, size.height); moveTo(size.width, 0f); lineTo(0f, size.height) }
+                                                drawPath(mark, color.copy(alpha = .85f), style = Stroke(width = 1.2.dp.toPx()))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        if (rows.any { it.result == SessionResult.SKIPPED }) Text("×", style = MaterialTheme.typography.labelSmall)
                     }
                 }
             } }

@@ -35,4 +35,6 @@
     <string name="course_limit">Достигнут лимит 10 незавершённых курсов</string>
     <string name="course_color_unavailable">Этот цвет уже занят. Выберите другой.</string>
     <string name="course_save_error">Не удалось сохранить изменения. Повторите попытку.</string>
+    <string name="course_continue">Далее</string>
+    <string name="course_name_too_long">Название должно содержать не более 50 символов</string>
 </resources>

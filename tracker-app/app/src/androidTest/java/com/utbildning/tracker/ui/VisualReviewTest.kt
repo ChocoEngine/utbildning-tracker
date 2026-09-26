@@ -70,7 +70,9 @@ class VisualReviewTest {
         val courses = (0..9).map { CourseEntity("course_$it", "$title ${it + 1}", it, CourseMode.SCHEDULED, 1, 1, categoryId = "category") }
         val date = LocalDate.of(2026, 9, 26)
         val sessions = courses.mapIndexed { index, course -> SessionEntity("session_$index", course.id, date.toEpochDay(), 8 * 60 + index * 30,
-            course.name, index, 1, 1, result = SessionResult.entries[index % 3]) }
+            course.name, index, 1, 1, result = when (index) { 0, 3, 6 -> SessionResult.DONE; 1, 4, 7, 9 -> SessionResult.SKIPPED; else -> SessionResult.PENDING }) } +
+            listOf(1, 4, 7).mapIndexed { index, color -> SessionEntity("calendar_extra_$index", "course_${index + 7}", date.toEpochDay(), 13 * 60 + index * 30,
+                "${title} ${index + 8}", color, 1, 1, result = SessionResult.SKIPPED) }
         val scene = mutableIntStateOf(0)
         val names = listOf("course_list", "course_new", "course_edit", "topic_editor", "calendar", "today", "session", "schedule", "guide")
         compose.setContent {

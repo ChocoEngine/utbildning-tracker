@@ -71,6 +71,7 @@ class CourseDraftRecreationTest {
         compose.onNodeWithTag("course_name").performTextReplacement("C draft")
         compose.onNodeWithTag("course_category").performTextReplacement("New category")
         compose.onNodeWithTag("course_category").performClick()
+        click("course_continue")
         click("mode_unscheduled")
         click("topics_edit")
         compose.onNodeWithTag("topics_input").performScrollTo().performTextReplacement("Pointers\nArrays")
@@ -78,14 +79,13 @@ class CourseDraftRecreationTest {
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
         compose.runOnIdle { assertSame(original, ViewModelProvider(compose.activity)[CoursesViewModel::class.java]) }
-        compose.onNodeWithTag("course_name").assertTextContains("C draft")
+        compose.onNodeWithTag("course_title").assertTextContains("C draft")
         compose.onNodeWithTag("course_category").assertTextContains("New category")
         compose.onNodeWithTag("mode_unscheduled").assertIsSelected()
         compose.onNodeWithTag("topics_input").assertTextContains("Pointers\nArrays")
         assertTrue(runBlocking { repository.observeCourses().first() }.isEmpty())
         assertTrue(runBlocking { repository.observeCategories().first() }.isEmpty())
         click("topics_apply")
-        click("course_save")
         compose.waitUntil(5_000) { runBlocking { repository.observeCourses().first() }.size == 1 }
         val saved = runBlocking { repository.observeCourses().first() }.single()
         assertEquals(CourseMode.UNSCHEDULED, saved.mode)
@@ -94,6 +94,7 @@ class CourseDraftRecreationTest {
 
     private fun click(tag: String) {
         compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithTag(tag).performScrollTo().performClick()
+        runCatching { compose.onNodeWithTag(tag).performScrollTo() }
+        compose.onNodeWithTag(tag).performClick()
     }
 }
