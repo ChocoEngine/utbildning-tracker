@@ -1,0 +1,14 @@
+<resources>
+    <string name="session_unmarked">Без отметки</string>
+    <string name="session_choose">Отметь пройденное</string>
+    <string name="session_nothing">Позанимался, но пока ничего не завершил</string>
+    <string name="session_done">Пройдено</string>
+    <string name="session_skipped">Пропущено</string>
+    <string name="session_planned">В плане</string>
+    <string name="session_question">Получилось позаниматься?</string>
+    <string name="session_error">Не удалось сохранить результат. Повторите попытку.</string>
+    <string name="calendar_previous">Предыдущий месяц</string>
+    <string name="calendar_next">Следующий месяц</string>
+    <string name="sessions_empty">Занятий нет</string>
+    <string name="today_next">Далее</string>
+</resources>

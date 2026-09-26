@@ -1,0 +1,77 @@
+<div id="study-today" aria-label="Макет экрана Сегодня">
+ <div class="td-phone">
+  <section class="td-home"><header><div class="td-eyebrow">СУББОТА · 26 СЕНТЯБРЯ</div></header><main><div class="td-today-list" aria-live="polite"></div></main><footer aria-label="Разделы приложения"><span class="td-active" aria-current="page"><i data-lucide="sun" aria-hidden="true"></i>Сегодня</span><span><i data-lucide="calendar-days" aria-hidden="true"></i>Календарь</span><span><i data-lucide="book-open" aria-hidden="true"></i>Курсы</span></footer></section>
+  <section class="td-result" hidden><header><button type="button" class="td-back cursor-interaction"><i data-lucide="arrow-left" aria-hidden="true"></i>Сегодня</button><div class="td-result-date td-eyebrow"></div><h1 class="td-result-course"></h1></header><main><section class="td-question"><h2>Получилось позаниматься?</h2><div class="td-answers"><button type="button" class="td-done cursor-interaction">Пройдено</button><button type="button" class="td-skip cursor-interaction">Пропущено</button></div></section><section class="td-selection" hidden><div class="td-section-head"><h2>Отметь пройденное</h2><span class="td-selected-count"></span></div><div class="td-topics"></div><button type="button" class="td-save cursor-interaction">Позанимался, но пока ничего не завершил</button></section></main></section>
+ </div>
+</div>
+<style>
+#study-today{--td-paper:light-dark(#fcfaf6,#222522);--td-ink:light-dark(#29352e,#eef0e8);--td-muted:light-dark(#697367,#aab5a8);--td-panel:light-dark(#f1efe7,#2e342e);--td-line:light-dark(#e5e5d9,#40483e);--td-green:light-dark(#78ac80,#80bd91);--td-orange:light-dark(#dc9475,#e6a382);--td-purple:light-dark(#9d95cc,#b0a2e2);font-family:ui-rounded,"SF Pro Rounded",system-ui,sans-serif;color:var(--td-ink);padding:12px 0}
+#study-today *{box-sizing:border-box}#study-today [hidden]{display:none!important}
+#study-today .td-phone{max-width:414px;margin:auto;background:var(--td-paper);border:1px solid var(--td-line);border-radius:30px;overflow:hidden}
+#study-today header{padding:28px 24px 18px}
+#study-today .td-eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--td-muted);font-weight:500}
+#study-today h1{font:400 34px/1.2 Georgia,serif;letter-spacing:-1px;margin:10px 0 0}
+#study-today main{padding:0 24px 22px}
+#study-today h2{font-size:16px;font-weight:500;margin:0;letter-spacing:-.2px}
+#study-today button{font:inherit;font-size:12px;color:inherit;background:var(--td-panel);border:0;border-radius:12px;min-height:44px;padding:10px 12px}
+#study-today .td-session{padding:17px 0;border-bottom:1px solid var(--td-line)}
+#study-today .td-session-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;font-size:11px;color:var(--td-muted)}
+#study-today .td-name-row{display:grid;grid-template-columns:22px minmax(0,1fr);gap:11px;align-items:center}
+#study-today .td-blot{width:21px;height:25px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--td-ink);background:color-mix(in srgb,var(--course-color) 23%,var(--td-paper));border-radius:43% 57% 38% 62% / 62% 36% 64% 38%;transform:rotate(-15deg)}
+#study-today .td-blot[data-status=done]{background:var(--course-color)}
+#study-today .td-title{font-size:14px;font-weight:500;line-height:1.5;overflow-wrap:anywhere}
+#study-today .td-prompt{font-size:12px;color:var(--td-muted);margin:15px 0 10px}
+#study-today .td-answers{display:flex;gap:8px}
+#study-today .td-answers button{flex:1}
+#study-today .td-answers button:first-child{background:var(--td-ink);color:var(--td-paper)}
+#study-today .td-inline-action{margin-top:9px;background:none;padding:7px 0;min-height:36px;text-decoration:underline;text-underline-offset:3px;color:var(--td-muted);font-size:11px}
+#study-today .td-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+#study-today .td-section-head>span{font-size:11px;color:var(--td-muted)}
+#study-today .td-empty{padding:22px 0 28px}
+#study-today .td-empty h2{font-family:Georgia,serif;font-size:24px;font-weight:400}
+#study-today .td-empty p{color:var(--td-muted);font-size:13px;line-height:1.6;margin-bottom:0}
+#study-today .td-next{border-top:1px solid var(--td-line);padding-top:18px;font-size:13px;line-height:1.7}
+#study-today .td-next>span{display:block;color:var(--td-muted);font-size:11px;margin-bottom:7px}
+#study-today footer{display:flex;justify-content:space-around;padding:14px 10px 20px;border-top:1px solid var(--td-line);font-size:11px;color:var(--td-muted)}
+#study-today footer span{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 15px}
+#study-today footer .td-active{background:var(--td-panel);border-radius:16px;color:var(--td-ink)}
+#study-today footer svg{width:19px;height:19px}
+#study-today .td-back{display:flex;align-items:center;gap:7px;background:none;padding:0;margin-bottom:18px;color:var(--td-muted)}
+#study-today .td-back svg{width:16px;height:16px}
+#study-today .td-result h1{font-size:22px;line-height:1.3;letter-spacing:-.6px}
+#study-today .td-question h2{margin:12px 0 18px}
+#study-today .td-topics{max-height:340px;overflow:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--td-line) transparent}
+#study-today .td-topic{display:grid;grid-template-columns:20px minmax(0,1fr);gap:9px;width:100%;padding:12px 0;text-align:left;border-radius:0;background:none;border-bottom:1px solid var(--td-line);font-size:13px;line-height:1.5}
+#study-today .td-topic>span:first-child{font-size:12px;text-align:center;color:var(--td-muted)}
+#study-today .td-topic>span:last-child{overflow-wrap:anywhere}
+#study-today .td-topic[aria-pressed=true]{background:var(--td-panel)}
+#study-today .td-save{width:100%;background:var(--td-ink);color:var(--td-paper);margin-top:20px;line-height:1.5;padding:12px}
+</style>
+<script>
+(()=>{
+const root=document.getElementById('study-today'),$=q=>root.querySelector(q);
+const cppTopics=['Лекция - Введение в C++','Семинар - Введение в C++','Семинар - Устройство памяти','Лекция - Классы','Лекция - Шаблоны 1','Семинар - Шаблоны 1','Лекция - Наследование','Семинар - Владение и управление памятью','Семинар - Шаблоны, вывод типов и семантика значений в C++','Лекция - Исключения','Лекция - Обзор STL','Семинар - Scheme','Лекция - Расположение объектов в памяти и время жизни','Семинар - Расположение объектов в памяти и время жизни','Семинар - Компиляция','Лекция - Компиляция','Лекция - Clang + LLVM','Лекция - Строки','Лекция - C++ 26. Обзор','Лекция - Cide review'];
+const courses=[{name:'Лекции и семинары по C++',color:'var(--td-green)',topics:cppTopics,baseline:[0,1]},{name:'Практика по C',color:'var(--td-orange)',topics:[],baseline:[]},{name:'Шведский · A2',color:'var(--td-purple)',topics:['Порядок слов','Прошедшее время','Разговорная практика'],baseline:[]}];
+const entries=[{id:1,course:0,date:'26 сентября',time:'11:00',today:true,due:true,status:'pending',topics:[]},{id:2,course:1,date:'26 сентября',time:'19:00',today:true,due:false,status:'pending',topics:[]},{id:3,course:2,date:'26 сентября',time:'20:30',today:true,due:false,status:'pending',topics:[]},{id:4,course:1,date:'25 сентября',time:'19:00',today:false,due:true,status:'pending',topics:[]},{id:5,course:0,date:'24 сентября',time:'19:00',today:false,due:true,status:'pending',topics:[]}];
+const design={scene:'several'};let active=null,step='question',selected=[];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
+function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{design,results:entries.map(e=>({course:courses[e.course].name,date:e.date,status:e.status,topics:e.topics.map(i=>courses[e.course].topics[i])}))},privateContent:{entries,active,step,selected}}).catch(()=>{});}
+function blot(e){return '<span class="td-blot" data-status="'+e.status+'" aria-hidden="true">'+(e.status==='skip'?'×':'')+'</span>';}
+function render(){
+ entries.forEach(e=>{if(!e.today&&e.status==='pending'){e.status='skip';e.topics=[];}});
+ $('.td-home').hidden=active!==null;$('.td-result').hidden=active===null;
+ const today=entries.filter(e=>e.today&&(design.scene==='several'||design.scene==='single'&&e.id===1));
+ $('.td-today-list').innerHTML=today.length?today.map(e=>'<article class="td-session" style="--course-color:'+courses[e.course].color+'"><div class="td-session-head"><span>'+e.time+'</span><span>'+({pending:'В плане',done:'Пройдено',skip:'Пропущено'}[e.status])+'</span></div><div class="td-name-row">'+blot(e)+'<div class="td-title">'+esc(courses[e.course].name)+'</div></div>'+(e.status==='pending'&&e.due?'<p class="td-prompt">Получилось позаниматься?</p><div class="td-answers"><button type="button" data-done="'+e.id+'" class="cursor-interaction">Пройдено</button><button type="button" data-skip="'+e.id+'" class="cursor-interaction">Пропущено</button></div>':'<button type="button" class="td-inline-action cursor-interaction" data-open="'+e.id+'">'+(e.status==='pending'?'Отметить занятие':'Изменить отметку')+'</button>')+'</article>').join(''):'<div class="td-empty"><h2>Сегодня без занятий</h2><p>Следующее занятие уже в календаре.</p></div><div class="td-next"><span>Завтра · 11:00</span>Лекции и семинары по C++</div>';
+ if(active!==null){const e=entries.find(x=>x.id===active),c=courses[e.course];$('.td-result-date').textContent=e.date+' · '+e.time;$('.td-result-course').textContent=c.name;$('.td-question').hidden=step!=='question';$('.td-selection').hidden=step!=='topics';const completed=new Set([...c.baseline,...entries.filter(x=>x.course===e.course&&x.id!==e.id&&x.status==='done').flatMap(x=>x.topics)]);const scroll=$('.td-topics').scrollTop;$('.td-topics').innerHTML=c.topics.map((name,i)=>completed.has(i)?'':'<button type="button" class="td-topic cursor-interaction" data-topic="'+i+'" aria-pressed="'+selected.includes(i)+'"><span aria-hidden="true">'+(selected.includes(i)?'✓':i+1)+'</span><span>'+esc(name)+'</span></button>').join('');$('.td-topics').scrollTop=scroll;$('.td-selected-count').textContent=selected.length?'Выбрано: '+selected.length:'';$('.td-save').textContent=selected.length?'Сохранить занятие':'Позанимался, но пока ничего не завершил';}
+ icons();
+}
+function saveResult(id,status){const e=entries.find(x=>x.id===id);e.status=status;e.topics=status==='done'?[...selected]:[];active=null;render();persist();}
+function open(id,done=false){const e=entries.find(x=>x.id===id);active=id;selected=[...e.topics];step='question';if(done){if(courses[e.course].topics.length)step='topics';else{saveResult(id,'done');return;}}render();persist();}
+function restore(s){const p=s?.privateContent;if(Array.isArray(p?.entries))p.entries.forEach(v=>{const e=entries.find(x=>x.id===v.id);if(e&&['pending','done','skip'].includes(v.status)&&Array.isArray(v.topics)){e.status=v.status;e.topics=v.topics.filter(i=>Number.isInteger(i)&&courses[e.course].topics[i]);}});if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);}
+restore(window.openai?.widgetState);render();
+root.addEventListener('click',ev=>{const target=ev.target,op=target.closest('[data-open]'),done=target.closest('[data-done]'),skip=target.closest('[data-skip]'),topic=target.closest('[data-topic]');if(op)open(Number(op.dataset.open));else if(done)open(Number(done.dataset.done),true);else if(skip){selected=[];saveResult(Number(skip.dataset.skip),'skip');}else if(target.closest('.td-done'))open(active,true);else if(target.closest('.td-skip'))saveResult(active,'skip');else if(topic){const i=Number(topic.dataset.topic);selected=selected.includes(i)?selected.filter(x=>x!==i):[...selected,i];render();}else if(target.closest('.td-save'))saveResult(active,'done');else if(target.closest('.td-back')){active=null;render();}else return;persist();});
+window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
+if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{active=null;render();persist();}});t.addSelect(design,'scene',{label:'Занятия сегодня',options:[{label:'Несколько',value:'several'},{label:'Одно',value:'single'},{label:'Нет занятий',value:'empty'}]});}
+})();
+</script>

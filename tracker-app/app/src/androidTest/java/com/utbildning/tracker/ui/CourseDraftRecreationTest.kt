@@ -1,0 +1,99 @@
+package com.utbildning.tracker.ui
+
+import android.app.Activity
+import android.app.Application
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.utbildning.tracker.data.TrackerRepository
+import com.utbildning.tracker.data.local.TrackerDatabase
+import com.utbildning.tracker.data.local.CourseMode
+import com.utbildning.tracker.ui.courses.CoursesScreen
+import com.utbildning.tracker.ui.courses.CoursesViewModel
+import com.utbildning.tracker.ui.theme.TrackerTheme
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.junit.*
+import org.junit.Assert.*
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class CourseDraftRecreationTest {
+    @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
+    private val application = ApplicationProvider.getApplicationContext<Application>()
+    private lateinit var database: TrackerDatabase
+    private lateinit var repository: TrackerRepository
+    private var modelJob: Job? = null
+    private val reattachContent = object : Application.ActivityLifecycleCallbacks {
+        // The empty test host has no onCreate content of its own. Reinstall the real screen
+        // after actual Activity recreation, using the Activity's retained ViewModelStore.
+        override fun onActivityPostCreated(activity: Activity, savedInstanceState: Bundle?) {
+            if (activity.javaClass == ComponentActivity::class.java) {
+                (activity as ComponentActivity).setContent { TrackerTheme { CoursesScreen({}, repository) } }
+            }
+        }
+        override fun onActivityCreated(activity: Activity, state: Bundle?) = Unit
+        override fun onActivityStarted(activity: Activity) = Unit
+        override fun onActivityResumed(activity: Activity) = Unit
+        override fun onActivityPaused(activity: Activity) = Unit
+        override fun onActivityStopped(activity: Activity) = Unit
+        override fun onActivitySaveInstanceState(activity: Activity, state: Bundle) = Unit
+        override fun onActivityDestroyed(activity: Activity) = Unit
+    }
+
+    @Before fun setUp() {
+        database = Room.inMemoryDatabaseBuilder(application, TrackerDatabase::class.java).build()
+        repository = TrackerRepository(database)
+    }
+    @After fun tearDown() {
+        application.unregisterActivityLifecycleCallbacks(reattachContent)
+        compose.runOnIdle { compose.activity.viewModelStore.clear() }
+        runBlocking { modelJob?.join() }
+        database.close()
+    }
+
+    @Test fun actualActivityRecreationRetainsUnsavedCourseAndOpenTopicEditor() {
+        compose.setContent { TrackerTheme { CoursesScreen({}, repository) } }
+        var original: CoursesViewModel? = null
+        compose.runOnIdle {
+            original = ViewModelProvider(compose.activity)[CoursesViewModel::class.java]
+            modelJob = original!!.viewModelScope.coroutineContext[Job]
+        }
+        click("course_add")
+        compose.onNodeWithTag("course_name").performTextReplacement("C draft")
+        compose.onNodeWithTag("course_category").performTextReplacement("New category")
+        compose.onNodeWithTag("course_category").performClick()
+        click("mode_unscheduled")
+        click("topics_edit")
+        compose.onNodeWithTag("topics_input").performScrollTo().performTextReplacement("Pointers\nArrays")
+        application.registerActivityLifecycleCallbacks(reattachContent)
+        compose.activityRule.scenario.recreate()
+        compose.waitForIdle()
+        compose.runOnIdle { assertSame(original, ViewModelProvider(compose.activity)[CoursesViewModel::class.java]) }
+        compose.onNodeWithTag("course_name").assertTextContains("C draft")
+        compose.onNodeWithTag("course_category").assertTextContains("New category")
+        compose.onNodeWithTag("mode_unscheduled").assertIsSelected()
+        compose.onNodeWithTag("topics_input").assertTextContains("Pointers\nArrays")
+        assertTrue(runBlocking { repository.observeCourses().first() }.isEmpty())
+        assertTrue(runBlocking { repository.observeCategories().first() }.isEmpty())
+        click("topics_apply")
+        click("course_save")
+        compose.waitUntil(5_000) { runBlocking { repository.observeCourses().first() }.size == 1 }
+        val saved = runBlocking { repository.observeCourses().first() }.single()
+        assertEquals(CourseMode.UNSCHEDULED, saved.mode)
+        assertEquals(listOf("Pointers", "Arrays"), runBlocking { database.trackerDao().getTopics(saved.id) }.map { it.title })
+    }
+
+    private fun click(tag: String) {
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag(tag).performScrollTo().performClick()
+    }
+}

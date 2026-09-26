@@ -1,0 +1,65 @@
+package com.utbildning.tracker.notifications
+
+import android.app.LocaleManager
+import android.app.NotificationManager
+import android.content.Context
+import android.os.LocaleList
+import android.os.ParcelFileDescriptor
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
+import com.utbildning.tracker.data.AppContainer
+import com.utbildning.tracker.data.local.CourseMode
+import com.utbildning.tracker.domain.WeeklyRule
+import java.time.ZonedDateTime
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.*
+import org.junit.Test
+
+/** Real system alarms and posted notifications, with no Compose test scheduler. */
+class LocalizedReminderDeliveryTest {
+    @Test fun realAlarmsUseSelectedLanguageAndPreserveCourseName() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val localeManager = context.getSystemService(LocaleManager::class.java)
+        val manager = context.getSystemService(NotificationManager::class.java)
+        val repository = AppContainer.repository(context)
+        val originalLocales = localeManager.applicationLocales
+        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        for (command in listOf("pm grant ${context.packageName} android.permission.POST_NOTIFICATIONS",
+            "appops set --uid ${context.packageName} SCHEDULE_EXACT_ALARM allow")) {
+            ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(command)).use { it.readBytes() }
+        }
+        assertTrue(ReminderScheduler.allowed(context))
+        try {
+            for ((language, body, channel) in listOf(
+                Triple("ru", "Пора заниматься", "Начало занятий"),
+                Triple("en", "Time to study", "Course starts"),
+            )) {
+                localeManager.applicationLocales = LocaleList.forLanguageTags(language)
+                val localeDeadline = System.currentTimeMillis() + 10_000
+                while (context.resources.configuration.locales[0].language != language && System.currentTimeMillis() < localeDeadline) delay(50)
+                assertEquals(language, context.resources.configuration.locales[0].language)
+                val course = repository.createCourse("Лекции по C · Arrays", repository.availableColors().first(), CourseMode.SCHEDULED)
+                try {
+                    val next = ZonedDateTime.now().plusMinutes(1).withSecond(0).withNano(0)
+                    repository.saveInitialSchedule(course.id, listOf(WeeklyRule(next.dayOfWeek.value, next.hour * 60 + next.minute)))
+                    val session = repository.observeSessions().first().first { it.courseId == course.id }
+                    ReminderScheduler.reconcile(context, repository)
+                    val deadline = next.toInstant().toEpochMilli() + 25_000
+                    while (manager.activeNotifications.none { it.tag == session.id } && System.currentTimeMillis() < deadline) delay(100)
+                    val posted = manager.activeNotifications.singleOrNull { it.tag == session.id }
+                    assertNotNull("Actual $language AlarmManager delivery", posted)
+                    assertEquals(course.name, posted!!.notification.extras.getString("android.title"))
+                    assertEquals(body, posted.notification.extras.getString("android.text"))
+                    assertEquals(channel, manager.getNotificationChannel(posted.notification.channelId).name.toString())
+                } finally {
+                    repository.deleteCourse(course.id)
+                    ReminderScheduler.reconcile(context, repository)
+                }
+            }
+        } finally {
+            localeManager.applicationLocales = originalLocales
+        }
+    }
+}

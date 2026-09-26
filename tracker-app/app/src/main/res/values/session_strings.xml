@@ -1,0 +1,14 @@
+<resources>
+    <string name="session_unmarked">Unmarked</string>
+    <string name="session_choose">Mark completed topics</string>
+    <string name="session_nothing">I studied, but have not finished anything yet</string>
+    <string name="session_done">Done</string>
+    <string name="session_skipped">Skipped</string>
+    <string name="session_planned">Planned</string>
+    <string name="session_question">Did you manage to study?</string>
+    <string name="session_error">Could not save the result. Try again.</string>
+    <string name="calendar_previous">Previous month</string>
+    <string name="calendar_next">Next month</string>
+    <string name="sessions_empty">No sessions</string>
+    <string name="today_next">Next</string>
+</resources>

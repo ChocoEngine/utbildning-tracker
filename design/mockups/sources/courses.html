@@ -1,0 +1,92 @@
+<div id="ink-courses" aria-label="Макет списка курсов">
+ <div class="uc-phone">
+  <section class="uc-list-page">
+   <header><div class="uc-eyebrow">МОЙ УЧЕБНЫЙ РИТМ</div><h1>Курсы</h1><p class="uc-subtitle">В своём темпе, шаг за шагом.</p></header>
+   <div class="uc-list" aria-live="polite"></div>
+   <div class="uc-summary"><span>Всего завершённых <b class="uc-count">2</b></span><button class="uc-toggle cursor-interaction" type="button" aria-pressed="false">Показать все</button></div>
+  </section>
+  <section class="uc-edit-page" hidden>
+   <header><button type="button" class="uc-back cursor-interaction"><i data-lucide="arrow-left" aria-hidden="true"></i>К курсам</button><h1>Редактирование</h1><p class="uc-edit-subtitle"></p></header>
+   <form class="uc-form"><label>Название курса<input class="uc-name" name="name" required maxlength="90"></label><label>Категория<input class="uc-category" name="category" required maxlength="50"></label><div class="uc-preview-progress"></div><div class="uc-edit-meta"></div><button type="submit" class="uc-save cursor-interaction">Сохранить</button></form>
+  </section>
+  <footer aria-label="Разделы приложения"><span><i data-lucide="sun" aria-hidden="true"></i>Сегодня</span><span><i data-lucide="calendar-days" aria-hidden="true"></i>Календарь</span><span class="uc-nav-active" aria-current="page"><i data-lucide="book-open" aria-hidden="true"></i>Курсы</span></footer>
+ </div>
+</div>
+<style>
+#ink-courses{--uc-paper:light-dark(#fcfaf6,#222522);--uc-ink:light-dark(#29352e,#eef0e8);--uc-muted:light-dark(#697367,#aab5a8);--uc-panel:light-dark(#f1efe7,#2e342e);--uc-line:light-dark(#e5e5d9,#40483e);--uc-a:light-dark(#78ac80,#80bd91);--uc-b:light-dark(#dc9475,#e6a382);--uc-c:light-dark(#9d95cc,#b0a2e2);--uc-d:light-dark(#81a9b5,#8fb6c2);--uc-e:light-dark(#c7a558,#d9bc75);--uc-space:16px;color:var(--uc-ink);font-family:ui-rounded,"SF Pro Rounded",system-ui,sans-serif;padding:12px 0}
+#ink-courses *{box-sizing:border-box}#ink-courses [hidden]{display:none!important}
+#ink-courses .uc-phone{max-width:414px;margin:auto;background:var(--uc-paper);border-radius:30px;overflow:hidden;border:1px solid var(--uc-line)}
+#ink-courses header{padding:28px 24px 24px}
+#ink-courses .uc-eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--uc-muted)}
+#ink-courses h1{font-family:Georgia,serif;font-size:34px;line-height:1.2;font-weight:400;margin:10px 0 8px;letter-spacing:-1px}
+#ink-courses header p{font-size:13px;margin:0;color:var(--uc-muted)}
+#ink-courses button,#ink-courses input{font:inherit;color:inherit}
+#ink-courses .uc-list{padding:0 22px}
+#ink-courses .uc-group{margin:0 0 18px}
+#ink-courses .uc-group-heading{display:flex;align-items:center;gap:10px;margin:0;padding:6px 0;font-size:11px;font-weight:500;color:var(--uc-muted);letter-spacing:1.3px;text-transform:uppercase}
+#ink-courses .uc-group-heading:after{content:"";height:1px;flex:1;background:var(--uc-line)}
+#ink-courses .uc-row{width:100%;text-align:left;background:none;border:0;display:grid;grid-template-columns:22px minmax(0,1fr) 14px;gap:12px;align-items:center;padding:var(--uc-space) 0;min-height:76px;border-bottom:1px solid var(--uc-line)}
+#ink-courses .uc-row:last-child{border-bottom:0}
+#ink-courses .uc-row:hover{background:var(--uc-panel)}
+#ink-courses .uc-blot{display:block;width:21px;height:24px;background:var(--course-color);border-radius:43% 57% 38% 62% / 62% 36% 64% 38%;transform:rotate(-15deg);align-self:start;margin-top:3px}
+#ink-courses .uc-body{display:block;min-width:0}
+#ink-courses .uc-title{display:block;font-size:14px;font-weight:550;line-height:1.45;overflow-wrap:anywhere}
+#ink-courses .uc-meta{display:flex;justify-content:space-between;gap:8px;margin:4px 0 8px;font-size:11px;color:var(--uc-muted);line-height:1.5;flex-wrap:wrap}
+#ink-courses .uc-meta .uc-percent{color:var(--uc-ink);font-variant-numeric:tabular-nums}
+#ink-courses .uc-progress{display:block;height:5px;background:color-mix(in srgb,var(--course-color) 19%,var(--uc-paper));border-radius:8px;overflow:hidden}
+#ink-courses .uc-progress-fill{display:block;height:100%;background:var(--course-color);border-radius:8px}
+#ink-courses[data-brush=true] .uc-progress{border-radius:33% 12% 23% 18% / 45% 33% 55% 65%;height:6px}
+#ink-courses .uc-arrow{width:14px;height:14px;color:var(--uc-muted)}
+#ink-courses .uc-finished .uc-blot{opacity:.5}
+#ink-courses .uc-finished .uc-meta{margin-bottom:0}
+#ink-courses .uc-summary{margin:2px 22px 24px;padding:15px 0 0;border-top:1px solid var(--uc-line);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--uc-muted)}
+#ink-courses .uc-count{font-weight:500;color:var(--uc-ink);margin-left:5px}
+#ink-courses .uc-toggle{border:0;background:var(--uc-panel);padding:10px 12px;border-radius:13px;font-size:11px;min-height:44px}
+#ink-courses footer{display:flex;justify-content:space-around;padding:14px 10px 20px;border-top:1px solid var(--uc-line);font-size:11px;color:var(--uc-muted)}
+#ink-courses footer span{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 15px}
+#ink-courses footer .uc-nav-active{background:var(--uc-panel);border-radius:16px;color:var(--uc-ink)}
+#ink-courses footer svg{width:19px;height:19px}
+#ink-courses .uc-back{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;min-height:44px;font-size:12px;color:var(--uc-muted)}
+#ink-courses .uc-back svg{width:16px;height:16px}
+#ink-courses .uc-form{padding:0 24px 28px;display:grid;gap:22px}
+#ink-courses .uc-form label{display:grid;gap:8px;font-size:12px;color:var(--uc-muted)}
+#ink-courses .uc-form input{width:100%;min-width:0;background:var(--uc-panel);border:1px solid var(--uc-line);border-radius:12px;padding:12px;font-size:16px;color:var(--uc-ink)}
+#ink-courses .uc-edit-meta{font-size:13px;color:var(--uc-muted)}
+#ink-courses .uc-save{background:var(--uc-ink);color:var(--uc-paper);border:0;border-radius:14px;min-height:46px;font-size:14px}
+</style>
+<script>
+(()=>{
+const root=document.getElementById('ink-courses');
+const courses=[
+{id:1,name:'Лекции по C',category:'Программирование',color:'var(--uc-a)',done:8,total:24,finished:false,mode:'Вс · 11:00'},
+{id:2,name:'Практика по C',category:'Программирование',color:'var(--uc-b)',done:12,total:null,finished:false,mode:'Вт, чт · 19:00'},
+{id:3,name:'Указатели и память',category:'Программирование',color:'var(--uc-d)',done:3,total:10,finished:false,mode:'Без расписания'},
+{id:4,name:'Основы C',category:'Программирование',color:'var(--uc-e)',done:18,total:18,finished:true,mode:'Без расписания'},
+{id:5,name:'Шведский · A2',category:'Языки',color:'var(--uc-c)',done:14,total:20,finished:false,mode:'Пн, пт · 20:30'},
+{id:6,name:'Шведская грамматика',category:'Языки',color:'var(--uc-e)',done:2,total:12,finished:false,mode:'Без расписания'},
+{id:7,name:'Шведский · A1',category:'Языки',color:'var(--uc-c)',done:16,total:16,finished:true,mode:'Без расписания'}
+];
+let showAll=false,editing=null;
+const design={spacing:16,brush:true};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function progress(c){if(c.finished)return '<span class="uc-meta">✓ Курс завершён</span>';const stats=c.total===null?c.done+' занятий пройдено':c.done+' из '+c.total+' тем';return '<span class="uc-meta"><span>'+stats+(c.mode==='Без расписания'?' · Без расписания':'')+'</span>'+(c.total===null?'':'<span class="uc-percent">'+Math.round(c.done/c.total*100)+'%</span>')+'</span>'+(c.total===null?'':'<span class="uc-progress" role="progressbar" aria-label="Пройдено тем" aria-valuenow="'+c.done+'" aria-valuemin="0" aria-valuemax="'+c.total+'"><span class="uc-progress-fill" style="width:'+c.done/c.total*100+'%"></span></span>');}
+function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
+function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{showAll,selectedCourse:editing===null?null:courses.find(c=>c.id===editing)?.name,design},privateContent:{courses,editing}}).catch(()=>{});}
+function render(){
+ root.style.setProperty('--uc-space',design.spacing+'px');root.dataset.brush=String(design.brush);
+ root.querySelector('.uc-list-page').hidden=editing!==null;root.querySelector('.uc-edit-page').hidden=editing===null;
+ const visible=courses.filter(c=>showAll||!c.finished),groups=[...new Set(visible.map(c=>c.category))];
+ root.querySelector('.uc-list').innerHTML=groups.map(g=>'<section class="uc-group"><h2 class="uc-group-heading">'+esc(g)+'</h2>'+visible.filter(c=>c.category===g).sort((a,b)=>Number(a.finished)-Number(b.finished)).map(c=>'<button type="button" class="uc-row cursor-interaction '+(c.finished?'uc-finished':'')+'" data-course="'+c.id+'" style="--course-color:'+c.color+'" aria-label="Редактировать '+esc(c.name)+'"><span class="uc-blot" aria-hidden="true"></span><span class="uc-body"><span class="uc-title">'+esc(c.name)+'</span>'+progress(c)+'</span><i class="uc-arrow" data-lucide="chevron-right" aria-hidden="true"></i></button>').join('')+'</section>').join('');
+ root.querySelector('.uc-count').textContent=courses.filter(c=>c.finished).length;
+ const toggle=root.querySelector('.uc-toggle');toggle.textContent=showAll?'Показать незавершённые':'Показать все';toggle.setAttribute('aria-pressed',String(showAll));
+ if(editing!==null){const c=courses.find(c=>c.id===editing);root.querySelector('.uc-name').value=c.name;root.querySelector('.uc-category').value=c.category;root.querySelector('.uc-edit-subtitle').textContent=c.finished?'Завершённый курс':'Незавершённый курс';const p=root.querySelector('.uc-preview-progress');p.style.setProperty('--course-color',c.color);p.innerHTML=progress(c);root.querySelector('.uc-edit-meta').textContent=c.mode;}
+ icons();
+}
+function restore(s){if(!s)return;if(typeof s.modelContent?.showAll==='boolean')showAll=s.modelContent.showAll;if(s.modelContent?.design)Object.assign(design,s.modelContent.design);if(Array.isArray(s.privateContent?.courses)){s.privateContent.courses.forEach(c=>{const old=courses.find(x=>x.id===c.id);if(old){old.name=c.name;old.category=c.category;}});}if(s.privateContent?.editing&&courses.some(c=>c.id===s.privateContent.editing))editing=s.privateContent.editing;}
+restore(window.openai?.widgetState);render();
+root.addEventListener('click',e=>{const c=e.target.closest('[data-course]');if(c){editing=Number(c.dataset.course);render();save();}else if(e.target.closest('.uc-back')){editing=null;render();save();}else if(e.target.closest('.uc-toggle')){showAll=!showAll;render();save();}});
+root.querySelector('form').addEventListener('submit',e=>{e.preventDefault();const name=root.querySelector('.uc-name').value.trim(),category=root.querySelector('.uc-category').value.trim();if(!name||!category)return;const c=courses.find(c=>c.id===editing);c.name=name;c.category=category;editing=null;render();save();});
+window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
+if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();save();}});t.addSlider(design,'spacing',{min:10,max:22,unit:'px',label:'Плотность списка'});t.addToggle(design,'brush',{label:'Мягкие края полосы прогресса'});}
+})();
+</script>

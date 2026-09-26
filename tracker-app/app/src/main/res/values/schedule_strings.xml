@@ -1,0 +1,16 @@
+<resources>
+    <string name="schedule_title">Schedule</string>
+    <string name="schedule_save">Save</string>
+    <string name="schedule_cancel">Cancel</string>
+    <string name="schedule_start">Start</string>
+    <string name="schedule_end">End</string>
+    <string name="schedule_add_end">Add end time</string>
+    <string name="schedule_remove_end">Remove end time</string>
+    <string name="schedule_until">End date</string>
+    <string name="schedule_choose_date">Choose end date</string>
+    <string name="schedule_clear_date">Remove end date</string>
+    <string name="schedule_next_day">Next day</string>
+    <string name="schedule_invalid">Select at least one day and an end date not earlier than today.</string>
+    <string name="schedule_failed">Could not save the schedule. Please try again.</string>
+    <string name="schedule_existing">The current schedule</string>
+</resources>

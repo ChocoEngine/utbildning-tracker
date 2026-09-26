@@ -1,0 +1,98 @@
+<div id="ink-calendar" aria-label="Макет календаря занятий">
+ <div class="ic-phone">
+  <header><div class="ic-eyebrow">МОЙ УЧЕБНЫЙ РИТМ</div><h1>Календарь</h1><p>Маленькие шаги оставляют след.</p></header>
+  <div class="ic-month"><h2>Сентябрь <span>2026</span></h2><button type="button" class="ic-today" aria-label="Выбрать сегодня, 26 сентября">Сегодня</button></div>
+  <div class="ic-week" aria-hidden="true"><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span></div>
+  <div class="ic-grid" role="group" aria-label="Дни сентября 2026"></div>
+  <div class="ic-courses"><span><b class="ic-dot ic-c0"></b>Лекции</span><span><b class="ic-dot ic-c1"></b>Практика</span><span><b class="ic-dot ic-c2"></b>Шведский</span></div>
+  <div class="ic-key"><span><b class="ic-sample ic-done"></b>Пройдено</span><span><b class="ic-sample ic-pending"></b>В плане</span><span><b class="ic-sample ic-skip">×</b>Пропущено</span></div>
+  <section class="ic-detail" aria-live="polite"><div class="ic-detail-heading"><h2></h2><span></span></div><div class="ic-lessons"></div></section>
+  <footer aria-label="Разделы приложения"><span><i data-lucide="sun" aria-hidden="true"></i>Сегодня</span><span class="ic-nav-active" aria-current="page"><i data-lucide="calendar-days" aria-hidden="true"></i>Календарь</span><span><i data-lucide="book-open" aria-hidden="true"></i>Курсы</span></footer>
+ </div>
+</div>
+<style>
+#ink-calendar{--ic-paper:light-dark(#fcfaf6,#222522);--ic-ink:light-dark(#29352e,#eef0e8);--ic-muted:light-dark(#697367,#aab5a8);--ic-panel:light-dark(#f1efe7,#2e342e);--ic-line:light-dark(#e5e5d9,#40483e);--ic-a:light-dark(#78ac80,#80bd91);--ic-b:light-dark(#dc9475,#e6a382);--ic-c:light-dark(#9d95cc,#b0a2e2);--ic-faint:.23;--ic-angle:-19deg;color:var(--ic-ink);font-family:ui-rounded,"SF Pro Rounded",system-ui,sans-serif;padding:12px 0}
+#ink-calendar *{box-sizing:border-box}
+#ink-calendar .ic-phone{max-width:414px;margin:auto;background:var(--ic-paper);border-radius:30px;overflow:hidden;border:1px solid var(--ic-line)}
+#ink-calendar header{padding:28px 24px 22px}
+#ink-calendar .ic-eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--ic-muted)}
+#ink-calendar h1{font-family:Georgia,serif;font-size:34px;line-height:1.2;font-weight:400;margin:10px 0 8px;letter-spacing:-1px}
+#ink-calendar header p{font-size:13px;margin:0;color:var(--ic-muted)}
+#ink-calendar h2{font-size:19px;font-weight:600;margin:0;letter-spacing:-.4px}
+#ink-calendar .ic-month{padding:0 20px 20px;display:flex;align-items:center;justify-content:space-between}
+#ink-calendar .ic-month h2 span{font-weight:400;color:var(--ic-muted);font-size:16px;margin-left:5px}
+#ink-calendar button{font:inherit;color:inherit;cursor:pointer}
+#ink-calendar .ic-today{background:var(--ic-panel);border:0;border-radius:16px;padding:9px 12px;font-size:12px;min-height:40px}
+#ink-calendar .ic-week,#ink-calendar .ic-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:0 8px}
+#ink-calendar .ic-week span{text-align:center;font-size:11px;color:var(--ic-muted);padding-bottom:9px}
+#ink-calendar .ic-day{position:relative;height:66px;padding:5px 0 0;background:none;border:0;border-radius:15px;display:flex;align-items:center;flex-direction:column;gap:0;min-width:0}
+#ink-calendar .ic-day[aria-pressed=true]{background:var(--ic-panel);box-shadow:inset 0 0 0 1px var(--ic-line)}
+#ink-calendar .ic-date{font-size:13px;line-height:21px;position:relative;z-index:1}
+#ink-calendar .ic-is-today .ic-date{font-weight:750;text-decoration:underline;text-underline-offset:4px}
+#ink-calendar .ic-day svg{width:44px;max-width:100%;height:34px;overflow:visible}
+#ink-calendar .ic-courses{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:20px 10px 14px;font-size:11px}
+#ink-calendar .ic-courses span,#ink-calendar .ic-key span{display:flex;align-items:center;gap:5px}
+#ink-calendar .ic-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+#ink-calendar .ic-c0{background:var(--ic-a)}#ink-calendar .ic-c1{background:var(--ic-b)}#ink-calendar .ic-c2{background:var(--ic-c)}
+#ink-calendar .ic-key{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:10px;color:var(--ic-muted);padding:0 8px 20px}
+#ink-calendar .ic-sample{width:17px;height:13px;border-radius:42% 60% 40% 55%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:400}
+#ink-calendar .ic-done{background:var(--ic-a)}#ink-calendar .ic-pending,#ink-calendar .ic-skip{background:color-mix(in srgb,var(--ic-a) 23%,var(--ic-paper))}
+#ink-calendar .ic-detail{border-top:1px solid var(--ic-line);padding:20px 20px 22px;min-height:208px}
+#ink-calendar .ic-detail-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}
+#ink-calendar .ic-detail-heading h2{font-size:17px}#ink-calendar .ic-detail-heading>span{font-size:11px;color:var(--ic-muted)}
+#ink-calendar .ic-lesson{display:grid;grid-template-columns:4px 1fr auto;gap:12px;align-items:center;margin:18px 0}
+#ink-calendar .ic-bar{width:4px;align-self:stretch;border-radius:4px}
+#ink-calendar .ic-lesson strong{display:block;font-size:13px;font-weight:550;margin:4px 0}
+#ink-calendar .ic-sub{font-size:11px;color:var(--ic-muted)}
+#ink-calendar .ic-status{background:var(--ic-panel);border:0;border-radius:12px;padding:9px;font-size:11px;min-height:44px;max-width:104px}
+#ink-calendar .ic-empty{color:var(--ic-muted);font-size:13px;padding:15px 0}
+#ink-calendar footer{display:flex;justify-content:space-around;padding:14px 10px 20px;border-top:1px solid var(--ic-line);font-size:11px;color:var(--ic-muted)}
+#ink-calendar footer span{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 15px}
+#ink-calendar footer .ic-nav-active{background:var(--ic-panel);border-radius:16px;color:var(--ic-ink)}
+#ink-calendar footer svg{width:19px;height:19px}
+</style>
+<script>
+(()=>{
+const root=document.getElementById('ink-calendar');
+const courses=[{name:'C · Лекции',color:'var(--ic-a)',time:'11:00',topic:'Функции и аргументы'},{name:'C · Практика',color:'var(--ic-b)',time:'19:00',topic:'Самостоятельное занятие'},{name:'Шведский',color:'var(--ic-c)',time:'20:30',topic:'Порядок слов'}];
+const data={};
+for(let d=1;d<=30;d++){
+ const weekday=(d%7);let ids=[];
+ if(weekday===6)ids.push(0);
+ if(weekday===1||weekday===3||weekday===6)ids.push(1);
+ if(weekday===3||weekday===5||weekday===6)ids.push(2);
+ if(ids.length)data[d]=ids.map((c,i)=>({c,status:d<26?((d===10&&i===0)||(d===17&&i===1)?'skip':'done'):'pending'}));
+}
+data[24]=[{c:0,status:'done'},{c:1,status:'skip'},{c:2,status:'done'}];
+data[26]=[{c:0,status:'done'},{c:1,status:'pending'},{c:2,status:'pending'}];
+let selected=26;
+const design={shape:'ink',direction:'diagonal',pale:23};
+const shapes=['M7 12 C2 8 9 2 17 4 C22 0 30 3 33 5 C43 3 47 10 43 15 C48 22 39 27 32 25 C24 31 18 26 13 27 C4 26 1 20 7 12Z','M5 13 C1 5 13 2 19 4 C27 0 36 3 38 7 C48 9 47 18 40 21 C39 29 29 27 24 26 C14 31 4 26 6 21 C0 19 1 16 5 13Z'];
+function mark(items,id){
+ const n=items.length;
+ const shape=design.shape==='round'?'M24 2 A22 13 0 1 1 23.99 2Z':shapes[id%2];
+ const clip='ic-clip-'+id;
+ const parts=items.map((x,i)=>{const width=60/n;const xx=-6+i*width;return '<rect x="'+xx+'" y="-15" width="'+(width+.3)+'" height="65" fill="'+courses[x.c].color+'" opacity="'+(x.status==='done'?'.94':design.pale/100)+'"/>';}).join('');
+ const crosses=items.map((x,i)=>x.status==='skip'?'<text x="'+(8+(i+.5)*32/n)+'" y="19" text-anchor="middle" fill="var(--ic-ink)" font-size="11">×</text>':'').join('');
+ return '<svg viewBox="0 0 48 32" aria-hidden="true"><defs><clipPath id="'+clip+'"><path d="'+shape+'"/></clipPath></defs><g clip-path="url(#'+clip+')"><g transform="rotate('+(design.direction==='diagonal'?-19:0)+' 24 16)">'+parts+'</g></g>'+crosses+'</svg>';
+}
+function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{selectedDay:selected,month:'2026-09',design},privateContent:{data}}).catch(()=>{});}
+function render(){
+ const grid=root.querySelector('.ic-grid');
+ grid.innerHTML='<span aria-hidden="true"></span>'+Array.from({length:30},(_,i)=>{
+  const d=i+1,items=data[d]||[];
+  const desc=items.map(x=>courses[x.c].name+': '+({done:'пройдено',skip:'пропущено',pending:'в плане'}[x.status])).join(', ');
+  return '<button type="button" class="ic-day '+(d===26?'ic-is-today':'')+'" data-day="'+d+'" aria-pressed="'+(selected===d)+'" aria-label="'+d+' сентября. '+(desc||'Нет занятий')+'"><span class="ic-date">'+d+'</span>'+(items.length?mark(items,d):'')+'</button>';
+ }).join('');
+ root.querySelector('.ic-detail-heading h2').textContent=selected+' сентября';
+ root.querySelector('.ic-detail-heading>span').textContent=selected===26?'Сегодня':new Date(2026,8,selected).toLocaleDateString('ru-RU',{weekday:'long'});
+ const items=data[selected]||[];
+ root.querySelector('.ic-lessons').innerHTML=items.length?items.map((x,i)=>'<div class="ic-lesson"><div class="ic-bar" style="background:'+courses[x.c].color+'"></div><div><div class="ic-sub">'+courses[x.c].time+' · '+courses[x.c].name+'</div><strong>'+courses[x.c].topic+'</strong></div><button type="button" class="ic-status" data-result="'+i+'" aria-label="Изменить результат: '+courses[x.c].name+'">'+({done:'✓ Пройдено',skip:'× Пропущено',pending:'В плане'}[x.status])+'</button></div>').join(''):'<div class="ic-empty">На этот день занятий нет</div>';
+}
+function restore(s){if(!s)return;const m=s.modelContent;if(m?.selectedDay>=1&&m.selectedDay<=30)selected=m.selectedDay;if(m?.design)Object.assign(design,m.design);if(s.privateContent?.data)Object.assign(data,s.privateContent.data);}
+restore(window.openai?.widgetState);render();
+root.addEventListener('click',e=>{const day=e.target.closest('[data-day]'),result=e.target.closest('[data-result]');if(day){selected=Number(day.dataset.day);render();save();}else if(result){const x=data[selected][Number(result.dataset.result)];x.status={pending:'done',done:'skip',skip:'pending'}[x.status];render();save();}else if(e.target.closest('.ic-today')){selected=26;render();save();}});
+window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
+if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();save();}});t.addSelect(design,'shape',{label:'Форма пятнышка',options:[{label:'Клякса',value:'ink'},{label:'Мягкий овал',value:'round'}]});t.addSelect(design,'direction',{label:'Полосы',options:[{label:'Диагональные',value:'diagonal'},{label:'Вертикальные',value:'vertical'}]});t.addSlider(design,'pale',{label:'Яркость запланированных',min:15,max:40,unit:'%'});}
+})();
+</script>

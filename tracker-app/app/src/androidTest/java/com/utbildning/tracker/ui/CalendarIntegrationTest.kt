@@ -1,0 +1,66 @@
+package com.utbildning.tracker.ui
+
+import android.content.Context
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.utbildning.tracker.data.TrackerRepository
+import com.utbildning.tracker.data.local.*
+import com.utbildning.tracker.domain.WeeklyRule
+import com.utbildning.tracker.ui.calendar.CalendarScreen
+import com.utbildning.tracker.ui.theme.TrackerTheme
+import java.time.YearMonth
+import kotlinx.coroutines.runBlocking
+import org.junit.*
+import org.junit.Assert.*
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class CalendarIntegrationTest {
+    @get:Rule val compose = createComposeRule()
+    private lateinit var database: TrackerDatabase
+    private lateinit var repository: TrackerRepository
+    private val visible = mutableStateOf(true)
+    private val dao get() = database.trackerDao()
+
+    @Before fun setUp() {
+        database = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext<Context>(), TrackerDatabase::class.java).build()
+        repository = TrackerRepository(database)
+    }
+    @After fun tearDown() {
+        compose.runOnIdle { visible.value = false }
+        compose.waitForIdle()
+        database.close()
+    }
+
+    @Test fun openingFarMonthGeneratesCalendarAndResultButtonsPersistChanges() {
+        val target = YearMonth.now().plusMonths(6).atDay(1)
+        val course = runBlocking {
+            repository.createCourse("C", 0, CourseMode.SCHEDULED).also {
+                repository.saveInitialSchedule(it.id, (1..7).map { day -> WeeklyRule(day, 1140) })
+            }
+        }
+        assertTrue(runBlocking { dao.getSessions(course.id) }.none { it.date == target.toEpochDay() })
+        var requestedSession: String? = null
+        compose.setContent { TrackerTheme { if (visible.value) CalendarScreen({}, repository) { requestedSession = it } } }
+        repeat(6) { click("calendar_next") }
+        compose.waitUntil(10_000) { runBlocking { dao.getSessions(course.id) }.any { it.date == target.toEpochDay() } }
+        val session = runBlocking { dao.getSessions(course.id) }.single { it.date == target.toEpochDay() }
+        click("calendar_day_${target.toEpochDay()}")
+        click("session_done_${session.id}")
+        compose.runOnIdle { assertEquals(session.id, requestedSession) }
+        click("session_skip_${session.id}")
+        compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.SKIPPED }
+        click("session_pending_${session.id}")
+        compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.PENDING }
+        assertEquals(1, runBlocking { dao.getSessions(course.id) }.count { it.date == target.toEpochDay() })
+    }
+
+    private fun click(tag: String) {
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag(tag).performScrollTo().performClick()
+    }
+}

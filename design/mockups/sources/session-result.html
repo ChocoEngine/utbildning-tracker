@@ -1,0 +1,69 @@
+<div id="session-result" aria-label="Макет отметки занятия">
+ <div class="sr-phone">
+  <header><div class="sr-eyebrow">26 СЕНТЯБРЯ · 11:00</div><div class="sr-course"><span class="sr-blot" aria-hidden="true"></span><h1>Лекции и семинары по C++</h1></div></header>
+  <main>
+   <section class="sr-edit">
+    <section class="sr-topics"><div class="sr-heading"><h2>Отметь пройденное</h2><span class="sr-count" aria-live="polite"></span></div><div class="sr-list" role="group" aria-label="Выбрать пройденные на занятии темы"></div></section>
+    <button type="button" class="sr-save cursor-interaction">Позанимался, но пока ничего не завершил</button>
+   </section>
+   <section class="sr-receipt" hidden aria-live="polite"><div class="sr-preview"><div class="sr-day"><span>26</span><b class="sr-ink"></b></div><div><h2 class="sr-result-title"></h2><p class="sr-result-detail"></p></div></div><div class="sr-progress"><div class="sr-progress-head"><span>Прогресс курса</span><span class="sr-progress-value"></span></div><div class="sr-track" role="progressbar" aria-label="Пройдено тем" aria-valuemin="0" aria-valuemax="20"><div></div></div></div><div class="sr-complete" hidden><h2>Все темы пройдены</h2><div class="sr-complete-actions"><button type="button" class="sr-finish cursor-interaction">Завершить курс</button><button type="button" class="sr-stay cursor-interaction">Оставить активным</button></div></div><button type="button" class="sr-correct cursor-interaction">Изменить отметку</button></section>
+  </main>
+  <div class="sr-bottom" aria-hidden="true"></div>
+ </div>
+</div>
+<style>
+#session-result{--sr-paper:light-dark(#fcfaf6,#222522);--sr-ink:light-dark(#29352e,#eef0e8);--sr-muted:light-dark(#697367,#aab5a8);--sr-panel:light-dark(#f1efe7,#2e342e);--sr-line:light-dark(#e5e5d9,#40483e);--sr-green:light-dark(#78ac80,#80bd91);--sr-spacing:12px;font-family:ui-rounded,"SF Pro Rounded",system-ui,sans-serif;color:var(--sr-ink);padding:12px 0}
+#session-result *{box-sizing:border-box}#session-result [hidden]{display:none!important}
+#session-result .sr-phone{max-width:414px;margin:auto;background:var(--sr-paper);border:1px solid var(--sr-line);border-radius:30px;overflow:hidden}
+#session-result header{padding:28px 24px 22px}
+#session-result .sr-eyebrow{font-size:10px;letter-spacing:1.6px;font-weight:500;color:var(--sr-muted)}
+#session-result .sr-course{display:flex;align-items:center;gap:12px;margin-top:15px}
+#session-result h1{font:400 22px/1.3 Georgia,serif;letter-spacing:-.6px;margin:0}
+#session-result .sr-blot{width:22px;height:26px;flex-shrink:0;background:var(--sr-green);border-radius:43% 57% 38% 62% / 62% 36% 64% 38%;transform:rotate(-15deg)}
+#session-result main{padding:0 24px 24px}
+#session-result button{font:inherit;font-size:12px;color:inherit;border:0;background:var(--sr-panel);border-radius:12px;padding:10px 12px;min-height:44px}
+#session-result .sr-topics{margin-top:4px}
+#session-result h2{font-size:16px;font-weight:500;margin:0;letter-spacing:-.2px}
+#session-result .sr-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px;flex-wrap:wrap}
+#session-result .sr-count{font-size:11px;color:var(--sr-muted)}
+#session-result .sr-list{max-height:340px;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--sr-line) transparent;border-top:1px solid var(--sr-line);border-bottom:1px solid var(--sr-line)}
+#session-result .sr-topic{display:grid;grid-template-columns:21px minmax(0,1fr);align-items:center;gap:9px;width:100%;text-align:left;border-radius:0;background:none;border-bottom:1px solid var(--sr-line);padding:var(--sr-spacing) 0;line-height:1.55;font-size:13px}
+#session-result .sr-topic:last-child{border-bottom:0}
+#session-result .sr-topic[aria-pressed=true]{background:color-mix(in srgb,var(--sr-green) 12%,var(--sr-paper))}
+#session-result .sr-topic>span:first-child{font-size:12px;color:var(--sr-muted);text-align:center}
+#session-result .sr-topic>span:last-child{overflow-wrap:anywhere}
+#session-result .sr-save{background:var(--sr-ink);color:var(--sr-paper);width:100%;margin-top:24px;line-height:1.5;padding:12px 15px;min-height:46px}
+#session-result .sr-preview{display:flex;align-items:center;gap:17px;padding:16px 0 24px}
+#session-result .sr-day{width:50px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;flex-shrink:0}
+#session-result .sr-ink{width:45px;height:29px;background:var(--sr-green);border-radius:43% 57% 38% 62% / 62% 36% 64% 38%;transform:rotate(-12deg);display:flex;align-items:center;justify-content:center;font-weight:400}
+#session-result .sr-result-detail{font-size:12px;color:var(--sr-muted);line-height:1.6;margin:8px 0 0}
+#session-result .sr-progress{padding:20px 0;border-top:1px solid var(--sr-line)}
+#session-result .sr-progress-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:12px}
+#session-result .sr-track{height:5px;border-radius:5px;background:color-mix(in srgb,var(--sr-green) 20%,var(--sr-paper));overflow:hidden}
+#session-result .sr-track>div{height:100%;background:var(--sr-green);border-radius:5px}
+#session-result .sr-correct{width:100%;margin-top:15px}
+#session-result .sr-complete{padding:15px 0;border-top:1px solid var(--sr-line)}
+#session-result .sr-complete-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#session-result .sr-bottom{width:90px;height:4px;border-radius:4px;background:var(--sr-line);margin:0 auto 12px}
+</style>
+<script>
+(()=>{
+const root=document.getElementById('session-result'),$=q=>root.querySelector(q);
+const topics=['Лекция - Введение в C++','Семинар - Введение в C++','Семинар - Устройство памяти','Лекция - Классы','Лекция - Шаблоны 1','Семинар - Шаблоны 1','Лекция - Наследование','Семинар - Владение и управление памятью','Семинар - Шаблоны, вывод типов и семантика значений в C++','Лекция - Исключения','Лекция - Обзор STL','Семинар - Scheme','Лекция - Расположение объектов в памяти и время жизни','Семинар - Расположение объектов в памяти и время жизни','Семинар - Компиляция','Лекция - Компиляция','Лекция - Clang + LLVM','Лекция - Строки','Лекция - C++ 26. Обзор','Лекция - Cide review'];
+const state={outcome:'done',selected:[],saved:null,view:'edit',finished:false,declined:false};const design={spacing:12};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{outcome:state.outcome,selectedTopics:state.selected.map(i=>topics[i]),saved:state.saved,finished:state.finished,design},privateContent:{session:state}}).catch(()=>{});}
+function render(){
+ root.style.setProperty('--sr-spacing',design.spacing+'px');$('.sr-edit').hidden=state.view!=='edit';$('.sr-receipt').hidden=state.view!=='receipt';
+ $('.sr-count').textContent=state.selected.length?'Выбрано: '+state.selected.length:'';
+ const scroll=$('.sr-list').scrollTop;$('.sr-list').innerHTML=topics.slice(2).map((name,j)=>{const i=j+2,selected=state.selected.includes(i);return '<button type="button" class="sr-topic cursor-interaction" data-topic="'+i+'" aria-pressed="'+selected+'" aria-label="'+esc(name)+'"><span aria-hidden="true">'+(selected?'✓':i+1)+'</span><span>'+esc(name)+'</span></button>';}).join('');$('.sr-list').scrollTop=scroll;
+ $('.sr-save').textContent=state.selected.length?'Сохранить занятие':'Позанимался, но пока ничего не завершил';
+ if(state.saved){const n=state.saved.selected.length,total=2+n;$('.sr-ink').textContent='';$('.sr-result-title').textContent='Занятие пройдено';$('.sr-result-detail').textContent=n?'Пройдено тем за занятие: '+n:'Позанимался — это тоже прогресс.';$('.sr-progress-value').textContent=total+' из 20 тем';$('.sr-track').setAttribute('aria-valuenow',total);$('.sr-track>div').style.width=total/20*100+'%';$('.sr-complete').hidden=total!==20||state.finished||state.declined;$('.sr-correct').hidden=state.finished;if(state.finished)$('.sr-result-detail').textContent='Все темы пройдены. Курс завершён, цвет освобождён.';}
+}
+function restore(s){const v=s?.privateContent?.session;if(v&&['done','skip'].includes(v.outcome)&&Array.isArray(v.selected))Object.assign(state,v);if(state.outcome==='skip'||state.saved?.outcome==='skip'){state.saved=null;state.view='edit';state.selected=[];state.finished=false;}state.outcome='done';state.selected=[...new Set(state.selected.filter(i=>Number.isInteger(i)&&i>=2&&i<20))];if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);}
+restore(window.openai?.widgetState);render();
+root.addEventListener('click',e=>{const topic=e.target.closest('[data-topic]');if(topic){const i=Number(topic.dataset.topic);state.selected=state.selected.includes(i)?state.selected.filter(x=>x!==i):[...state.selected,i];}else if(e.target.closest('.sr-save')){state.saved={outcome:'done',selected:[...state.selected]};state.view='receipt';state.declined=false;}else if(e.target.closest('.sr-correct')){state.outcome=state.saved.outcome;state.selected=[...state.saved.selected];state.view='edit';}else if(e.target.closest('.sr-finish')){state.finished=true;}else if(e.target.closest('.sr-stay'))state.declined=true;else return;render();persist();});
+window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
+if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();persist();}});t.addSlider(design,'spacing',{label:'Отступы между темами',min:8,max:18,unit:'px'});}
+})();
+</script>

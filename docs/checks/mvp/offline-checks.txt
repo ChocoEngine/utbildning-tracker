@@ -1,0 +1,10 @@
+API 36 / Medium_Phone_API_36, 2026-09-26
+During the complete Gradle run and the subsequent denied-permission probe:
+Active default network: none
+  mDefaultNetwork=null
+      android.permission.POST_NOTIFICATIONS
+        android.permission.POST_NOTIFICATIONS: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
+RecoveryProbeTest prepare / denied / cleanup: each OK (1 test).
+MainActivity cold launch: Status ok.
+UI displayed Today, Recovery probe C and Planned while offline and denied.
+After cleanup: notifications granted; exact access denied; Wi-Fi and mobile data enabled.

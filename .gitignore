@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Gradle and Kotlin build state
+.gradle/
+.kotlin/
+**/build/
+
+# Local Android SDK configuration
+local.properties
+**/local.properties
+
+# Environment files and local credentials
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+google-services.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*~

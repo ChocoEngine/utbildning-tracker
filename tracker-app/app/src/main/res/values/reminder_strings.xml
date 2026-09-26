@@ -1,0 +1,10 @@
+<resources>
+    <string name="reminder_channel">Course starts</string>
+    <string name="reminder_start">Time to study</string>
+    <string name="reminder_title">Reminders</string>
+    <string name="reminder_enable">Allow notifications</string>
+    <string name="reminder_exact">Allow precise reminders</string>
+    <string name="reminder_active">Reminders are enabled</string>
+    <string name="reminder_explanation">Notifications and precise alarm access are needed to remind you when a class starts.</string>
+    <string name="guide_title">How to use</string>
+</resources>

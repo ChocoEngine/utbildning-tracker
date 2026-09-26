@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Трекер учёбы</string>
+    <string name="nav_today">Сегодня</string>
+    <string name="nav_calendar">Календарь</string>
+    <string name="nav_courses">Курсы</string>
+    <string name="settings">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="language">Язык</string>
+    <string name="language_system">Как в системе</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_english">English</string>
+</resources>
