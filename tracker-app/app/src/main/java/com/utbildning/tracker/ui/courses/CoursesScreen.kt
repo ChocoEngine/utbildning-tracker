@@ -2,6 +2,14 @@ package com.utbildning.tracker.ui.courses
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -142,12 +150,21 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
     onModeSelected: (CourseMode) -> Unit = { value -> onChange { it.copy(mode = value, modeChosen = true) } }) {
     var editingName by rememberSaveable(draft.id) { mutableStateOf(false) }
     var nameFocused by remember { mutableStateOf(false) }
+    var nameBounds by remember { mutableStateOf<Rect?>(null) }
+    var editorOrigin by remember { mutableStateOf(Offset.Zero) }
     val focusRequester = remember { FocusRequester() }
     val focus = LocalFocusManager.current
     val effectiveText = draft.editingText ?: draft.text
     val conflictLines = try { TopicListEditor.plan(effectiveText, draft.topics); emptyList<Int>() } catch (failure: TopicListConflictException) { failure.lineNumbers }
     LaunchedEffect(editingName) { if (editingName) focusRequester.requestFocus() }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxSize().onGloballyPositioned { editorOrigin = it.positionInRoot() }
+        .pointerInput(editingName) {
+            // Observe the initial pass without consuming the touch: buttons and scrolling still work.
+            awaitEachGesture {
+                val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                if (editingName && nameBounds?.contains(down.position + editorOrigin) == false) focus.clearFocus()
+            }
+        }.testTag("course_editor").verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onCancel, modifier = Modifier.testTag("course_cancel")) {
                 Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
@@ -155,7 +172,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             if (editingName) OutlinedTextField(draft.name, { value -> onChange { it.copy(name = value) } }, singleLine = true,
                 label = { Text(stringResource(R.string.course_name)) },
                 supportingText = { Text("${draft.name.codePointCount(0, draft.name.length)}/50") },
-                modifier = Modifier.weight(1f).focusRequester(focusRequester).onFocusChanged {
+                modifier = Modifier.weight(1f).onGloballyPositioned { nameBounds = it.boundsInRoot() }.focusRequester(focusRequester).onFocusChanged {
                     if (nameFocused && !it.isFocused) { onSave(); editingName = false }
                     nameFocused = it.isFocused
                 }.testTag("course_name"))
@@ -205,7 +222,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
         if (error != null) Text(errorText(error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error"))
         if (draft.id != null && draft.editingText == null) {
             if (!draft.completed) {
-                OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("complete") }, modifier = Modifier.fillMaxWidth().testTag("course_complete")) { Text(stringResource(R.string.course_complete)) }
+                OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("complete") }, modifier = Modifier.fillMaxWidth().testTag("course_complete")) { Icon(painterResource(R.drawable.ic_check), contentDescription = null, modifier = Modifier.size(16.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.course_complete)) }
                 if (draft.mode == CourseMode.SCHEDULED && !draft.paused) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("pause") }, modifier = Modifier.fillMaxWidth().testTag("course_pause")) { Text(stringResource(R.string.course_pause)) }
             }
             OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("delete") }, modifier = Modifier.fillMaxWidth().testTag("course_delete")) { Text(stringResource(R.string.course_delete)) }

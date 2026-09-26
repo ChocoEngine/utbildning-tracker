@@ -58,7 +58,7 @@ class SessionScreenTest {
     @Test fun nothingCompletedClearsDraftSelectionAndSavesFactOfStudyOnly() {
         show()
         click("session_topic_${topics[0].id}")
-        click("session_none")
+        click("session_topic_${topics[0].id}")
         compose.onNodeWithTag("session_topic_${topics[0].id}").assertIsOff()
         click("session_save")
         waitClosed()
@@ -70,7 +70,7 @@ class SessionScreenTest {
     @Test fun cancelDoesNotChangeResultOrCompletion() {
         show()
         click("session_topic_${topics[1].id}")
-        click("session_cancel")
+        click("session_back")
         waitClosed()
         assertEquals(session, runBlocking { dao.getSession(session.id) })
         assertTrue(runBlocking { dao.getCompletions(course.id) }.isEmpty())

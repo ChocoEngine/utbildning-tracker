@@ -10,5 +10,6 @@
     <string name="calendar_previous">Previous month</string>
     <string name="calendar_next">Next month</string>
     <string name="sessions_empty">No sessions</string>
-    <string name="today_next">Next</string>
+    <string name="today_next">Upcoming sessions</string>
+    <string name="today_empty">No planned sessions</string>
 </resources>

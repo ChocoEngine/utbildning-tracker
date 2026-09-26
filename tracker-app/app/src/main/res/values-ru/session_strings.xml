@@ -10,5 +10,6 @@
     <string name="calendar_previous">Предыдущий месяц</string>
     <string name="calendar_next">Следующий месяц</string>
     <string name="sessions_empty">Занятий нет</string>
-    <string name="today_next">Далее</string>
+    <string name="today_next">Ближайшие занятия</string>
+    <string name="today_empty">Нет запланированных занятий</string>
 </resources>

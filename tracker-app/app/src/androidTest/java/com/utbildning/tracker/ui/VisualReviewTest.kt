@@ -87,7 +87,7 @@ class VisualReviewTest {
                                 3 -> CourseEditorContent(CourseDraft(id = "course_0", name = title, category = category, topics = editableTopics, text = text, editingText = text), emptyList(), listOf(0), false, null, {}, {}, {}, {}, {}, {})
                                 4 -> CalendarContent(YearMonth.from(date), date, sessions, locale, {}, {}, {}, {})
                                 5 -> TodayContent(sessions, Instant.parse("2026-09-26T10:00:00Z"), ZoneId.of("Europe/Moscow"), locale, {}, {})
-                                6 -> SessionContent(title, topics, completedIds, false, false, {}, {}, {}, {})
+                                6 -> SessionContent(title, topics, completedIds, false, false, {}, {}, {})
                                 7 -> ScheduleContent(initial = listOf(WeeklyRule(2, 19 * 60, 20 * 60 + 30), WeeklyRule(6, 11 * 60)), initialEnd = date.plusMonths(3).toEpochDay())
                                 8 -> GuideScreen({})
                             }

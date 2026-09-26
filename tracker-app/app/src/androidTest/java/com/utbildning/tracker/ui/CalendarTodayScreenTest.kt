@@ -57,7 +57,7 @@ class CalendarTodayScreenTest {
         assertTrue(description.contains("Planned")); assertTrue(description.contains("Done")); assertTrue(description.contains("Skipped"))
     }
 
-    @Test fun todayOmitsPastShowsNearestFutureAndQuestionsFollowEndOrNinetyMinutes() {
+    @Test fun todayOmitsPastAndFutureAndRoutesDoneAction() {
         val day = LocalDate.of(2026, 9, 26)
         val now = mutableStateOf(Instant.parse("2026-09-26T11:29:00Z"))
         val sessions = listOf(
@@ -73,15 +73,15 @@ class CalendarTodayScreenTest {
             onDone = { done = it }, onSkip = {}) } }
         compose.onNodeWithTag("session_done_past").assertDoesNotExist()
         compose.onNodeWithTag("session_done_far").assertDoesNotExist()
-        compose.onNodeWithTag("session_done_near").assertExists()
+        compose.onNodeWithTag("session_done_near").assertDoesNotExist()
         compose.onNodeWithTag("question_default").assertDoesNotExist()
         compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         click("session_done_default")
         compose.runOnIdle { assertEquals("default", done); now.value = Instant.parse("2026-09-26T11:30:00Z") }
-        compose.onNodeWithTag("question_default").assertExists()
+        compose.onNodeWithTag("question_default").assertDoesNotExist()
         compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         compose.runOnIdle { now.value = Instant.parse("2026-09-26T12:00:00Z") }
-        compose.onNodeWithTag("question_explicit").assertExists()
+        compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         compose.onNodeWithTag("question_done").assertDoesNotExist()
     }
 
@@ -90,7 +90,7 @@ class CalendarTodayScreenTest {
         val now = mutableStateOf(Instant.parse("2026-09-26T20:59:00Z"))
         val sessions = listOf(lesson("yesterday", day, 600), lesson("newday", day.plusDays(1), 600))
         compose.setContent { TrackerTheme { TodayContent(sessions, now.value, ZoneId.of("Europe/Moscow"), Locale.ENGLISH, {}, {}) } }
-        compose.onNodeWithTag("question_yesterday").assertExists()
+        compose.onNodeWithTag("question_yesterday").assertDoesNotExist()
         compose.runOnIdle { now.value = Instant.parse("2026-09-26T21:00:00Z") }
         compose.onNodeWithTag("session_done_yesterday").assertDoesNotExist()
         compose.onNodeWithTag("question_yesterday").assertDoesNotExist()

@@ -125,6 +125,18 @@ class CoursesScreenTest {
         compose.onNodeWithTag("course_title").assertDoesNotExist() // Invalid field stays editable.
     }
 
+    @Test fun nameSavesOnOutsideTouchWithoutSwallowingColorAction() {
+        val course = seed()
+        show(); click("course_row_${course.id}")
+        rename("Saved on background")
+        compose.onNodeWithTag("course_editor").performTouchInput { click(androidx.compose.ui.geometry.Offset(2f, 2f)) }
+        waitFor { runBlocking { dao.getCourse(course.id) }?.name == "Saved on background" }
+        compose.onNodeWithTag("course_title").assertTextEquals("Saved on background")
+        rename("Saved with color")
+        compose.onNodeWithTag("color_3").performTouchInput { click() }
+        waitFor { runBlocking { dao.getCourse(course.id) }?.let { it.name == "Saved with color" && it.colorId == 3 } == true }
+    }
+
     @Test fun appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea() {
         val original = seed(topics = listOf("Pointers", "Arrays"))
         val before = runBlocking { dao.getTopics(original.id) }.associateBy { it.title }
