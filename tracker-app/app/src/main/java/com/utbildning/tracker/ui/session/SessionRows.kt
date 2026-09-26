@@ -43,10 +43,10 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
                     cubicTo(0f, size.height, 0f, size.height * .6f, size.width * .1f, size.height * .35f)
                     close()
                 }
-                Box(Modifier.size(22.dp, 25.dp).background(CourseColors[session.colorIdSnapshot].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(22.dp, 25.dp).background(CourseColors[session.colorId].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot), contentAlignment = Alignment.Center) {
                     if (session.result == SessionResult.SKIPPED) Text("×", style = MaterialTheme.typography.labelSmall)
                 }
-                Text(session.courseNameSnapshot, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                Text(session.courseName, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             }
             val buttonBackground = MaterialTheme.colorScheme.secondaryContainer
             val selectedBackground = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = .1f).compositeOver(buttonBackground)
@@ -68,9 +68,9 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
         return
     }
     Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.width(5.dp).height(72.dp).background(CourseColors[session.colorIdSnapshot].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f)))
+        Box(Modifier.width(5.dp).height(72.dp).background(CourseColors[session.colorId].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f)))
         Column(Modifier.weight(1f)) {
-            Text(session.courseNameSnapshot, style = MaterialTheme.typography.titleMedium)
+            Text(session.courseName, style = MaterialTheme.typography.titleMedium)
             Text(time + " · " + status)
             if (question) Text(stringResource(R.string.session_question), modifier = Modifier.testTag("question_${session.id}"))
             Row {

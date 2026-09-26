@@ -39,6 +39,9 @@ class TrackerMigrationTest {
                 sqlite.execSQL("INSERT INTO courses (id,name,colorId,mode,createdAt,updatedAt,categoryId,isCompleted,isPaused,completedAt) VALUES ('c','C',0,'SCHEDULED',1,1,NULL,0,0,NULL)")
                 sqlite.execSQL("INSERT INTO topics (id,courseId,position,title,archivedAt) VALUES ('t','c',0,'Массивы',NULL)")
                 sqlite.execSQL("INSERT INTO schedules (courseId,startsOn,endsOn,generatedThrough) VALUES ('c',20000,NULL,20090)")
+                sqlite.execSQL("INSERT INTO sessions (id,courseId,date,startMinute,courseNameSnapshot,colorIdSnapshot,createdAt,updatedAt,endMinute,endDayOffset,result) VALUES ('s','c',20000,600,'Old',2,1,1,NULL,0,'DONE')")
+                sqlite.execSQL("INSERT INTO session_topic_history VALUES ('s','t','c','Массивы',1)")
+                sqlite.execSQL("INSERT INTO topic_completions VALUES ('t','c','SESSION',1,'s')")
                 sqlite.version = 1
             }
             val migrated = TrackerDatabase.open(context, name)
@@ -50,7 +53,15 @@ class TrackerMigrationTest {
                 assertEquals("Массивы", dao.getTopic("t")?.title)
                 assertEquals(20090L, dao.getSchedule("c")?.generatedThrough)
                 assertNull(dao.getSchedule("c")?.generationNotBefore)
-                assertEquals(2, migrated.openHelper.readableDatabase.version)
+                assertEquals(SessionResult.DONE, dao.getSession("s")!!.result)
+                assertEquals("C", dao.getSession("s")!!.courseName)
+                assertEquals(0, dao.getSession("s")!!.colorId)
+                assertEquals(1, dao.getHistory("s").size)
+                assertEquals("s", dao.getCompletion("t")!!.sessionId)
+                dao.updateCourse(dao.getCourse("c")!!.copy(name = "New", colorId = 4))
+                assertEquals("New", dao.getSession("s")!!.courseName)
+                assertEquals(4, dao.getSession("s")!!.colorId)
+                assertEquals(3, migrated.openHelper.readableDatabase.version)
             } finally { migrated.close() }
         } finally { context.deleteDatabase(name) }
     }

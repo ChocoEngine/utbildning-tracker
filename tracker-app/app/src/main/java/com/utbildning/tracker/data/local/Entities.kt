@@ -179,13 +179,11 @@ data class ScheduleRuleEntity(
         Index(value = ["id", "courseId"], unique = true),
     ],
 )
-data class SessionEntity(
+data class SessionRecord(
     @PrimaryKey val id: String,
     val courseId: String,
     val date: Long,
     val startMinute: Int,
-    val courseNameSnapshot: String,
-    val colorIdSnapshot: Int,
     val createdAt: Long,
     val updatedAt: Long,
     val endMinute: Int? = null,
@@ -196,9 +194,30 @@ data class SessionEntity(
         validateId(id)
         validateId(courseId)
         validateTime(startMinute, endMinute, endDayOffset)
-        require(courseNameSnapshot.isNotBlank())
-        require(colorIdSnapshot in 0..9)
     }
+}
+
+data class SessionEntity(
+    @PrimaryKey val id: String,
+    val courseId: String,
+    val date: Long,
+    val startMinute: Int,
+    val courseName: String,
+    val colorId: Int,
+    val createdAt: Long,
+    val updatedAt: Long,
+    val endMinute: Int? = null,
+    val endDayOffset: Int = 0,
+    val result: SessionResult = SessionResult.PENDING,
+) {
+    init {
+        validateId(id)
+        validateId(courseId)
+        validateTime(startMinute, endMinute, endDayOffset)
+        require(courseName.isNotBlank())
+        require(colorId in 0..9)
+    }
+    fun record() = SessionRecord(id, courseId, date, startMinute, createdAt, updatedAt, endMinute, endDayOffset, result)
 }
 
 @Entity(
@@ -206,7 +225,7 @@ data class SessionEntity(
     primaryKeys = ["sessionId", "topicId"],
     foreignKeys = [
         ForeignKey(
-            entity = SessionEntity::class,
+            entity = SessionRecord::class,
             parentColumns = ["id", "courseId"],
             childColumns = ["sessionId", "courseId"],
             onDelete = ForeignKey.CASCADE,

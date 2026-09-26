@@ -29,7 +29,9 @@ interface TrackerDao {
     suspend fun insertScheduleRule(rule: ScheduleRuleEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertSession(session: SessionEntity)
+    suspend fun insertSessionRecord(session: SessionRecord)
+
+    suspend fun insertSession(session: SessionEntity) = insertSessionRecord(session.record())
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertHistory(history: SessionTopicHistoryEntity)
@@ -62,7 +64,9 @@ interface TrackerDao {
     suspend fun updateTopic(topic: TopicEntity)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    suspend fun updateSession(session: SessionEntity)
+    suspend fun updateSessionRecord(session: SessionRecord)
+
+    suspend fun updateSession(session: SessionEntity) = updateSessionRecord(session.record())
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateSchedule(schedule: ScheduleEntity)
@@ -70,10 +74,10 @@ interface TrackerDao {
     @Query("SELECT * FROM courses ORDER BY createdAt, id")
     suspend fun getCourses(): List<CourseEntity>
 
-    @Query("SELECT * FROM sessions ORDER BY date, startMinute, id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getAllSessions(): List<SessionEntity>
 
-    @Query("SELECT * FROM sessions ORDER BY date, startMinute, id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     fun observeSessions(): Flow<List<SessionEntity>>
 
     @Query("DELETE FROM sessions WHERE id = :id")
@@ -85,7 +89,7 @@ interface TrackerDao {
     @Query("SELECT * FROM topics WHERE id = :id")
     suspend fun getTopic(id: String): TopicEntity?
 
-    @Query("SELECT * FROM sessions WHERE id = :id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.id = :id")
     suspend fun getSession(id: String): SessionEntity?
 
     @Query("SELECT * FROM topic_completions WHERE topicId = :topicId")
@@ -100,7 +104,7 @@ interface TrackerDao {
     @Query("SELECT * FROM topics WHERE courseId = :courseId ORDER BY position, id")
     suspend fun getTopics(courseId: String): List<TopicEntity>
 
-    @Query("SELECT * FROM sessions WHERE courseId = :courseId ORDER BY date, startMinute, id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.courseId = :courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getSessions(courseId: String): List<SessionEntity>
 
     @Query("SELECT * FROM schedules WHERE courseId = :courseId")

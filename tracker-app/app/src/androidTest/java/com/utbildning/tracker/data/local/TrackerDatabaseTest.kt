@@ -220,7 +220,7 @@ class TrackerDatabaseTest {
     private fun session(id: String, courseId: String) =
         SessionEntity(id = id, courseId = courseId, date = 20_000L, startMinute = 600,
             endMinute = null, endDayOffset = 0, result = SessionResult.DONE,
-            courseNameSnapshot = "C", colorIdSnapshot = 0, createdAt = 100L, updatedAt = 100L)
+            courseName = "C", colorId = 0, createdAt = 100L, updatedAt = 100L)
 
     private fun history(sessionId: String, topicId: String, courseId: String) =
         SessionTopicHistoryEntity(sessionId = sessionId, topicId = topicId, courseId = courseId,

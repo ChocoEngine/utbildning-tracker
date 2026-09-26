@@ -32,29 +32,33 @@ class CalendarTodayScreenTest {
             onDone = { done = it }, onSkip = { skipped = it }) } }
         compose.onNodeWithTag("session_done_first").assertDoesNotExist()
         click("calendar_day_${leapDay.toEpochDay()}")
-        click("session_done_first")
-        click("session_skip_second")
-        compose.runOnIdle { assertEquals("first", done); assertEquals("second", skipped) }
-        click("calendar_next")
+        compose.onNodeWithTag("calendar_session_first").assertHasNoClickAction()
+        compose.runOnIdle { assertNull(done); assertNull(skipped) }
+        compose.onNodeWithTag("session_skip_second").assertDoesNotExist()
+        compose.onNodeWithTag("calendar_grid").performTouchInput { swipeLeft() }
         compose.onNodeWithTag("calendar_day_${LocalDate.of(2028, 3, 31).toEpochDay()}").assertExists()
         compose.onNodeWithTag("calendar_day_${leapDay.toEpochDay()}").assertDoesNotExist()
         compose.onNodeWithTag("session_done_first").assertDoesNotExist()
-        click("calendar_prev")
+        compose.onNodeWithTag("calendar_grid").performTouchInput { swipeRight() }
         click("calendar_day_${leapDay.toEpochDay()}")
-        compose.onNodeWithTag("session_done_first").assertExists()
+        compose.onNodeWithTag("calendar_session_first").assertExists()
+        click("calendar_today")
+        compose.runOnIdle { assertEquals(YearMonth.now(), month.value); assertEquals(LocalDate.now(), selected.value) }
     }
 
     @Test fun calendarShowsOneInkAndPerSessionBarsWithSkippedMarks() {
         val date = LocalDate.of(2028, 2, 29)
         val sessions = listOf(
-            lesson("pending", date, 600, result = SessionResult.PENDING).copy(colorIdSnapshot = 0),
-            lesson("done", date, 630, result = SessionResult.DONE).copy(colorIdSnapshot = 1),
-            lesson("skip_a", date, 660, result = SessionResult.SKIPPED).copy(colorIdSnapshot = 2),
-            lesson("skip_b", date, 690, result = SessionResult.SKIPPED).copy(colorIdSnapshot = 3),
+            lesson("pending", date, 600, result = SessionResult.PENDING).copy(colorId = 0),
+            lesson("done", date, 630, result = SessionResult.DONE).copy(colorId = 1),
+            lesson("skip_a", date, 660, result = SessionResult.SKIPPED).copy(colorId = 2),
+            lesson("skip_b", date, 690, result = SessionResult.SKIPPED).copy(colorId = 3),
         )
         compose.setContent { TrackerTheme { CalendarContent(YearMonth.from(date), date, sessions, Locale.ENGLISH, {}, {}, {}, {}) } }
         val description = compose.onNodeWithTag("calendar_day_${date.toEpochDay()}").fetchSemanticsNode().config.toString()
-        assertTrue(description.contains("Planned")); assertTrue(description.contains("Done")); assertTrue(description.contains("Skipped"))
+        val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+        listOf(com.utbildning.tracker.R.string.session_planned, com.utbildning.tracker.R.string.session_done,
+            com.utbildning.tracker.R.string.session_skipped).forEach { assertTrue(description.contains(context.getString(it))) }
     }
 
     @Test fun todayOmitsPastAndFutureAndRoutesDoneAction() {

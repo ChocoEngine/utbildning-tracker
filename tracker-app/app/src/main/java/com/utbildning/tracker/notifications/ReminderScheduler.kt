@@ -92,7 +92,7 @@ object ReminderScheduler {
                 val content = PendingIntent.getActivity(context, 0, open, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                 try {
                     manager.notify(session.id, 1, Notification.Builder(context, CHANNEL)
-                        .setSmallIcon(R.drawable.ic_book).setContentTitle(session.courseNameSnapshot)
+                        .setSmallIcon(R.drawable.ic_book).setContentTitle(session.courseName)
                         .setContentText(context.getString(R.string.reminder_start)).setContentIntent(content)
                         .setAutoCancel(true).setOnlyAlertOnce(true).build())
                     delivered.add(session.id)

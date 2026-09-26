@@ -101,10 +101,10 @@ class ScheduleRepositoryTest {
         clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
         repo.updateCourse(course.id, "New", 1)
         val updated = dao.getSessions(course.id)
-        assertEquals("C", updated[0].courseNameSnapshot)
-        assertEquals("C", updated[1].courseNameSnapshot)
-        assertEquals("New", updated[2].courseNameSnapshot)
-        assertEquals(1, updated[2].colorIdSnapshot)
+        assertEquals("New", updated[0].courseName)
+        assertEquals("New", updated[1].courseName)
+        assertEquals("New", updated[2].courseName)
+        assertEquals(1, updated[2].colorId)
     }
 
     private suspend fun rejects(error: RepositoryError, action: suspend () -> Unit) {

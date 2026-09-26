@@ -7,7 +7,7 @@ namespace и applicationId — `com.utbildning.tracker`.
 и локальные напоминания. Выбор RU/EN сохраняет системный LocaleManager.
 Все Compose-экраны имеют автономные Preview в теме приложения.
 
-Room хранит данные локально; схема v2 и миграция 1→2 находятся в `app/schemas/`
+Room хранит данные локально; схема v3 и миграции 1→2→3 находятся в `app/schemas/`
 и `data/local/TrackerDatabase.kt`. Контракты: [данные](../docs/DATA_CONTRACT.md),
 [расписание](../docs/SCHEDULE_CONTRACT.md), [уведомления](../docs/NOTIFICATIONS.md).
 Текущий статус проверок и оставшиеся ограничения — [отчёт](../docs/checks/mvp/README.md)

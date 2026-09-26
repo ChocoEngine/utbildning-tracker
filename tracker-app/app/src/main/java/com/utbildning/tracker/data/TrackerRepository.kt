@@ -56,7 +56,7 @@ class TrackerRepository(
     suspend fun synchronize(throughDate: Long? = null) = operations.synchronize(throughDate)
     suspend fun getSessionDetails(sessionId: String) = operations.getSessionDetails(sessionId)
     fun observeSessionDetails(sessionId: String) = database.invalidationTracker
-        .createFlow("sessions", "topics", "topic_completions")
+        .createFlow("sessions", "courses", "topics", "topic_completions")
         .map { getSessionDetails(sessionId) }
     suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null) =
         operations.setSessionResult(sessionId, result, selectedTopicIds)
@@ -232,7 +232,6 @@ class TrackerRepository(
             categoryId = resolveCategory(categoryName), updatedAt = now(),
         )
         dao.updateCourse(updated)
-        operations.refreshFutureSnapshots(updated)
         dao.deleteColorReservation(courseId)
         if (!updated.isCompleted) {
             dao.insertColorReservation(ColorReservationEntity(colorId, courseId))

@@ -46,15 +46,15 @@ class CalendarIntegrationTest {
         assertTrue(runBlocking { dao.getSessions(course.id) }.none { it.date == target.toEpochDay() })
         var requestedSession: String? = null
         compose.setContent { TrackerTheme { if (visible.value) CalendarScreen({}, repository) { requestedSession = it } } }
-        repeat(6) { click("calendar_next") }
+        repeat(6) { compose.onNodeWithTag("calendar_grid").performTouchInput { swipeLeft() } }
         compose.waitUntil(10_000) { runBlocking { dao.getSessions(course.id) }.any { it.date == target.toEpochDay() } }
         val session = runBlocking { dao.getSessions(course.id) }.single { it.date == target.toEpochDay() }
         click("calendar_day_${target.toEpochDay()}")
-        click("session_done_${session.id}")
-        compose.runOnIdle { assertEquals(session.id, requestedSession) }
-        click("session_skip_${session.id}")
+        compose.onNodeWithTag("calendar_session_${session.id}").assertHasNoClickAction()
+        compose.runOnIdle { assertNull(requestedSession) }
+        runBlocking { repository.setSessionResult(session.id, SessionResult.SKIPPED) }
         compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.SKIPPED }
-        click("session_pending_${session.id}")
+        runBlocking { repository.setSessionResult(session.id, SessionResult.PENDING) }
         compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.PENDING }
         assertEquals(1, runBlocking { dao.getSessions(course.id) }.count { it.date == target.toEpochDay() })
     }

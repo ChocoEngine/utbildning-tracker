@@ -65,7 +65,7 @@ class EmulatorDemoSeedTest {
                         if (today.any { it.courseId == course.id && it.startMinute == minute }) continue
                         val original = today.firstOrNull { it.startMinute == minute && it.courseId == preferences.getString("landscapes", null) && it.result == com.utbildning.tracker.data.local.SessionResult.PENDING && dao.getHistory(it.id).isEmpty() }
                         if (original != null) {
-                            dao.updateSession(original.copy(courseId = course.id, courseNameSnapshot = course.name, colorIdSnapshot = course.colorId, updatedAt = timestamp))
+                            dao.updateSession(original.copy(courseId = course.id, courseName = course.name, colorId = course.colorId, updatedAt = timestamp))
                         } else {
                             dao.insertSession(SessionEntity(UUID.randomUUID().toString(), course.id, date, minute, course.name, course.colorId, timestamp, timestamp))
                         }

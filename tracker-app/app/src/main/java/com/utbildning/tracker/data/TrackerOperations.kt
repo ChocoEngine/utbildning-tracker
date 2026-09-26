@@ -140,13 +140,6 @@ internal class TrackerOperations(
         dao.getSessions(courseId).filter { it.result == SessionResult.PENDING && start(it) > timestamp }.forEach { dao.deleteSession(it.id) }
     }
 
-    suspend fun refreshFutureSnapshots(course: CourseEntity) {
-        val timestamp = now()
-        dao.getSessions(course.id).filter { it.result == SessionResult.PENDING && start(it) > timestamp }.forEach {
-            dao.updateSession(it.copy(courseNameSnapshot = course.name, colorIdSnapshot = course.colorId, updatedAt = timestamp))
-        }
-    }
-
     suspend fun completeCourse(courseId: String) = database.withTransaction {
         synchronize()
         val course = course(courseId)

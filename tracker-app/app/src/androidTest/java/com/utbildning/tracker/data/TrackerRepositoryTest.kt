@@ -113,7 +113,7 @@ class TrackerRepositoryTest {
         assertEquals(listOf(0) + (2..9).toList(), repository.availableColors(first.id))
     }
 
-    @Test fun editMovesReservationAndPreservesModeProgressAndHistoricalSnapshots() = runBlocking {
+    @Test fun editMovesReservationAndPreservesProgressWithCurrentCourseMetadata() = runBlocking {
         val course = repository.createCourse("C", 0, CourseMode.SCHEDULED, topics = listOf("Pointers"))
         val topic = dao.getTopics(course.id).single()
         val session = SessionEntity("session", course.id, 20, 600, "C", 0, 100, 100, result = SessionResult.DONE)
@@ -130,7 +130,7 @@ class TrackerRepositoryTest {
         assertEquals(3, dao.getReservation(course.id)?.colorId)
         assertTrue(repository.availableColors().contains(0))
         assertFalse(repository.availableColors().contains(3))
-        assertEquals(session, dao.getSession(session.id))
+        assertEquals(session.copy(courseName = "Advanced C", colorId = 3), dao.getSession(session.id))
         assertEquals(listOf(history), dao.getHistory(session.id))
         assertEquals(completion, dao.getCompletion(topic.id))
         assertEquals(listOf(topic), dao.getTopics(course.id))

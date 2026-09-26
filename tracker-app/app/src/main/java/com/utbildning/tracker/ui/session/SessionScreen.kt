@@ -53,7 +53,7 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
     val current = details
     if (current == null) {
         Column(Modifier.padding(20.dp)) { TextButton(onClick = onBack) { Text(stringResource(R.string.back)) } }
-    } else SessionContent(current.session.courseNameSnapshot, current.selectableTopics, selected.orEmpty().toSet(), busy, error,
+    } else SessionContent(current.session.courseName, current.selectableTopics, selected.orEmpty().toSet(), busy, error,
         onToggle = { topicId -> selected = ArrayList(selected.orEmpty().let { if (topicId in it) it - topicId else it + topicId }) },
         onCancel = onBack, onSave = {
             scope.launch {
