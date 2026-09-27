@@ -57,7 +57,21 @@ class ScheduleScreenTest {
         compose.runOnIdle { assertEquals(emptyList<WeeklyRule>(), saved) }
         clickScrolled("schedule_day_2")
         compose.onNodeWithTag("schedule_save").performClick()
-        compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1140)), saved) }
+        compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1200)), saved) }
+    }
+
+    @Test fun endDateWithoutWeekdaysCanBeSavedAndCleared() {
+        val end = LocalDate.now().plusDays(30).toEpochDay()
+        var saved: Pair<List<WeeklyRule>, Long?>? = null
+        compose.setContent { TrackerTheme { ScheduleContent(initialEnd = end,
+            onSave = { rules, date -> saved = rules to date }) } }
+        clickScrolled("schedule_date")
+        compose.onNodeWithTag("schedule_date_apply").performClick()
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.runOnIdle { assertEquals(emptyList<WeeklyRule>() to end, saved) }
+        clickScrolled("schedule_clear_date")
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.runOnIdle { assertEquals(emptyList<WeeklyRule>() to null, saved) }
     }
 
     @Test fun savedInstanceRestorationRetainsChangedDaysAndClearedDate() {
@@ -74,7 +88,7 @@ class ScheduleScreenTest {
         compose.onNodeWithTag("schedule_day_6").assertIsOff()
         compose.onNodeWithTag("schedule_clear_date").assertDoesNotExist()
         compose.onNodeWithTag("schedule_save").performClick()
-        compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1140)) to null, saved) }
+        compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1200)) to null, saved) }
     }
 
     @Test fun completedCourseScheduleIsReadOnly() {

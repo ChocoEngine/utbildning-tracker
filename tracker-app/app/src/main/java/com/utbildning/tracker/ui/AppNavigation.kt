@@ -93,7 +93,7 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         bottomBar = {
-            if (route in MainDestination.entries.map { it.route }) {
+            if (route in MainDestination.entries.map { it.route } && !(route == "courses" && courseExit != null)) {
                 androidx.compose.foundation.layout.Column {
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     NavigationBar(

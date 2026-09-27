@@ -29,6 +29,27 @@ class ScheduleRepositoryTest {
     }
     @After fun close() = db.close()
 
+    @Test fun endDateWithoutRulesSurvivesReloadAndCanBeEditedOrGivenWeekdays() = runBlocking {
+        val course = repo.createCourse("C", 0)
+        repo.saveInitialSchedule(course.id, emptyList(), monday + 30)
+        val reloaded = TrackerRepository(db, now = { clock }, zone = { ZoneId.of("UTC") })
+        assertEquals(monday + 30, reloaded.getSchedule(course.id)?.endsOn)
+        assertTrue(reloaded.getScheduleRules(course.id).isEmpty())
+        reloaded.synchronize()
+        assertTrue(dao.getSessions(course.id).isEmpty())
+        assertFalse(dao.getCourse(course.id)!!.isCompleted)
+        reloaded.updateSchedule(course.id, emptyList(), monday + 40)
+        assertEquals(monday + 40, reloaded.getSchedule(course.id)?.endsOn)
+        assertTrue(dao.getSessions(course.id).isEmpty())
+        reloaded.updateSchedule(course.id, listOf(WeeklyRule(2, 1140)), monday + 40)
+        assertTrue(dao.getSessions(course.id).isNotEmpty())
+        reloaded.updateSchedule(course.id, emptyList(), monday + 50)
+        assertTrue(dao.getSessions(course.id).isEmpty())
+        assertEquals(monday + 50, reloaded.getSchedule(course.id)?.endsOn)
+        reloaded.disableSchedule(course.id)
+        assertNull(reloaded.getSchedule(course.id))
+    }
+
     @Test fun switchingModesKeepsHistoryAndProgressAndCanGenerateAgain() = runBlocking {
         val course = repo.createCourse("C", 0, topics = listOf("One", "Two", "Three"))
         val topics = dao.getTopics(course.id)

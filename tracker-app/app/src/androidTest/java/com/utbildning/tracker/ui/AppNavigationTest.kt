@@ -86,6 +86,70 @@ class AppNavigationTest {
         } finally { runBlocking { repository.deleteCourse(course.id) } }
     }
 
+    @Test fun pausedCourseCanResumeThroughScheduleWithoutLosingProgress() {
+        val repository = AppContainer.repository(compose.activity)
+        val course = runBlocking {
+            repository.createCourse("Resume flow", repository.availableColors().first(), topics = listOf("C basics", "Pointers"))
+        }
+        val topics = runBlocking { repository.getCourseDetails(course.id)!!.topics }
+        runBlocking {
+            repository.toggleTopicCompletion(course.id, topics.first().id)
+            repository.saveInitialSchedule(course.id, listOf(com.utbildning.tracker.domain.WeeklyRule(2, 1200)))
+            repository.pauseCourse(course.id)
+        }
+        try {
+            compose.onNodeWithTag("nav_courses").performClick()
+            compose.onNodeWithTag("course_row_${course.id}").performScrollTo().performClick()
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule").assertIsDisplayed().performClick()
+            compose.onNodeWithTag("schedule_day_3").performScrollTo().performClick()
+            pressBack()
+            org.junit.Assert.assertTrue(runBlocking { repository.getCourse(course.id)!!.isPaused })
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule").performClick()
+            compose.onNodeWithTag("schedule_day_3").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_save").performClick()
+            compose.waitUntil(10_000) { runBlocking { !repository.getCourse(course.id)!!.isPaused } }
+            val details = runBlocking { repository.getCourseDetails(course.id)!! }
+            assertEquals(course.colorId, details.course.colorId)
+            assertEquals(1, details.topics.count { it.isCompleted })
+            assertEquals(listOf(3), runBlocking { repository.getScheduleRules(course.id).map { it.dayOfWeek } })
+            org.junit.Assert.assertTrue(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
+        } finally { runBlocking { repository.deleteCourse(course.id) } }
+    }
+
+    @Test fun courseEditorHidesTabsAndReturningToListRestoresThem() {
+        val repository = AppContainer.repository(compose.activity)
+        val course = runBlocking {
+            repository.createCourse("Navigation flow", repository.availableColors().first())
+        }
+        fun assertTabsHidden() {
+            for (tab in listOf("today", "calendar", "courses")) {
+                compose.onNodeWithTag("nav_$tab").assertDoesNotExist()
+            }
+        }
+        try {
+            compose.onNodeWithTag("nav_courses").performClick()
+            compose.onNodeWithTag("course_row_${course.id}").performScrollTo().performClick()
+            waitForTag("course_schedule")
+            assertTabsHidden()
+            compose.onNodeWithTag("course_schedule").performClick()
+            compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
+            assertTabsHidden()
+            pressBack()
+            waitForTag("course_schedule")
+            assertTabsHidden()
+            compose.activityRule.scenario.recreate()
+            waitForTag("course_schedule")
+            assertTabsHidden()
+            pressBack()
+            waitForTag("nav_courses")
+            for (tab in listOf("today", "calendar", "courses")) {
+                compose.onNodeWithTag("nav_$tab").assertIsDisplayed()
+            }
+        } finally { runBlocking { repository.deleteCourse(course.id) } }
+    }
+
     @Test
     fun existingScheduledCourseWithoutScheduleCanBeConfigured() {
         val repository = AppContainer.repository(compose.activity)

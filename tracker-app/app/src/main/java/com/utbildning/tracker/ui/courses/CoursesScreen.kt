@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.Path
@@ -280,7 +281,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
                         stringResource(if (draft.hasSchedule) R.string.course_configure else R.string.course_enable_schedule),
                         Modifier.size(20.dp))
                 } else Icon(painterResource(R.drawable.ic_calendar), null, Modifier.size(20.dp))
-                if (!draft.hasSchedule) Text(stringResource(R.string.course_unscheduled),
+                if (draft.rules.isEmpty()) Text(stringResource(R.string.course_unscheduled),
                     style = MaterialTheme.typography.bodyMedium)
                 else FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -417,6 +418,8 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
                     .semantics { contentDescription = categoryLabel }
                     .testTag("course_category"))
             if (visible) DropdownMenu(true, { expanded = false },
+                // Suggestions must not steal the text field's focus and commit partial input.
+                properties = PopupProperties(focusable = false),
                 shape = RoundedCornerShape(12.dp),
                 containerColor = MaterialTheme.colorScheme.background,
                 tonalElevation = 0.dp,

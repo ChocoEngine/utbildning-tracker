@@ -154,6 +154,25 @@ class CoursesScreenTest {
         compose.onNodeWithTag("topic_${after[2].id}").assertExists()
     }
 
+    @Test fun categorySuggestionsKeepFocusAndDoNotSavePartialInput() {
+        val course = seed()
+        runBlocking { dao.insertCategory(CategoryEntity("existing", "Programming")) }
+        show(); click("course_row_${course.id}")
+        click("course_category")
+        val field = compose.onNodeWithTag("course_category")
+        field.assertIsFocused()
+        for (letter in "Programming new") {
+            field.performTextInput(letter.toString())
+            field.assertIsFocused()
+            assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
+            assertEquals(listOf("Programming"), categories().map { it.name })
+        }
+        field.assertTextContains("Programming new")
+        compose.onNodeWithTag("category_menu").assertDoesNotExist()
+        click("color_3")
+        waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "Programming new" }
+    }
+
     @Test fun categoryAndColorSaveIndependentlyWithoutLosingRapidChanges() {
         val course = seed()
         runBlocking { dao.insertCategory(CategoryEntity("existing", "Existing")) }

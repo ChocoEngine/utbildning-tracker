@@ -82,7 +82,7 @@ internal fun ScheduleContent(
 ) {
     // Primitive saveable arrays retain the complete draft across activity recreation.
     var days by rememberSaveable { mutableStateOf(BooleanArray(7) { day -> initial.any { it.dayOfWeek == day + 1 } }) }
-    var starts by rememberSaveable { mutableStateOf(IntArray(7) { day -> initial.find { it.dayOfWeek == day + 1 }?.startMinute ?: 19 * 60 }) }
+    var starts by rememberSaveable { mutableStateOf(IntArray(7) { day -> initial.find { it.dayOfWeek == day + 1 }?.startMinute ?: 20 * 60 }) }
     var ends by rememberSaveable { mutableStateOf(IntArray(7) { day -> initial.find { it.dayOfWeek == day + 1 }?.endMinute ?: -1 }) }
     var endDate by rememberSaveable { mutableStateOf(initialEnd) }
     var dateDialog by rememberSaveable { mutableStateOf(false) }
@@ -140,7 +140,7 @@ internal fun ScheduleContent(
             if (invalid || error) Text(stringResource(if (error) R.string.schedule_failed else R.string.schedule_invalid), color = MaterialTheme.colorScheme.error)
         }
         if (!readOnly) Button(enabled = !saving, modifier = Modifier.fillMaxWidth().padding(20.dp).testTag("schedule_save"), onClick = {
-            invalid = (days.none { it } && endDate != null) || (endDate?.let { it < LocalDate.now().toEpochDay() } == true)
+            invalid = endDate?.let { it < LocalDate.now().toEpochDay() } == true
             if (!invalid) onSave((0..6).filter { days[it] }.map { i -> WeeklyRule(i + 1, starts[i], ends[i].takeIf { it >= 0 }) }, endDate)
         }) { Text(stringResource(R.string.schedule_save)) }
     }

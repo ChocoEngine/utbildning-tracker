@@ -32,7 +32,7 @@ internal class TrackerOperations(
     suspend fun saveInitialSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long?) = database.withTransaction {
         val course = course(courseId)
         if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
-        if (rules.isEmpty() || rules.map { it.dayOfWeek }.distinct().size != rules.size) {
+        if ((rules.isEmpty() && endsOn == null) || rules.map { it.dayOfWeek }.distinct().size != rules.size) {
             fail(RepositoryError.INVALID_SCHEDULE)
         }
         if (dao.getSchedule(courseId) != null) fail(RepositoryError.SCHEDULE_EXISTS)
@@ -53,7 +53,7 @@ internal class TrackerOperations(
         if (dao.getSchedule(courseId) == null) fail(RepositoryError.INVALID_SCHEDULE)
         val timestamp = now()
         val date = today(timestamp).toEpochDay()
-        if (rules.isEmpty() || rules.map { it.dayOfWeek }.distinct().size != rules.size ||
+        if ((rules.isEmpty() && endsOn == null) || rules.map { it.dayOfWeek }.distinct().size != rules.size ||
             (endsOn != null && endsOn < date)) fail(RepositoryError.INVALID_SCHEDULE)
         removeFuturePending(courseId, timestamp)
         dao.deleteSchedule(courseId)
