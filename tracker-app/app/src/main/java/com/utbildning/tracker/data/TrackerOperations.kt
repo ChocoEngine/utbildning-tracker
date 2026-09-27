@@ -174,7 +174,6 @@ internal class TrackerOperations(
         synchronize()
         val course = course(courseId)
         if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
-        if (dao.getSchedule(courseId) == null) fail(RepositoryError.INVALID_SCHEDULE)
         val timestamp = now()
         removeFuturePending(courseId, timestamp)
         dao.deleteSchedule(courseId)

@@ -270,6 +270,46 @@ class CoursesScreenTest {
         compose.onNodeWithTag("course_title").assertTextEquals(course.name)
     }
 
+    @Test fun pauseAndResumeStayInEditorAndAllowPausingAgain() {
+        val course = seed(topics = listOf("Pointers", "Arrays"))
+        runBlocking {
+            repository.saveInitialSchedule(course.id, listOf(com.utbildning.tracker.domain.WeeklyRule(1, 1200)))
+            repository.toggleTopicCompletion(course.id, dao.getTopics(course.id).first().id)
+        }
+        val before = runBlocking { dao.getTopics(course.id) }
+        show()
+        click("course_row_${course.id}")
+        click("course_pause"); click("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(course.id) }!!.isPaused }
+        compose.onNodeWithTag("course_editor").assertIsDisplayed()
+        click("course_resume")
+        waitFor { !runBlocking { dao.getCourse(course.id) }!!.isPaused }
+        compose.onNodeWithTag("course_editor").assertIsDisplayed()
+        waitFor { runCatching { compose.onNodeWithTag("course_pause").isDisplayed() }.getOrDefault(false) }
+        compose.onNodeWithTag("course_pause").assertIsDisplayed()
+        assertNull(runBlocking { repository.getSchedule(course.id) })
+        assertEquals(before, runBlocking { dao.getTopics(course.id) })
+        click("course_pause"); click("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(course.id) }!!.isPaused }
+        compose.onNodeWithTag("course_editor").assertIsDisplayed()
+        compose.onNodeWithTag("course_resume").assertIsDisplayed()
+    }
+
+    @Test fun completionStaysInEditorWithCompletedStatus() {
+        val course = seed(topics = listOf("Pointers", "Arrays"))
+        show()
+        click("course_row_${course.id}")
+        click("course_complete"); click("course_action_confirm")
+        waitFor { runCatching { compose.onNodeWithTag("course_status").isDisplayed() }.getOrDefault(false) }
+        compose.onNodeWithTag("course_editor").assertIsDisplayed()
+        compose.onNodeWithText("Completed").assertIsDisplayed()
+        compose.onNodeWithTag("course_delete").assertIsDisplayed()
+        compose.onNodeWithTag("course_complete").assertDoesNotExist()
+        compose.onNodeWithTag("course_schedule_row").assertDoesNotExist()
+        assertTrue(runBlocking { dao.getCourse(course.id) }!!.isCompleted)
+        assertTrue(runBlocking { dao.getTopics(course.id) }.all { it.isCompleted })
+    }
+
     private fun rename(value: String) {
         compose.onNodeWithTag("course_title").performScrollTo().performTouchInput { longClick() }
         text("course_name", value)

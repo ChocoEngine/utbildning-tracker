@@ -48,4 +48,9 @@
     <string name="course_schedule_until">Until %1$s</string>
     <string name="course_complete_short">Complete</string>
     <string name="course_pause_short">Pause</string>
+    <string name="course_add_category">Add category</string>
+    <string name="course_completed_label">Completed</string>
+    <string name="course_actions_label">Course actions</string>
+    <string name="course_resume">Resume</string>
+    <string name="course_color_label">Course color</string>
 </resources>

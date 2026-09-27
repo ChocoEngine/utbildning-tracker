@@ -48,4 +48,9 @@
     <string name="course_schedule_until">До %1$s</string>
     <string name="course_complete_short">Завершить</string>
     <string name="course_pause_short">Пауза</string>
+    <string name="course_add_category">Добавить категорию</string>
+    <string name="course_completed_label">Завершён</string>
+    <string name="course_actions_label">Действия с курсом</string>
+    <string name="course_resume">Продолжить</string>
+    <string name="course_color_label">Цвет курса</string>
 </resources>

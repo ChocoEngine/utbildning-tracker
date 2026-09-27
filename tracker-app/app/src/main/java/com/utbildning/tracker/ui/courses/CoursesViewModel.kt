@@ -151,7 +151,14 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
         if (snapshot.name.trim() != current.course.name || snapshot.category.trim() != current.category?.name.orEmpty() || snapshot.color != current.course.colorId)
             repository.updateCourse(id, snapshot.name, snapshot.color, snapshot.category)
     }
-    fun requestLifecycle(action: String) { lifecycleAction = action }
+    fun requestLifecycle(action: String) {
+        if (action == "resume") work {
+            val id = draft?.id ?: return@work
+            draft?.let { flush(it) }
+            repository.disableSchedule(id)
+            attach(id)
+        } else lifecycleAction = action
+    }
     fun dismissLifecycle() { lifecycleAction = null }
     fun confirmLifecycle() = work {
         val id = draft?.id ?: return@work
@@ -164,8 +171,20 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 return@work
             }
             "delete" -> repository.deleteCourse(id)
-            "pause" -> repository.pauseCourse(id)
-            "complete" -> repository.completeCourse(id)
+            "pause" -> {
+                draft?.let { flush(it) }
+                repository.pauseCourse(id)
+                attach(id)
+                lifecycleAction = null
+                return@work
+            }
+            "complete" -> {
+                draft?.let { flush(it) }
+                repository.completeCourse(id)
+                attach(id)
+                lifecycleAction = null
+                return@work
+            }
         }
         cancel()
     }
