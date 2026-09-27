@@ -25,11 +25,12 @@ class TrackerDatabaseTest {
 
     @After fun tearDown() { database.close() }
 
-    @Test fun constructorsRejectInvalidRangesAndCompletionOwnership() {
+    @Test fun constructorsRejectInvalidRangesAndCompletionDateWithoutCompletion() {
         assertThrows(IllegalArgumentException::class.java) { course("a", color = -1) }
         assertThrows(IllegalArgumentException::class.java) { course("a", color = 10) }
         assertThrows(IllegalArgumentException::class.java) { course("a").copy(isCompleted = true) }
         assertThrows(IllegalArgumentException::class.java) { course("a").copy(completedAt = 200L) }
+        assertThrows(IllegalArgumentException::class.java) { course("a").copy(colorId = null) }
         for (day in listOf(0, 8)) {
             assertThrows(IllegalArgumentException::class.java) { ScheduleRuleEntity("a", day, 600) }
         }
@@ -37,21 +38,16 @@ class TrackerDatabaseTest {
             assertThrows(IllegalArgumentException::class.java) { session("s", "a").copy(startMinute = minute) }
             assertThrows(IllegalArgumentException::class.java) { session("s", "a").copy(endMinute = minute) }
         }
-        assertThrows(IllegalArgumentException::class.java) { session("s", "a").copy(endDayOffset = 2) }
-        assertThrows(IllegalArgumentException::class.java) { session("s", "a").copy(endDayOffset = 1) }
-        assertThrows(IllegalArgumentException::class.java) { completion("t", "a").copy(source = CompletionSource.SESSION) }
-        assertThrows(IllegalArgumentException::class.java) { completion("t", "a", "s").copy(source = CompletionSource.MANUAL) }
-        assertThrows(IllegalArgumentException::class.java) { completion("t", "a", "s").copy(source = CompletionSource.COURSE_COMPLETION) }
+        assertThrows(IllegalArgumentException::class.java) { topic("t", "a").copy(completionDate = 20000L) }
         assertEquals(0, course("a", color = 0).colorId)
         assertEquals(9, course("b", color = 9).colorId)
-        assertEquals(1439, ScheduleRuleEntity("a", 7, 1439, 0, 1).startMinute)
+        assertEquals(1439, ScheduleRuleEntity("a", 7, 1439, 0).startMinute)
     }
 
     @Test fun manualCompletionDoesNotCreateCalendarEntries() = runBlocking {
-        dao.insertCourse(course("a", mode = CourseMode.UNSCHEDULED))
+        dao.insertCourse(course("a"))
         dao.insertTopic(topic("t", "a"))
-        dao.insertCompletion(completion("t", "a"))
-        assertEquals(CompletionSource.MANUAL, dao.getCompletion("t")?.source)
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = null))
         assertTrue(dao.getSessions("a").isEmpty())
         assertNull(dao.getSchedule("a"))
     }
@@ -65,40 +61,28 @@ class TrackerDatabaseTest {
         dao.insertTopic(topic("tb", "b"))
         dao.insertSession(session("sa", "a"))
         dao.insertSession(session("sb", "b"))
-        rejects { dao.insertHistory(history("sa", "tb", "a")) }
-        rejects { dao.insertHistory(history("sb", "ta", "a")) }
-        rejects { dao.insertHistory(history("missing", "ta", "a")) }
-        rejects { dao.insertHistory(history("sa", "missing", "a")) }
-        rejects { dao.insertCompletion(completion("ta", "b")) }
-        rejects { dao.insertCompletion(completion("missing", "a")) }
-        rejects { dao.insertCompletion(completion("ta", "a", "sa")) }
-        dao.insertHistory(history("sa", "ta", "a"))
-        dao.insertCompletion(completion("ta", "a", "sa"))
-        assertEquals("sa", dao.getCompletion("ta")?.sessionId)
+        dao.updateTopic(dao.getTopic("ta")!!.copy(isCompleted = true, completionDate = 20000L))
+        assertEquals(20000L, dao.getTopic("ta")?.completionDate)
     }
 
     @Test fun duplicateKeysAbortWithoutReplacingExistingData() = runBlocking {
-        seedHistory()
-        dao.insertCompletion(completion("t", "a", "s"))
-        dao.insertColorReservation(ColorReservationEntity(colorId = 0, courseId = "a"))
+        seedSession()
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = 20000L))
         dao.insertCourse(course("b", color = 1))
+        rejects { dao.insertTopic(topic("t", "a").copy(title = "replacement")) }
         rejects { dao.insertCourse(course("a", name = "replacement")) }
         rejects { dao.insertSession(session("other-id", "a")) }
-        rejects { dao.insertHistory(history("s", "t", "a").copy(topicTitleSnapshot = "replacement")) }
-        rejects { dao.insertCompletion(completion("t", "a")) }
-        rejects { dao.insertColorReservation(ColorReservationEntity(colorId = 0, courseId = "b")) }
-        rejects { dao.insertColorReservation(ColorReservationEntity(colorId = 1, courseId = "a")) }
         assertEquals("C", dao.getCourse("a")?.name)
         assertEquals(listOf("s"), dao.getSessions("a").map { it.id })
-        assertEquals("Pointers", dao.getHistory("s").single().topicTitleSnapshot)
-        assertEquals(CompletionSource.SESSION, dao.getCompletion("t")?.source)
-        assertEquals(0, dao.getReservation("a")?.colorId)
-        assertNull(dao.getReservation("b"))
+        assertEquals("Pointers", dao.getTopic("t")!!.title)
+        assertEquals(20000L, dao.getTopic("t")!!.completionDate)
+        assertEquals(0, dao.getCourse("a")?.colorId)
+        assertEquals(1, dao.getCourse("b")!!.colorId)
     }
 
     @Test fun deletingCategoryAndSchedulePreservesCourseAndHistory() = runBlocking {
         dao.insertCategory(CategoryEntity(id = "cat", name = "Programming"))
-        seedHistory(categoryId = "cat")
+        seedSession(categoryId = "cat")
         seedSchedule("a")
         dao.deleteCategory("cat")
         assertNull(dao.getCourse("a")?.categoryId)
@@ -107,44 +91,36 @@ class TrackerDatabaseTest {
         assertNull(dao.getSchedule("a"))
         assertTrue(dao.getScheduleRules("a").isEmpty())
         assertEquals(SessionResult.DONE, dao.getSession("s")?.result)
-        assertEquals(1, dao.getHistory("s").size)
     }
 
     @Test fun deletingCourseCascadesOnlyItsOwnData() = runBlocking {
-        seedHistory()
+        seedSession()
         seedSchedule("a")
-        dao.insertCompletion(completion("t", "a", "s"))
-        dao.insertColorReservation(ColorReservationEntity(colorId = 0, courseId = "a"))
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = 20000L))
         dao.insertCourse(course("b", color = 1))
         dao.insertTopic(topic("tb", "b"))
-        dao.insertCompletion(completion("tb", "b"))
+        dao.updateTopic(dao.getTopic("tb")!!.copy(isCompleted = true, completionDate = null))
         dao.deleteCourse("a")
         assertNull(dao.getCourse("a"))
         assertTrue(dao.getTopics("a").isEmpty())
         assertTrue(dao.getSessions("a").isEmpty())
-        assertTrue(dao.getHistory("s").isEmpty())
         assertTrue(dao.getScheduleRules("a").isEmpty())
         assertNull(dao.getSchedule("a"))
-        assertNull(dao.getCompletion("t"))
-        assertNull(dao.getReservation("a"))
+        assertNull(dao.getTopic("t")?.takeIf { it.isCompleted })
+        assertNull(dao.getCourse("a"))
         assertNotNull(dao.getCourse("b"))
         assertEquals("tb", dao.getTopics("b").single().id)
-        assertEquals(CompletionSource.MANUAL, dao.getCompletion("tb")?.source)
     }
 
-    @Test fun removingCompletionAndEditingTopicPreservesHistoricalFact() = runBlocking {
-        seedHistory()
-        dao.insertCompletion(completion("t", "a", "s"))
-        dao.deleteCompletion("t")
-        assertNull(dao.getCompletion("t"))
+    @Test fun removingCompletionAndEditingTopicPreservesSessionResult() = runBlocking {
+        seedSession()
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = 20000L))
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = false, completionDate = null))
+        assertNull(dao.getTopic("t")?.takeIf { it.isCompleted })
         assertEquals(SessionResult.DONE, dao.getSession("s")?.result)
-        dao.updateTopic(topic("t", "a").copy(title = "Renamed", archivedAt = 300L))
-        assertEquals("Pointers", dao.getHistory("s").single().topicTitleSnapshot)
-        assertEquals(300L, dao.getTopics("a").single().archivedAt)
-        dao.insertCompletion(completion("t", "a"))
-        assertEquals(CompletionSource.MANUAL, dao.getCompletion("t")?.source)
-        assertNull(dao.getCompletion("t")?.sessionId)
-        assertEquals(1, dao.getHistory("s").size)
+        dao.updateTopic(topic("t", "a").copy(title = "Renamed"))
+        dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = null))
+        assertNull(dao.getTopic("t")?.completionDate)
     }
 
     @Test fun failedTransactionRollsBackEarlierWrites() = runBlocking {
@@ -161,24 +137,23 @@ class TrackerDatabaseTest {
         assertNull(dao.getTopic("new-topic"))
     }
 
-    @Test fun fileDatabasePersistsCurrentStateAndIndependentHistoryAfterReopen() = runBlocking {
+    @Test fun fileDatabasePersistsTopicProgressAndSessionResultsAfterReopen() = runBlocking {
         val name = "room-persistence-${System.nanoTime()}.db"
         database.close()
         try {
             database = TrackerDatabase.open(context, name)
-            seedHistory()
+            seedSession()
             seedSchedule("a")
             dao.insertSession(session("pending", "a").copy(date = 20_001L, result = SessionResult.PENDING))
             dao.insertSession(session("skipped", "a").copy(date = 20_002L, result = SessionResult.SKIPPED))
-            dao.insertCompletion(completion("t", "a", "s"))
-            dao.deleteCompletion("t")
-            dao.insertCompletion(completion("t", "a"))
+            dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = 20000L))
+            dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = false, completionDate = null))
+            dao.updateTopic(dao.getTopic("t")!!.copy(isCompleted = true, completionDate = null))
             database.close()
             database = TrackerDatabase.open(context, name)
             assertEquals("C", dao.getCourse("a")?.name)
-            assertEquals(CompletionSource.MANUAL, dao.getCompletion("t")?.source)
-            assertNull(dao.getCompletion("t")?.sessionId)
-            assertEquals("s", dao.getHistory("s").single().sessionId)
+            assertTrue(dao.getTopic("t")!!.isCompleted)
+            assertNull(dao.getTopic("t")?.completionDate)
             assertEquals(SessionResult.DONE, dao.getSession("s")?.result)
             assertEquals(SessionResult.PENDING, dao.getSession("pending")?.result)
             assertEquals(SessionResult.SKIPPED, dao.getSession("skipped")?.result)
@@ -189,16 +164,15 @@ class TrackerDatabaseTest {
         }
     }
 
-    private suspend fun seedHistory(categoryId: String? = null) {
+    private suspend fun seedSession(categoryId: String? = null) {
         dao.insertCourse(course("a").copy(categoryId = categoryId))
         dao.insertTopic(topic("t", "a"))
         dao.insertSession(session("s", "a"))
-        dao.insertHistory(history("s", "t", "a"))
     }
 
     private suspend fun seedSchedule(courseId: String) {
         dao.insertSchedule(ScheduleEntity(courseId = courseId, startsOn = 20_000L, endsOn = null, generatedThrough = null))
-        dao.insertScheduleRule(ScheduleRuleEntity(courseId = courseId, dayOfWeek = 1, startMinute = 600, endMinute = null, endDayOffset = 0))
+        dao.insertScheduleRule(ScheduleRuleEntity(courseId = courseId, dayOfWeek = 1, startMinute = 600, endMinute = null))
     }
 
     private suspend fun rejects(block: suspend () -> Unit) {
@@ -210,24 +184,16 @@ class TrackerDatabaseTest {
         }
     }
 
-    private fun course(id: String, color: Int = 0, name: String = "C", mode: CourseMode = CourseMode.SCHEDULED) =
-        CourseEntity(id = id, name = name, colorId = color, categoryId = null, mode = mode,
+    private fun course(id: String, color: Int = 0, name: String = "C") =
+        CourseEntity(id = id, name = name, colorId = color, categoryId = null,
             isCompleted = false, isPaused = false, createdAt = 100L, updatedAt = 100L, completedAt = null)
 
     private fun topic(id: String, courseId: String) =
-        TopicEntity(id = id, courseId = courseId, position = 0, title = "Pointers", archivedAt = null)
+        TopicEntity(id = id, courseId = courseId, position = 0, title = "Pointers")
 
     private fun session(id: String, courseId: String) =
         SessionEntity(id = id, courseId = courseId, date = 20_000L, startMinute = 600,
-            endMinute = null, endDayOffset = 0, result = SessionResult.DONE,
+            endMinute = null, result = SessionResult.DONE,
             courseName = "C", colorId = 0, createdAt = 100L, updatedAt = 100L)
 
-    private fun history(sessionId: String, topicId: String, courseId: String) =
-        SessionTopicHistoryEntity(sessionId = sessionId, topicId = topicId, courseId = courseId,
-            topicTitleSnapshot = "Pointers", recordedAt = 200L)
-
-    private fun completion(topicId: String, courseId: String, sessionId: String? = null) =
-        TopicCompletionEntity(topicId = topicId, courseId = courseId,
-            source = if (sessionId == null) CompletionSource.MANUAL else CompletionSource.SESSION,
-            sessionId = sessionId, completedAt = 200L)
 }

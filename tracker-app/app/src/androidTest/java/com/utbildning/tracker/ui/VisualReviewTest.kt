@@ -67,7 +67,7 @@ class VisualReviewTest {
         val completedIds = topics.take(3).map { it.id }.toSet()
         val editableTopics = topics.map { EditableTopic(it.id, it.title, it.position, it.id in completedIds) }
         val text = topics.drop(3).joinToString("\n") { it.title }
-        val courses = (0..9).map { CourseEntity("course_$it", "$title ${it + 1}", it, CourseMode.SCHEDULED, 1, 1, categoryId = "category") }
+        val courses = (0..9).map { CourseEntity("course_$it", "$title ${it + 1}", it, 1, 1, categoryId = "category") }
         val date = LocalDate.of(2026, 9, 26)
         val sessions = courses.mapIndexed { index, course -> SessionEntity("session_$index", course.id, date.toEpochDay(), 8 * 60 + index * 30,
             course.name, index, 1, 1, result = when (index) { 0, 3, 6 -> SessionResult.DONE; 1, 4, 7, 9 -> SessionResult.SKIPPED; else -> SessionResult.PENDING }) } +

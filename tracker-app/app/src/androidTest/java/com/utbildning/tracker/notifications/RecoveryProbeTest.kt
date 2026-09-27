@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.data.AppContainer
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.first
@@ -20,7 +19,7 @@ class RecoveryProbeTest {
         val preferences = context.getSharedPreferences("recovery_probe", Context.MODE_PRIVATE)
         val phase = InstrumentationRegistry.getArguments().getString("recovery_phase")
         if (phase == null || phase == "prepare") {
-            val course = repository.createCourse("Recovery probe C", repository.availableColors().first(), CourseMode.SCHEDULED)
+            val course = repository.createCourse("Recovery probe C", repository.availableColors().first())
             val next = ZonedDateTime.now().plusMinutes(8).withSecond(0).withNano(0)
             repository.saveInitialSchedule(course.id, listOf(WeeklyRule(next.dayOfWeek.value, next.hour * 60 + next.minute)))
             val ids = repository.observeSessions().first().filter { it.courseId == course.id }.map { it.id }.toSet()

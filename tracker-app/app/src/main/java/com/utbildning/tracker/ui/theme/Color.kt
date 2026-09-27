@@ -21,3 +21,5 @@ val CourseColors: List<Color> = listOf(
     Color(0xFFA4AA73),
     Color(0xFFB29885),
 )
+
+fun courseColor(colorId: Int?): Color = CourseColors.getOrNull(colorId ?: -1) ?: Color(0xFF8B918A)

@@ -29,8 +29,70 @@ class ScheduleRepositoryTest {
     }
     @After fun close() = db.close()
 
+    @Test fun switchingModesKeepsHistoryAndProgressAndCanGenerateAgain() = runBlocking {
+        val course = repo.createCourse("C", 0, topics = listOf("One", "Two", "Three"))
+        val topics = dao.getTopics(course.id)
+        repo.toggleTopicCompletion(course.id, topics[0].id)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 12 * 60)))
+        assertNotNull(dao.getCourse(course.id))
+        val sessions = dao.getSessions(course.id)
+        repo.setSessionResult(sessions[0].id, SessionResult.DONE, setOf(topics[1].id))
+        // Legacy recorded results remain preserved when switching modes.
+        dao.updateSession(sessions[1].copy(result = SessionResult.SKIPPED))
+        clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
+        val completions = dao.getTopics(course.id).filter { it.isCompleted }
+        repo.disableSchedule(course.id)
+        assertNotNull(dao.getCourse(course.id))
+        assertNull(repo.getSchedule(course.id))
+        assertTrue(repo.getScheduleRules(course.id).isEmpty())
+        assertEquals(listOf(sessions[0].id, sessions[1].id), dao.getSessions(course.id).map { it.id })
+        assertEquals(completions, dao.getTopics(course.id).filter { it.isCompleted })
+        assertEquals(course.colorId, dao.getCourse(course.id)!!.colorId)
+        repo.synchronize()
+        assertEquals(2, dao.getSessions(course.id).size)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 12 * 60)))
+        val regenerated = dao.getSessions(course.id)
+        assertTrue(regenerated.size > 2)
+        assertEquals(completions, dao.getTopics(course.id).filter { it.isCompleted })
+        repo.synchronize()
+        assertEquals(regenerated, dao.getSessions(course.id))
+    }
+
+    @Test fun generationDoesNotAddSecondSessionOnAnExistingDate() = runBlocking {
+        val course = repo.createCourse("C", 0)
+        dao.insertSession(SessionEntity("existing", course.id, monday, 660, "C", 0, clock, clock))
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
+        assertEquals(listOf("existing"), dao.getSessions(course.id).filter { it.date == monday }.map { it.id })
+        repo.synchronize()
+        assertTrue(dao.getSessions(course.id).groupBy { it.date }.values.all { it.size == 1 })
+    }
+
+    @Test fun disablingWithoutTopicsKeepsCourseAndStartedSessions() = runBlocking {
+        val course = repo.createCourse("C", 0)
+        assertTrue(dao.getTopics(course.id).isEmpty())
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 12 * 60)))
+        clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
+        repo.disableSchedule(course.id)
+        assertNull(repo.getSchedule(course.id))
+        assertNotNull(repo.getCourse(course.id))
+        assertEquals(1, dao.getSessions(course.id).size)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 12 * 60)))
+        assertNotNull(repo.getSchedule(course.id))
+    }
+
+    @Test fun failedEnablingAndCompletedCourseKeepTheirMode() = runBlocking {
+        val course = repo.createCourse("C", 0, topics = listOf("One"))
+        try { repo.saveInitialSchedule(course.id, emptyList()); fail("Expected INVALID_SCHEDULE") }
+        catch (error: RepositoryException) { assertEquals(RepositoryError.INVALID_SCHEDULE, error.error) }
+        assertNotNull(dao.getCourse(course.id))
+        assertNull(repo.getSchedule(course.id))
+        repo.completeCourse(course.id)
+        try { repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720))); fail("Expected COURSE_COMPLETED") }
+        catch (error: RepositoryException) { assertEquals(RepositoryError.COURSE_COMPLETED, error.error) }
+    }
+
     @Test fun initialGenerationSkipsPastStartAndExpandsFarHorizonWithoutDuplicates() = runBlocking {
-        val course = repo.createCourse("C", 0, CourseMode.SCHEDULED)
+        val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 9 * 60)))
         assertTrue(dao.getSessions(course.id).all { it.date > monday })
         val far = monday + 300
@@ -43,7 +105,7 @@ class ScheduleRepositoryTest {
     }
 
     @Test fun longAbsenceCatchesUpOnlyPastPendingAndEndDateDoesNotCompleteCourse() = runBlocking {
-        val course = repo.createCourse("C", 0, CourseMode.SCHEDULED)
+        val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 12 * 60)), monday + 14)
         val first = dao.getSessions(course.id).first()
         repo.setSessionResult(first.id, SessionResult.DONE)
@@ -57,7 +119,7 @@ class ScheduleRepositoryTest {
     }
 
     @Test fun midnightSkipsYesterdayButLeavesTodayPending() = runBlocking {
-        val course = repo.createCourse("C", 0, CourseMode.SCHEDULED)
+        val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 23 * 60), WeeklyRule(2, 60)))
         clock = Instant.parse("2026-09-29T00:00:00Z").toEpochMilli()
         repo.synchronize()
@@ -65,22 +127,23 @@ class ScheduleRepositoryTest {
         assertEquals(SessionResult.PENDING, dao.getSessions(course.id)[1].result)
     }
 
-    @Test fun absenceBeyondInitialHorizonGeneratesMissingPastWeeks() = runBlocking {
-        val course = repo.createCourse("C", 0, CourseMode.SCHEDULED)
+    @Test fun absenceBeyondInitialHorizonLeavesGapAndGeneratesFutureOnly() = runBlocking {
+        val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
         clock = Instant.parse("2027-03-29T10:00:00Z").toEpochMilli()
         repo.synchronize()
         val today = LocalDate.parse("2027-03-29").toEpochDay()
         val missedBeyondOldHorizon = dao.getSessions(course.id).filter { it.date > monday + 90 && it.date < today }
-        assertTrue(missedBeyondOldHorizon.isNotEmpty())
+        assertTrue(missedBeyondOldHorizon.isEmpty())
         assertTrue(missedBeyondOldHorizon.all { it.result == SessionResult.SKIPPED })
         assertEquals(SessionResult.PENDING, dao.getSessions(course.id).single { it.date == today }.result)
     }
 
-    @Test fun invalidModesAndReplacementDoNotMutateSchedule() = runBlocking {
-        val without = repo.createCourse("C", 0, CourseMode.UNSCHEDULED, topics = listOf("Массивы"))
-        rejects(RepositoryError.INVALID_SCHEDULE) { repo.saveInitialSchedule(without.id, listOf(WeeklyRule(1, 720))) }
-        val course = repo.createCourse("Practice", 1, CourseMode.SCHEDULED)
+    @Test fun invalidRulesPauseAndReplacementDoNotMutateSchedule() = runBlocking {
+        val without = repo.createCourse("C", 0, topics = listOf("Массивы"))
+        rejects(RepositoryError.INVALID_SCHEDULE) { repo.saveInitialSchedule(without.id, listOf(WeeklyRule(1, 720)), monday - 1) }
+        assertNotNull(dao.getCourse(without.id))
+        val course = repo.createCourse("Practice", 1)
         rejects(RepositoryError.INVALID_SCHEDULE) { repo.saveInitialSchedule(course.id, emptyList()) }
         rejects(RepositoryError.INVALID_SCHEDULE) { repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)), monday - 1) }
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
@@ -88,16 +151,16 @@ class ScheduleRepositoryTest {
         rejects(RepositoryError.SCHEDULE_EXISTS) { repo.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 720))) }
         assertEquals(original, dao.getSessions(course.id))
         repo.pauseCourse(course.id)
-        rejects(RepositoryError.INVALID_SCHEDULE) { repo.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 720))) }
-        assertNull(dao.getSchedule(course.id))
-        assertTrue(dao.getCourse(course.id)!!.isPaused)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 720)))
+        assertNotNull(dao.getSchedule(course.id))
+        assertFalse(dao.getCourse(course.id)!!.isPaused)
     }
 
     @Test fun renamingAndRecoloringOnlyRefreshFutureUnmarkedSnapshots() = runBlocking {
-        val course = repo.createCourse("C", 0, CourseMode.SCHEDULED)
+        val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
         val sessions = dao.getSessions(course.id)
-        repo.setSessionResult(sessions[1].id, SessionResult.DONE)
+        dao.updateSession(sessions[1].copy(result = SessionResult.DONE))
         clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
         repo.updateCourse(course.id, "New", 1)
         val updated = dao.getSessions(course.id)

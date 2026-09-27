@@ -1,0 +1,32 @@
+# Android 16 system checks, 2026-09-26
+
+BOOT_COMPLETED: alarm observed before launching application after real reboot:
+    RTC_WAKEUP #8: Alarm{51d3a88 type 0 origWhen 1790421180000 whenElapsed 367543 com.utbildning.tracker}
+      tag=*walarm*:com.utbildning.tracker.START
+      type=RTC_WAKEUP origWhen=2026-09-26 14:13:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+5m21s872ms app_standby=-8s604ms device_idle=-- battery_saver=-8s604ms
+      whenElapsed=+5m21s872ms maxWhenElapsed=+5m21s872ms
+      operation=PendingIntent{2778c21: PendingIntentRecord{c1ee846 com.utbildning.tracker broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+
+TIMEZONE_CHANGED Europe/Moscow -> Europe/Berlin: local 14:13 retained; epoch advanced 3600000 ms:
+    RTC_WAKEUP #14: Alarm{52d9630 type 0 origWhen 1790424780000 whenElapsed 3967542 com.utbildning.tracker}
+      tag=*walarm*:com.utbildning.tracker.START
+      type=RTC_WAKEUP origWhen=2026-09-26 14:13:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+1h4m50s365ms app_standby=-21s509ms device_idle=-- battery_saver=-21s509ms
+      whenElapsed=+1h4m50s365ms maxWhenElapsed=+1h4m50s365ms
+      operation=PendingIntent{14bc2a9: PendingIntentRecord{c1ee846 com.utbildning.tracker broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+
+TIME_SET +60000 ms: original target epoch retained; one alarm:
+    RTC_WAKEUP #4: Alarm{375f432 type 0 origWhen 1790421180000 whenElapsed 307907 com.utbildning.tracker}
+      tag=*walarm*:com.utbildning.tracker.START
+      type=RTC_WAKEUP origWhen=2026-09-26 14:13:00.000 window=0 exactAllowReason=permission repeatInterval=0 count=0 flags=0x5
+      policyWhenElapsed: requester=+2m56s417ms app_standby=-3s531ms device_idle=-- battery_saver=-3s531ms
+      whenElapsed=+2m56s417ms maxWhenElapsed=+2m56s417ms
+      operation=PendingIntent{a4c6583: PendingIntentRecord{c1ee846 com.utbildning.tracker broadcastIntent}}
+      idle-options=Bundle[{android.pendingIntent.backgroundActivityAllowed=2, android:broadcast.temporaryAppAllowlistReasonCode=302, android:broadcast.temporaryAppAllowlistDuration=10000, android:broadcast.temporaryAppAllowlistReason=, android:broadcast.temporaryAppAllowlistType=0, android:broadcast.flags=8}]
+
+POST_NOTIFICATIONS revoked through adb pm revoke outside instrumentation.
+RecoveryProbeTest phase=denied: OK (1 test), allowed=false, calendar readable, IDs unchanged.
+Timezone and clock restored; permission re-granted.

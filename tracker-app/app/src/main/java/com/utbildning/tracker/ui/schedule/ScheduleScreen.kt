@@ -27,6 +27,8 @@ import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ScheduleScreen(repository: TrackerRepository, courseId: String, onBack: () -> Unit) {
@@ -39,17 +41,23 @@ fun ScheduleScreen(repository: TrackerRepository, courseId: String, onBack: () -
     val scope = rememberCoroutineScope()
     LaunchedEffect(courseId) {
         val schedule = repository.getSchedule(courseId)
-        readOnly = schedule != null
+        readOnly = schedule != null || repository.getCourse(courseId)?.isCompleted == true
         endsOn = schedule?.endsOn
-        initial = repository.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute, it.endDayOffset) }
+        initial = repository.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
         loaded = true
     }
     if (loaded) ScheduleContent(initial, endsOn, readOnly, saving, error, onBack) { rules, end ->
         saving = true
         scope.launch {
-            try { repository.saveInitialSchedule(courseId, rules, end); onBack() }
+            try {
+                repository.saveInitialSchedule(courseId, rules, end)
+                withContext(Dispatchers.Main.immediate) { onBack() }
+            }
             catch (e: CancellationException) { throw e }
-            catch (_: Exception) { error = true }
+            catch (failure: Exception) {
+                android.util.Log.e("Tracker", "Schedule save failed", failure)
+                error = true
+            }
             finally { saving = false }
         }
     } else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
@@ -105,7 +113,7 @@ internal fun ScheduleContent(
                             }
                         }
                         if (ends[index] >= 0) Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (ends[index] <= starts[index]) Text(stringResource(R.string.schedule_next_day), style = MaterialTheme.typography.bodySmall)
+                            if (ends[index] < starts[index]) Text(stringResource(R.string.schedule_next_day), style = MaterialTheme.typography.bodySmall)
                             TextButton(enabled = !readOnly && !saving, onClick = { ends = ends.copyOf().also { it[index] = -1 } }) { Text(stringResource(R.string.schedule_remove_end)) }
                         }
                     }
@@ -127,7 +135,7 @@ internal fun ScheduleContent(
         }
         if (!readOnly) Button(enabled = !saving, modifier = Modifier.fillMaxWidth().padding(20.dp).testTag("schedule_save"), onClick = {
             invalid = days.none { it } || (endDate?.let { it < LocalDate.now().toEpochDay() } == true)
-            if (!invalid) onSave((0..6).filter { days[it] }.map { i -> WeeklyRule(i + 1, starts[i], ends[i].takeIf { it >= 0 }, if (ends[i] >= 0 && ends[i] <= starts[i]) 1 else 0) }, endDate)
+            if (!invalid) onSave((0..6).filter { days[it] }.map { i -> WeeklyRule(i + 1, starts[i], ends[i].takeIf { it >= 0 }) }, endDate)
         }) { Text(stringResource(R.string.schedule_save)) }
     }
     if (dateDialog) {

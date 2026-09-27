@@ -1328,13 +1328,12 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;div id=&quot;course-editor&quot; aria-label=&quot;Макет редактора курса&quot;&gt;
  &lt;div class=&quot;ce-phone&quot;&gt;
-  &lt;header&gt;&lt;div class=&quot;ce-top&quot;&gt;&lt;span&gt;КУРСЫ / РЕДАКТИРОВАНИЕ&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;ce-save cursor-interaction&quot;&gt;Сохранить&lt;/button&gt;&lt;/div&gt;&lt;h1&gt;Мой курс&lt;/h1&gt;&lt;/header&gt;
+  &lt;header&gt;&lt;div class=&quot;ce-heading&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-back cursor-interaction&quot; aria-label=&quot;Назад к курсам&quot;&gt;&lt;i data-lucide=&quot;arrow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;h1&gt;&lt;button type=&quot;button&quot; class=&quot;ce-title cursor-interaction&quot; aria-label=&quot;Название курса, удерживайте для редактирования&quot;&gt;Лекции и семинары по C++&lt;/button&gt;&lt;/h1&gt;&lt;input class=&quot;ce-name&quot; value=&quot;Лекции и семинары по C++&quot; maxlength=&quot;50&quot; required aria-label=&quot;Название курса&quot; hidden&gt;&lt;/div&gt;&lt;div class=&quot;ce-name-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/div&gt;&lt;/header&gt;
   &lt;div class=&quot;ce-content&quot;&gt;
-   &lt;label class=&quot;ce-field&quot;&gt;Название&lt;input class=&quot;ce-name&quot; value=&quot;Лекции и семинары по C++&quot; maxlength=&quot;100&quot; required&gt;&lt;/label&gt;
-   &lt;label class=&quot;ce-field&quot;&gt;Категория&lt;select class=&quot;ce-category&quot;&gt;&lt;option&gt;Программирование&lt;/option&gt;&lt;option&gt;Языки&lt;/option&gt;&lt;option&gt;Без категории&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
-   &lt;div class=&quot;ce-label&quot;&gt;Цвет в календаре&lt;/div&gt;&lt;div class=&quot;ce-colors&quot; role=&quot;group&quot; aria-label=&quot;Свободные цвета курса&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ce-color-info ce-muted&quot;&gt;&lt;/div&gt;
+   &lt;div class=&quot;ce-category-wrap&quot;&gt;&lt;label class=&quot;ce-field&quot;&gt;Категория&lt;div class=&quot;ce-category-control&quot;&gt;&lt;input class=&quot;ce-category&quot; value=&quot;Программирование&quot; placeholder=&quot;Без категории&quot; role=&quot;combobox&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;ce-category-menu&quot; autocomplete=&quot;off&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-category-toggle cursor-interaction&quot; aria-label=&quot;Выбрать категорию&quot;&gt;&lt;i data-lucide=&quot;chevron-down&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&lt;/label&gt;&lt;div id=&quot;ce-category-menu&quot; class=&quot;ce-category-menu&quot; hidden&gt;&lt;/div&gt;&lt;/div&gt;
+   &lt;div class=&quot;ce-label&quot;&gt;Цвет в календаре&lt;/div&gt;&lt;div class=&quot;ce-colors&quot; role=&quot;group&quot; aria-label=&quot;Свободные цвета курса&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ce-color-info ce-muted&quot; hidden&gt;&lt;/div&gt;
    &lt;section class=&quot;ce-schedule&quot;&gt;&lt;div class=&quot;ce-schedule-title&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;strong&gt;По расписанию&lt;/strong&gt;&lt;button type=&quot;button&quot; class=&quot;ce-configure cursor-interaction&quot;&gt;Настроить&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;ce-schedule-days&quot;&gt;&lt;span&gt;Вт &lt;b&gt;19:00&lt;/b&gt;&lt;/span&gt;&lt;span&gt;Сб &lt;b&gt;11:00&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ce-muted&quot;&gt;Без даты окончания&lt;/div&gt;&lt;/section&gt;
-   &lt;section class=&quot;ce-schedule-editor&quot; hidden&gt;&lt;h2&gt;Расписание&lt;/h2&gt;&lt;p class=&quot;ce-bulk-help&quot;&gt;Выберите дни и время занятий.&lt;/p&gt;&lt;div class=&quot;ce-week-editor&quot;&gt;&lt;/div&gt;&lt;label class=&quot;ce-field&quot;&gt;Последний день занятий · необязательно&lt;input type=&quot;date&quot; class=&quot;ce-end-date&quot;&gt;&lt;/label&gt;&lt;p class=&quot;ce-schedule-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;div class=&quot;ce-topic-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-apply cursor-interaction&quot;&gt;Сохранить расписание&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;
+   &lt;section class=&quot;ce-schedule-editor&quot; hidden&gt;&lt;h2&gt;Расписание&lt;/h2&gt;&lt;div class=&quot;ce-week-editor&quot;&gt;&lt;/div&gt;&lt;label class=&quot;ce-field&quot;&gt;Дата окончания&lt;div class=&quot;ce-date-control&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-date-open cursor-interaction&quot; aria-label=&quot;Выбрать дату окончания&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;input type=&quot;date&quot; class=&quot;ce-end-date&quot; aria-label=&quot;Дата окончания&quot; hidden&gt;&lt;button type=&quot;button&quot; class=&quot;ce-date-clear cursor-interaction&quot; aria-label=&quot;Убрать дату окончания&quot; hidden&gt;&lt;i data-lucide=&quot;x&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&lt;/label&gt;&lt;p class=&quot;ce-schedule-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;div class=&quot;ce-topic-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-apply cursor-interaction&quot;&gt;Сохранить расписание&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;
    &lt;section class=&quot;ce-topics&quot;&gt;&lt;div class=&quot;ce-section-head&quot;&gt;&lt;h2&gt;Темы&lt;/h2&gt;&lt;span class=&quot;ce-total&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ce-track&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройденные темы&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ce-rows&quot; role=&quot;region&quot; aria-label=&quot;Список тем, прокручивается&quot;&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;ce-edit-list cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;list&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Редактировать список&lt;/button&gt;&lt;/section&gt;
    &lt;section class=&quot;ce-topic-editor&quot; hidden&gt;&lt;div class=&quot;ce-section-head&quot;&gt;&lt;h2&gt;Редактировать список&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;ce-bulk-help&quot;&gt;Одна строка — одна тема. Можно вставить весь список, изменить порядок или удалить строки.&lt;/p&gt;&lt;details class=&quot;ce-completed&quot;&gt;&lt;summary&gt;&lt;/summary&gt;&lt;div&gt;&lt;/div&gt;&lt;/details&gt;&lt;label class=&quot;ce-field&quot;&gt;Непройденные темы&lt;textarea class=&quot;ce-topic-text&quot; rows=&quot;12&quot; aria-describedby=&quot;ce-bulk-count ce-bulk-error&quot; placeholder=&quot;Лекция - Введение в C++&amp;#10;Семинар - Устройство памяти&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;p id=&quot;ce-bulk-count&quot; class=&quot;ce-bulk-count ce-muted&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;p id=&quot;ce-bulk-error&quot; class=&quot;ce-bulk-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;div class=&quot;ce-topic-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-apply cursor-interaction&quot;&gt;Применить список&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;
    &lt;div class=&quot;ce-finish&quot;&gt;&lt;span class=&quot;ce-course-status&quot; hidden&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;ce-finish-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;check&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Завершить курс&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-pause-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;pause&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Поставить на паузу&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-delete-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;trash-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Удалить курс&lt;/button&gt;&lt;/div&gt;
@@ -1342,6 +1341,7 @@ html&gt;body{padding:0}&lt;/style&gt;
    &lt;div class=&quot;ce-feedback&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
   &lt;section class=&quot;ce-deleted&quot; hidden aria-live=&quot;polite&quot;&gt;&lt;h2&gt;Курс удалён&lt;/h2&gt;&lt;p&gt;Темы и календарь удалены.&lt;br&gt;Цвет снова доступен для нового курса.&lt;/p&gt;&lt;/section&gt;
+  &lt;section class=&quot;ce-return&quot; hidden&gt;&lt;button type=&quot;button&quot; class=&quot;ce-reopen cursor-interaction&quot;&gt;Открыть курс&lt;/button&gt;&lt;/section&gt;
   &lt;div class=&quot;ce-bottom-line&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
  &lt;/div&gt;
 &lt;/div&gt;
@@ -1352,11 +1352,29 @@ html&gt;body{padding:0}&lt;/style&gt;
 #course-editor header{padding:22px 24px 18px}
 #course-editor .ce-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
 #course-editor .ce-top&gt;span{font-size:10px;font-weight:600;letter-spacing:1.1px;color:var(--ce-muted)}
-#course-editor h1{font:400 34px/1.2 Georgia,serif;letter-spacing:-1px;margin:16px 0 0}
+#course-editor h1{font:400 24px/1.25 Georgia,serif;letter-spacing:-.5px;margin:0;overflow-wrap:anywhere;flex:1;touch-action:pan-y;user-select:none}
+#course-editor .ce-title{background:none;padding:0;text-align:left;font:inherit;letter-spacing:inherit;line-height:inherit;width:100%}
+#course-editor .ce-heading{display:flex;align-items:center;gap:10px}
+#course-editor .ce-back{background:none;flex:0 0 36px;padding:6px}
+#course-editor .ce-name{flex:1;width:0}
+#course-editor .ce-name-error{color:light-dark(#984d47,#e8aaa3);font-size:12px;margin:8px 0}
+#course-editor .ce-category-wrap{position:relative}
+#course-editor .ce-category-control{position:relative;display:flex;align-items:center}
+#course-editor .ce-category-control input{padding-right:44px}
+#course-editor .ce-category-toggle{position:absolute;right:1px;top:1px;background:none;width:42px;height:calc(100% - 2px);padding:8px}
+#course-editor .ce-category-menu{position:absolute;z-index:5;top:100%;left:0;right:0;background:var(--ce-paper);border:1px solid var(--ce-line);border-radius:12px;padding:4px;box-shadow:0 8px 20px color-mix(in srgb,var(--ce-ink) 10%,transparent)}
+#course-editor .ce-category-option{display:flex;align-items:center;gap:4px}
+#course-editor .ce-category-option&gt;button:first-child{flex:1;text-align:left;background:none}
+#course-editor .ce-category-option&gt;button:last-child{background:none;width:44px;padding:12px}
+#course-editor .ce-category-empty{display:block}
+#course-editor .ce-date-control{display:flex;align-items:center;gap:6px}
+#course-editor .ce-date-control input{flex:1;width:0}
+#course-editor .ce-return{padding:20px 24px 32px}
+
 #course-editor h2{font-size:19px;letter-spacing:-.4px;font-weight:500;margin:0}
 #course-editor button,#course-editor input,#course-editor select,#course-editor textarea{font:inherit;color:inherit}
 #course-editor button{border:0;background:var(--ce-panel);border-radius:12px;padding:10px 12px;font-size:12px;min-height:44px}
-#course-editor .ce-save,#course-editor .ce-apply{background:var(--ce-ink);color:var(--ce-paper)}
+#course-editor .ce-apply{background:var(--ce-ink);color:var(--ce-paper)}
 #course-editor .ce-content{padding:0 24px 10px}
 #course-editor .ce-field{display:grid;gap:7px;font-size:11px;color:var(--ce-muted);margin-bottom:17px}
 #course-editor input,#course-editor select,#course-editor textarea{background:var(--ce-panel);border:1px solid var(--ce-line);border-radius:12px;padding:12px;width:100%;min-width:0;color:var(--ce-ink);font-size:16px;line-height:1.45}
@@ -1388,7 +1406,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 #course-editor .ce-track{height:5px;background:color-mix(in srgb,var(--ce-color) 20%,var(--ce-paper));border-radius:5px;overflow:hidden;margin-bottom:10px}
 #course-editor .ce-track&gt;div{height:100%;background:var(--ce-color);border-radius:5px}
 #course-editor .ce-rows{max-height:300px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--ce-line) transparent;overscroll-behavior-y:contain}
-#course-editor .ce-row{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:center;gap:6px;width:100%;text-align:left;background:none;border-radius:0;border-bottom:1px solid var(--ce-line);padding:var(--ce-spacing) 0;font-size:13px;line-height:1.5;min-height:46px;touch-action:pan-y;user-select:none}
+#course-editor .ce-row{display:grid;grid-template-columns:24px minmax(0,1fr) 18px;align-items:center;gap:6px;width:100%;text-align:left;background:none;border-radius:0;border-bottom:1px solid var(--ce-line);padding:var(--ce-spacing) 0;font-size:13px;line-height:1.5;min-height:46px;touch-action:pan-y;user-select:none}
 #course-editor .ce-row&gt;span:nth-child(2){overflow-wrap:anywhere}
 #course-editor .ce-number{font-size:11px;color:var(--ce-muted);padding-top:2px;font-variant-numeric:tabular-nums}
 #course-editor .ce-row svg{width:14px;height:14px;margin-top:3px;color:var(--ce-muted)}
@@ -1422,25 +1440,26 @@ html&gt;body{padding:0}&lt;/style&gt;
 (()=&gt;{
 const root=document.getElementById(&#x27;course-editor&#x27;);
 const initialNames=[&#x27;Лекция - Введение в C++&#x27;,&#x27;Семинар - Введение в C++&#x27;,&#x27;Семинар - Устройство памяти&#x27;,&#x27;Лекция - Классы&#x27;,&#x27;Лекция - Шаблоны 1&#x27;,&#x27;Семинар - Шаблоны 1&#x27;,&#x27;Лекция - Наследование&#x27;,&#x27;Семинар - Владение и управление памятью&#x27;,&#x27;Семинар - Шаблоны, вывод типов и семантика значений в C++&#x27;,&#x27;Лекция - Исключения&#x27;,&#x27;Лекция - Обзор STL&#x27;,&#x27;Семинар - Scheme&#x27;,&#x27;Лекция - Расположение объектов в памяти и время жизни&#x27;,&#x27;Семинар - Расположение объектов в памяти и время жизни&#x27;,&#x27;Семинар - Компиляция&#x27;,&#x27;Лекция - Компиляция&#x27;,&#x27;Лекция - Clang + LLVM&#x27;,&#x27;Лекция - Строки&#x27;,&#x27;Лекция - C++ 26. Обзор&#x27;,&#x27;Лекция - Cide review&#x27;];
-const colors=[[&#x27;Зелёный&#x27;,&#x27;light-dark(#78ac80,#80bd91)&#x27;],[&#x27;Терракотовый&#x27;,&#x27;light-dark(#dc9475,#e6a382)&#x27;],[&#x27;Сиреневый&#x27;,&#x27;light-dark(#9d95cc,#b0a2e2)&#x27;],[&#x27;Голубой&#x27;,&#x27;light-dark(#81a9b5,#8fb6c2)&#x27;],[&#x27;Охристый&#x27;,&#x27;light-dark(#c7a558,#d9bc75)&#x27;],[&#x27;Пыльная роза&#x27;,&#x27;light-dark(#c28d9a,#d4a2ad)&#x27;],[&#x27;Бирюзовый&#x27;,&#x27;light-dark(#70a69c,#8dbdb3)&#x27;],[&#x27;Барвинковый&#x27;,&#x27;light-dark(#899ac0,#a2b1d5)&#x27;],[&#x27;Оливковый&#x27;,&#x27;light-dark(#a4aa73,#bdc18e)&#x27;],[&#x27;Какао&#x27;,&#x27;light-dark(#b29885,#cbb19b)&#x27;]];
+const colors=[[&#x27;Зелёный&#x27;,&#x27;light-dark(#78ac80,#80bd91)&#x27;],[&#x27;Терракотовый&#x27;,&#x27;light-dark(#dc9475,#e6a382)&#x27;],[&#x27;Сиреневый&#x27;,&#x27;light-dark(#9d95cc,#b0a2e2)&#x27;],[&#x27;Голубой&#x27;,&#x27;light-dark(#6b9dcc,#8cb5db)&#x27;],[&#x27;Охристый&#x27;,&#x27;light-dark(#c7a558,#d9bc75)&#x27;],[&#x27;Пыльная роза&#x27;,&#x27;light-dark(#c28d9a,#d4a2ad)&#x27;],[&#x27;Бирюзовый&#x27;,&#x27;light-dark(#397f79,#75b3a9)&#x27;],[&#x27;Барвинковый&#x27;,&#x27;light-dark(#899ac0,#a2b1d5)&#x27;],[&#x27;Оливковый&#x27;,&#x27;light-dark(#a4aa73,#bdc18e)&#x27;],[&#x27;Какао&#x27;,&#x27;light-dark(#b29885,#cbb19b)&#x27;]];
 const state={name:&#x27;Лекции и семинары по C++&#x27;,category:&#x27;Программирование&#x27;,color:0,expanded:false,finished:false,paused:false,deleted:false,topics:initialNames.map((name,i)=&gt;({id:i+1,name,done:i&lt;2})),nextId:21};
 state.schedule=[{day:1,start:&#x27;19:00&#x27;,end:&#x27;&#x27;},{day:5,start:&#x27;11:00&#x27;,end:&#x27;&#x27;}];state.endDate=&#x27;&#x27;;
 const weekdays=[&#x27;Пн&#x27;,&#x27;Вт&#x27;,&#x27;Ср&#x27;,&#x27;Чт&#x27;,&#x27;Пт&#x27;,&#x27;Сб&#x27;,&#x27;Вс&#x27;];
-const design={spacing:12,otherCourses:4};let editing=false,action=null,scheduleEditing=false;
+const design={spacing:12,otherCourses:0};let editing=false,action=null,scheduleEditing=false,nameEditing=false,categoryOpen=false,returned=false;
+let categories=[{name:&#x27;Программирование&#x27;,courses:2},{name:&#x27;Языки&#x27;,courses:1},{name:&#x27;Дизайн&#x27;,courses:0}];
 function occupiedColors(){return Array.from({length:design.otherCourses},(_,i)=&gt;i+1);}
 const $=q=&gt;root.querySelector(q),esc=s=&gt;String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
 function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
-function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{courseName:state.name,color:colors[state.color][0],expanded:state.expanded,finished:state.finished,paused:state.paused,deleted:state.deleted,unfinishedCourses:design.otherCourses+(!state.finished&amp;&amp;!state.deleted?1:0),design},privateContent:{editor:state}}).catch(()=&gt;{});}
+function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{courseName:state.name,color:colors[state.color][0],expanded:state.expanded,finished:state.finished,paused:state.paused,deleted:state.deleted,unfinishedCourses:design.otherCourses+(!state.finished&amp;&amp;!state.deleted?1:0),design},privateContent:{editor:state,categories}}).catch(()=&gt;{});}
 function render(){
  const occupied=occupiedColors();if(!state.finished&amp;&amp;!state.deleted&amp;&amp;occupied.includes(state.color))state.color=0;
- $(&#x27;.ce-content&#x27;).hidden=state.deleted;$(&#x27;.ce-deleted&#x27;).hidden=!state.deleted;$(&#x27;.ce-save&#x27;).hidden=state.deleted;
+ $(&#x27;.ce-content&#x27;).hidden=state.deleted||returned;$(&#x27;.ce-deleted&#x27;).hidden=!state.deleted;$(&#x27;.ce-return&#x27;).hidden=!returned;$(&#x27;.ce-title&#x27;).textContent=state.name;$(&#x27;.ce-title&#x27;).parentElement.hidden=nameEditing;$(&#x27;.ce-name&#x27;).hidden=!nameEditing;$(&#x27;.ce-category-toggle&#x27;).hidden=categories.length===0;
  $(&#x27;.ce-color-info&#x27;).textContent=state.finished?&#x27;Цвет освобождён для других курсов&#x27;:(9-design.otherCourses)+&#x27; свободных из 10&#x27;;
  root.style.setProperty(&#x27;--ce-color&#x27;,colors[state.color][1]);root.style.setProperty(&#x27;--ce-spacing&#x27;,design.spacing+&#x27;px&#x27;);
  $(&#x27;.ce-colors&#x27;).innerHTML=colors.map((c,i)=&gt;({c,i})).filter(({i})=&gt;state.finished?i===state.color:!occupied.includes(i)).map(({c,i})=&gt;&#x27;&lt;button type=&quot;button&quot; class=&quot;ce-color-button cursor-interaction&quot; data-color=&quot;&#x27;+i+&#x27;&quot; &#x27;+(state.finished?&#x27;disabled&#x27;:&#x27;&#x27;)+&#x27; aria-label=&quot;&#x27;+c[0]+&#x27;&quot; aria-pressed=&quot;&#x27;+(state.color===i)+&#x27;&quot;&gt;&lt;span class=&quot;ce-color-swatch&quot; style=&quot;background:&#x27;+c[1]+&#x27;&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(state.color===i?&#x27;✓&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);
  const done=state.topics.filter(t=&gt;t.done).length,total=state.topics.length;
  $(&#x27;.ce-total&#x27;).textContent=done+&#x27; из &#x27;+total+&#x27; пройдено&#x27;;const track=$(&#x27;.ce-track&#x27;);track.setAttribute(&#x27;aria-valuenow&#x27;,done);track.setAttribute(&#x27;aria-valuemin&#x27;,0);track.setAttribute(&#x27;aria-valuemax&#x27;,Math.max(total,1));track.firstElementChild.style.width=(total?done/total*100:0)+&#x27;%&#x27;;
  const scroll=$(&#x27;.ce-rows&#x27;).scrollTop;
- $(&#x27;.ce-rows&#x27;).innerHTML=state.topics.map((t,i)=&gt;&#x27;&lt;button type=&quot;button&quot; data-topic=&quot;&#x27;+t.id+&#x27;&quot; class=&quot;ce-row cursor-interaction &#x27;+(t.done?&#x27;ce-complete&#x27;:&#x27;&#x27;)+&#x27;&quot; aria-pressed=&quot;&#x27;+t.done+&#x27;&quot; aria-label=&quot;&#x27;+esc(t.name)+(t.done?&#x27;. Пройдена.&#x27;:&#x27;. Не пройдена.&#x27;)+&#x27; Удерживайте для изменения отметки.&quot;&gt;&lt;span class=&quot;ce-number&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(t.done?&#x27;✓&#x27;:i+1)+&#x27;&lt;/span&gt;&lt;span&gt;&#x27;+esc(t.name)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);
+ $(&#x27;.ce-rows&#x27;).innerHTML=state.topics.map((t,i)=&gt;&#x27;&lt;button type=&quot;button&quot; data-topic=&quot;&#x27;+t.id+&#x27;&quot; class=&quot;ce-row cursor-interaction &#x27;+(t.done?&#x27;ce-complete&#x27;:&#x27;&#x27;)+&#x27;&quot; aria-pressed=&quot;&#x27;+t.done+&#x27;&quot; aria-label=&quot;&#x27;+esc(t.name)+(t.done?&#x27;. Пройдена.&#x27;:&#x27;. Не пройдена.&#x27;)+&#x27; Удерживайте для изменения отметки.&quot;&gt;&lt;span class=&quot;ce-number&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(i+1)+&#x27;&lt;/span&gt;&lt;span&gt;&#x27;+esc(t.name)+&#x27;&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot;&gt;&#x27;+(t.done?&#x27;✓&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);
  $(&#x27;.ce-rows&#x27;).scrollTop=scroll;
  $(&#x27;.ce-course-status&#x27;).textContent=state.finished?&#x27;Курс пройден&#x27;:state.paused?&#x27;Курс на паузе&#x27;:&#x27;&#x27;;$(&#x27;.ce-course-status&#x27;).hidden=!state.finished&amp;&amp;!state.paused;$(&#x27;.ce-finish-button&#x27;).hidden=state.finished;
  $(&#x27;.ce-pause-button&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-edit-list&#x27;).hidden=state.finished;
@@ -1449,7 +1468,7 @@ function render(){
  $(&#x27;.ce-schedule-days&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-schedule .ce-muted&#x27;).textContent=state.finished?&#x27;Напоминания отключены&#x27;:state.paused?&#x27;Прогресс сохранён. Напоминания отключены.&#x27;:&#x27;Без даты окончания&#x27;;
  $(&#x27;.ce-schedule-days&#x27;).innerHTML=state.schedule.map(s=&gt;&#x27;&lt;span&gt;&#x27;+weekdays[s.day]+&#x27; &lt;b&gt;&#x27;+esc(s.start)+(s.end?&#x27;–&#x27;+esc(s.end):&#x27;&#x27;)+&#x27;&lt;/b&gt;&lt;/span&gt;&#x27;).join(&#x27;&#x27;);
  if(!state.finished&amp;&amp;!state.paused&amp;&amp;state.endDate)$(&#x27;.ce-schedule .ce-muted&#x27;).textContent=&#x27;До &#x27;+state.endDate.split(&#x27;-&#x27;).reverse().join(&#x27;.&#x27;);
- $(&#x27;.ce-configure&#x27;).hidden=state.finished;$(&#x27;.ce-configure&#x27;).textContent=state.paused?&#x27;Задать&#x27;:&#x27;Настроить&#x27;;
+ $(&#x27;.ce-configure&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-configure&#x27;).textContent=state.paused?&#x27;Задать&#x27;:&#x27;Настроить&#x27;;
  $(&#x27;.ce-schedule-editor&#x27;).hidden=!scheduleEditing;
  icons();
 }
@@ -1470,54 +1489,89 @@ function applyList(){
  if(!validateList()){$(&#x27;.ce-topic-text&#x27;).focus();return false;}
  const remaining=state.topics.filter(t=&gt;!t.done),pool=new Map();remaining.forEach(t=&gt;{if(!pool.has(t.name))pool.set(t.name,[]);pool.get(t.name).push(t);});
  const revised=lines().map(name=&gt;pool.get(name)?.shift()||{id:state.nextId++,name,done:false});
- const done=state.topics.filter(t=&gt;t.done);state.topics=[...done,...revised];editing=false;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;Список обновлён&#x27;;return true;
+ const original=state.topics;const next=[];let cursor=0;original.forEach(t=&gt;{if(t.done)next.push(t);else if(cursor&lt;revised.length)next.push(revised[cursor++]);});while(cursor&lt;revised.length)next.push(revised[cursor++]);state.topics=next;editing=false;render();persist();return true;
 }
 function toggleTopic(id){
  const topic=state.topics.find(t=&gt;t.id===id);if(!topic||state.deleted)return;
  if(state.finished){$(&#x27;.ce-feedback&#x27;).textContent=&#x27;Курс уже завершён. Возврат в незавершённые с проверкой свободного цвета будет отдельным действием.&#x27;;return;}
- topic.done=!topic.done;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=topic.done?&#x27;Тема отмечена пройденной&#x27;:&#x27;Отметка снята&#x27;;
+ topic.done=!topic.done;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;&#x27;;
  if(state.topics.length&amp;&amp;state.topics.every(t=&gt;t.done)){
  action=&#x27;finish&#x27;;$(&#x27;.ce-confirm strong&#x27;).textContent=&#x27;Все темы пройдены&#x27;;$(&#x27;.ce-confirm p&#x27;).textContent=&#x27;Завершить курс и освободить цвет?&#x27;;$(&#x27;.ce-confirm-yes&#x27;).textContent=&#x27;Завершить&#x27;;$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Оставить активным&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;
  }else $(&#x27;.ce-confirm&#x27;).hidden=true;
 }
 function openSchedule(){
- scheduleEditing=true;$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;&#x27;;$(&#x27;.ce-end-date&#x27;).value=state.endDate;
+ scheduleEditing=true;$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;&#x27;;$(&#x27;.ce-end-date&#x27;).value=state.endDate;$(&#x27;.ce-end-date&#x27;).hidden=!state.endDate;$(&#x27;.ce-date-clear&#x27;).hidden=!state.endDate;
  $(&#x27;.ce-week-editor&#x27;).innerHTML=weekdays.map((name,day)=&gt;{const s=state.schedule.find(x=&gt;x.day===day);return &#x27;&lt;div class=&quot;ce-week-row&quot; data-day=&quot;&#x27;+day+&#x27;&quot;&gt;&lt;label class=&quot;ce-day-check&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;ce-day-enabled&quot; &#x27;+(s?&#x27;checked&#x27;:&#x27;&#x27;)+&#x27;&gt;&#x27;+name+&#x27;&lt;/label&gt;&lt;div class=&quot;ce-times&quot; &#x27;+(s?&#x27;&#x27;:&#x27;hidden&#x27;)+&#x27;&gt;&lt;label class=&quot;ce-field&quot;&gt;Начало&lt;input class=&quot;ce-start&quot; type=&quot;time&quot; value=&quot;&#x27;+(s?.start||&#x27;19:00&#x27;)+&#x27;&quot;&gt;&lt;/label&gt;&lt;label class=&quot;ce-field&quot;&gt;Конец · необязательно&lt;input class=&quot;ce-end&quot; type=&quot;time&quot; value=&quot;&#x27;+(s?.end||&#x27;&#x27;)+&#x27;&quot;&gt;&lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;}).join(&#x27;&#x27;);render();
 }
 function applySchedule(){
  const rules=Array.from(root.querySelectorAll(&#x27;.ce-week-row&#x27;)).filter(row=&gt;row.querySelector(&#x27;.ce-day-enabled&#x27;).checked).map(row=&gt;({day:Number(row.dataset.day),start:row.querySelector(&#x27;.ce-start&#x27;).value,end:row.querySelector(&#x27;.ce-end&#x27;).value}));
  if(!rules.length||rules.some(s=&gt;!s.start||(s.end&amp;&amp;s.end&lt;=s.start))){$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;Выберите хотя бы один день. Укажите начало, а окончание — позже начала.&#x27;;return false;}
- state.schedule=rules;state.endDate=$(&#x27;.ce-end-date&#x27;).value;state.paused=false;scheduleEditing=false;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;Расписание сохранено&#x27;;return true;
+ state.schedule=rules;state.endDate=$(&#x27;.ce-end-date&#x27;).value;state.paused=false;scheduleEditing=false;render();persist();return true;
 }
-function restore(s){const v=s?.privateContent?.editor;if(v&amp;&amp;Array.isArray(v.topics)&amp;&amp;Number.isInteger(v.color)&amp;&amp;colors[v.color])Object.assign(state,v);if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);design.otherCourses=Math.max(0,Math.min(9,Math.round(design.otherCourses)));if(state.finished)state.topics.forEach(t=&gt;t.done=true);$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-category&#x27;).value=state.category;}
+function restore(s){const v=s?.privateContent?.editor;if(v&amp;&amp;Array.isArray(v.topics)&amp;&amp;Number.isInteger(v.color)&amp;&amp;colors[v.color])Object.assign(state,v);if(Array.isArray(s?.privateContent?.categories))categories=s.privateContent.categories.filter(c=&gt;typeof c.name===&#x27;string&#x27;);if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);design.otherCourses=Math.max(0,Math.min(9,Math.round(design.otherCourses)));if(state.finished)state.topics.forEach(t=&gt;t.done=true);$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-category&#x27;).value=state.category;}
 restore(window.openai?.widgetState);render();
 let hold=null,holdTimer=null;
 function cancelHold(){if(holdTimer!==null)clearTimeout(holdTimer);holdTimer=null;hold=null;}
-root.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{if(e.button!==0)return;const row=e.target.closest(&#x27;[data-topic]&#x27;);if(!row)return;cancelHold();hold={id:Number(row.dataset.topic),x:e.clientX,y:e.clientY};holdTimer=setTimeout(()=&gt;{if(!hold)return;const id=hold.id;cancelHold();toggleTopic(id);},600);});
+root.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{if(e.button!==0)return;if(e.target.closest(&#x27;.ce-title&#x27;)){cancelHold();hold={title:true,x:e.clientX,y:e.clientY};holdTimer=setTimeout(()=&gt;{cancelHold();editName();},600);return;}const row=e.target.closest(&#x27;[data-topic]&#x27;);if(!row)return;cancelHold();hold={id:Number(row.dataset.topic),x:e.clientX,y:e.clientY};holdTimer=setTimeout(()=&gt;{if(!hold)return;const id=hold.id;cancelHold();toggleTopic(id);},600);});
 root.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(hold&amp;&amp;Math.hypot(e.clientX-hold.x,e.clientY-hold.y)&gt;8)cancelHold();});
-root.addEventListener(&#x27;keydown&#x27;,e=&gt;{const row=e.target.closest(&#x27;[data-topic]&#x27;);if(!row||![&#x27; &#x27;,&#x27;Enter&#x27;].includes(e.key))return;e.preventDefault();if(e.repeat)return;cancelHold();hold={id:Number(row.dataset.topic),x:0,y:0};holdTimer=setTimeout(()=&gt;{if(!hold)return;const id=hold.id;cancelHold();toggleTopic(id);},600);});
+root.addEventListener(&#x27;keydown&#x27;,e=&gt;{if(e.target.closest(&#x27;.ce-title&#x27;)&amp;&amp;[&#x27; &#x27;,&#x27;Enter&#x27;].includes(e.key)){e.preventDefault();if(e.repeat)return;cancelHold();holdTimer=setTimeout(editName,600);return;}const row=e.target.closest(&#x27;[data-topic]&#x27;);if(!row||![&#x27; &#x27;,&#x27;Enter&#x27;].includes(e.key))return;e.preventDefault();if(e.repeat)return;cancelHold();hold={id:Number(row.dataset.topic),x:0,y:0};holdTimer=setTimeout(()=&gt;{if(!hold)return;const id=hold.id;cancelHold();toggleTopic(id);},600);});
 root.addEventListener(&#x27;keyup&#x27;,e=&gt;{if([&#x27; &#x27;,&#x27;Enter&#x27;].includes(e.key))cancelHold();});root.addEventListener(&#x27;focusout&#x27;,cancelHold);
 root.addEventListener(&#x27;pointerup&#x27;,cancelHold);root.addEventListener(&#x27;pointercancel&#x27;,cancelHold);root.addEventListener(&#x27;pointerleave&#x27;,cancelHold);
-$(&#x27;.ce-rows&#x27;).addEventListener(&#x27;scroll&#x27;,cancelHold);root.addEventListener(&#x27;contextmenu&#x27;,e=&gt;{if(e.target.closest(&#x27;[data-topic]&#x27;))e.preventDefault();});
+$(&#x27;.ce-rows&#x27;).addEventListener(&#x27;scroll&#x27;,cancelHold);root.addEventListener(&#x27;contextmenu&#x27;,e=&gt;{if(e.target.closest(&#x27;[data-topic],.ce-title&#x27;))e.preventDefault();});
 root.addEventListener(&#x27;click&#x27;,e=&gt;{
  const color=e.target.closest(&#x27;[data-color]&#x27;);
- if(color){state.color=Number(color.dataset.color);render();persist();}
- else if(e.target.closest(&#x27;.ce-configure&#x27;))openSchedule();
+ if(color){if(!commitName())return;commitCategory();state.color=Number(color.dataset.color);render();persist();}
+ else if(e.target.closest(&#x27;.ce-configure&#x27;)){if(commitName()){commitCategory();openSchedule();}}
+ else if(e.target.closest(&#x27;.ce-date-open&#x27;)){$(&#x27;.ce-end-date&#x27;).hidden=false;$(&#x27;.ce-date-clear&#x27;).hidden=false;$(&#x27;.ce-end-date&#x27;).focus();if($(&#x27;.ce-end-date&#x27;).showPicker)try{$(&#x27;.ce-end-date&#x27;).showPicker();}catch{}}
+ else if(e.target.closest(&#x27;.ce-date-clear&#x27;)){$(&#x27;.ce-end-date&#x27;).value=&#x27;&#x27;;$(&#x27;.ce-end-date&#x27;).hidden=true;$(&#x27;.ce-date-clear&#x27;).hidden=true;}
+ else if(e.target.closest(&#x27;.ce-back&#x27;)){if(commitName()){commitCategory();editing=false;scheduleEditing=false;returned=true;render();persist();}}
+ else if(e.target.closest(&#x27;.ce-reopen&#x27;)){returned=false;render();}
  else if(e.target.closest(&#x27;.ce-schedule-apply&#x27;))applySchedule();
  else if(e.target.closest(&#x27;.ce-schedule-cancel&#x27;)){scheduleEditing=false;render();}
  else if(e.target.closest(&#x27;.ce-edit-list&#x27;))openList();
  else if(e.target.closest(&#x27;.ce-cancel&#x27;)){editing=false;render();}
  else if(e.target.closest(&#x27;.ce-apply&#x27;))applyList();
- else if(e.target.closest(&#x27;.ce-save&#x27;)){const name=$(&#x27;.ce-name&#x27;).value.trim();if(!name){$(&#x27;.ce-name&#x27;).reportValidity();return;}if(editing&amp;&amp;!applyList())return;if(scheduleEditing&amp;&amp;!applySchedule())return;state.name=name;state.category=$(&#x27;.ce-category&#x27;).value;persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;Изменения сохранены&#x27;;}
  else if(e.target.closest(&#x27;.ce-finish-button&#x27;)||e.target.closest(&#x27;.ce-delete-button&#x27;)||e.target.closest(&#x27;.ce-pause-button&#x27;)){
+ if(!commitName())return;commitCategory();
  action=e.target.closest(&#x27;.ce-delete-button&#x27;)?&#x27;delete&#x27;:e.target.closest(&#x27;.ce-pause-button&#x27;)?&#x27;pause&#x27;:&#x27;finish&#x27;;
  const copy={finish:[&#x27;Завершить курс?&#x27;,&#x27;Все темы будут отмечены пройденными. Напоминания отключатся, цвет освободится.&#x27;,&#x27;Завершить&#x27;],pause:[&#x27;Поставить на паузу?&#x27;,&#x27;Будущие занятия и напоминания будут убраны. Пройденные темы и история сохранятся.&#x27;,&#x27;Поставить на паузу&#x27;],delete:[&#x27;Удалить курс?&#x27;,&#x27;Курс, все темы и календарь будут удалены. Цвет освободится.&#x27;,&#x27;Удалить&#x27;]}[action];
  $(&#x27;.ce-confirm strong&#x27;).textContent=copy[0];$(&#x27;.ce-confirm p&#x27;).textContent=copy[1];$(&#x27;.ce-confirm-yes&#x27;).textContent=copy[2];$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Отмена&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;
  }
  else if(e.target.closest(&#x27;.ce-confirm-no&#x27;))$(&#x27;.ce-confirm&#x27;).hidden=true;
- else if(e.target.closest(&#x27;.ce-confirm-yes&#x27;)){if(action===&#x27;finish&#x27;){state.finished=true;state.paused=false;state.topics.forEach(t=&gt;t.done=true);}else if(action===&#x27;pause&#x27;){state.paused=true;state.schedule=[];}else if(action===&#x27;delete&#x27;){state.deleted=true;state.topics=[];state.schedule=[];}scheduleEditing=false;$(&#x27;.ce-confirm&#x27;).hidden=true;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=action===&#x27;finish&#x27;?&#x27;Все темы пройдены. Цвет освобождён.&#x27;:action===&#x27;pause&#x27;?&#x27;Расписание убрано. Цвет остаётся за курсом.&#x27;:&#x27;&#x27;;action=null;}
+ else if(e.target.closest(&#x27;.ce-confirm-yes&#x27;)){if(action===&#x27;finish&#x27;){state.finished=true;state.paused=false;state.topics.forEach(t=&gt;t.done=true);}else if(action===&#x27;pause&#x27;){state.paused=true;state.schedule=[];}else if(action===&#x27;delete&#x27;){state.deleted=true;state.topics=[];state.schedule=[];}else if(action?.startsWith(&#x27;category:&#x27;)){deleteCategory(action.slice(9));}scheduleEditing=false;$(&#x27;.ce-confirm&#x27;).hidden=true;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;&#x27;;action=null;}
 });
 root.addEventListener(&#x27;change&#x27;,e=&gt;{if(e.target.classList.contains(&#x27;ce-day-enabled&#x27;))e.target.closest(&#x27;.ce-week-row&#x27;).querySelector(&#x27;.ce-times&#x27;).hidden=!e.target.checked;});
+function editName(){nameEditing=true;$(&#x27;.ce-title&#x27;).parentElement.hidden=true;$(&#x27;.ce-name&#x27;).hidden=false;$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-name&#x27;).focus();$(&#x27;.ce-name&#x27;).select();}
+function commitName(){
+ if(!nameEditing)return true;const name=$(&#x27;.ce-name&#x27;).value.trim();
+ if(!name||Array.from(name).length&gt;50){$(&#x27;.ce-name-error&#x27;).textContent=!name?&#x27;Введите название курса&#x27;:&#x27;Не более 50 символов&#x27;;$(&#x27;.ce-name-error&#x27;).hidden=false;return false;}
+ state.name=name;nameEditing=false;$(&#x27;.ce-name-error&#x27;).hidden=true;$(&#x27;.ce-title&#x27;).textContent=name;$(&#x27;.ce-title&#x27;).parentElement.hidden=false;$(&#x27;.ce-name&#x27;).hidden=true;persist();return true;
+}
+$(&#x27;.ce-name&#x27;).addEventListener(&#x27;blur&#x27;,commitName);
+$(&#x27;.ce-name&#x27;).addEventListener(&#x27;keydown&#x27;,e=&gt;{if(e.key===&#x27;Enter&#x27;){e.preventDefault();if(commitName())$(&#x27;.ce-title&#x27;).focus();}if(e.key===&#x27;Escape&#x27;){nameEditing=false;$(&#x27;.ce-name-error&#x27;).hidden=true;render();}});
+function commitCategory(){
+ const value=$(&#x27;.ce-category&#x27;).value.trim(),existing=categories.find(c=&gt;normalized(c.name)===normalized(value));
+ state.category=existing?.name||value;
+ if(value&amp;&amp;!existing)categories.push({name:value,courses:0});
+ $(&#x27;.ce-category&#x27;).value=state.category;categoryOpen=false;renderCategories();persist();
+}
+function renderCategories(){
+ const value=$(&#x27;.ce-category&#x27;).value;const matches=categories.filter(c=&gt;value===state.category||normalized(c.name).includes(normalized(value)));
+ const visible=categoryOpen&amp;&amp;matches.length&gt;0;$(&#x27;.ce-category-menu&#x27;).hidden=!visible;$(&#x27;.ce-category&#x27;).setAttribute(&#x27;aria-expanded&#x27;,String(visible));$(&#x27;.ce-category-toggle&#x27;).hidden=categories.length===0;
+ $(&#x27;.ce-category-menu&#x27;).innerHTML=matches.map(c=&gt;&#x27;&lt;div class=&quot;ce-category-option&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;cursor-interaction&quot; data-category=&quot;&#x27;+esc(c.name)+&#x27;&quot;&gt;&#x27;+esc(c.name)+&#x27;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;cursor-interaction&quot; data-category-delete=&quot;&#x27;+esc(c.name)+&#x27;&quot; aria-label=&quot;Удалить категорию &#x27;+esc(c.name)+&#x27;&quot;&gt;&lt;i data-lucide=&quot;trash-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);icons();
+}
+function deleteCategory(name){categories=categories.filter(c=&gt;c.name!==name);if(normalized(state.category)===normalized(name)){state.category=&#x27;&#x27;;$(&#x27;.ce-category&#x27;).value=&#x27;&#x27;;}renderCategories();persist();}
+$(&#x27;.ce-category&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{categoryOpen=true;renderCategories();});
+$(&#x27;.ce-category&#x27;).addEventListener(&#x27;blur&#x27;,()=&gt;{commitCategory();});
+$(&#x27;.ce-category-menu&#x27;).addEventListener(&#x27;pointerdown&#x27;,e=&gt;e.preventDefault());
+$(&#x27;.ce-category-toggle&#x27;).addEventListener(&#x27;pointerdown&#x27;,e=&gt;e.preventDefault());
+$(&#x27;.ce-category-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{categoryOpen=!categoryOpen;renderCategories();});
+$(&#x27;.ce-category-menu&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{
+ const pick=e.target.closest(&#x27;[data-category]&#x27;),remove=e.target.closest(&#x27;[data-category-delete]&#x27;);
+ if(pick){$(&#x27;.ce-category&#x27;).value=pick.dataset.category;commitCategory();}
+ if(remove){const name=remove.dataset.categoryDelete,c=categories.find(c=&gt;c.name===name);categoryOpen=false;renderCategories();
+ if(c.courses&gt;0||normalized(state.category)===normalized(name)){action=&#x27;category:&#x27;+name;$(&#x27;.ce-confirm strong&#x27;).textContent=&#x27;Удалить категорию «&#x27;+name+&#x27;»?&#x27;;$(&#x27;.ce-confirm p&#x27;).textContent=&#x27;Курсы останутся без категории.&#x27;;$(&#x27;.ce-confirm-yes&#x27;).textContent=&#x27;Удалить&#x27;;$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Отмена&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;}else deleteCategory(name);}
+});
 $(&#x27;.ce-topic-text&#x27;).addEventListener(&#x27;input&#x27;,updateCount);
 window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{restore(e.detail?.globals?.widgetState);render();});
 if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=&gt;{render();persist();}});t.addSlider(design,&#x27;spacing&#x27;,{label:&#x27;Отступы между темами&#x27;,min:9,max:18,unit:&#x27;px&#x27;});t.addSlider(design,&#x27;otherCourses&#x27;,{label:&#x27;Других незавершённых курсов&#x27;,min:0,max:9});}

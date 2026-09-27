@@ -4,12 +4,22 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.MainActivity
+import com.utbildning.tracker.data.AppContainer
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class AppNavigationTest {
@@ -44,6 +54,93 @@ class AppNavigationTest {
         compose.onNodeWithTag("screen_courses").assertIsDisplayed()
         pressBack()
         compose.onNodeWithTag("screen_today").assertIsDisplayed()
+    }
+
+    @Test
+    fun newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions() {
+        val repository = AppContainer.repository(compose.activity)
+        val name = "Schedule flow ${System.currentTimeMillis()}"
+        compose.onNodeWithTag("nav_courses").performClick()
+        compose.onNodeWithTag("course_add").performClick()
+        compose.onNodeWithTag("course_name").performTextInput(name)
+        compose.onNodeWithTag("course_continue").performClick()
+        compose.waitUntil(10_000) { runBlocking { repository.observeCourses().first().any { it.name == name } } }
+        val course = runBlocking { repository.observeCourses().first().single { it.name == name } }
+        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+        compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
+        compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
+        compose.onNodeWithTag("back").performClick()
+        assert(runBlocking { repository.getSchedule(course.id) == null })
+        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+        compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+        val countBeforeRestart = runBlocking { repository.observeSessions().first().count { it.courseId == course.id } }
+        assert(countBeforeRestart > 0)
+        compose.activityRule.scenario.recreate()
+        compose.waitUntil(10_000) { runCatching { runBlocking { repository.getSchedule(course.id) != null } }.getOrDefault(false) }
+        runBlocking { repository.synchronize() }
+        assertEquals(countBeforeRestart, runBlocking { repository.observeSessions().first().count { it.courseId == course.id } })
+    }
+
+    @Test
+    fun existingScheduledCourseWithoutScheduleCanBeConfigured() {
+        val repository = AppContainer.repository(compose.activity)
+        val course = runBlocking {
+            repository.createCourse("Existing schedule flow ${System.currentTimeMillis()}", repository.availableColors().first())
+        }
+        compose.onNodeWithTag("nav_courses").performClick()
+        compose.onNodeWithTag("course_row_${course.id}").assertIsDisplayed().performClick()
+        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+        compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
+        compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+        assert(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
+    }
+
+    @Test fun unscheduledCourseCanEnableCancelDisableAndEnableAgain() {
+        val repository = AppContainer.repository(compose.activity)
+        val course = runBlocking {
+            repository.createCourse("Mode flow ${System.currentTimeMillis()}", repository.availableColors().first(), topics = listOf("C basics"))
+        }
+        try {
+            compose.onNodeWithTag("nav_courses").performClick()
+            compose.onNodeWithTag("course_row_${course.id}").performScrollTo().performClick()
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
+            compose.onNodeWithTag("back").performClick()
+            assertNotNull(runBlocking { repository.getCourse(course.id) })
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_save").performClick()
+            compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+            try { compose.waitUntil(10_000) { compose.onAllNodesWithTag("course_disable_schedule").fetchSemanticsNodes().isNotEmpty() } }
+            catch (failure: Throwable) { throw AssertionError(compose.onRoot().printToString(), failure) }
+            compose.onNodeWithTag("course_disable_schedule").performScrollTo().performClick()
+            compose.onNodeWithTag("course_action_cancel").performClick()
+            assertNotNull(runBlocking { repository.getCourse(course.id) })
+            compose.onNodeWithTag("course_disable_schedule").performScrollTo().performClick()
+            compose.onNodeWithTag("course_action_confirm").performClick()
+            compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) == null } }
+            compose.waitUntil(10_000) { compose.onAllNodesWithTag("course_disable_schedule").fetchSemanticsNodes().isEmpty() }
+            compose.activityRule.scenario.recreate()
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_day_3").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_save").performClick()
+            compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+            waitForTag("course_cancel")
+            compose.onNodeWithTag("course_cancel").performClick()
+            compose.waitUntil(10_000) { compose.onAllNodesWithTag("course_cancel").fetchSemanticsNodes().isEmpty() }
+        } finally { runBlocking { repository.deleteCourse(course.id) } }
+    }
+
+    private fun waitForTag(tag: String) {
+        try { compose.waitUntil(10_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() } }
+        catch (failure: Throwable) { throw AssertionError(compose.onRoot().printToString(), failure) }
     }
 
     private fun pressBack() {

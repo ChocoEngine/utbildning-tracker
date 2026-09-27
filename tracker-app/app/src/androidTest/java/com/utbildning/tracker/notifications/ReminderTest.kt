@@ -10,7 +10,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.data.AppContainer
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.TrackerDatabase
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.ZonedDateTime
@@ -58,14 +57,15 @@ class ReminderTest {
         var testNow = trigger - 1
         val local = TrackerRepository(db, now = { testNow })
         try {
-            for (case in listOf("control", "pause", "complete", "delete", "exhausted", "result")) {
+            for (case in listOf("control", "pause", "disable_schedule", "complete", "delete", "exhausted", "result")) {
                 testNow = trigger - 1
-                val course = local.createCourse(case, 0, CourseMode.SCHEDULED, topics = listOf("Массивы"))
+                val course = local.createCourse(case, 0, topics = listOf("Массивы"))
                 local.saveInitialSchedule(course.id, listOf(WeeklyRule(due.dayOfWeek.value, due.hour * 60 + due.minute)), due.toLocalDate().toEpochDay())
                 val session = local.observeSessions().first().single { it.courseId == course.id }
                 testNow = System.currentTimeMillis()
                 when (case) {
                     "pause" -> local.pauseCourse(course.id)
+                    "disable_schedule" -> local.disableSchedule(course.id)
                     "complete" -> local.completeCourse(course.id)
                     "delete" -> local.deleteCourse(course.id)
                     "exhausted" -> local.toggleTopicCompletion(course.id, local.getCourseDetails(course.id)!!.topics.single().id)

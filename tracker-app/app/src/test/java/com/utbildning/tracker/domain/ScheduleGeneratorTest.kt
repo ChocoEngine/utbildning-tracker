@@ -24,7 +24,7 @@ class ScheduleGeneratorTest {
     }
 
     @Test fun timezoneChangesInstantButNotCalendarIdentity() {
-        val occurrence = ScheduledOccurrence(date("2026-09-26"), 600, null, 0)
+        val occurrence = ScheduledOccurrence(date("2026-09-26"), 600, null)
         assertEquals(Instant.parse("2026-09-26T07:00:00Z"), occurrence.startAt(ZoneId.of("Europe/Moscow")))
         assertEquals(Instant.parse("2026-09-26T14:00:00Z"), occurrence.startAt(ZoneId.of("America/New_York")))
         assertEquals(date("2026-09-26"), occurrence.date)
@@ -34,18 +34,18 @@ class ScheduleGeneratorTest {
         val zone = ZoneId.of("Europe/Berlin")
         assertEquals(Instant.parse("2026-03-29T01:30:00Z"), SessionTime.start(date("2026-03-29"), 150, zone))
         assertEquals(Instant.parse("2026-10-25T00:30:00Z"), SessionTime.start(date("2026-10-25"), 150, zone))
-        assertEquals(Instant.parse("2026-03-29T02:00:00Z"), SessionTime.question(date("2026-03-29"), 150, 180, 0, zone))
+        assertEquals(Instant.parse("2026-03-29T02:00:00Z"), SessionTime.question(date("2026-03-29"), 150, 180, zone))
     }
 
     @Test fun overnightAndFallbackQuestionTimes() {
         val utc = ZoneId.of("UTC")
-        assertEquals(Instant.parse("2026-01-01T01:00:00Z"), SessionTime.question(date("2025-12-31"), 1380, 60, 1, utc))
-        assertEquals(Instant.parse("2026-01-01T00:30:00Z"), SessionTime.question(date("2025-12-31"), 1380, null, 0, utc))
+        assertEquals(Instant.parse("2026-01-01T01:00:00Z"), SessionTime.question(date("2025-12-31"), 1380, 60, utc))
+        assertEquals(Instant.parse("2026-01-01T00:30:00Z"), SessionTime.question(date("2025-12-31"), 1380, null, utc))
     }
 
     @Test fun invalidIntervalsAndDuplicateWeekdaysRejected() {
-        assertThrows(IllegalArgumentException::class.java) { WeeklyRule(1, 600, 600) }
-        assertThrows(IllegalArgumentException::class.java) { WeeklyRule(1, 600, 800, 1) }
+        assertEquals(Instant.parse("2026-09-26T10:00:00Z"), SessionTime.question(date("2026-09-26"), 600, 600, ZoneId.of("UTC")))
+        assertThrows(IllegalArgumentException::class.java) { WeeklyRule(1, 600, 1440) }
         assertThrows(IllegalArgumentException::class.java) { ScheduleGenerator.generate(date("2026-01-01"), null, listOf(WeeklyRule(1, 600), WeeklyRule(1, 700)), date("2026-01-01"), date("2026-01-10")) }
     }
 }

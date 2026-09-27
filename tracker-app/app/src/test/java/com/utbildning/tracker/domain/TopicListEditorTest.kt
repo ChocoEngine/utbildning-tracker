@@ -29,30 +29,30 @@ class TopicListEditorTest {
         assertEquals(listOf("x", "a", "b", null), result.topics.map { it.existingId })
         assertEquals(listOf(0, 1, 2, 3), result.topics.map { it.position })
         assertEquals(listOf("Other", "Same", "Same", "Same"), result.topics.map { it.title })
-        assertTrue(result.archivedIds.isEmpty())
+        assertTrue(result.deletedIds.isEmpty())
     }
 
     @Test fun fifoTiesUseIdAndRemovedDuplicateIsArchived() {
         val result = TopicListEditor.plan("Same", listOf(
             EditableTopic("b", "Same", 0), EditableTopic("a", "Same", 0)))
         assertEquals("a", result.topics.single().existingId)
-        assertEquals(listOf("b"), result.archivedIds)
+        assertEquals(listOf("b"), result.deletedIds)
     }
 
     @Test fun changedCaseIsNewTopicAndArchivedRowsNeverReappear() {
         val result = TopicListEditor.plan("pointers\nOld", listOf(
             EditableTopic("active", "Pointers", 0),
-            EditableTopic("archived", "Old", 1, isCompleted = true, isArchived = true)))
-        assertEquals(listOf(null, null), result.topics.map { it.existingId })
-        assertEquals(listOf("active"), result.archivedIds)
+            EditableTopic("archived", "Old", 1, isCompleted = false)))
+        assertEquals(listOf(null, "archived"), result.topics.map { it.existingId })
+        assertEquals(listOf("active"), result.deletedIds)
     }
 
     @Test fun completedPositionsAreReservedAndCompletedRowsExcludedFromText() {
         val topics = listOf(EditableTopic("done", "Completed", 1, isCompleted = true),
             EditableTopic("b", "Second", 3), EditableTopic("a", "First", 0),
-            EditableTopic("old", "Archived", 2, isArchived = true))
+            EditableTopic("old", "Archived", 2, isCompleted = true))
         assertEquals("First\nSecond", TopicListEditor.editableText(topics))
-        assertEquals(listOf(0, 2, 3), TopicListEditor.plan("Second\nFirst\nNew", topics).topics.map { it.position })
+        assertEquals(listOf(0, 3, 4), TopicListEditor.plan("Second\nFirst\nNew", topics).topics.map { it.position })
     }
 
     @Test fun discardingPlanLeavesOriginalSnapshotUnchanged() {
@@ -62,6 +62,6 @@ class TopicListEditorTest {
         assertEquals(before, original)
         val reapplied = TopicListEditor.plan(TopicListEditor.editableText(original), original)
         assertEquals(listOf("a"), reapplied.topics.map { it.existingId })
-        assertTrue(reapplied.archivedIds.isEmpty())
+        assertTrue(reapplied.deletedIds.isEmpty())
     }
 }

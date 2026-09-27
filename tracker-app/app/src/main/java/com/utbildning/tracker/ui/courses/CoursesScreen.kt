@@ -73,7 +73,7 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
         } else CourseEditorContent(draft, model.categories, model.colors, model.busy, model.error,
             model::change, model::commitName, { model.leave() }, model::applyTopics, { model.removeCategory(it) }, model::toggle,
             { model.openSchedule(onSchedule) }, model::requestLifecycle,
-            model::commitCategory, model::selectCategory, model::selectColor, model::chooseMode)
+            model::commitCategory, model::selectCategory, model::selectColor)
         if (model.creating && draft != null) AlertDialog(onDismissRequest = model::cancel,
             title = { Text(stringResource(R.string.course_add)) },
             text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -87,14 +87,10 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             } },
             confirmButton = { Button(onClick = model::continueCreation, enabled = !model.busy, modifier = Modifier.testTag("course_continue")) { Text(stringResource(R.string.course_continue)) } },
             dismissButton = { TextButton(onClick = model::cancel, modifier = Modifier.testTag("course_cancel")) { Text(stringResource(R.string.course_cancel)) } })
-        if (model.completionOffer && model.lifecycleAction == null) AlertDialog(onDismissRequest = model::keepActive,
-            text = { Text(stringResource(R.string.course_offer_complete)) },
-            confirmButton = { TextButton(onClick = { model.requestLifecycle("complete") }, modifier = Modifier.testTag("course_offer_complete")) { Text(stringResource(R.string.course_complete)) } },
-            dismissButton = { TextButton(onClick = model::keepActive, modifier = Modifier.testTag("course_keep_active")) { Text(stringResource(R.string.course_keep_active)) } })
         model.lifecycleAction?.let { action ->
             AlertDialog(onDismissRequest = model::dismissLifecycle,
-                text = { Column { Text(stringResource(when(action) { "delete" -> R.string.course_confirm_delete; "pause" -> R.string.course_confirm_pause; else -> R.string.course_confirm_complete })); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error) } } },
-                confirmButton = { TextButton(onClick = model::confirmLifecycle, enabled = !model.busy, modifier = Modifier.testTag("course_action_confirm")) { Text(stringResource(when(action) { "delete" -> R.string.course_delete; "pause" -> R.string.course_pause; else -> R.string.course_complete })) } },
+                text = { Column { Text(stringResource(when(action) { "delete" -> R.string.course_confirm_delete; "pause" -> R.string.course_confirm_pause; "disable_schedule" -> R.string.course_confirm_disable_schedule; else -> R.string.course_confirm_complete })); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error) } } },
+                confirmButton = { TextButton(onClick = model::confirmLifecycle, enabled = !model.busy, modifier = Modifier.testTag("course_action_confirm")) { Text(stringResource(when(action) { "delete" -> R.string.course_delete; "pause" -> R.string.course_pause; "disable_schedule" -> R.string.course_disable_schedule; else -> R.string.course_complete })) } },
                 dismissButton = { TextButton(onClick = model::dismissLifecycle, modifier = Modifier.testTag("course_action_cancel")) { Text(stringResource(R.string.course_cancel)) } })
         }
         model.deleteCategory?.let { category ->
@@ -118,7 +114,7 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
             group.forEach { course ->
                 Surface(onClick = { onOpen(course.id) }, modifier = Modifier.fillMaxWidth().testTag("course_row_${course.id}"), color = MaterialTheme.colorScheme.surface) {
                     Row(Modifier.padding(vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Box(Modifier.size(14.dp).background(CourseColors[course.colorId], CircleShape))
+                        Box(Modifier.size(14.dp).background(courseColor(course.colorId), CircleShape))
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(course.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -127,7 +123,7 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
                             }
                             val count = progress[course.id] ?: (0 to 0)
                             if (count.second > 0) LinearProgressIndicator(progress = { count.first.toFloat() / count.second },
-                                color = CourseColors[course.colorId], trackColor = CourseColors[course.colorId].copy(alpha = .16f),
+                                color = courseColor(course.colorId), trackColor = courseColor(course.colorId).copy(alpha = .16f),
                                 modifier = Modifier.fillMaxWidth().testTag("course_progress_${course.id}"))
                         }
                     }
@@ -146,8 +142,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
     onChange: ((CourseDraft) -> CourseDraft) -> Unit, onSave: () -> Unit, onCancel: () -> Unit, onApply: () -> Unit,
     onDeleteCategory: (CategoryEntity) -> Unit, onToggle: (String) -> Unit, onSchedule: (String) -> Unit = {}, onLifecycle: (String) -> Unit = {},
     onCategoryCommit: () -> Unit = {}, onCategorySelected: (String) -> Unit = {},
-    onColorSelected: (Int) -> Unit = { value -> onChange { it.copy(color = value) } },
-    onModeSelected: (CourseMode) -> Unit = { value -> onChange { it.copy(mode = value, modeChosen = true) } }) {
+    onColorSelected: (Int) -> Unit = { value -> onChange { it.copy(color = value) } }) {
     var editingName by rememberSaveable(draft.id) { mutableStateOf(false) }
     var nameFocused by remember { mutableStateOf(false) }
     var nameBounds by remember { mutableStateOf<Rect?>(null) }
@@ -177,53 +172,56 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
                     nameFocused = it.isFocused
                 }.testTag("course_name"))
             else Text(draft.name, style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.weight(1f).combinedClickable(onClick = {}, onLongClick = { editingName = true }).testTag("course_title"))
+                modifier = Modifier.weight(1f).combinedClickable(onClick = {}, onLongClick = if (!draft.completed) ({ editingName = true }) else null).testTag("course_title"))
         }
-        CategoryField(draft.category, categories, { value -> onChange { it.copy(category = value) } }, onCategorySelected, onCategoryCommit, onDeleteCategory)
+        if (draft.completed) {
+            if (draft.category.isNotEmpty()) Text(draft.category)
+        } else CategoryField(draft.category, categories, { value -> onChange { it.copy(category = value) } }, onCategorySelected, onCategoryCommit, onDeleteCategory)
+        if (draft.id != null && !draft.completed) {
+            OutlinedButton(onClick = { focus.clearFocus(); onSchedule(draft.id) }, modifier = Modifier.fillMaxWidth().testTag("course_schedule")) {
+                Text(stringResource(if (!draft.hasSchedule) R.string.course_enable_schedule else R.string.course_configure))
+            }
+        }
+        if (!draft.completed) {
         Text(stringResource(R.string.course_color), style = MaterialTheme.typography.labelLarge)
         colors.chunked(5).forEach { row -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             row.forEach { color ->
                 val description = stringResource(R.string.course_color_number, color + 1)
                 Box(Modifier.size(48.dp).border(if (draft.color == color) 2.dp else 0.dp, MaterialTheme.colorScheme.primary, CircleShape).padding(6.dp)
-                    .background(CourseColors[color], CircleShape).combinedClickable(onClick = { focus.clearFocus(); onColorSelected(color) })
+                    .background(courseColor(color), CircleShape).combinedClickable(onClick = { focus.clearFocus(); onColorSelected(color) })
                     .semantics { contentDescription = description; selected = draft.color == color; role = Role.RadioButton }.testTag("color_$color"))
             }
         } }
-        if (draft.id == null) Column {
-            FilterChip(draft.modeChosen && draft.mode == CourseMode.SCHEDULED, { focus.clearFocus(); onModeSelected(CourseMode.SCHEDULED) }, label = { Text(stringResource(R.string.course_scheduled)) }, modifier = Modifier.testTag("mode_scheduled"))
-            FilterChip(draft.modeChosen && draft.mode == CourseMode.UNSCHEDULED, { focus.clearFocus(); onModeSelected(CourseMode.UNSCHEDULED) }, label = { Text(stringResource(R.string.course_unscheduled)) }, modifier = Modifier.testTag("mode_unscheduled"))
-        } else Text(stringResource(if (draft.mode == CourseMode.SCHEDULED) R.string.course_scheduled else R.string.course_unscheduled))
-        if (draft.id != null && draft.mode == CourseMode.SCHEDULED && !draft.completed && !draft.paused) {
-            TextButton(onClick = { onSchedule(draft.id) }, modifier = Modifier.testTag("course_schedule")) { Text(stringResource(R.string.course_configure)) }
         }
-        if (draft.id != null || draft.modeChosen) {
         Text(stringResource(R.string.course_topics), style = MaterialTheme.typography.titleMedium)
-        val completed = draft.topics.filter { !it.isArchived && it.isCompleted }
+        val completed = draft.topics.filter { it.isCompleted }
         val total = completed.size + TopicListEditor.parse(draft.text).size
         if (total > 0) {
             Text("${completed.size}/$total", style = MaterialTheme.typography.bodySmall)
-            LinearProgressIndicator(progress = { completed.size.toFloat() / total }, color = CourseColors[draft.color], trackColor = CourseColors[draft.color].copy(alpha = .16f), modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(progress = { completed.size.toFloat() / total }, color = courseColor(draft.color), trackColor = courseColor(draft.color).copy(alpha = .16f), modifier = Modifier.fillMaxWidth())
         }
 
-        if (draft.editingText != null) {
+        if (draft.editingText != null && !draft.completed) {
             OutlinedTextField(draft.editingText, { value -> onChange { it.copy(editingText = value) } }, label = { Text(stringResource(R.string.course_pending_topics)) }, minLines = 6, modifier = Modifier.fillMaxWidth().testTag("topics_input"))
             Row {
                 TextButton(onClick = onApply, enabled = conflictLines.isEmpty(), modifier = Modifier.testTag("topics_apply")) { Text(stringResource(R.string.topics_apply)) }
                 TextButton(onClick = { onChange { it.copy(editingText = null) } }, modifier = Modifier.testTag("topics_cancel")) { Text(stringResource(R.string.course_cancel)) }
             }
         } else {
-            draft.topics.filter { !it.isArchived }.sortedBy { it.position }.forEachIndexed { index, topic ->
+            draft.topics.sortedBy { it.position }.forEachIndexed { index, topic ->
                 TopicRow(topic.id, topic.title, "${index + 1}.", !draft.completed, onToggle, topic.isCompleted)
             }
             if (!draft.completed) TextButton(onClick = { onChange { it.copy(editingText = it.text) } }, modifier = Modifier.testTag("topics_edit")) { Text(stringResource(R.string.topics_edit)) }
         }
-        }
+        if (!draft.completed && draft.topics.isNotEmpty() && draft.topics.all { it.isCompleted })
+            Text(stringResource(R.string.course_all_topics_completed), modifier = Modifier.testTag("course_all_topics_completed"))
         if (conflictLines.isNotEmpty()) Text(stringResource(R.string.topics_conflict, conflictLines.joinToString()), color = MaterialTheme.colorScheme.error)
         if (error != null) Text(errorText(error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error"))
         if (draft.id != null && draft.editingText == null) {
+            if (!draft.completed && draft.hasSchedule) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("disable_schedule") }, enabled = !busy, modifier = Modifier.fillMaxWidth().testTag("course_disable_schedule")) { Text(stringResource(R.string.course_disable_schedule)) }
             if (!draft.completed) {
                 OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("complete") }, modifier = Modifier.fillMaxWidth().testTag("course_complete")) { Icon(painterResource(R.drawable.ic_check), contentDescription = null, modifier = Modifier.size(16.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.course_complete)) }
-                if (draft.mode == CourseMode.SCHEDULED && !draft.paused) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("pause") }, modifier = Modifier.fillMaxWidth().testTag("course_pause")) { Text(stringResource(R.string.course_pause)) }
+                if (draft.hasSchedule && !draft.paused) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("pause") }, modifier = Modifier.fillMaxWidth().testTag("course_pause")) { Text(stringResource(R.string.course_pause)) }
             }
             OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("delete") }, modifier = Modifier.fillMaxWidth().testTag("course_delete")) { Text(stringResource(R.string.course_delete)) }
         }

@@ -6,14 +6,13 @@ data class EditableTopic(
     val title: String,
     val position: Int,
     val isCompleted: Boolean = false,
-    val isArchived: Boolean = false,
 )
 
 data class TopicLine(val lineNumber: Int, val title: String)
 
 data class PlannedTopic(val existingId: String?, val title: String, val position: Int)
 
-data class TopicListPlan(val topics: List<PlannedTopic>, val archivedIds: List<String>)
+data class TopicListPlan(val topics: List<PlannedTopic>, val deletedIds: List<String>)
 
 /** Carries source line numbers; the UI supplies localized error text. */
 class TopicListConflictException(val lineNumbers: List<Int>) :
@@ -31,7 +30,7 @@ object TopicListEditor {
     /** Planning is pure: cancel by discarding the text/plan, without a compensating write. */
     fun plan(text: String, topics: List<EditableTopic>): TopicListPlan {
         val lines = parse(text)
-        val completed = topics.filter { !it.isArchived && it.isCompleted }
+        val completed = topics.filter { it.isCompleted }
         val conflicts = lines.filter { line ->
             completed.any { it.title.trim().equals(line.title, ignoreCase = true) }
         }.map { it.lineNumber }
@@ -53,6 +52,6 @@ object TopicListEditor {
     }
 
     private fun editable(topics: List<EditableTopic>): List<EditableTopic> = topics
-        .filter { !it.isArchived && !it.isCompleted }
+        .filter { !it.isCompleted }
         .sortedWith(compareBy<EditableTopic> { it.position }.thenBy { it.id })
 }

@@ -1,0 +1,24 @@
+API 36, 2026-09-26
+POST_NOTIFICATIONS granted=true; exact access denied:
+RecoveryProbeTest prepare: OK (1 test)
+RecoveryProbeTest denied: OK (1 test)
+dumpsys alarm: no application entries
+
+Exact access enabled through system Settings:
+    RTC_WAKEUP #5: Alarm{4584c0e type 0 origWhen 1790422020000 whenElapsed 378552357 com.utbildning.tracker}
+      tag=*walarm*:com.utbildning.tracker.START
+      operation=PendingIntent{198d62f: PendingIntentRecord{6afb43c com.utbildning.tracker broadcastIntent}}
+
+Exact access revoked through system Settings (cancellation history):
+    u0a218:
+      #1: Reason=exact_alarm_permission_revoked elapsed=-15s116ms rtc=2026-09-26 14:20:03.830
+        Snapshot:
+          type=RTC_WAKEUP tag=*walarm*:com.utbildning.tracker.START
+          policyWhenElapsed: requester=+6m41s54ms app_standby=-23s389ms device_idle=-- battery_saver=-23s389ms
+
+  Top Alarms:
+    +31s13ms running, 0 wakeups, 6374 alarms: 1000:android
+      *alarm*:TIME_TICK
+
+RecoveryProbeTest denied: OK (1 test)
+RecoveryProbeTest cleanup: OK (1 test)

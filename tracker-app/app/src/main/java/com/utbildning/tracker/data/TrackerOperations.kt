@@ -13,6 +13,7 @@ data class SessionDetails(
     val session: SessionEntity,
     val selectableTopics: List<TopicEntity>,
     val selectedTopicIds: Set<String>,
+    val canEdit: Boolean = true,
 )
 
 /** Calendar and lifecycle transactions; called through TrackerRepository. */
@@ -31,15 +32,15 @@ internal class TrackerOperations(
     suspend fun saveInitialSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long?) = database.withTransaction {
         val course = course(courseId)
         if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
-        if (course.isPaused || course.mode != CourseMode.SCHEDULED || rules.isEmpty() || rules.map { it.dayOfWeek }.distinct().size != rules.size) {
+        if (rules.isEmpty() || rules.map { it.dayOfWeek }.distinct().size != rules.size) {
             fail(RepositoryError.INVALID_SCHEDULE)
         }
         if (dao.getSchedule(courseId) != null) fail(RepositoryError.SCHEDULE_EXISTS)
         val timestamp = now()
         val date = today(timestamp).toEpochDay()
         if (endsOn != null && endsOn < date) fail(RepositoryError.INVALID_SCHEDULE)
-        dao.insertSchedule(ScheduleEntity(courseId, date, endsOn, generationNotBefore = timestamp))
-        rules.forEach { dao.insertScheduleRule(ScheduleRuleEntity(courseId, it.dayOfWeek, it.startMinute, it.endMinute, it.endDayOffset)) }
+        dao.insertSchedule(ScheduleEntity(courseId, date, endsOn))
+        rules.forEach { dao.insertScheduleRule(ScheduleRuleEntity(courseId, it.dayOfWeek, it.startMinute, it.endMinute)) }
         dao.updateCourse(course.copy(isPaused = false, updatedAt = timestamp))
         reconcileExhaustion(courseId)
         generate(courseId, date + 90, timestamp)
@@ -60,18 +61,18 @@ internal class TrackerOperations(
 
     private suspend fun generate(courseId: String, through: Long, timestamp: Long) {
         val course = course(courseId)
-        if (course.isCompleted || course.isPaused || course.exhaustedAt != null || course.mode != CourseMode.SCHEDULED) return
+        if (course.isCompleted || course.isPaused || dao.hasExhaustedTopics(courseId)) return
         val schedule = dao.getSchedule(courseId) ?: return
-        val first = maxOf(schedule.startsOn, schedule.generatedThrough?.plus(1) ?: schedule.startsOn)
+        val first = maxOf(today(timestamp).toEpochDay(), schedule.startsOn, schedule.generatedThrough?.plus(1) ?: schedule.startsOn)
         if (first > through) return
-        val rules = dao.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute, it.endDayOffset) }
-        val existing = dao.getSessions(courseId).map { it.date to it.startMinute }.toHashSet()
+        val rules = dao.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
+        val existing = dao.getSessions(courseId).map { it.date }.toHashSet()
         ScheduleGenerator.generate(LocalDate.ofEpochDay(schedule.startsOn), schedule.endsOn?.let(LocalDate::ofEpochDay),
             rules, LocalDate.ofEpochDay(first), LocalDate.ofEpochDay(through)).forEach { occurrence ->
-            if ((schedule.generationNotBefore == null || occurrence.startAt(zone()).toEpochMilli() >= schedule.generationNotBefore) &&
-                (occurrence.date.toEpochDay() to occurrence.startMinute) !in existing) {
+            if (occurrence.startAt(zone()).toEpochMilli() >= timestamp &&
+                occurrence.date.toEpochDay() !in existing) {
                 dao.insertSession(SessionEntity(newId(), courseId, occurrence.date.toEpochDay(), occurrence.startMinute,
-                    course.name, course.colorId, timestamp, timestamp, occurrence.endMinute, occurrence.endDayOffset))
+                    course.name, course.colorId, timestamp, timestamp, occurrence.endMinute))
             }
         }
         dao.updateSchedule(schedule.copy(generatedThrough = through))
@@ -79,60 +80,57 @@ internal class TrackerOperations(
 
     suspend fun getSessionDetails(sessionId: String): SessionDetails? = database.withTransaction {
         val session = dao.getSession(sessionId) ?: return@withTransaction null
-        val completions = dao.getCompletions(session.courseId).associateBy { it.topicId }
-        val own = completions.values.filter { it.source == CompletionSource.SESSION && it.sessionId == sessionId }.map { it.topicId }.toSet()
-        SessionDetails(session, dao.getTopics(session.courseId).filter { it.archivedAt == null && (it.id !in completions || it.id in own) }, own)
+        val topics = dao.getTopics(session.courseId)
+        val own = topics.filter { it.isCompleted && it.completionDate == session.date }.map { it.id }.toSet()
+        val canEdit = session.date == today(now()).toEpochDay() && !course(session.courseId).isCompleted
+        SessionDetails(session, topics.filter { if (canEdit) !it.isCompleted || it.id in own else it.id in own }, own, canEdit)
     }
 
-    suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null) = database.withTransaction {
+    suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null): Boolean = database.withTransaction {
         val session = dao.getSession(sessionId) ?: fail(RepositoryError.SESSION_NOT_FOUND)
+        val course = course(session.courseId)
+        if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
+        val timestamp = now()
+        if (session.date != today(timestamp).toEpochDay()) fail(RepositoryError.INVALID_SESSION_DATE)
         val topics = dao.getTopics(session.courseId).associateBy { it.id }
-        val completions = dao.getCompletions(session.courseId).associateBy { it.topicId }
-        val own = completions.values.filter { it.source == CompletionSource.SESSION && it.sessionId == sessionId }
-        val selected = if (result == SessionResult.DONE) selectedTopicIds ?: own.map { it.topicId }.toSet() else emptySet()
+        val own = topics.values.filter { it.isCompleted && it.completionDate == session.date }.map { it.id }.toSet()
+        val selected = if (result == SessionResult.DONE) selectedTopicIds ?: own else emptySet()
         selected.forEach { id ->
             val topic = topics[id]
-            val completion = completions[id]
-            if (topic == null || topic.archivedAt != null || (completion != null && completion !in own)) fail(RepositoryError.INVALID_TOPIC)
+            if (topic == null) fail(RepositoryError.INVALID_TOPIC)
         }
-        if (session.result == result && selected == own.map { it.topicId }.toSet()) return@withTransaction
-        val timestamp = now()
-        val course = course(session.courseId)
-        own.filter { it.topicId !in selected }.forEach {
-            dao.deleteCompletion(it.topicId)
-            if (course.isCompleted) {
-                dao.insertCompletion(TopicCompletionEntity(it.topicId, course.id,
-                    CompletionSource.COURSE_COMPLETION, course.completedAt!!))
-            }
+        // Already completed manual/older topics keep their original provenance.
+        val effective = selected.filter { !topics.getValue(it).isCompleted || it in own }.toSet()
+        if (session.result == result && effective == own) return@withTransaction false
+        val wasExhausted = topics.isNotEmpty() && topics.values.all { it.isCompleted }
+        own.filter { it !in effective }.forEach { id ->
+            dao.updateTopic(topics.getValue(id).copy(isCompleted = false, completionDate = null))
         }
-        val history = dao.getHistory(sessionId).map { it.topicId }.toSet()
-        selected.filter { it !in completions }.forEach { id ->
-            if (id !in history) dao.insertHistory(SessionTopicHistoryEntity(sessionId, id, session.courseId, topics.getValue(id).title, timestamp))
-            dao.insertCompletion(TopicCompletionEntity(id, session.courseId, CompletionSource.SESSION, timestamp, sessionId))
+        effective.filter { it !in own }.forEach { id ->
+            dao.updateTopic(topics.getValue(id).copy(isCompleted = true, completionDate = session.date))
         }
-        if (session.result != result || selectedTopicIds != null) dao.updateSession(session.copy(result = result, updatedAt = timestamp))
+        dao.updateSession(session.copy(result = result, updatedAt = timestamp))
         dao.updateCourse(course.copy(updatedAt = timestamp))
         reconcileExhaustion(session.courseId)
+        result == SessionResult.DONE && !wasExhausted && dao.getTopics(session.courseId).let { it.isNotEmpty() && it.all { topic -> topic.isCompleted } }
     }
 
     suspend fun reconcileExhaustion(courseId: String) {
         val course = course(courseId)
         if (course.isCompleted) return
-        val topics = dao.getTopics(courseId).filter { it.archivedAt == null }
-        val complete = dao.getCompletions(courseId).map { it.topicId }.toSet()
-        val exhausted = topics.isNotEmpty() && topics.all { it.id in complete }
         val timestamp = now()
-        if (exhausted && course.exhaustedAt == null) {
-            dao.updateCourse(course.copy(exhaustedAt = timestamp, completionPromptDismissed = false))
+        if (dao.hasExhaustedTopics(courseId)) {
             removeFuturePending(courseId, timestamp)
-        } else if (!exhausted && (course.exhaustedAt != null || course.completionPromptDismissed)) {
-            dao.updateCourse(course.copy(exhaustedAt = null, completionPromptDismissed = false))
-            if (course.exhaustedAt != null) {
-                dao.getSchedule(courseId)?.let {
-                    dao.updateSchedule(it.copy(generatedThrough = today(timestamp).toEpochDay() - 1, generationNotBefore = timestamp))
+            // Future sessions were removed: the old generation horizon is no longer valid.
+            // Keep the cursor ready for resuming, even after a database reopen.
+            dao.getSchedule(courseId)?.let { schedule ->
+                val through = today(timestamp).toEpochDay() - 1
+                if (schedule.generatedThrough != through) {
+                    dao.updateSchedule(schedule.copy(generatedThrough = through))
                 }
-                generate(courseId, today(timestamp).toEpochDay() + 90, timestamp)
             }
+        } else {
+            generate(courseId, today(timestamp).toEpochDay() + 90, timestamp)
         }
     }
 
@@ -145,14 +143,12 @@ internal class TrackerOperations(
         val course = course(courseId)
         if (!course.isCompleted) {
             val timestamp = now()
-            val completed = dao.getCompletions(courseId).map { it.topicId }.toSet()
-            dao.getTopics(courseId).filter { it.archivedAt == null && it.id !in completed }.forEach {
-                dao.insertCompletion(TopicCompletionEntity(it.id, courseId, CompletionSource.COURSE_COMPLETION, timestamp))
+            dao.getTopics(courseId).filter { !it.isCompleted }.forEach {
+                dao.updateTopic(it.copy(isCompleted = true, completionDate = null))
             }
             removeFuturePending(courseId, timestamp)
             dao.deleteSchedule(courseId)
-            dao.deleteColorReservation(courseId)
-            dao.updateCourse(course.copy(isCompleted = true, isPaused = false, completedAt = timestamp, updatedAt = timestamp))
+            dao.updateCourse(course.copy(colorId = null, isCompleted = true, isPaused = false, completedAt = timestamp, updatedAt = timestamp))
         }
     }
 
@@ -160,11 +156,22 @@ internal class TrackerOperations(
         synchronize()
         val course = course(courseId)
         if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
-        if (course.mode != CourseMode.SCHEDULED) fail(RepositoryError.INVALID_SCHEDULE)
+        if (dao.getSchedule(courseId) == null) fail(RepositoryError.INVALID_SCHEDULE)
         val timestamp = now()
         removeFuturePending(courseId, timestamp)
         dao.deleteSchedule(courseId)
         dao.updateCourse(course.copy(isPaused = true, updatedAt = timestamp))
+    }
+
+    suspend fun disableSchedule(courseId: String) = database.withTransaction {
+        val course = course(courseId)
+        if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
+        if (dao.getSchedule(courseId) == null && !course.isPaused) return@withTransaction
+        val timestamp = now()
+        // Keep started sessions and every recorded result, including early results.
+        removeFuturePending(courseId, timestamp)
+        dao.deleteSchedule(courseId)
+        dao.updateCourse(course.copy(isPaused = false, updatedAt = timestamp))
     }
 
     suspend fun deleteCourse(courseId: String) = database.withTransaction {
@@ -172,15 +179,4 @@ internal class TrackerOperations(
         dao.deleteCourse(courseId)
     }
 
-    suspend fun dismissCompletionPrompt(courseId: String) = database.withTransaction {
-        reconcileExhaustion(courseId)
-        val course = course(courseId)
-        if (!course.isCompleted && course.exhaustedAt != null) dao.updateCourse(course.copy(completionPromptDismissed = true))
-    }
-
-    suspend fun shouldOfferCompletion(courseId: String): Boolean = database.withTransaction {
-        reconcileExhaustion(courseId)
-        val course = course(courseId)
-        !course.isCompleted && course.exhaustedAt != null && !course.completionPromptDismissed
-    }
 }

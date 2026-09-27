@@ -146,10 +146,10 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                         if (rows.size > 4) {
                                             val alpha = if (rows.any { it.result == SessionResult.DONE }) .94f else .23f
                                             val colors = rows.map { it.colorId }.distinct()
-                                            drawPath(blob, CourseColors[colors.first()].copy(alpha = alpha * .3f))
+                                            drawPath(blob, courseColor(colors.first()).copy(alpha = alpha * .3f))
                                             for (dotRow in 0..5) for (dotColumn in 0..7) {
                                                 val dotColor = colors[(dotRow * 3 + dotColumn) % colors.size]
-                                                drawCircle(CourseColors[dotColor].copy(alpha = alpha), 2.4f*sx,
+                                                drawCircle(courseColor(dotColor).copy(alpha = alpha), 2.4f*sx,
                                                     Offset((3f + dotColumn*6f + if (dotRow % 2 == 0) 0f else 3f)*sx, (2f + dotRow*6f)*sy))
                                             }
                                         } else rotate(-19f) {
@@ -157,7 +157,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                                 val weights = rows.indices.map { if (rows.size in 3..4 && it != 0 && it != rows.lastIndex) .7f else 1f }
                                                 val width = 60f * weights[i] / weights.sum()
                                                 val left = -6f + 60f * weights.take(i).sum() / weights.sum()
-                                                drawRect(CourseColors[session.colorId].copy(alpha = if (session.result == SessionResult.DONE) .94f else .23f),
+                                                drawRect(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) .94f else .23f),
                                                     Offset(left*sx, -15*sy), Size((width+.3f)*sx, 65*sy))
                                             }
                                         }
@@ -190,7 +190,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
         visible.forEach { session ->
             Row(Modifier.fillMaxWidth().testTag("calendar_session_${session.id}").padding(vertical = 9.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.width(4.dp).height(22.dp).background(CourseColors[session.colorId], RoundedCornerShape(4.dp)))
+                Box(Modifier.width(4.dp).height(22.dp).background(courseColor(session.colorId), RoundedCornerShape(4.dp)))
                 Text(LocalTime.of(session.startMinute / 60, session.startMinute % 60)
                     .format(DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT).withLocale(locale)),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

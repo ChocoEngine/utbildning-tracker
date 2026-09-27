@@ -59,21 +59,21 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
             scope.launch {
                 busy = true; error = false
                 try {
-                    repository.setSessionResult(id, SessionResult.DONE, selected.orEmpty().toSet())
-                    if (repository.shouldOfferCompletion(current.session.courseId)) completionCourseId = current.session.courseId else onBack()
+                    val offerCompletion = repository.setSessionResult(id, SessionResult.DONE, selected.orEmpty().toSet())
+                    if (offerCompletion) completionCourseId = current.session.courseId else onBack()
                 }
                 catch (cancel: CancellationException) { throw cancel }
                 catch (_: Exception) { error = true }
                 finally { busy = false }
             }
-        }, dateLabel = LocalDate.ofEpochDay(current.session.date).format(DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "dMMMM"), locale)) + " · " +
+        }, editable = current.canEdit, dateLabel = LocalDate.ofEpochDay(current.session.date).format(DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "dMMMM"), locale)) + " · " +
             LocalTime.of(current.session.startMinute / 60, current.session.startMinute % 60).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)))
     completionCourseId?.let { courseId ->
         fun finish(complete: Boolean) {
             scope.launch {
                 busy = true
                 try {
-                    if (complete) repository.completeCourse(courseId) else repository.dismissCompletionPrompt(courseId)
+                    if (complete) repository.completeCourse(courseId)
                     completionCourseId = null
                     onBack()
                 } catch (cancel: CancellationException) { throw cancel }
@@ -89,7 +89,7 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
 
 @Composable
 internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: Set<String>, busy: Boolean, error: Boolean,
-    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, dateLabel: String = "") {
+    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, dateLabel: String = "", editable: Boolean = true) {
     Column(Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         TextButton(onClick = onCancel, enabled = !busy, contentPadding = PaddingValues(0.dp), modifier = Modifier.testTag("session_back")) {
             Icon(painterResource(R.drawable.ic_back), contentDescription = null, modifier = Modifier.size(16.dp))
@@ -98,14 +98,14 @@ internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: S
         }
         if (dateLabel.isNotEmpty()) Text(dateLabel.uppercase(LocalConfiguration.current.locales[0]), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 10.sp, lineHeight = 14.sp, letterSpacing = 1.5.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(name, style = TextStyle(fontFamily = FontFamily.Serif, fontWeight = FontWeight.Normal, fontSize = 22.sp, lineHeight = 29.sp, letterSpacing = (-.6).sp))
-        Text(stringResource(R.string.session_choose), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp, letterSpacing = (-.2).sp))
+        if (editable) Text(stringResource(R.string.session_choose), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp, letterSpacing = (-.2).sp))
         LazyColumn(Modifier.weight(1f).fillMaxWidth().testTag("session_topics")) {
             items(topics, key = { it.id }) { topic ->
                 val isSelected = topic.id in selected
                 Row(
                     Modifier.fillMaxWidth()
                         .background(if (isSelected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
-                        .toggleable(value = isSelected, enabled = !busy, role = Role.Checkbox, onValueChange = { onToggle(topic.id) })
+                        .toggleable(value = isSelected, enabled = !busy && editable, role = Role.Checkbox, onValueChange = { onToggle(topic.id) })
                         .heightIn(min = 48.dp).padding(vertical = 12.dp)
                         .semantics { contentDescription = topic.title }.testTag("session_topic_${topic.id}"),
                     verticalAlignment = Alignment.CenterVertically,
@@ -118,7 +118,7 @@ internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: S
             }
         }
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
-        Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().testTag("session_save")) { Text(stringResource(R.string.course_save)) }
+        if (editable) Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().testTag("session_save")) { Text(stringResource(R.string.course_save)) }
     }
 }
 

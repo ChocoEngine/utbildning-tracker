@@ -8,7 +8,6 @@ import android.os.ParcelFileDescriptor
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.data.AppContainer
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.ZonedDateTime
 import kotlinx.coroutines.delay
@@ -40,7 +39,7 @@ class LocalizedReminderDeliveryTest {
                 val localeDeadline = System.currentTimeMillis() + 10_000
                 while (context.resources.configuration.locales[0].language != language && System.currentTimeMillis() < localeDeadline) delay(50)
                 assertEquals(language, context.resources.configuration.locales[0].language)
-                val course = repository.createCourse("Лекции по C · Arrays", repository.availableColors().first(), CourseMode.SCHEDULED)
+                val course = repository.createCourse("Лекции по C · Arrays", repository.availableColors().first())
                 try {
                     val next = ZonedDateTime.now().plusMinutes(1).withSecond(0).withNano(0)
                     repository.saveInitialSchedule(course.id, listOf(WeeklyRule(next.dayOfWeek.value, next.hour * 60 + next.minute)))

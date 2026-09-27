@@ -20,7 +20,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.MainActivity
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.AppContainer
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
@@ -179,7 +178,7 @@ class LanguageSettingsTest {
         val repository = AppContainer.repository(context)
         val course = runBlocking {
             repository.saveCourseForm(name = "Лекции по C · Arrays", colorId = repository.availableColors().first(),
-                mode = CourseMode.SCHEDULED, categoryName = "C · Программирование", topicText = "Указатели\nArrays\nСтруктуры")
+                categoryName = "C · Программирование", topicText = "Указатели\nArrays\nСтруктуры")
         }
         try {
             val original = runBlocking {

@@ -31,7 +31,7 @@ object ReminderScheduler {
         observing = true
         val app = context.applicationContext
         scope.launch {
-            combine(repository.observeSessions(), repository.observeCourses()) { _, _ -> Unit }.collect {
+            combine(repository.observeSessions(), repository.observeReminderCourses()) { _, _ -> Unit }.collect {
                 try { reconcile(app, repository) }
                 catch (e: CancellationException) { throw e }
                 catch (e: Exception) { android.util.Log.e("Tracker", "Reminder reconciliation failed", e) }
@@ -54,7 +54,7 @@ object ReminderScheduler {
     }
 
     private suspend fun eligible(repository: TrackerRepository): List<SessionEntity> {
-        val courses = repository.observeCourses().first().filter { !it.isCompleted && !it.isPaused && it.exhaustedAt == null }.map { it.id }.toSet()
+        val courses = repository.observeReminderCourses().first().map { it.id }.toSet()
         return repository.observeSessions().first().filter { it.courseId in courses && it.result == SessionResult.PENDING }
             .filter { repository.getSchedule(it.courseId) != null }
     }

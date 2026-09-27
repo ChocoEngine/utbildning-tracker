@@ -14,7 +14,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.TrackerDatabase
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.ui.courses.CoursesScreen
 import com.utbildning.tracker.ui.courses.CoursesViewModel
 import com.utbildning.tracker.ui.theme.TrackerTheme
@@ -60,7 +59,7 @@ class CourseDraftRecreationTest {
         database.close()
     }
 
-    @Test fun actualActivityRecreationRetainsUnsavedCourseAndOpenTopicEditor() {
+    @Test fun actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor() {
         compose.setContent { TrackerTheme { CoursesScreen({}, repository) } }
         var original: CoursesViewModel? = null
         compose.runOnIdle {
@@ -72,7 +71,6 @@ class CourseDraftRecreationTest {
         compose.onNodeWithTag("course_category").performTextReplacement("New category")
         compose.onNodeWithTag("course_category").performClick()
         click("course_continue")
-        click("mode_unscheduled")
         click("topics_edit")
         compose.onNodeWithTag("topics_input").performScrollTo().performTextReplacement("Pointers\nArrays")
         application.registerActivityLifecycleCallbacks(reattachContent)
@@ -81,14 +79,12 @@ class CourseDraftRecreationTest {
         compose.runOnIdle { assertSame(original, ViewModelProvider(compose.activity)[CoursesViewModel::class.java]) }
         compose.onNodeWithTag("course_title").assertTextContains("C draft")
         compose.onNodeWithTag("course_category").assertTextContains("New category")
-        compose.onNodeWithTag("mode_unscheduled").assertIsSelected()
         compose.onNodeWithTag("topics_input").assertTextContains("Pointers\nArrays")
-        assertTrue(runBlocking { repository.observeCourses().first() }.isEmpty())
-        assertTrue(runBlocking { repository.observeCategories().first() }.isEmpty())
+        assertEquals(1, runBlocking { repository.observeCourses().first() }.size)
+        assertEquals(1, runBlocking { repository.observeCategories().first() }.size)
         click("topics_apply")
         compose.waitUntil(5_000) { runBlocking { repository.observeCourses().first() }.size == 1 }
         val saved = runBlocking { repository.observeCourses().first() }.single()
-        assertEquals(CourseMode.UNSCHEDULED, saved.mode)
         assertEquals(listOf("Pointers", "Arrays"), runBlocking { database.trackerDao().getTopics(saved.id) }.map { it.title })
     }
 

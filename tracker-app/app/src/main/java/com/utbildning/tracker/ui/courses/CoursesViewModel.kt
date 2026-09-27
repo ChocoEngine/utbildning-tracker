@@ -18,10 +18,10 @@ import kotlinx.coroutines.sync.withLock
 
 data class CourseDraft(
     val id: String? = null, val name: String = "", val category: String = "",
-    val color: Int = 0, val mode: CourseMode = CourseMode.SCHEDULED,
+    val color: Int? = 0, val hasSchedule: Boolean = false,
     val completed: Boolean = false, val topics: List<EditableTopic> = emptyList(),
     val text: String = "", val editingText: String? = null, val topicsChanged: Boolean = false,
-    val paused: Boolean = false, val modeChosen: Boolean = false,
+    val paused: Boolean = false,
 )
 
 internal class CoursesViewModel(private val repository: TrackerRepository) : ViewModel() {
@@ -35,7 +35,6 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     var error by mutableStateOf<String?>(null); private set
     var deleteCategory by mutableStateOf<CategoryEntity?>(null); private set
     var lifecycleAction by mutableStateOf<String?>(null); private set
-    var completionOffer by mutableStateOf(false); private set
     var creating by mutableStateOf(false); private set
     private val writes = Mutex()
     private var pendingWrites = 0
@@ -53,7 +52,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 list.forEach { course ->
                     if (course.id !in progressJobs) progressJobs[course.id] = viewModelScope.launch {
                         repository.observeCourseDetails(course.id).collect { details ->
-                            details?.let { topicProgress = topicProgress + (course.id to (it.completions.size to it.topics.size)); refreshProgress() }
+                            details?.let { topicProgress = topicProgress + (course.id to (it.topics.count { topic -> topic.isCompleted } to it.topics.size)); refreshProgress() }
                         }
                     }
                 }
@@ -70,58 +69,42 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             val details = repository.getCourseDetails(id) ?: return@work
             val topics = repository.getTopicEditorTopics(id)
             draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
-                details.course.mode, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused, modeChosen = true)
+                details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused)
             detailJob = viewModelScope.launch {
                 repository.observeCourseDetails(id).collect { current ->
                     current ?: return@collect
-                    val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, current.completions.any { it.topicId == topic.id }) }
+                    val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, topic.isCompleted) }
                     draft?.takeIf { it.id == id }?.let { old ->
-                        draft = old.copy(topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused, text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
-                        completionOffer = repository.shouldOfferCompletion(id)
+                        draft = old.copy(hasSchedule = current.hasSchedule, topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused, text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
                     }
                 }
             }
         }
     }
-    fun cancel() { creating = false; detailJob?.cancel(); draft = null; error = null; completionOffer = false; lifecycleAction = null }
+    fun cancel() { creating = false; detailJob?.cancel(); draft = null; error = null; lifecycleAction = null }
     fun back() { if (draft?.editingText != null) change { it.copy(editingText = null) } else leave() }
-    fun continueCreation() {
-        val current = draft ?: return
-        error = when {
-            current.name.trim().isEmpty() -> "EMPTY_NAME"
-            current.name.trim().codePointCount(0, current.name.trim().length) > 50 -> "NAME_TOO_LONG"
-            else -> null
-        }
-        if (error == null) { change { it.copy(name = it.name.trim()) }; creating = false }
-    }
-    fun chooseMode(mode: CourseMode) {
-        if (draft?.id != null) return
-        change { it.copy(mode = mode, modeChosen = true) }
-        if (mode == CourseMode.SCHEDULED) work { createDraft() }
-    }
-    private suspend fun createDraft() {
-        val current = draft ?: return
-        if (current.id != null || !current.modeChosen) return
+    fun continueCreation() = work {
+        val current = draft ?: return@work
         val saved = repository.saveCourseForm(name = current.name, colorId = current.color,
-            mode = current.mode, categoryName = current.category, topicText = current.text)
+            categoryName = current.category, topicText = current.text)
+        creating = false
         attach(saved.id)
     }
     private suspend fun attach(id: String) {
         val details = repository.getCourseDetails(id) ?: return
         val topics = repository.getTopicEditorTopics(id)
         draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
-            details.course.mode, details.course.isCompleted, topics, TopicListEditor.editableText(topics),
-            paused = details.course.isPaused, modeChosen = true)
+            details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics),
+            paused = details.course.isPaused)
         colors = repository.availableColors(id)
         detailJob?.cancel()
         detailJob = viewModelScope.launch {
             repository.observeCourseDetails(id).collect { current ->
                 current ?: return@collect
-                val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, current.completions.any { it.topicId == topic.id }) }
+                val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, topic.isCompleted) }
                 draft?.takeIf { it.id == id }?.let { old ->
-                    draft = old.copy(topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused,
+                    draft = old.copy(hasSchedule = current.hasSchedule, topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused,
                         text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
-                    completionOffer = repository.shouldOfferCompletion(id)
                 }
             }
         }
@@ -132,6 +115,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     fun selectColor(value: Int) { change { it.copy(color = value) }; commitField("color") }
     private fun commitField(field: String) {
         val snapshot = draft ?: return
+        if (snapshot.completed) return
         val id = snapshot.id ?: return
         work {
             val current = repository.getCourseDetails(id) ?: return@work
@@ -155,6 +139,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
         work { if (snapshot.id != null) { flush(snapshot); after(snapshot.id) } }
     }
     private suspend fun flush(snapshot: CourseDraft) {
+        if (snapshot.completed) return
         val id = snapshot.id ?: return
         val current = repository.getCourseDetails(id) ?: return
         if (snapshot.name.trim() != current.course.name || snapshot.category.trim() != current.category?.name.orEmpty() || snapshot.color != current.course.colorId)
@@ -162,10 +147,16 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     }
     fun requestLifecycle(action: String) { lifecycleAction = action }
     fun dismissLifecycle() { lifecycleAction = null }
-    fun keepActive() = work { draft?.id?.let { repository.dismissCompletionPrompt(it) }; completionOffer = false }
     fun confirmLifecycle() = work {
         val id = draft?.id ?: return@work
         when (lifecycleAction) {
+            "disable_schedule" -> {
+                draft?.let { flush(it) }
+                repository.disableSchedule(id)
+                attach(id)
+                lifecycleAction = null
+                return@work
+            }
             "delete" -> repository.deleteCourse(id)
             "pause" -> repository.pauseCourse(id)
             "complete" -> repository.completeCourse(id)
@@ -184,7 +175,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             TopicListEditor.plan(text, current.topics)
             if (current.id == null) {
                 val saved = repository.saveCourseForm(name = current.name, colorId = current.color,
-                    mode = current.mode, categoryName = current.category, topicText = text)
+                    categoryName = current.category, topicText = text)
                 attach(saved.id)
             } else {
                 repository.saveTopicList(current.id, text)

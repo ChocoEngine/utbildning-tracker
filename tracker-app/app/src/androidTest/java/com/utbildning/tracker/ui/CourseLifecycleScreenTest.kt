@@ -44,8 +44,8 @@ class CourseLifecycleScreenTest {
     @Test fun completionCancelPreservesCourseAndConfirmationCompletesTopicsAndReleasesColor() {
         val course = seed()
         val topics = runBlocking { dao.getTopics(course.id) }
-        val manual = TopicCompletionEntity(topics.first().id, course.id, CompletionSource.MANUAL, 1)
-        runBlocking { dao.insertCompletion(manual) }
+        val manual = topics.first().copy(isCompleted = true, completionDate = null)
+        runBlocking { dao.updateTopic(manual) }
         show(course.id)
         click("course_complete")
         clickDialog("course_action_cancel")
@@ -53,9 +53,9 @@ class CourseLifecycleScreenTest {
         click("course_complete")
         clickDialog("course_action_confirm")
         waitFor { runBlocking { dao.getCourse(course.id) }!!.isCompleted }
-        assertEquals(manual, runBlocking { dao.getCompletion(topics.first().id) })
-        assertEquals(CompletionSource.COURSE_COMPLETION, runBlocking { dao.getCompletion(topics.last().id) }?.source)
-        assertNull(runBlocking { dao.getReservation(course.id) })
+        assertEquals(manual, runBlocking { dao.getTopic(topics.first().id)?.takeIf { it.isCompleted } })
+        assertNull(runBlocking { dao.getTopic(topics.last().id)?.takeIf { it.isCompleted } }?.completionDate)
+        assertNull(runBlocking { dao.getCourse(course.id) }!!.colorId)
         assertNull(runBlocking { dao.getSchedule(course.id) })
         assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
         assertEquals(SessionResult.DONE, runBlocking { dao.getSession("past") }?.result)
@@ -73,8 +73,8 @@ class CourseLifecycleScreenTest {
         clickDialog("course_action_confirm")
         waitFor { runBlocking { dao.getCourse(course.id) }!!.isPaused }
         assertFalse(runBlocking { dao.getCourse(course.id) }!!.isCompleted)
-        assertNotNull(runBlocking { dao.getCompletion(topic.id) })
-        assertEquals(0, runBlocking { dao.getReservation(course.id) }?.colorId)
+        assertNotNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
+        assertEquals(0, runBlocking { dao.getCourse(course.id) }?.colorId)
         assertNull(runBlocking { dao.getSchedule(course.id) })
         assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
     }
@@ -94,12 +94,12 @@ class CourseLifecycleScreenTest {
     }
 
     private fun repositoryCourseUnscheduled() = runBlocking {
-        repository.createCourse("Free", 1, CourseMode.UNSCHEDULED, topics = listOf("Pointers"))
+        repository.createCourse("Free", 1, topics = listOf("Pointers"))
     }
 
     @Test fun deletionRequiresConfirmationAndDoesNotTouchOtherCourse() {
         val course = seed()
-        val other = runBlocking { repository.createCourse("Other", 1, CourseMode.SCHEDULED) }
+        val other = runBlocking { repository.createCourse("Other", 1) }
         show(course.id)
         click("course_delete")
         clickDialog("course_action_cancel")
@@ -109,32 +109,39 @@ class CourseLifecycleScreenTest {
         waitFor { runBlocking { dao.getCourse(course.id) } == null }
         assertTrue(runBlocking { dao.getTopics(course.id) }.isEmpty())
         assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
-        assertNull(runBlocking { dao.getReservation(course.id) })
+        assertNull(runBlocking { dao.getCourse(course.id) })
         assertEquals(other, runBlocking { dao.getCourse(other.id) })
     }
 
-    @Test fun exhaustedKeepActiveDoesNotRepeatUntilNewCompletionCycle() {
-        val course = runBlocking { repository.createCourse("Practice", 0, CourseMode.UNSCHEDULED, topics = listOf("Pointers")) }
+    @Test fun completedTopicsShowInlineMessageWithoutCompletionDialog() {
+        val course = runBlocking { repository.createCourse("Practice", 0, topics = listOf("Pointers")) }
         val topic = runBlocking { dao.getTopics(course.id) }.single()
         show(course.id)
         longPress(topic.id)
-        clickDialog("course_keep_active")
-        waitFor { runBlocking { dao.getCourse(course.id) }!!.completionPromptDismissed }
-        assertFalse(runBlocking { dao.getCourse(course.id) }!!.isCompleted)
+        waitFor { compose.onAllNodesWithTag("course_all_topics_completed").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("course_keep_active").assertDoesNotExist()
         click("course_cancel")
         click("course_row_${course.id}")
-        compose.onNodeWithTag("course_keep_active").assertDoesNotExist()
+        compose.onNodeWithTag("course_all_topics_completed").assertExists()
+        compose.onNodeWithTag("course_offer_complete").assertDoesNotExist()
         longPress(topic.id)
-        waitFor { runBlocking { dao.getCompletion(topic.id) } == null }
-        longPress(topic.id)
-        clickDialog("course_offer_complete")
-        clickDialog("course_action_confirm")
-        waitFor { runBlocking { dao.getCourse(course.id) }!!.isCompleted }
-        assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
+        waitFor { compose.onAllNodesWithTag("course_all_topics_completed").fetchSemanticsNodes().isEmpty() }
+    }
+
+    @Test fun completedCourseIsReadOnlyAndHasNoColorPicker() {
+        val course = seed()
+        runBlocking { repository.completeCourse(course.id) }
+        compose.setContent { CompositionLocalProvider(LocalViewModelStoreOwner provides owner) { TrackerTheme { CoursesScreen({}, repository) } } }
+        click("courses_filter")
+        click("course_row_${course.id}")
+        compose.runOnIdle { modelJob = ViewModelProvider(owner)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        for (tag in listOf("course_name", "course_category", "color_0", "topics_edit", "course_schedule", "course_complete")) compose.onNodeWithTag(tag).assertDoesNotExist()
+        assertNull(runBlocking { dao.getCourse(course.id) }!!.colorId)
     }
 
     private fun seed(): CourseEntity = runBlocking {
-        val course = repository.createCourse("C", 0, CourseMode.SCHEDULED, topics = listOf("Pointers", "Arrays"))
+        val course = repository.createCourse("C", 0, topics = listOf("Pointers", "Arrays"))
         // The fixture already represents a synchronized calendar through today.
         dao.insertSchedule(ScheduleEntity(course.id, today.toEpochDay(), generatedThrough = today.toEpochDay()))
         dao.insertScheduleRule(ScheduleRuleEntity(course.id, 6, 600))

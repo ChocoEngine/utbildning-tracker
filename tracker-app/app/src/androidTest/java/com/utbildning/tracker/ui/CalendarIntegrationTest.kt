@@ -36,10 +36,10 @@ class CalendarIntegrationTest {
         database.close()
     }
 
-    @Test fun openingFarMonthGeneratesCalendarAndResultButtonsPersistChanges() {
+    @Test fun openingFarMonthGeneratesReadOnlyCalendarAndRejectsResultChanges() {
         val target = YearMonth.now().plusMonths(6).atDay(1)
         val course = runBlocking {
-            repository.createCourse("C", 0, CourseMode.SCHEDULED).also {
+            repository.createCourse("C", 0).also {
                 repository.saveInitialSchedule(it.id, (1..7).map { day -> WeeklyRule(day, 1140) })
             }
         }
@@ -52,10 +52,13 @@ class CalendarIntegrationTest {
         click("calendar_day_${target.toEpochDay()}")
         compose.onNodeWithTag("calendar_session_${session.id}").assertHasNoClickAction()
         compose.runOnIdle { assertNull(requestedSession) }
-        runBlocking { repository.setSessionResult(session.id, SessionResult.SKIPPED) }
-        compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.SKIPPED }
-        runBlocking { repository.setSessionResult(session.id, SessionResult.PENDING) }
-        compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id) }?.result == SessionResult.PENDING }
+        try {
+            runBlocking { repository.setSessionResult(session.id, SessionResult.SKIPPED) }
+            fail("Future sessions must be read-only")
+        } catch (expected: com.utbildning.tracker.data.RepositoryException) {
+            assertEquals(com.utbildning.tracker.data.RepositoryError.INVALID_SESSION_DATE, expected.error)
+        }
+        assertEquals(SessionResult.PENDING, runBlocking { dao.getSession(session.id) }!!.result)
         assertEquals(1, runBlocking { dao.getSessions(course.id) }.count { it.date == target.toEpochDay() })
     }
 

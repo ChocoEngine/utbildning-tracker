@@ -183,7 +183,7 @@ private fun SynchronizeOnResume(repository: TrackerRepository) {
             try { repository.synchronize(); ReminderScheduler.reconcile(context, repository) }
             catch (e: CancellationException) { throw e }
             catch (e: Exception) { android.util.Log.e("Tracker", "Calendar synchronization failed", e) }
-            delay(60_000L - System.currentTimeMillis() % 60_000L)
+            delay(com.utbildning.tracker.domain.millisUntilNextLocalDay(System.currentTimeMillis(), java.time.ZoneId.systemDefault()))
         }
     }
 }

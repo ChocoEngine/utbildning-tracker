@@ -17,9 +17,6 @@ interface TrackerDao {
     suspend fun insertCourse(course: CourseEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertColorReservation(reservation: ColorReservationEntity)
-
-    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertTopic(topic: TopicEntity)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
@@ -32,12 +29,6 @@ interface TrackerDao {
     suspend fun insertSessionRecord(session: SessionRecord)
 
     suspend fun insertSession(session: SessionEntity) = insertSessionRecord(session.record())
-
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertHistory(history: SessionTopicHistoryEntity)
-
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertCompletion(completion: TopicCompletionEntity)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateCourse(course: CourseEntity)
@@ -54,11 +45,8 @@ interface TrackerDao {
     @Query("SELECT COUNT(*) FROM courses WHERE categoryId = :categoryId")
     suspend fun countCoursesInCategory(categoryId: String): Int
 
-    @Query("SELECT * FROM color_reservations ORDER BY colorId")
-    suspend fun getColorReservations(): List<ColorReservationEntity>
-
-    @Query("DELETE FROM color_reservations WHERE courseId = :courseId")
-    suspend fun deleteColorReservation(courseId: String)
+    @Query("DELETE FROM topics WHERE id = :id")
+    suspend fun deleteTopic(id: String)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun updateTopic(topic: TopicEntity)
@@ -74,10 +62,10 @@ interface TrackerDao {
     @Query("SELECT * FROM courses ORDER BY createdAt, id")
     suspend fun getCourses(): List<CourseEntity>
 
-    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getAllSessions(): List<SessionEntity>
 
-    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     fun observeSessions(): Flow<List<SessionEntity>>
 
     @Query("DELETE FROM sessions WHERE id = :id")
@@ -89,22 +77,22 @@ interface TrackerDao {
     @Query("SELECT * FROM topics WHERE id = :id")
     suspend fun getTopic(id: String): TopicEntity?
 
-    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.id = :id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.id = :id")
     suspend fun getSession(id: String): SessionEntity?
 
-    @Query("SELECT * FROM topic_completions WHERE topicId = :topicId")
-    suspend fun getCompletion(topicId: String): TopicCompletionEntity?
+    @Query("SELECT EXISTS(SELECT 1 FROM topics WHERE courseId = :courseId) AND NOT EXISTS(SELECT 1 FROM topics WHERE courseId = :courseId AND isCompleted = 0)")
+    suspend fun hasExhaustedTopics(courseId: String): Boolean
 
-    @Query("SELECT * FROM topic_completions WHERE courseId = :courseId ORDER BY topicId")
-    suspend fun getCompletions(courseId: String): List<TopicCompletionEntity>
+    @Query("SELECT * FROM courses WHERE isCompleted = 0 AND isPaused = 0 AND (NOT EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id) OR EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id AND isCompleted = 0))")
+    suspend fun getReminderCourses(): List<CourseEntity>
 
-    @Query("SELECT * FROM session_topic_history WHERE sessionId = :sessionId ORDER BY topicId")
-    suspend fun getHistory(sessionId: String): List<SessionTopicHistoryEntity>
+    @Query("SELECT * FROM courses WHERE isCompleted = 0 AND isPaused = 0 AND (NOT EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id) OR EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id AND isCompleted = 0))")
+    fun observeReminderCourses(): Flow<List<CourseEntity>>
 
     @Query("SELECT * FROM topics WHERE courseId = :courseId ORDER BY position, id")
     suspend fun getTopics(courseId: String): List<TopicEntity>
 
-    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.courseId = :courseId ORDER BY s.date, s.startMinute, s.id")
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.courseId = :courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getSessions(courseId: String): List<SessionEntity>
 
     @Query("SELECT * FROM schedules WHERE courseId = :courseId")
@@ -112,9 +100,6 @@ interface TrackerDao {
 
     @Query("SELECT * FROM schedule_rules WHERE courseId = :courseId ORDER BY dayOfWeek")
     suspend fun getScheduleRules(courseId: String): List<ScheduleRuleEntity>
-
-    @Query("SELECT * FROM color_reservations WHERE courseId = :courseId")
-    suspend fun getReservation(courseId: String): ColorReservationEntity?
 
     @Query("DELETE FROM courses WHERE id = :id")
     suspend fun deleteCourse(id: String)
@@ -125,9 +110,6 @@ interface TrackerDao {
     @Query("DELETE FROM schedules WHERE courseId = :courseId")
     suspend fun deleteSchedule(courseId: String)
 
-    @Query("DELETE FROM topic_completions WHERE topicId = :topicId")
-    suspend fun deleteCompletion(topicId: String)
-
     @Query("SELECT * FROM courses ORDER BY createdAt, id")
     fun observeCourses(): Flow<List<CourseEntity>>
 
@@ -137,6 +119,4 @@ interface TrackerDao {
     @Query("SELECT * FROM topics WHERE courseId = :courseId ORDER BY position, id")
     fun observeTopics(courseId: String): Flow<List<TopicEntity>>
 
-    @Query("SELECT * FROM topic_completions WHERE courseId = :courseId ORDER BY topicId")
-    fun observeCompletions(courseId: String): Flow<List<TopicCompletionEntity>>
 }

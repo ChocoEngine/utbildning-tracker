@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.local.SessionEntity
 import com.utbildning.tracker.data.local.SessionResult
-import com.utbildning.tracker.ui.theme.CourseColors
+import com.utbildning.tracker.ui.theme.courseColor
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -43,7 +43,7 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
                     cubicTo(0f, size.height, 0f, size.height * .6f, size.width * .1f, size.height * .35f)
                     close()
                 }
-                Box(Modifier.size(22.dp, 25.dp).background(CourseColors[session.colorId].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(22.dp, 25.dp).background(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot), contentAlignment = Alignment.Center) {
                     if (session.result == SessionResult.SKIPPED) Text("×", style = MaterialTheme.typography.labelSmall)
                 }
                 Text(session.courseName, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
@@ -52,7 +52,7 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
             val selectedBackground = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = .1f).compositeOver(buttonBackground)
             val doneSelected = session.result == SessionResult.DONE
             val skipSelected = session.result == SessionResult.SKIPPED
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (!session.courseCompleted) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilledTonalButton(onClick = { if (doneSelected) onPending(session.id) else onDone(session.id) }, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (doneSelected) selectedBackground else buttonBackground), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp), modifier = Modifier.semantics { selected = doneSelected }.testTag("session_done_${session.id}")) {
                     Icon(painterResource(R.drawable.ic_check), contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
@@ -68,16 +68,16 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
         return
     }
     Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.width(5.dp).height(72.dp).background(CourseColors[session.colorId].copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f)))
+        Box(Modifier.width(5.dp).height(72.dp).background(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f)))
         Column(Modifier.weight(1f)) {
             Text(session.courseName, style = MaterialTheme.typography.titleMedium)
             Text(time + " · " + status)
             if (question) Text(stringResource(R.string.session_question), modifier = Modifier.testTag("question_${session.id}"))
-            Row {
+            if (!session.courseCompleted) Row {
                 TextButton(onClick = { onDone(session.id) }, modifier = Modifier.testTag("session_done_${session.id}")) { Text(stringResource(R.string.session_done)) }
                 TextButton(onClick = { onSkip(session.id) }, modifier = Modifier.testTag("session_skip_${session.id}")) { Text(stringResource(R.string.session_skipped)) }
             }
-            if (session.result != SessionResult.PENDING) TextButton(onClick = { onPending(session.id) }, modifier = Modifier.testTag("session_pending_${session.id}")) { Text(stringResource(R.string.session_unmarked)) }
+            if (!session.courseCompleted && session.result != SessionResult.PENDING) TextButton(onClick = { onPending(session.id) }, modifier = Modifier.testTag("session_pending_${session.id}")) { Text(stringResource(R.string.session_unmarked)) }
         }
     }
 }

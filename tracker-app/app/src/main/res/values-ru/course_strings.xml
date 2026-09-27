@@ -6,7 +6,7 @@
     <string name="course_confirm_complete">Завершить курс? Все темы будут отмечены пройденными. Будущие занятия и напоминания будут удалены.</string>
     <string name="course_confirm_pause">Поставить курс на паузу? Расписание, будущие занятия и напоминания будут удалены. Прогресс сохранится.</string>
     <string name="course_confirm_delete">Удалить курс, его темы и календарь? Это действие нельзя отменить.</string>
-    <string name="course_configure">Настроить</string>
+    <string name="course_configure">Настроить расписание</string>
     <string name="course_add">Добавить курс</string>
     <string name="courses_empty">Курсов пока нет</string>
     <string name="course_no_category">Без категории</string>
@@ -37,4 +37,8 @@
     <string name="course_save_error">Не удалось сохранить изменения. Повторите попытку.</string>
     <string name="course_continue">Далее</string>
     <string name="course_name_too_long">Название должно содержать не более 50 символов</string>
+    <string name="course_enable_schedule">Включить расписание</string>
+    <string name="course_disable_schedule">Перейти без расписания</string>
+    <string name="course_confirm_disable_schedule">Будущие занятия без отметки и уведомления будут удалены. Прошлые занятия, записанные результаты и прогресс тем сохранятся.</string>
+    <string name="course_all_topics_completed">Все темы пройдены</string>
 </resources>

@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.MainActivity
 import com.utbildning.tracker.data.AppContainer
-import com.utbildning.tracker.data.local.CourseMode
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.ZonedDateTime
@@ -54,7 +53,7 @@ class ReminderNavigationTest {
 
     @Test fun realExactAlarmDeliversOnceAndTapRendersSelectedSession() = runBlocking {
         compose.waitForIdle()
-        val course = repository.createCourse("Reminder navigation C", repository.availableColors().first(), CourseMode.SCHEDULED)
+        val course = repository.createCourse("Reminder navigation C", repository.availableColors().first())
         courseId = course.id
         val next = ZonedDateTime.now().plusMinutes(1).withSecond(0).withNano(0)
         repository.saveInitialSchedule(course.id, listOf(WeeklyRule(next.dayOfWeek.value, next.hour * 60 + next.minute)))

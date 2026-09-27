@@ -27,47 +27,46 @@ class CourseFormRepositoryTest {
     @After fun close() = db.close()
 
     @Test fun formCreatesBothModesAndParsesBlankLines() = runBlocking {
-        val course = repository.saveCourseForm(name = " C ", colorId = 0, mode = CourseMode.UNSCHEDULED,
+        val course = repository.saveCourseForm(name = " C ", colorId = 0,
             categoryName = "Учёба", topicText = " Массивы \n\n Указатели ")
         val details = repository.observeCourseDetails(course.id).first()!!
         assertEquals(listOf("Массивы", "Указатели"), details.topics.map { it.title })
         assertEquals("Учёба", details.category?.name)
-        assertTrue(details.completions.isEmpty())
-        val practice = repository.saveCourseForm(name = "Практика", colorId = 1, mode = CourseMode.SCHEDULED)
+        assertTrue(details.topics.filter { it.isCompleted }.isEmpty())
+        val practice = repository.saveCourseForm(name = "Практика", colorId = 1)
         assertTrue(repository.getCourseDetails(practice.id)!!.topics.isEmpty())
     }
 
     @Test fun conflictingTopicsRollBackMetadataCategoryAndColorTogether() = runBlocking {
-        val original = repository.createCourse("C", 0, CourseMode.UNSCHEDULED, "Old", listOf("Массивы", "Указатели"))
+        val original = repository.createCourse("C", 0, "Old", listOf("Массивы", "Указатели"))
         val topics = dao.getTopics(original.id)
-        dao.insertCompletion(TopicCompletionEntity(topics.first().id, original.id, CompletionSource.MANUAL, 50))
+        dao.updateTopic(dao.getTopic(topics.first().id)!!.copy(isCompleted = true, completionDate = null))
         try {
-            repository.saveCourseForm(original.id, "Changed", 1, CourseMode.UNSCHEDULED, "New", "МАССИВЫ")
+            repository.saveCourseForm(original.id, "Changed", 1, "New", "МАССИВЫ")
             fail("Expected conflict")
         } catch (expected: TopicListConflictException) {
             assertEquals(listOf(1), expected.lineNumbers)
         }
         assertEquals(original, dao.getCourse(original.id))
-        assertEquals(0, dao.getReservation(original.id)?.colorId)
+        assertEquals(0, dao.getCourse(original.id)?.colorId)
         assertEquals(listOf("Old"), dao.getCategories().map { it.name })
-        assertEquals(topics, dao.getTopics(original.id))
+        assertEquals(topics.mapIndexed { i, topic -> topic.copy(isCompleted = i == 0) }, dao.getTopics(original.id))
     }
 
-    @Test fun completedFormIgnoresTopicDraftAndKeepsMode() = runBlocking {
-        val course = repository.createCourse("C", 0, CourseMode.UNSCHEDULED, topics = listOf("Массивы"))
-        dao.updateCourse(course.copy(isCompleted = true, completedAt = 90))
-        dao.deleteColorReservation(course.id)
-        repository.saveCourseForm(course.id, "C new", 0, CourseMode.SCHEDULED, topicText = "")
-        assertEquals(CourseMode.UNSCHEDULED, dao.getCourse(course.id)?.mode)
-        assertEquals(listOf("Массивы"), dao.getTopics(course.id).map { it.title })
+    @Test fun completedFormRejectsAllChanges() = runBlocking {
+        val course = repository.createCourse("C", 0, topics = listOf("Массивы"))
+        repository.completeCourse(course.id)
+        val before = repository.getCourseDetails(course.id)
+        try { repository.saveCourseForm(course.id, "New", 1, topicText = ""); fail("Completed course is read only") }
+        catch (e: RepositoryException) { assertEquals(RepositoryError.COURSE_COMPLETED, e.error) }
+        assertEquals(before, repository.getCourseDetails(course.id))
     }
 
     @Test fun deletionRequiresConfirmationForCompletedCoursesAndPreservesData() = runBlocking {
-        val course = repository.createCourse("C", 0, CourseMode.UNSCHEDULED, "Учёба", listOf("Массивы"))
+        val course = repository.createCourse("C", 0, "Учёба", listOf("Массивы"))
         val topic = dao.getTopics(course.id).single()
-        dao.insertCompletion(TopicCompletionEntity(topic.id, course.id, CompletionSource.MANUAL, 50))
-        dao.updateCourse(course.copy(isCompleted = true, completedAt = 90))
-        dao.deleteColorReservation(course.id)
+        dao.updateTopic(dao.getTopic(topic.id)!!.copy(isCompleted = true, completionDate = null))
+        dao.updateCourse(course.copy(colorId = null, isCompleted = true, completedAt = 90))
         val before = dao.getCourse(course.id)!!
         try {
             repository.deleteCategory(course.categoryId!!)
@@ -75,8 +74,8 @@ class CourseFormRepositoryTest {
         } catch (expected: RepositoryException) { assertEquals(RepositoryError.CATEGORY_IN_USE, expected.error) }
         repository.deleteCategory(course.categoryId!!, confirmed = true)
         assertEquals(before.copy(categoryId = null), dao.getCourse(course.id))
-        assertEquals(topic, dao.getTopic(topic.id))
-        assertNotNull(dao.getCompletion(topic.id))
+        assertEquals(topic.copy(isCompleted = true), dao.getTopic(topic.id))
+        assertNotNull(dao.getTopic(topic.id)?.takeIf { it.isCompleted })
         assertTrue(dao.getCategories().isEmpty())
     }
 
@@ -84,10 +83,10 @@ class CourseFormRepositoryTest {
         dao.insertCategory(CategoryEntity("unused", "Unused"))
         repository.deleteCategory("unused")
         assertTrue(dao.getCategories().isEmpty())
-        val course = repository.createCourse("C", 0, CourseMode.UNSCHEDULED, topics = listOf("Массивы"))
+        val course = repository.createCourse("C", 0, topics = listOf("Массивы"))
         val topics = dao.getTopics(course.id)
-        repository.saveCourseForm(course.id, "New", 0, CourseMode.SCHEDULED)
+        repository.saveCourseForm(course.id, "New", 0)
         assertEquals(topics, dao.getTopics(course.id))
-        assertEquals(CourseMode.UNSCHEDULED, dao.getCourse(course.id)?.mode)
+        assertNotNull(dao.getCourse(course.id))
     }
 }
