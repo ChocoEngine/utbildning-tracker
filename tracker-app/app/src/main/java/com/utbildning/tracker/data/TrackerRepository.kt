@@ -82,7 +82,7 @@ class TrackerRepository(
     }
 
     fun observeCourseDetails(courseId: String): Flow<CourseDetails?> =
-        database.invalidationTracker.createFlow("courses", "categories", "topics", "schedules")
+        database.invalidationTracker.createFlow("courses", "categories", "topics", "schedules", "schedule_rules")
             .map { getCourseDetails(courseId) }
 
     /** Outer transaction includes metadata, category/color allocation and topic reconciliation. */

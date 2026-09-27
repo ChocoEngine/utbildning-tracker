@@ -10,7 +10,7 @@
     <string name="course_add">Add course</string>
     <string name="courses_empty">No courses yet</string>
     <string name="course_no_category">No category</string>
-    <string name="courses_completed">Completed: %1$d</string>
+    <string name="courses_completed">Total completed: %1$d</string>
     <string name="courses_all">Show all</string>
     <string name="courses_active">Show unfinished</string>
     <string name="course_sessions">Sessions: %1$d</string>
@@ -41,4 +41,7 @@
     <string name="course_disable_schedule">Switch to unscheduled</string>
     <string name="course_confirm_disable_schedule">Future sessions without a result and reminders will be removed. Past sessions, recorded results and topic progress will be kept.</string>
     <string name="course_all_topics_completed">All topics completed</string>
+    <string name="course_finished_status">Completed course</string>
+    <string name="course_paused_status">Paused</string>
+    <string name="course_topics_progress">%1$d of %2$d topics</string>
 </resources>

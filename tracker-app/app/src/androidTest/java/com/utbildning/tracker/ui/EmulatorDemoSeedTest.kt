@@ -27,6 +27,14 @@ class EmulatorDemoSeedTest {
         val database = TrackerDatabase.open(context)
         try {
             val repository = TrackerRepository(database)
+            // Explicit cleanup of timestamp-named artifacts from a specified navigation check.
+            InstrumentationRegistry.getArguments().getString("cleanupNavigationSince")?.toLong()?.let { since ->
+                val testName = Regex("(?:Schedule flow|Existing schedule flow) ([0-9]{13})")
+                database.trackerDao().getCourses().filter { course ->
+                    val timestamp = testName.matchEntire(course.name)?.groupValues?.get(1)?.toLong()
+                    timestamp != null && timestamp >= since && course.createdAt >= since
+                }.forEach { repository.deleteCourse(it.id) }
+            }
             val definitions = listOf(
                 Triple("landscapes", "Пейзажи", "Рисование"),
                 Triple("programming", "Задачи по C", "Программирование"),
@@ -79,6 +87,24 @@ class EmulatorDemoSeedTest {
                 if (colors.isEmpty()) continue
                 val course = repository.createCourse(name, colors.first(), topics = listOf("Первая тема", "Вторая тема"))
                 if (completed) repository.completeCourse(course.id)
+                check(preferences.edit().putString(key, course.id).commit())
+            }
+            for ((key, name, variant) in listOf(
+                Triple("list-paused", "Указатели и память", "paused"),
+                Triple("list-paused-empty", "Практика рисования", "paused-empty"),
+                Triple("list-finished-c", "Основы C", "finished"),
+                Triple("list-finished-swedish", "Шведский · A1", "finished"),
+                Triple("list-scheduled-empty", "Разговорная практика", "scheduled-empty"),
+            )) {
+                val prior = preferences.getString(key, null)
+                if (prior != null && dao.getCourse(prior) != null) continue
+                val color = repository.availableColors().firstOrNull() ?: continue
+                val topics = if (variant.endsWith("empty")) emptyList() else listOf("Введение", "Основные понятия", "Практика", "Повторение")
+                val course = repository.createCourse(name, color, if (name.contains("C") || key == "list-paused") "Программирование" else if (key == "list-paused-empty") "Рисование" else "Языки", topics)
+                if (variant.startsWith("paused") || variant == "scheduled-empty") repository.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 19 * 60), WeeklyRule(4, 19 * 60)))
+                if (variant == "paused") repository.toggleTopicCompletion(course.id, dao.getTopics(course.id).first().id)
+                if (variant.startsWith("paused")) repository.pauseCourse(course.id)
+                if (variant == "finished") repository.completeCourse(course.id)
                 check(preferences.edit().putString(key, course.id).commit())
             }
             val date = LocalDate.now().toEpochDay()

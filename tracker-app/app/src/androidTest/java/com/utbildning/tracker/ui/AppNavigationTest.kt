@@ -66,21 +66,24 @@ class AppNavigationTest {
         compose.onNodeWithTag("course_continue").performClick()
         compose.waitUntil(10_000) { runBlocking { repository.observeCourses().first().any { it.name == name } } }
         val course = runBlocking { repository.observeCourses().first().single { it.name == name } }
-        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
-        compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
-        compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
-        compose.onNodeWithTag("back").performClick()
-        assert(runBlocking { repository.getSchedule(course.id) == null })
-        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
-        compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
-        compose.onNodeWithTag("schedule_save").performClick()
-        compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
-        val countBeforeRestart = runBlocking { repository.observeSessions().first().count { it.courseId == course.id } }
-        assert(countBeforeRestart > 0)
-        compose.activityRule.scenario.recreate()
-        compose.waitUntil(10_000) { runCatching { runBlocking { repository.getSchedule(course.id) != null } }.getOrDefault(false) }
-        runBlocking { repository.synchronize() }
-        assertEquals(countBeforeRestart, runBlocking { repository.observeSessions().first().count { it.courseId == course.id } })
+        try {
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+            compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
+            compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
+            compose.onNodeWithTag("back").performClick()
+            assert(runBlocking { repository.getSchedule(course.id) == null })
+            compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_save").performClick()
+            compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+            val countBeforeRestart = runBlocking { repository.observeSessions().first().count { it.courseId == course.id } }
+            assert(countBeforeRestart > 0)
+            compose.activityRule.scenario.recreate()
+            compose.waitUntil(10_000) { runCatching { runBlocking { repository.getSchedule(course.id) != null } }.getOrDefault(false) }
+            runBlocking { repository.synchronize() }
+            assertEquals(countBeforeRestart, runBlocking { repository.observeSessions().first().count { it.courseId == course.id } })
+        } finally { runBlocking { repository.deleteCourse(course.id) } }
     }
 
     @Test
@@ -89,14 +92,17 @@ class AppNavigationTest {
         val course = runBlocking {
             repository.createCourse("Existing schedule flow ${System.currentTimeMillis()}", repository.availableColors().first())
         }
-        compose.onNodeWithTag("nav_courses").performClick()
-        compose.onNodeWithTag("course_row_${course.id}").assertIsDisplayed().performClick()
-        compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
-        compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
-        compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
-        compose.onNodeWithTag("schedule_save").performClick()
-        compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
-        assert(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
+        try {
+            compose.onNodeWithTag("nav_courses").performClick()
+            compose.onNodeWithTag("course_row_${course.id}").performScrollTo().assertIsDisplayed().performClick()
+            waitForTag("course_schedule")
+            compose.onNodeWithTag("course_schedule", useUnmergedTree = true).performScrollTo().performClick()
+            compose.onNodeWithTag("screen_schedule").assertIsDisplayed()
+            compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
+            compose.onNodeWithTag("schedule_save").performClick()
+            compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
+            assert(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
+        } finally { runBlocking { repository.deleteCourse(course.id) } }
     }
 
     @Test fun unscheduledCourseCanEnableCancelDisableAndEnableAgain() {

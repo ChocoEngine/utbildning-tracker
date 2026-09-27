@@ -10,7 +10,7 @@
     <string name="course_add">Добавить курс</string>
     <string name="courses_empty">Курсов пока нет</string>
     <string name="course_no_category">Без категории</string>
-    <string name="courses_completed">Завершено: %1$d</string>
+    <string name="courses_completed">Всего завершённых %1$d</string>
     <string name="courses_all">Показать все</string>
     <string name="courses_active">Показать незавершённые</string>
     <string name="course_sessions">Занятий: %1$d</string>
@@ -41,4 +41,7 @@
     <string name="course_disable_schedule">Перейти без расписания</string>
     <string name="course_confirm_disable_schedule">Будущие занятия без отметки и уведомления будут удалены. Прошлые занятия, записанные результаты и прогресс тем сохранятся.</string>
     <string name="course_all_topics_completed">Все темы пройдены</string>
+    <string name="course_finished_status">Курс завершён</string>
+    <string name="course_paused_status">На паузе</string>
+    <string name="course_topics_progress">%1$d из %2$d тем</string>
 </resources>

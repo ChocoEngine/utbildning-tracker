@@ -29,6 +29,9 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.lifecycle.withResumed
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -99,7 +102,8 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
                     ) {
                         MainDestination.entries.forEach { destination ->
                             NavigationBarItem(
-                                modifier = Modifier.testTag("nav_${destination.route}"),
+                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp).background(
+                                    if (route == destination.route) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent, RoundedCornerShape(16.dp)).testTag("nav_${destination.route}"),
                                 selected = route == destination.route,
                                 onClick = {
                                     val navigate = { navController.navigate(destination.route) {
@@ -120,7 +124,7 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
                                 },
                                 label = { Text(stringResource(destination.label)) },
                                 colors = NavigationBarItemDefaults.colors(
-                                    indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+                                    indicatorColor = Color.Transparent,
                                     selectedIconColor = MaterialTheme.colorScheme.onSurface,
                                     selectedTextColor = MaterialTheme.colorScheme.onSurface,
                                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,

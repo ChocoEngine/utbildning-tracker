@@ -32,10 +32,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.platform.LocalConfiguration
+import java.time.DayOfWeek
+import java.time.format.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -69,7 +79,7 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             AppHeader(title = stringResource(R.string.nav_courses), onSettings = onSettings)
             if (model.error != null && !model.creating) Text(errorText(model.error!!), color = MaterialTheme.colorScheme.error)
             CourseListContent(model.courses, model.categories, model.progress, model.showAll,
-                { model.showAll = !model.showAll }, { model.open(it) })
+                { model.showAll = !model.showAll }, { model.open(it) }, model.scheduleRules)
         } else CourseEditorContent(draft, model.categories, model.colors, model.busy, model.error,
             model::change, model::commitName, { model.leave() }, model::applyTopics, { model.removeCategory(it) }, model::toggle,
             { model.openSchedule(onSchedule) }, model::requestLifecycle,
@@ -104,35 +114,104 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
 
 @Composable
 internal fun CourseListContent(courses: List<CourseEntity>, categories: List<CategoryEntity>,
-    progress: Map<String, Pair<Int, Int>>, showAll: Boolean, onFilter: () -> Unit, onOpen: (String?) -> Unit) {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    progress: Map<String, Pair<Int, Int>>, showAll: Boolean, onFilter: () -> Unit, onOpen: (String?) -> Unit,
+    scheduleRules: Map<String, List<ScheduleRuleEntity>> = emptyMap()) {
+    val locale = LocalConfiguration.current.locales[0]
+    Column(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         if (courses.count { !it.isCompleted } < 10) Button(onClick = { onOpen(null) }, modifier = Modifier.testTag("course_add")) { Text(stringResource(R.string.course_add)) }
         val shown = courses.filter { showAll || !it.isCompleted }
-        if (shown.isEmpty()) Text(stringResource(R.string.courses_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
-        shown.groupBy { it.categoryId }.forEach { (categoryId, group) ->
-            Text(categories.find { it.id == categoryId }?.name ?: stringResource(R.string.course_no_category), style = MaterialTheme.typography.labelLarge)
-            group.forEach { course ->
-                Surface(onClick = { onOpen(course.id) }, modifier = Modifier.fillMaxWidth().testTag("course_row_${course.id}"), color = MaterialTheme.colorScheme.surface) {
-                    Row(Modifier.padding(vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Box(Modifier.size(14.dp).background(courseColor(course.colorId), CircleShape))
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(course.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                                val count = progress[course.id] ?: (0 to 0)
-                                Text(if (count.second > 0) "${count.first}/${count.second}" else stringResource(R.string.course_sessions, count.first), style = MaterialTheme.typography.bodySmall)
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).testTag("course_list_scroll"), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+            if (shown.isEmpty()) Text(stringResource(R.string.courses_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            shown.groupBy { it.categoryId }.forEach { (categoryId, group) ->
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text((categories.find { it.id == categoryId }?.name ?: stringResource(R.string.course_no_category)).uppercase(locale),
+                            style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 1.3.sp), color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(vertical = 6.dp).widthIn(max = LocalConfiguration.current.screenWidthDp.dp - 84.dp))
+                        HorizontalDivider(Modifier.weight(1f), color = MaterialTheme.colorScheme.outlineVariant)
+                    }
+                    group.sortedBy { it.isCompleted }.forEachIndexed { index, course ->
+                        Surface(onClick = { onOpen(course.id) }, modifier = Modifier.fillMaxWidth().testTag("course_row_${course.id}"), color = MaterialTheme.colorScheme.surface) {
+                            Row(Modifier.heightIn(min = 76.dp).padding(vertical = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                if (course.isCompleted) Text("✓", modifier = Modifier.width(22.dp).padding(top = 3.dp))
+                                else CourseBlot(course.colorId, Modifier.padding(top = 3.dp).size(22.dp, 24.dp).alpha(if (course.isPaused) .45f else 1f))
+                                Column(Modifier.weight(1f)) {
+                                    Text(course.name, style = MaterialTheme.typography.titleMedium, color = if (course.isPaused)
+                                        lerp(MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onSurfaceVariant, .65f) else MaterialTheme.colorScheme.onSurface)
+                                    val count = progress[course.id] ?: (0 to 0)
+                                    val rules = scheduleRules[course.id].orEmpty()
+                                    val status = when {
+                                        course.isCompleted -> stringResource(R.string.course_finished_status)
+                                        course.isPaused -> stringResource(R.string.course_paused_status)
+                                        rules.isEmpty() -> stringResource(R.string.course_unscheduled)
+                                        else -> rules.sortedBy { it.dayOfWeek }.groupBy { it.startMinute }.entries.joinToString(" · ") { (minute, days) ->
+                                            days.joinToString(", ") { DayOfWeek.of(it.dayOfWeek).getDisplayName(TextStyle.SHORT, locale) } + " · " + String.format(locale, "%02d:%02d", minute / 60, minute % 60)
+                                        }
+                                    }
+                                    val percent = if (count.second > 0) kotlin.math.round(count.first * 100f / count.second).toInt() else 0
+                                    Row(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = if (count.second > 0 && !course.isCompleted) 8.dp else 0.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Text(if (course.isCompleted || count.second == 0) status else stringResource(R.string.course_topics_progress, count.first, count.second) +
+                                            if (course.isPaused || rules.isEmpty()) " · $status" else "",
+                                            Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        if (count.second > 0 && !course.isCompleted) Text("$percent%", style = MaterialTheme.typography.bodySmall)
+                                    }
+                                    if (count.second > 0 && !course.isCompleted) CourseProgress(count.first.toFloat() / count.second, course.colorId,
+                                        Modifier.fillMaxWidth().height(6.dp).alpha(if (course.isPaused) .45f else 1f).testTag("course_progress_${course.id}"))
+                                }
+                                val ink = MaterialTheme.colorScheme.onSurfaceVariant
+                                Canvas(Modifier.size(14.dp).align(Alignment.CenterVertically)) {
+                                    drawLine(ink, Offset(size.width * .35f, size.height * .2f), Offset(size.width * .65f, size.height * .5f), 1.5.dp.toPx())
+                                    drawLine(ink, Offset(size.width * .65f, size.height * .5f), Offset(size.width * .35f, size.height * .8f), 1.5.dp.toPx())
+                                }
                             }
-                            val count = progress[course.id] ?: (0 to 0)
-                            if (count.second > 0) LinearProgressIndicator(progress = { count.first.toFloat() / count.second },
-                                color = courseColor(course.colorId), trackColor = courseColor(course.colorId).copy(alpha = .16f),
-                                modifier = Modifier.fillMaxWidth().testTag("course_progress_${course.id}"))
                         }
+                        if (index < group.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     }
                 }
-                HorizontalDivider()
             }
         }
-        Text(stringResource(R.string.courses_completed, courses.count { it.isCompleted }), style = MaterialTheme.typography.bodySmall)
-        if (courses.any { it.isCompleted }) TextButton(onClick = onFilter, modifier = Modifier.testTag("courses_filter")) { Text(stringResource(if (showAll) R.string.courses_active else R.string.courses_all)) }
+        Column(Modifier.padding(bottom = 16.dp)) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            FlowRow(Modifier.fillMaxWidth().padding(top = 15.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.courses_completed, courses.count { it.isCompleted }), Modifier.align(Alignment.CenterVertically), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (courses.any { it.isCompleted }) FilledTonalButton(onClick = onFilter, shape = RoundedCornerShape(13.dp), modifier = Modifier.testTag("courses_filter")) {
+                    Text(stringResource(if (showAll) R.string.courses_active else R.string.courses_all), style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CourseBlot(colorId: Int?, modifier: Modifier) {
+    Canvas(modifier) {
+        val blot = Path().apply {
+            moveTo(size.width * .45f, 0f)
+            cubicTo(size.width, -size.height * .08f, size.width * .95f, size.height * .45f, size.width * .9f, size.height * .7f)
+            cubicTo(size.width * .85f, size.height * 1.15f, size.width * .2f, size.height, size.width * .1f, size.height * .8f)
+            cubicTo(-size.width * .2f, size.height * .4f, size.width * .05f, size.height * .1f, size.width * .45f, 0f)
+            close()
+        }
+        drawPath(blot, courseColor(colorId))
+    }
+}
+
+@Composable
+private fun CourseProgress(progress: Float, colorId: Int?, modifier: Modifier) {
+    val paper = MaterialTheme.colorScheme.surface
+    Canvas(modifier.semantics { progressBarRangeInfo = androidx.compose.ui.semantics.ProgressBarRangeInfo(progress, 0f..1f) }) {
+        val brush = Path().apply {
+            moveTo(0f, size.height * .3f)
+            cubicTo(size.width * .25f, -size.height * .1f, size.width * .7f, size.height * .15f, size.width, 0f)
+            lineTo(size.width, size.height * .8f)
+            cubicTo(size.width * .7f, size.height, size.width * .25f, size.height * .75f, 0f, size.height)
+            close()
+        }
+        clipPath(brush) {
+            drawRect(paper)
+            drawRect(courseColor(colorId).copy(alpha = .19f))
+            drawRect(courseColor(colorId), size = androidx.compose.ui.geometry.Size(size.width * progress.coerceIn(0f, 1f), size.height))
+        }
     }
 }
 
