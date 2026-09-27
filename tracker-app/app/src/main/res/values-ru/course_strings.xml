@@ -44,4 +44,8 @@
     <string name="course_finished_status">Курс завершён</string>
     <string name="course_paused_status">На паузе</string>
     <string name="course_topics_progress">%1$d из %2$d тем</string>
+    <string name="course_schedule_no_end">Без даты окончания</string>
+    <string name="course_schedule_until">До %1$s</string>
+    <string name="course_complete_short">Завершить</string>
+    <string name="course_pause_short">Пауза</string>
 </resources>

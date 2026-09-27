@@ -18,6 +18,31 @@ import org.junit.runner.RunWith
 /** Explicit opt-in fixture for the emulator's real app database, never normal startup. */
 @RunWith(AndroidJUnit4::class)
 class EmulatorDemoSeedTest {
+    @Test fun keepThreeDemoCourses() = runBlocking {
+        assumeTrue(InstrumentationRegistry.getArguments().getString("keepThreeDemo") == "true")
+        check(Build.HARDWARE in listOf("ranchu", "goldfish"))
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val preferences = context.getSharedPreferences("emulator_demo", 0)
+        val database = TrackerDatabase.open(context)
+        try {
+            val repository = TrackerRepository(database)
+            val kept = listOf("editor-review-v1", "programming", "list-paused").map { key ->
+                checkNotNull(preferences.getString(key, null)) { "Missing demo course: $key" }
+            }.toSet()
+            database.withTransaction {
+                val courses = database.trackerDao().getCourses()
+                check(courses.count { !it.isCompleted && it.id in kept } == 3)
+                courses.filter { !it.isCompleted && it.id !in kept }.forEach { repository.deleteCourse(it.id) }
+            }
+            com.utbildning.tracker.notifications.ReminderScheduler.reconcile(context, repository)
+            val active = database.trackerDao().getCourses().filter { !it.isCompleted }
+            check(active.size == 3)
+            active.forEach { course ->
+                println("KEPT: ${course.name}; paused=${course.isPaused}; scheduled=${repository.getSchedule(course.id) != null}")
+            }
+        } finally { database.close() }
+    }
+
     @Test fun seedDemoCourses() = runBlocking {
         assumeTrue(InstrumentationRegistry.getArguments().getString("seedDemo") == "true")
         check(Build.HARDWARE in listOf("ranchu", "goldfish")) { "Demo seeding requires an emulator" }
@@ -106,6 +131,26 @@ class EmulatorDemoSeedTest {
                 if (variant.startsWith("paused")) repository.pauseCourse(course.id)
                 if (variant == "finished") repository.completeCourse(course.id)
                 check(preferences.edit().putString(key, course.id).commit())
+            }
+            // Dedicated editor fixture: bounded topic scrolling, completed rows and schedule summary.
+            val editorKey = "editor-review-v1"
+            val editorPrior = preferences.getString(editorKey, null)
+            if (editorPrior == null || dao.getCourse(editorPrior) == null) {
+                repository.availableColors().firstOrNull()?.let { color ->
+                    val course = database.withTransaction {
+                        val created = repository.createCourse("Лекции и практика по C", color, "Программирование",
+                            listOf("Введение в C", "Переменные и типы", "Условия", "Циклы", "Функции", "Массивы",
+                                "Строки", "Указатели", "Управление памятью", "Структуры", "Файлы", "Обработка ошибок",
+                                "Заголовочные файлы", "Компиляция", "Отладка", "Тестирование", "Битовые операции",
+                                "Перечисления", "Указатели на функции", "Практика: работа с файлами",
+                                "Практика: динамический массив", "Практика: список", "Повторение", "Итоговая задача"))
+                        repository.saveInitialSchedule(created.id, listOf(WeeklyRule(2, 19 * 60), WeeklyRule(6, 11 * 60)),
+                            LocalDate.now().plusDays(45).toEpochDay())
+                        dao.getTopics(created.id).take(2).forEach { repository.toggleTopicCompletion(created.id, it.id) }
+                        created
+                    }
+                    check(preferences.edit().putString(editorKey, course.id).commit())
+                }
             }
             val date = LocalDate.now().toEpochDay()
             val fixtureIds = listOf("landscapes", "programming", "swedish", "reading", "practice").mapNotNull { preferences.getString(it, null) }

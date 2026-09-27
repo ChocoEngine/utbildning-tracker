@@ -44,4 +44,8 @@
     <string name="course_finished_status">Completed course</string>
     <string name="course_paused_status">Paused</string>
     <string name="course_topics_progress">%1$d of %2$d topics</string>
+    <string name="course_schedule_no_end">No end date</string>
+    <string name="course_schedule_until">Until %1$s</string>
+    <string name="course_complete_short">Complete</string>
+    <string name="course_pause_short">Pause</string>
 </resources>

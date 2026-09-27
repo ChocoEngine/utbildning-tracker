@@ -35,13 +35,16 @@ fun ScheduleScreen(repository: TrackerRepository, courseId: String, onBack: () -
     var loaded by remember { mutableStateOf(false) }
     var initial by remember { mutableStateOf(emptyList<WeeklyRule>()) }
     var endsOn by remember { mutableStateOf<Long?>(null) }
+    var existing by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     var readOnly by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf(false) }
     var saving by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     LaunchedEffect(courseId) {
         val schedule = repository.getSchedule(courseId)
-        readOnly = schedule != null || repository.getCourse(courseId)?.isCompleted == true
+        existing = schedule != null
+        readOnly = repository.getCourse(courseId)?.isCompleted == true
         endsOn = schedule?.endsOn
         initial = repository.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
         loaded = true
@@ -50,7 +53,10 @@ fun ScheduleScreen(repository: TrackerRepository, courseId: String, onBack: () -
         saving = true
         scope.launch {
             try {
-                repository.saveInitialSchedule(courseId, rules, end)
+                if (rules.isEmpty() && end == null) repository.disableSchedule(courseId)
+                else if (existing) repository.updateSchedule(courseId, rules, end)
+                else repository.saveInitialSchedule(courseId, rules, end)
+                com.utbildning.tracker.notifications.ReminderScheduler.reconcile(context, repository)
                 withContext(Dispatchers.Main.immediate) { onBack() }
             }
             catch (e: CancellationException) { throw e }
@@ -134,7 +140,7 @@ internal fun ScheduleContent(
             if (invalid || error) Text(stringResource(if (error) R.string.schedule_failed else R.string.schedule_invalid), color = MaterialTheme.colorScheme.error)
         }
         if (!readOnly) Button(enabled = !saving, modifier = Modifier.fillMaxWidth().padding(20.dp).testTag("schedule_save"), onClick = {
-            invalid = days.none { it } || (endDate?.let { it < LocalDate.now().toEpochDay() } == true)
+            invalid = (days.none { it } && endDate != null) || (endDate?.let { it < LocalDate.now().toEpochDay() } == true)
             if (!invalid) onSave((0..6).filter { days[it] }.map { i -> WeeklyRule(i + 1, starts[i], ends[i].takeIf { it >= 0 }) }, endDate)
         }) { Text(stringResource(R.string.schedule_save)) }
     }

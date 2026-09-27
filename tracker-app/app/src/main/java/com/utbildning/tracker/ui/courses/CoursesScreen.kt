@@ -215,7 +215,7 @@ private fun CourseProgress(progress: Float, colorId: Int?, modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEntity>, colors: List<Int>, busy: Boolean, error: String?,
     onChange: ((CourseDraft) -> CourseDraft) -> Unit, onSave: () -> Unit, onCancel: () -> Unit, onApply: () -> Unit,
@@ -238,7 +238,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
                 val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                 if (editingName && nameBounds?.contains(down.position + editorOrigin) == false) focus.clearFocus()
             }
-        }.testTag("course_editor").verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        }.testTag("course_editor").padding(horizontal = 20.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onCancel, modifier = Modifier.testTag("course_cancel")) {
                 Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
@@ -256,54 +256,123 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
         if (draft.completed) {
             if (draft.category.isNotEmpty()) Text(draft.category)
         } else CategoryField(draft.category, categories, { value -> onChange { it.copy(category = value) } }, onCategorySelected, onCategoryCommit, onDeleteCategory)
-        if (draft.id != null && !draft.completed) {
-            OutlinedButton(onClick = { focus.clearFocus(); onSchedule(draft.id) }, modifier = Modifier.fillMaxWidth().testTag("course_schedule")) {
-                Text(stringResource(if (!draft.hasSchedule) R.string.course_enable_schedule else R.string.course_configure))
-            }
-        }
         if (!draft.completed) {
-        Text(stringResource(R.string.course_color), style = MaterialTheme.typography.labelLarge)
-        colors.chunked(5).forEach { row -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            row.forEach { color ->
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            colors.forEach { color ->
                 val description = stringResource(R.string.course_color_number, color + 1)
-                Box(Modifier.size(48.dp).border(if (draft.color == color) 2.dp else 0.dp, MaterialTheme.colorScheme.primary, CircleShape).padding(6.dp)
-                    .background(courseColor(color), CircleShape).combinedClickable(onClick = { focus.clearFocus(); onColorSelected(color) })
-                    .semantics { contentDescription = description; selected = draft.color == color; role = Role.RadioButton }.testTag("color_$color"))
+                Box(Modifier.size(44.dp).background(if (draft.color == color) MaterialTheme.colorScheme.surfaceVariant else androidx.compose.ui.graphics.Color.Transparent, RoundedCornerShape(12.dp)).combinedClickable(onClick = { focus.clearFocus(); onColorSelected(color) })
+                    .semantics { contentDescription = description; selected = draft.color == color; role = Role.RadioButton }.testTag("color_$color"), contentAlignment = Alignment.Center) {
+                    CourseBlot(color, Modifier.size(27.dp, 28.dp))
+                    if (draft.color == color) Icon(painterResource(R.drawable.ic_check), null, Modifier.size(16.dp))
+                }
             }
-        } }
         }
-        Text(stringResource(R.string.course_topics), style = MaterialTheme.typography.titleMedium)
+        }
+        if (!draft.completed || draft.hasSchedule) {
+            val locale = LocalConfiguration.current.locales[0]
+            HorizontalDivider()
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (draft.id != null && !draft.completed) IconButton(
+                    onClick = { focus.clearFocus(); onSchedule(draft.id) },
+                    enabled = !busy, modifier = Modifier.testTag("course_schedule")) {
+                    Icon(painterResource(R.drawable.ic_calendar),
+                        stringResource(if (draft.hasSchedule) R.string.course_configure else R.string.course_enable_schedule),
+                        Modifier.size(20.dp))
+                } else Icon(painterResource(R.drawable.ic_calendar), null, Modifier.size(20.dp))
+                if (!draft.hasSchedule) Text(stringResource(R.string.course_unscheduled),
+                    style = MaterialTheme.typography.bodyMedium)
+                else FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    draft.rules.sortedBy { it.dayOfWeek }.groupBy { it.startMinute to it.endMinute }.forEach { (times, rules) ->
+                        val days = rules.joinToString(", ") { DayOfWeek.of(it.dayOfWeek).getDisplayName(TextStyle.SHORT, locale) }
+                        fun time(minute: Int) = java.time.LocalTime.of(minute / 60, minute % 60).toString()
+                        val hours = time(times.first) + (times.second?.let { "–" + time(it) } ?: "")
+                        Text("$days  $hours",
+                            Modifier.background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(9.dp)).padding(8.dp),
+                            style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+            if (draft.hasSchedule) draft.endsOn?.let { end ->
+                Text(stringResource(R.string.course_schedule_until,
+                    java.time.LocalDate.ofEpochDay(end).format(java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM).withLocale(locale))),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            HorizontalDivider()
+        }
         val completed = draft.topics.filter { it.isCompleted }
         val total = completed.size + TopicListEditor.parse(draft.text).size
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.course_topics), style = MaterialTheme.typography.titleLarge)
+                if (!draft.completed && draft.editingText == null) IconButton(
+                    onClick = { onChange { it.copy(editingText = it.text) } },
+                    modifier = Modifier.testTag("topics_edit")) {
+                    Icon(painterResource(R.drawable.ic_edit), stringResource(R.string.topics_edit), Modifier.size(20.dp))
+                }
+            }
+            if (total > 0) Text(stringResource(R.string.course_topics_progress, completed.size, total), style = MaterialTheme.typography.bodySmall)
+        }
         if (total > 0) {
-            Text("${completed.size}/$total", style = MaterialTheme.typography.bodySmall)
             LinearProgressIndicator(progress = { completed.size.toFloat() / total }, color = courseColor(draft.color), trackColor = courseColor(draft.color).copy(alpha = .16f), modifier = Modifier.fillMaxWidth())
         }
 
-        if (draft.editingText != null && !draft.completed) {
-            OutlinedTextField(draft.editingText, { value -> onChange { it.copy(editingText = value) } }, label = { Text(stringResource(R.string.course_pending_topics)) }, minLines = 6, modifier = Modifier.fillMaxWidth().testTag("topics_input"))
-            Row {
-                TextButton(onClick = onApply, enabled = conflictLines.isEmpty(), modifier = Modifier.testTag("topics_apply")) { Text(stringResource(R.string.topics_apply)) }
-                TextButton(onClick = { onChange { it.copy(editingText = null) } }, modifier = Modifier.testTag("topics_cancel")) { Text(stringResource(R.string.course_cancel)) }
-            }
-        } else {
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).testTag("course_topics_scroll")) {
             draft.topics.sortedBy { it.position }.forEachIndexed { index, topic ->
                 TopicRow(topic.id, topic.title, "${index + 1}.", !draft.completed, onToggle, topic.isCompleted)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             }
-            if (!draft.completed) TextButton(onClick = { onChange { it.copy(editingText = it.text) } }, modifier = Modifier.testTag("topics_edit")) { Text(stringResource(R.string.topics_edit)) }
+        }
+        if (draft.id != null && draft.editingText == null) {
+            Row(Modifier.fillMaxWidth().testTag("course_actions"), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                if (!draft.completed) {
+                    Button(onClick = { focus.clearFocus(); onLifecycle("complete") },
+                        enabled = !busy, shape = RoundedCornerShape(13.dp), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                        modifier = Modifier.weight(1f).testTag("course_complete")) {
+                        Text(stringResource(R.string.course_complete_short), style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp, maxLines = 1)
+                    }
+                    if (draft.hasSchedule && !draft.paused) Button(
+                        onClick = { focus.clearFocus(); onLifecycle("pause") },
+                        enabled = !busy, shape = RoundedCornerShape(13.dp), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                        modifier = Modifier.weight(1f).testTag("course_pause")) {
+                        Text(stringResource(R.string.course_pause_short), style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp, maxLines = 1)
+                    }
+                }
+                Button(onClick = { focus.clearFocus(); onLifecycle("delete") },
+                    enabled = !busy, shape = RoundedCornerShape(13.dp), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+                    modifier = Modifier.weight(1f).testTag("course_delete")) {
+                    Text(stringResource(R.string.course_delete), style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp, maxLines = 1)
+                }
+            }
+        }
+        if (draft.editingText != null && !draft.completed) {
+            AlertDialog(onDismissRequest = { onChange { it.copy(editingText = null) } },
+                title = { Text(stringResource(R.string.topics_edit)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(draft.editingText, { value -> onChange { it.copy(editingText = value) } },
+                            label = { Text(stringResource(R.string.course_pending_topics)) },
+                            minLines = 3, maxLines = 8, modifier = Modifier.fillMaxWidth().testTag("topics_input"))
+                        if (conflictLines.isNotEmpty()) Text(stringResource(R.string.topics_conflict, conflictLines.joinToString()),
+                            color = MaterialTheme.colorScheme.error)
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = onApply, enabled = conflictLines.isEmpty(), modifier = Modifier.testTag("topics_apply")) {
+                        Text(stringResource(R.string.topics_apply))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { onChange { it.copy(editingText = null) } }, modifier = Modifier.testTag("topics_cancel")) {
+                        Text(stringResource(R.string.course_cancel))
+                    }
+                })
         }
         if (!draft.completed && draft.topics.isNotEmpty() && draft.topics.all { it.isCompleted })
             Text(stringResource(R.string.course_all_topics_completed), modifier = Modifier.testTag("course_all_topics_completed"))
-        if (conflictLines.isNotEmpty()) Text(stringResource(R.string.topics_conflict, conflictLines.joinToString()), color = MaterialTheme.colorScheme.error)
         if (error != null) Text(errorText(error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error"))
-        if (draft.id != null && draft.editingText == null) {
-            if (!draft.completed && draft.hasSchedule) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("disable_schedule") }, enabled = !busy, modifier = Modifier.fillMaxWidth().testTag("course_disable_schedule")) { Text(stringResource(R.string.course_disable_schedule)) }
-            if (!draft.completed) {
-                OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("complete") }, modifier = Modifier.fillMaxWidth().testTag("course_complete")) { Icon(painterResource(R.drawable.ic_check), contentDescription = null, modifier = Modifier.size(16.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.course_complete)) }
-                if (draft.hasSchedule && !draft.paused) OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("pause") }, modifier = Modifier.fillMaxWidth().testTag("course_pause")) { Text(stringResource(R.string.course_pause)) }
-            }
-            OutlinedButton(onClick = { focus.clearFocus(); onLifecycle("delete") }, modifier = Modifier.fillMaxWidth().testTag("course_delete")) { Text(stringResource(R.string.course_delete)) }
-        }
+
     }
 }
 
@@ -313,25 +382,62 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
     onSelect: (String) -> Unit, onCommit: () -> Unit, onDelete: (CategoryEntity) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
+    val categoryLabel = stringResource(R.string.course_category)
+    var fieldWidth by remember { mutableStateOf(0.dp) }
+    val density = androidx.compose.ui.platform.LocalDensity.current
     val matches = categories.filter { it.name.contains(value.trim(), true) }
     val visible = expanded && matches.isNotEmpty()
-    ExposedDropdownMenuBox(visible, { expanded = !expanded }) {
-        OutlinedTextField(value, { onChange(it); expanded = true }, label = { Text(stringResource(R.string.course_category)) }, singleLine = true,
-            trailingIcon = { if (categories.isNotEmpty()) ExposedDropdownMenuDefaults.TrailingIcon(visible) },
-            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-                .onFocusChanged { if (focused && !it.isFocused) onCommit(); focused = it.isFocused }.testTag("course_category"))
-        if (visible) ExposedDropdownMenu(true, { expanded = false }, modifier = Modifier.testTag("category_menu")) {
-            matches.forEach { category ->
-                val description = stringResource(R.string.category_delete_accessibility, category.name)
-                DropdownMenuItem(text = { Text(category.name) }, onClick = { onSelect(category.name); expanded = false }, modifier = Modifier.testTag("category_option_${category.id}"),
-                    trailingIcon = { IconButton(onClick = { expanded = false; onDelete(category) }, modifier = Modifier.testTag("category_delete_${category.id}")) {
-                        val ink = MaterialTheme.colorScheme.onSurfaceVariant
-                        Canvas(Modifier.size(20.dp).semantics { contentDescription = description }) {
-                            drawLine(ink, Offset(size.width * .15f, size.height * .25f), Offset(size.width * .85f, size.height * .25f), 2.dp.toPx())
-                            drawRect(ink, Offset(size.width * .25f, size.height * .3f), androidx.compose.ui.geometry.Size(size.width * .5f, size.height * .6f), style = Stroke(2.dp.toPx()))
-                            drawLine(ink, Offset(size.width * .35f, size.height * .1f), Offset(size.width * .65f, size.height * .1f), 2.dp.toPx())
+    Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+        Text(stringResource(R.string.course_category), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Box {
+            TextField(value, { onChange(it); expanded = true }, singleLine = true,
+                placeholder = { Text(stringResource(R.string.course_no_category)) },
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                ),
+                trailingIcon = {
+                    if (categories.isNotEmpty()) IconButton(onClick = { expanded = !expanded }) {
+                        ExposedDropdownMenuDefaults.TrailingIcon(visible)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                    .onGloballyPositioned { fieldWidth = with(density) { it.size.width.toDp() } }
+                    .pointerInput(categories) {
+                        awaitEachGesture {
+                            val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                            if (down.position.x < size.width - 48.dp.toPx()) expanded = true
                         }
-                    } })
+                    }
+                    .onFocusChanged { if (focused && !it.isFocused) onCommit(); focused = it.isFocused }
+                    .semantics { contentDescription = categoryLabel }
+                    .testTag("course_category"))
+            if (visible) DropdownMenu(true, { expanded = false },
+                shape = RoundedCornerShape(12.dp),
+                containerColor = MaterialTheme.colorScheme.background,
+                tonalElevation = 0.dp,
+                shadowElevation = 8.dp,
+                modifier = Modifier.width(fieldWidth).border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                    .testTag("category_menu")) {
+                matches.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(category.name, style = MaterialTheme.typography.bodyMedium) },
+                        contentPadding = PaddingValues(start = 12.dp, end = 4.dp),
+                        onClick = { onSelect(category.name); expanded = false },
+                        modifier = Modifier.testTag("category_option_${category.id}"),
+                        trailingIcon = {
+                            IconButton(onClick = { expanded = false; onDelete(category) },
+                                modifier = Modifier.testTag("category_delete_${category.id}")) {
+                                Icon(painterResource(R.drawable.ic_delete),
+                                    stringResource(R.string.category_delete_accessibility, category.name),
+                                    Modifier.size(18.dp))
+                            }
+                        })
+                }
             }
         }
     }
@@ -341,7 +447,10 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
 @Composable
 private fun TopicRow(id: String, title: String, marker: String, enabled: Boolean, onToggle: (String) -> Unit, completed: Boolean = false) {
     Row(Modifier.fillMaxWidth().combinedClickable(onClick = {}, onLongClick = if (enabled) ({ onToggle(id) }) else null).padding(vertical = 10.dp).testTag("topic_$id"), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(marker, Modifier.testTag("topic_number_$id")); Text(title, Modifier.weight(1f)); if (completed) Text("✓", Modifier.testTag("topic_done_$id"))
+        Text(marker, Modifier.width(24.dp).testTag("topic_number_$id"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant); Text(title, Modifier.weight(1f).testTag("topic_title_$id"), style = MaterialTheme.typography.bodyMedium, color = if (completed) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface); Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+            if (completed) Icon(painterResource(R.drawable.ic_check), null,
+                Modifier.size(16.dp).testTag("topic_done_$id"))
+        }
     }
 }
 

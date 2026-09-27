@@ -5,7 +5,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val TrackerColorScheme = lightColorScheme(
-    primary = Ink,
+    primary = ButtonInk,
     onPrimary = Paper,
     primaryContainer = Panel,
     onPrimaryContainer = Ink,

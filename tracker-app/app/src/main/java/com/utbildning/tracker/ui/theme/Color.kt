@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 internal val Paper = Color(0xFFFCFAF6)
 internal val Ink = Color(0xFF29352E)
+internal val ButtonInk = Color(0xFF435449)
 internal val MutedInk = Color(0xFF697367)
 internal val Panel = Color(0xFFF1EFE7)
 internal val Divider = Color(0xFFE5E5D9)

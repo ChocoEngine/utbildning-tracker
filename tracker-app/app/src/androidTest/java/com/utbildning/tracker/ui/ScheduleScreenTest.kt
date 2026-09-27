@@ -50,11 +50,11 @@ class ScheduleScreenTest {
         compose.runOnIdle { assertNull(saved); assertEquals(3, calls) }
     }
 
-    @Test fun noWeekdaysCannotSaveAndSelectingDayEnablesValidSubmission() {
+    @Test fun noWeekdaysAndNoDateSavesUnscheduledAndSelectingDayEnablesSchedule() {
         var saved: List<WeeklyRule>? = null
         compose.setContent { TrackerTheme { ScheduleContent(onSave = { rules, _ -> saved = rules }) } }
         compose.onNodeWithTag("schedule_save").performClick()
-        compose.runOnIdle { assertNull(saved) }
+        compose.runOnIdle { assertEquals(emptyList<WeeklyRule>(), saved) }
         clickScrolled("schedule_day_2")
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1140)), saved) }
@@ -77,7 +77,7 @@ class ScheduleScreenTest {
         compose.runOnIdle { assertEquals(listOf(WeeklyRule(2, 1140)) to null, saved) }
     }
 
-    @Test fun existingScheduleIsReadOnly() {
+    @Test fun completedCourseScheduleIsReadOnly() {
         compose.setContent { TrackerTheme { ScheduleContent(initial = listOf(WeeklyRule(2, 1140)), readOnly = true) } }
         compose.onNodeWithTag("schedule_day_2").assertIsNotEnabled()
         compose.onNodeWithTag("schedule_start_2").assertIsNotEnabled()

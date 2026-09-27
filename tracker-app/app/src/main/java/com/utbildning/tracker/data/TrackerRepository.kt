@@ -41,6 +41,8 @@ class TrackerRepository(
 
     suspend fun saveInitialSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long? = null) =
         operations.saveInitialSchedule(courseId, rules, endsOn)
+    suspend fun updateSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long? = null) =
+        operations.updateSchedule(courseId, rules, endsOn)
     suspend fun getSchedule(courseId: String) = dao.getSchedule(courseId)
     suspend fun getScheduleRules(courseId: String) = dao.getScheduleRules(courseId)
     fun observeSessions() = dao.observeSessions()

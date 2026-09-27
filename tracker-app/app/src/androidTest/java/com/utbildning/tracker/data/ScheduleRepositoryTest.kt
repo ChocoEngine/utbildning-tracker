@@ -170,6 +170,43 @@ class ScheduleRepositoryTest {
         assertEquals(1, updated[2].colorId)
     }
 
+    @Test fun editingSchedulePreservesHistoryProgressAndRecordedFutureResults() = runBlocking {
+        val course = repo.createCourse("C", 0, topics = listOf("One", "Two"))
+        repo.toggleTopicCompletion(course.id, dao.getTopics(course.id)[0].id)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)), monday + 28)
+        val original = dao.getSessions(course.id)
+        dao.updateSession(original[1].copy(result = SessionResult.DONE))
+        clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
+        val preserved = dao.getSessions(course.id).take(2)
+        val topics = dao.getTopics(course.id)
+        repo.updateSchedule(course.id, listOf(WeeklyRule(2, 900, 960)), monday + 21)
+        val updated = dao.getSessions(course.id)
+        assertEquals(preserved, updated.filter { it.id in preserved.map { session -> session.id } })
+        assertTrue(original.drop(2).none { old -> updated.any { it.id == old.id } })
+        assertEquals(topics, dao.getTopics(course.id))
+        assertEquals(listOf(ScheduleRuleEntity(course.id, 2, 900, 960)), repo.getScheduleRules(course.id))
+        assertEquals(monday + 21, repo.getSchedule(course.id)?.endsOn)
+        assertTrue(updated.filter { it.id !in preserved.map { session -> session.id } }.all {
+            LocalDate.ofEpochDay(it.date).dayOfWeek.value == 2 && it.startMinute == 900 && it.endMinute == 960
+        })
+        assertTrue(updated.size > preserved.size)
+        repo.synchronize()
+        assertEquals(updated, dao.getSessions(course.id))
+    }
+
+    @Test fun invalidScheduleEditLeavesExistingScheduleAndCalendarUnchanged() = runBlocking {
+        val course = repo.createCourse("C", 0)
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
+        val schedule = repo.getSchedule(course.id)
+        val rules = repo.getScheduleRules(course.id)
+        val sessions = dao.getSessions(course.id)
+        rejects(RepositoryError.INVALID_SCHEDULE) { repo.updateSchedule(course.id, emptyList()) }
+        rejects(RepositoryError.INVALID_SCHEDULE) { repo.updateSchedule(course.id, listOf(WeeklyRule(2, 720)), monday - 1) }
+        assertEquals(schedule, repo.getSchedule(course.id))
+        assertEquals(rules, repo.getScheduleRules(course.id))
+        assertEquals(sessions, dao.getSessions(course.id))
+    }
+
     private suspend fun rejects(error: RepositoryError, action: suspend () -> Unit) {
         try { action(); fail("Expected $error") } catch (actual: RepositoryException) { assertEquals(error, actual.error) }
     }

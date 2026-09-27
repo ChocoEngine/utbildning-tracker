@@ -46,6 +46,24 @@ internal class TrackerOperations(
         generate(courseId, date + 90, timestamp)
     }
 
+    /** Editing retains history and results; only future unmarked occurrences are regenerated. */
+    suspend fun updateSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long?) = database.withTransaction {
+        val course = course(courseId)
+        if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
+        if (dao.getSchedule(courseId) == null) fail(RepositoryError.INVALID_SCHEDULE)
+        val timestamp = now()
+        val date = today(timestamp).toEpochDay()
+        if (rules.isEmpty() || rules.map { it.dayOfWeek }.distinct().size != rules.size ||
+            (endsOn != null && endsOn < date)) fail(RepositoryError.INVALID_SCHEDULE)
+        removeFuturePending(courseId, timestamp)
+        dao.deleteSchedule(courseId)
+        dao.insertSchedule(ScheduleEntity(courseId, date, endsOn))
+        rules.forEach { dao.insertScheduleRule(ScheduleRuleEntity(courseId, it.dayOfWeek, it.startMinute, it.endMinute)) }
+        dao.updateCourse(course.copy(updatedAt = timestamp))
+        reconcileExhaustion(courseId)
+        generate(courseId, date + 90, timestamp)
+    }
+
     suspend fun synchronize(throughDate: Long? = null) = database.withTransaction {
         val timestamp = now()
         val date = today(timestamp).toEpochDay()

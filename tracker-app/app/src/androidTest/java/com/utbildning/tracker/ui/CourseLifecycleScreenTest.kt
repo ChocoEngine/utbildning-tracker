@@ -157,7 +157,7 @@ class CourseLifecycleScreenTest {
         compose.runOnIdle { modelJob = ViewModelProvider(owner)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
     }
     private fun waitFor(condition: () -> Boolean) = compose.waitUntil(5_000, condition)
-    private fun click(tag: String) { waitFor { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }; compose.onNodeWithTag(tag).performScrollTo().performClick() }
+    private fun click(tag: String) { waitFor { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }; if (tag.startsWith("course_row_")) compose.onNodeWithTag(tag).performScrollTo(); compose.onNodeWithTag(tag).performClick(); if (tag.startsWith("course_row_")) waitFor { compose.onAllNodesWithTag("course_title").fetchSemanticsNodes().isNotEmpty() } }
     private fun clickDialog(tag: String) { waitFor { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }; compose.onNodeWithTag(tag).performClick() }
-    private fun longPress(id: String) { compose.onNodeWithTag("topic_$id").performScrollTo().performTouchInput { longClick() } }
+    private fun longPress(id: String) { waitFor { compose.onAllNodesWithTag("topic_$id").fetchSemanticsNodes().isNotEmpty() }; compose.onNodeWithTag("topic_$id").performScrollTo().performTouchInput { longClick() } }
 }
