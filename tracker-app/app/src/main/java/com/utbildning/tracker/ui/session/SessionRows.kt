@@ -49,7 +49,7 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
                 Text(session.courseName, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             }
             val buttonBackground = MaterialTheme.colorScheme.secondaryContainer
-            val selectedBackground = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = .16f).compositeOver(buttonBackground)
+            val selectedBackground = MaterialTheme.colorScheme.primary.copy(alpha = .24f).compositeOver(buttonBackground)
             val doneSelected = session.result == SessionResult.DONE
             val skipSelected = session.result == SessionResult.SKIPPED
             if (!session.courseCompleted) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

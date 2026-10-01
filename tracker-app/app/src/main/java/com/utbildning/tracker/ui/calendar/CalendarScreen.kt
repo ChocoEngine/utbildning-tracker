@@ -63,7 +63,15 @@ internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepositor
         AppHeader(title = stringResource(R.string.nav_calendar), onSettings = onSettings)
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
         CalendarContent(YearMonth.parse(month), LocalDate.ofEpochDay(day), sessions, locale,
-            onMonth = { month = it.toString(); day = it.atDay(1).toEpochDay() }, onDay = { day = it.toEpochDay() }, onDone = onSession,
+            onMonth = { month = it.toString(); day = it.atDay(1).toEpochDay() }, onDay = { day = it.toEpochDay() }, onDone = { id ->
+                scope.launch {
+                    try {
+                        if (!repository.markSessionDoneIfNoTopics(id)) onSession(id)
+                        error = false
+                    } catch (cancel: CancellationException) { throw cancel }
+                    catch (_: Exception) { error = true }
+                }
+            },
             onSkip = { id -> scope.launch { try { repository.setSessionResult(id, SessionResult.SKIPPED); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } } },
             onPending = { id -> scope.launch { try { repository.setSessionResult(id, SessionResult.PENDING); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } } })
     }

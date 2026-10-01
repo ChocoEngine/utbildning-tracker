@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.*
 import com.utbildning.tracker.ui.session.SessionScreen
+import com.utbildning.tracker.ui.today.TodayScreen
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
@@ -90,6 +91,31 @@ class SessionScreenTest {
         check.assertExists()
         assertTrue(number.fetchSemanticsNode().boundsInRoot.center.x < title.fetchSemanticsNode().boundsInRoot.center.x)
         assertTrue(title.fetchSemanticsNode().boundsInRoot.center.x < check.fetchSemanticsNode().boundsInRoot.center.x)
+    }
+
+    @Test fun todayMarksNoTopicCourseDoneWithoutOpeningSessionScreen() {
+        val noTopics = runBlocking {
+            repository.createCourse("Practice", 1).also {
+                dao.insertSession(SessionEntity("practice", it.id, LocalDate.now().toEpochDay(), 720, it.name, it.colorId, 100, 100))
+            }
+        }
+        var opened: String? = null
+        compose.setContent { TrackerTheme { if (visible.value) TodayScreen({}, repository) { opened = it } } }
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag("session_done_practice").fetchSemanticsNodes().isNotEmpty() }
+        click("session_done_practice")
+        compose.waitUntil(5_000) { runBlocking { dao.getSession("practice")!!.result == SessionResult.DONE } }
+        compose.runOnIdle { assertNull(opened) }
+        compose.onNodeWithTag("screen_today").assertIsDisplayed()
+        assertTrue(runBlocking { dao.getTopics(noTopics.id) }.isEmpty())
+    }
+
+    @Test fun todayStillOpensTopicSelectionForCourseWithTopics() {
+        var opened: String? = null
+        compose.setContent { TrackerTheme { if (visible.value) TodayScreen({}, repository) { opened = it } } }
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag("session_done_${session.id}").fetchSemanticsNodes().isNotEmpty() }
+        click("session_done_${session.id}")
+        compose.waitUntil(5_000) { opened == session.id }
+        assertEquals(SessionResult.PENDING, runBlocking { dao.getSession(session.id)!!.result })
     }
 
     @Test fun cancelDoesNotChangeResultOrCompletion() {

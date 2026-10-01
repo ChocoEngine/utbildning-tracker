@@ -99,6 +99,16 @@ class SessionResultRepositoryTest {
         assertFalse(repo.setSessionResult("today", SessionResult.DONE, topics.map { it.id }.toSet()))
     }
 
+    @Test fun directCompletionOnlyHandlesCoursesWithoutTopics() = runBlocking {
+        assertFalse(repo.markSessionDoneIfNoTopics("today"))
+        assertEquals(SessionResult.PENDING, dao.getSession("today")!!.result)
+
+        val noTopics = repo.createCourse("Practice", 1)
+        dao.insertSession(SessionEntity("practice", noTopics.id, date, 720, noTopics.name, noTopics.colorId, timestamp, timestamp))
+        assertTrue(repo.markSessionDoneIfNoTopics("practice"))
+        assertEquals(SessionResult.DONE, dao.getSession("practice")!!.result)
+    }
+
     @Test fun pastAndFutureAreReadOnlyWhileAutomaticCatchupWorks() = runBlocking {
         for (id in listOf("past", "future")) {
             assertFalse(repo.getSessionDetails(id)!!.canEdit)

@@ -14,6 +14,7 @@ data class SessionDetails(
     val selectableTopics: List<TopicEntity>,
     val selectedTopicIds: Set<String>,
     val canEdit: Boolean = true,
+    val hasTopics: Boolean = selectableTopics.isNotEmpty(),
 )
 
 /** Calendar and lifecycle transactions; called through TrackerRepository. */
@@ -101,7 +102,7 @@ internal class TrackerOperations(
         val topics = dao.getTopics(session.courseId)
         val own = topics.filter { it.isCompleted && it.completionDate == session.date }.map { it.id }.toSet()
         val canEdit = session.date == today(now()).toEpochDay() && !course(session.courseId).isCompleted
-        SessionDetails(session, topics.filter { if (canEdit) !it.isCompleted || it.id in own else it.id in own }, own, canEdit)
+        SessionDetails(session, topics.filter { if (canEdit) !it.isCompleted || it.id in own else it.id in own }, own, canEdit, topics.isNotEmpty())
     }
 
     suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null): Boolean = database.withTransaction {

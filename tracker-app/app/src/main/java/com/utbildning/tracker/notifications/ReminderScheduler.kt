@@ -18,10 +18,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** One exact alarm for the next start, potentially shared by several courses. */
+/** One exact alarm for the next start or result question, potentially shared by several courses. */
 object ReminderScheduler {
     private const val CHANNEL = "course_starts"
     private const val ACTION_START = "com.utbildning.tracker.START"
+    private const val START_NOTIFICATION = 1
+    private const val QUESTION_NOTIFICATION = 2
     private val mutex = Mutex()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var observing = false
@@ -70,8 +72,14 @@ object ReminderScheduler {
         val zone = ZoneId.systemDefault()
         val now = System.currentTimeMillis()
         val delivered = context.getSharedPreferences("reminders", Context.MODE_PRIVATE).getStringSet("delivered", emptySet()).orEmpty()
-        // A concurrent refresh at the exact start must not cancel a due, not-yet-delivered alarm.
-        val next = sessions.filter { it.id !in delivered }.map { start(it, zone) }
+        // A concurrent refresh at the exact event time must not cancel a due, not-yet-delivered alarm.
+        val next = sessions.flatMap { session ->
+            buildList {
+                // Session ids are the legacy keys used by already installed versions for start reminders.
+                if (session.id !in delivered) add(start(session, zone))
+                if (questionKey(session) !in delivered) add(question(session, zone))
+            }
+        }
             .filter { it >= now - 5 * 60_000 }.minOrNull() ?: return
         try { alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, next, pending(context, next)) }
         catch (_: SecurityException) { /* Special access was revoked between check and registration. */ }
@@ -85,17 +93,29 @@ object ReminderScheduler {
             val manager = context.getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(NotificationChannel(CHANNEL, context.getString(R.string.reminder_channel), NotificationManager.IMPORTANCE_DEFAULT))
             repository.withCurrentReminders(trigger) { session ->
-                if (session.id in delivered) return@withCurrentReminders
+                val atStart = start(session, ZoneId.systemDefault()) == trigger
+                val atQuestion = question(session, ZoneId.systemDefault()) == trigger
+                val keys = buildList {
+                    if (atStart) add(session.id)
+                    if (atQuestion) {
+                        // Once the result question is due, an omitted start reminder must never be posted late.
+                        add(session.id)
+                        add(questionKey(session))
+                    }
+                }.filterNot { it in delivered }
+                if (keys.isEmpty()) return@withCurrentReminders
                 val open = Intent(context, MainActivity::class.java).setAction("OPEN_SESSION")
                     .setData(Uri.parse("tracker://session/${session.id}")).putExtra("sessionId", session.id)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 val content = PendingIntent.getActivity(context, 0, open, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                 try {
-                    manager.notify(session.id, 1, Notification.Builder(context, CHANNEL)
+                    // The question must alert again even while the start notification is still visible.
+                    if (atQuestion) manager.cancel(session.id, START_NOTIFICATION)
+                    manager.notify(session.id, if (atQuestion) QUESTION_NOTIFICATION else START_NOTIFICATION, Notification.Builder(context, CHANNEL)
                         .setSmallIcon(R.drawable.ic_book).setContentTitle(session.courseName)
-                        .setContentText(context.getString(R.string.reminder_start)).setContentIntent(content)
+                        .setContentText(context.getString(if (atQuestion) R.string.reminder_question else R.string.reminder_start)).setContentIntent(content)
                         .setAutoCancel(true).setOnlyAlertOnce(true).build())
-                    delivered.add(session.id)
+                    delivered.addAll(keys)
                     preferences.edit().putStringSet("delivered", delivered).commit()
                 } catch (_: SecurityException) { /* Permission may have been revoked during delivery. */ }
             }
@@ -105,6 +125,9 @@ object ReminderScheduler {
     }
 
     private fun start(session: SessionEntity, zone: ZoneId) = SessionTime.start(LocalDate.ofEpochDay(session.date), session.startMinute, zone).toEpochMilli()
+    private fun question(session: SessionEntity, zone: ZoneId) =
+        SessionTime.question(LocalDate.ofEpochDay(session.date), session.startMinute, session.endMinute, zone).toEpochMilli()
+    private fun questionKey(session: SessionEntity) = "question:${session.id}"
 }
 
 class ReminderReceiver : BroadcastReceiver() {

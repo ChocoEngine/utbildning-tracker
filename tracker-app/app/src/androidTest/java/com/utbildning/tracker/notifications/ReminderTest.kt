@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.utbildning.tracker.R
 import com.utbildning.tracker.data.AppContainer
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.TrackerDatabase
@@ -18,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import org.junit.*
 import org.junit.Assert.*
+import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -88,6 +90,38 @@ class ReminderTest {
             }
         } finally {
             db.close()
+            ReminderScheduler.reconcile(context, repository)
+        }
+    }
+
+    @Test fun endReminderAsksForResultAndRecordsBothEvents() = runBlocking {
+        val due = ZonedDateTime.now().withSecond(0).withNano(0)
+        assumeTrue("Needs a same-day start minute", due.hour * 60 + due.minute > 0)
+        val trigger = due.toInstant().toEpochMilli()
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        val local = TrackerRepository(db, now = { trigger - 2 * 60_000 })
+        val course = local.createCourse("End reminder", 0)
+        try {
+            local.saveInitialSchedule(course.id, listOf(WeeklyRule(
+                due.dayOfWeek.value,
+                due.hour * 60 + due.minute - 1,
+                due.hour * 60 + due.minute,
+            )), due.toLocalDate().toEpochDay())
+            val session = local.observeSessions().first().single()
+
+            ReminderScheduler.receive(context, trigger, local)
+
+            awaitCondition("End reminder is posted") { manager.activeNotifications.any { it.tag == session.id } }
+            val posted = manager.activeNotifications.single { it.tag == session.id }
+            assertEquals("End reminder replaces the start notification with a fresh alert", 2, posted.id)
+            assertEquals(context.getString(R.string.reminder_question), posted.notification.extras.getString("android.text"))
+            val delivered = context.getSharedPreferences("reminders", Context.MODE_PRIVATE)
+                .getStringSet("delivered", emptySet()).orEmpty()
+            assertTrue("A late start reminder is suppressed", session.id in delivered)
+            assertTrue("The result reminder is recorded", "question:${session.id}" in delivered)
+        } finally {
+            db.close()
+            manager.cancelAll()
             ReminderScheduler.reconcile(context, repository)
         }
     }

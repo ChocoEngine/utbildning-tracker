@@ -32,8 +32,8 @@ class LocalizedReminderDeliveryTest {
         assertTrue(ReminderScheduler.allowed(context))
         try {
             for ((language, body, channel) in listOf(
-                Triple("ru", "Пора заниматься", "Начало занятий"),
-                Triple("en", "Time to study", "Course starts"),
+                Triple("ru", "Пора заниматься", "Напоминания о занятиях"),
+                Triple("en", "Time to study", "Course reminders"),
             )) {
                 localeManager.applicationLocales = LocaleList.forLanguageTags(language)
                 val localeDeadline = System.currentTimeMillis() + 10_000

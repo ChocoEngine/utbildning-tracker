@@ -1,10 +1,11 @@
 <resources>
-    <string name="reminder_channel">Начало занятий</string>
+    <string name="reminder_channel">Напоминания о занятиях</string>
     <string name="reminder_start">Пора заниматься</string>
+    <string name="reminder_question">Как прошло занятие? Отметьте результат</string>
     <string name="reminder_title">Напоминания</string>
     <string name="reminder_enable">Разрешить уведомления</string>
     <string name="reminder_exact">Разрешить точные напоминания</string>
     <string name="reminder_active">Напоминания включены</string>
-    <string name="reminder_explanation">Чтобы напомнить о начале занятия, нужны разрешения на уведомления и точные напоминания.</string>
+    <string name="reminder_explanation">Чтобы напомнить о начале и окончании занятия, нужны разрешения на уведомления и точные напоминания.</string>
     <string name="guide_title">Как пользоваться</string>
 </resources>

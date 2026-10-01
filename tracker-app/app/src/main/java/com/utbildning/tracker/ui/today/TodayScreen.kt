@@ -49,7 +49,15 @@ internal fun TodayScreen(onSettings: () -> Unit, repository: TrackerRepository, 
     var error by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().testTag("screen_today")) {
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
-        TodayContent(sessions, now, ZoneId.systemDefault(), locale, onSession, onSkip = { id ->
+        TodayContent(sessions, now, ZoneId.systemDefault(), locale, onDone = { id ->
+            scope.launch {
+                try {
+                    if (!repository.markSessionDoneIfNoTopics(id)) onSession(id)
+                    error = false
+                } catch (cancel: CancellationException) { throw cancel }
+                catch (_: Exception) { error = true }
+            }
+        }, onSkip = { id ->
             scope.launch { try { repository.setSessionResult(id, SessionResult.SKIPPED); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } }
         }, onSettings = onSettings, onPending = { id -> scope.launch { try { repository.setSessionResult(id, SessionResult.PENDING); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } } })
     }

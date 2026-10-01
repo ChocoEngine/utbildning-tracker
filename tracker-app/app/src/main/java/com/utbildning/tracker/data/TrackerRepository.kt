@@ -62,8 +62,9 @@ class TrackerRepository(
         val currentZone = zone()
         val courses = dao.getReminderCourses().map { it.id }.toSet()
         dao.getAllSessions().filter { it.courseId in courses && it.result == SessionResult.PENDING }.forEach {
-            if (dao.getSchedule(it.courseId) != null &&
-                SessionTime.start(LocalDate.ofEpochDay(it.date), it.startMinute, currentZone).toEpochMilli() == trigger) action(it)
+            val date = LocalDate.ofEpochDay(it.date)
+            if (dao.getSchedule(it.courseId) != null && (SessionTime.start(date, it.startMinute, currentZone).toEpochMilli() == trigger ||
+                    SessionTime.question(date, it.startMinute, it.endMinute, currentZone).toEpochMilli() == trigger)) action(it)
         }
     }
     suspend fun synchronize(throughDate: Long? = null) = operations.synchronize(throughDate)
@@ -75,6 +76,12 @@ class TrackerRepository(
     ).map { getSessionDetails(sessionId) }.distinctUntilChanged()
     suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null) =
         operations.setSessionResult(sessionId, result, selectedTopicIds)
+    suspend fun markSessionDoneIfNoTopics(sessionId: String): Boolean {
+        val details = getSessionDetails(sessionId) ?: throw RepositoryException(RepositoryError.SESSION_NOT_FOUND)
+        if (details.hasTopics) return false
+        setSessionResult(sessionId, SessionResult.DONE, emptySet())
+        return true
+    }
     suspend fun completeCourse(courseId: String) = operations.completeCourse(courseId)
     suspend fun pauseCourse(courseId: String) = operations.pauseCourse(courseId)
     suspend fun disableSchedule(courseId: String) = operations.disableSchedule(courseId)
