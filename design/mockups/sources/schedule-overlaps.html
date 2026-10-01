@@ -1,0 +1,160 @@
+<div id="schedule-overlaps">
+  <div class="viz-controls">
+    <label class="form-label">Пример
+      <select class="form-select" id="overlap-example">
+        <option value="partial">Частичное пересечение</option>
+        <option value="same">Одинаковое начало</option>
+        <option value="multiple">Несколько курсов</option>
+        <option value="default">Без окончания: один час</option>
+        <option value="midnight">Без окончания: до полуночи</option>
+        <option value="overnight">Ночное занятие: следующий день</option>
+        <option value="previous">Ночное занятие: предыдущий день</option>
+        <option value="touching">Стык в стык: без пересечения</option>
+      </select>
+    </label>
+  </div>
+  <div class="viz-dotted-background overlap-stage">
+    <article class="ot-app" aria-label="Настройка расписания курса — интерактивный макет">
+      <header class="ot-header"><i data-lucide="calendar-days" aria-hidden="true"></i><div><h2>Расписание</h2><p>Практика C</p></div></header>
+      <div id="ot-days"></div>
+      <footer class="ot-footer">
+        <button class="ot-save cursor-interaction" type="button" id="ot-save">Сохранить</button>
+        <div id="ot-saved" role="status"></div>
+      </footer>
+    </article>
+  </div>
+</div>
+<style>
+  #schedule-overlaps .overlap-stage {padding:24px 12px; margin-top:14px;}
+  #schedule-overlaps .ot-app {
+    --ot-paper:light-dark(#fcfaf6,#242923); --ot-ink:light-dark(#29352e,#eff0e8);
+    --ot-muted:light-dark(#697367,#b7beb1); --ot-line:light-dark(#e5e5d9,#454c42);
+    --ot-button:light-dark(#435449,#bccfbc); --ot-button-text:light-dark(#fcfaf6,#233027);
+    --ot-panel:light-dark(#f1efe7,#31372f); --ot-warn-bg:light-dark(#f8efd9,#443923);
+    --ot-warn:light-dark(#775319,#efd39a); --ot-field:light-dark(#fffdf9,#293027);
+    max-width:390px; margin:0 auto; background:var(--ot-paper); color:var(--ot-ink);
+    border:1px solid var(--ot-line); border-radius:22px; overflow:hidden;
+    font:400 15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    box-shadow:0 8px 28px #0000000c;
+  }
+  #schedule-overlaps .ot-app * {box-sizing:border-box;}
+  #schedule-overlaps .ot-header {display:flex; align-items:center; gap:13px; padding:22px 20px 15px;}
+  #schedule-overlaps .ot-header h2 {font-size:22px; font-weight:500; line-height:1.2; margin:0;}
+  #schedule-overlaps .ot-header p {margin:4px 0 0; color:var(--ot-muted); font-size:13px;}
+  #schedule-overlaps .ot-header > svg {width:24px; height:24px;}
+  #schedule-overlaps #ot-days {padding:0 18px;}
+  #schedule-overlaps .ot-day {border-bottom:1px solid var(--ot-line); padding:7px 0;}
+  #schedule-overlaps .ot-day:last-child {border-bottom:0;}
+  #schedule-overlaps .ot-day-label {display:flex; align-items:center; gap:11px; min-height:42px; font-size:16px; font-weight:500;}
+  #schedule-overlaps .ot-day-label input {accent-color:var(--ot-button); width:19px; height:19px; margin:0 0 0 3px;}
+  #schedule-overlaps .ot-slot {padding:10px 11px 12px; margin:0 0 7px; border-radius:13px;}
+  #schedule-overlaps .ot-slot.ot-conflict {background:var(--ot-warn-bg);}
+  #schedule-overlaps .ot-fields {display:flex; flex-wrap:wrap; gap:8px; align-items:end;}
+  #schedule-overlaps .ot-time-label {display:flex; flex-direction:column; gap:4px; color:var(--ot-muted); font-size:12px; flex:1; min-width:82px;}
+  #schedule-overlaps .ot-app input[type=time] {width:100%; min-width:0; max-width:130px; padding:7px 8px; min-height:42px; background:var(--ot-field); border:1px solid var(--ot-line); border-radius:8px; color:var(--ot-ink); font:400 16px/1.3 inherit; font-family:inherit; font-size:16px;}
+  #schedule-overlaps .ot-text-button {border:0; background:transparent; padding:8px 0; min-height:42px; color:var(--ot-ink); text-align:left; font:500 13px/1.4 inherit; font-family:inherit; font-size:13px;}
+  #schedule-overlaps .ot-end-group {flex:1.4; min-width:132px;}
+  #schedule-overlaps .ot-end-field {display:flex; align-items:center; gap:2px; margin-top:4px;}
+  #schedule-overlaps .ot-end-field input[type=time] {flex:1; width:0;}
+  #schedule-overlaps .ot-remove {display:grid; place-items:center; flex:0 0 32px; width:32px; height:42px; padding:0; border:0; border-radius:8px; background:transparent; color:var(--ot-muted);}
+  #schedule-overlaps .ot-remove:hover {background:var(--ot-panel);}
+  #schedule-overlaps .ot-remove svg {width:16px; height:16px;}
+  #schedule-overlaps .ot-next-day {margin-top:5px;}
+  @media(pointer:coarse) {#schedule-overlaps .ot-remove {flex-basis:44px; width:44px; height:44px;}}
+  #schedule-overlaps .ot-small {font-size:12px; color:var(--ot-muted);}
+  #schedule-overlaps .ot-warning {display:flex; align-items:flex-start; gap:7px; margin-top:7px; color:var(--ot-warn); font-size:13px;}
+  #schedule-overlaps .ot-warning > svg {width:15px; height:15px; flex-shrink:0; margin-top:2px;}
+  #schedule-overlaps .ot-conflicts {display:grid; gap:3px; min-width:0;}
+  #schedule-overlaps .ot-warning-label {font-weight:500;}
+  #schedule-overlaps .ot-course {overflow-wrap:anywhere;}
+  #schedule-overlaps .ot-footer {padding:15px 18px 20px;}
+  #schedule-overlaps .ot-save {width:100%; background:var(--ot-button); color:var(--ot-button-text); border:0; border-radius:24px; min-height:46px; font-family:inherit; font-size:15px; font-weight:500;}
+  #schedule-overlaps #ot-saved:not(:empty) {margin-top:10px; text-align:center; font-size:12px; color:var(--ot-muted);}
+  @media(max-width:360px) {#schedule-overlaps .overlap-stage {padding:12px 0;} #schedule-overlaps #ot-days {padding:0 12px;} #schedule-overlaps .ot-header {padding:20px 14px 12px;}}
+</style>
+<script>
+(() => {
+  const root = document.getElementById('schedule-overlaps');
+  const names = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+  const short = ['пн','вт','ср','чт','пт','сб','вс'];
+  const course = (name,day,start,end,color=0) => ({name,day,start,end,color});
+  const examples = {
+    partial:{day:0,start:1200,end:1260,courses:[course('Основы C',0,1170,1230)]},
+    same:{day:0,start:1200,end:1260,courses:[course('Основы C',0,1200,1290)]},
+    multiple:{day:0,start:1200,end:1320,courses:[course('Основы C',0,1170,1230),course('Шведский',0,1245,1275,1),course('Математика',0,1290,1350,2)]},
+    default:{day:0,start:1200,end:null,courses:[course('Основы C',0,1230,null)]},
+    midnight:{day:0,start:1410,end:null,courses:[course('Основы C',0,1395,1425),course('Шведский',1,0,60,1)]},
+    overnight:{day:0,start:1410,end:60,courses:[course('Шведский',1,30,90,1)]},
+    previous:{day:1,start:30,end:90,courses:[course('Основы C',0,1380,60)]},
+    touching:{day:0,start:1200,end:1260,courses:[course('Основы C',0,1140,1200),course('Шведский',0,1260,1320,1)]}
+  };
+  const picker = root.querySelector('#overlap-example');
+  const daysElement = root.querySelector('#ot-days');
+  const saved = root.querySelector('#ot-saved');
+  let key = 'partial';
+  let drafts = [];
+  const format = n => `${String(Math.floor(((n%1440)+1440)%1440/60)).padStart(2,'0')}:${String(((n%60)+60)%60).padStart(2,'0')}`;
+  const parse = text => {const [h,m] = text.split(':').map(Number); return h*60+m;};
+  const finish = (start,end) => end === null ? Math.min(start+60,1440) : end+(end<start?1440:0);
+  function interval(item) {return [item.day*1440+item.start,item.day*1440+finish(item.start,item.end)];}
+  function labelRange(a,b,referenceDay) {
+    const startDay=Math.floor(a/1440), endDay=Math.floor(b/1440);
+    return startDay===endDay ? `${startDay!==referenceDay?short[(startDay+7)%7]+' ':''}${format(a)}–${format(b)}` : `${short[(startDay+7)%7]} ${format(a)} → ${short[(endDay+7)%7]} ${format(b)}`;
+  }
+  function conflicts(draft,day) {
+    const [a,b]=interval({...draft,day});
+    return examples[key].courses.flatMap(c=>{
+      const [baseStart,baseEnd]=interval(c);
+      return [-10080,0,10080].flatMap(shift=>{
+        const start=baseStart+shift,end=baseEnd+shift;
+        const overlapStart=Math.max(a,start),overlapEnd=Math.min(b,end);
+        return overlapStart<overlapEnd ? [{...c,defaultEnd:c.end===null,start,end,overlapStart,overlapEnd,coincides:a===start}] : [];
+      });
+    }).sort((a,b)=>a.overlapStart-b.overlapStart);
+  }
+  function warnings(draft,day) {
+    const rows=conflicts(draft,day);
+    if(!rows.length) return '';
+    return `<div class="ot-warning" role="group" aria-label="Время пересекается с другими курсами"><i data-lucide="triangle-alert" aria-hidden="true"></i><div class="ot-conflicts"><div class="ot-warning-label">В то же время:</div>${rows.map(c=>`<div class="ot-course">${c.name} · ${labelRange(c.start,c.end,day)}</div>`).join('')}</div></div>`;
+  }
+  function render() {
+    picker.value=key;
+    daysElement.innerHTML=drafts.map((d,i)=>`<section class="ot-day"><label class="ot-day-label cursor-interaction"><input type="checkbox" data-day="${i}" ${d.enabled?'checked':''}>${names[i]}</label>${d.enabled?`<div class="ot-slot ${conflicts(d,i).length?'ot-conflict':''}" data-slot="${i}"><div class="ot-fields"><label class="ot-time-label">Начало<input aria-label="${names[i]}: начало" type="time" value="${format(d.start)}" data-start="${i}"></label>${d.end===null?`<button class="ot-text-button cursor-interaction" type="button" data-add="${i}">+ Окончание</button>`:`<div class="ot-end-group"><label class="ot-small" for="ot-end-${i}">Окончание</label><div class="ot-end-field"><input id="ot-end-${i}" aria-label="${names[i]}: окончание" type="time" value="${format(d.end)}" data-end="${i}"><button type="button" class="ot-remove cursor-interaction" aria-label="Убрать окончание: ${names[i]}" data-remove="${i}"><i data-lucide="x" aria-hidden="true"></i></button></div></div>`}</div>${d.end!==null&&d.end<d.start?'<div class="ot-small ot-next-day">Следующий день</div>':''}<div data-warning="${i}" aria-live="polite">${warnings(d,i)}</div></div>`:''}</section>`).join('');
+    if(globalThis.lucide) lucide.createIcons();
+  }
+  function preset(next) {
+    key=Object.hasOwn(examples,next)?next:'partial';
+    const p=examples[key];
+    drafts=names.map((_,i)=>({enabled:i===p.day,start:i===p.day?p.start:1200,end:i===p.day?p.end:null}));
+    saved.textContent=''; render();
+  }
+  function persist() {
+    if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{example:picker.options[picker.selectedIndex].text,defaultDuration:'1 час, не позднее полуночи'},privateContent:{key,drafts}}).catch(()=>{});
+  }
+  function restore(state) {
+    const s=state?.privateContent;
+    if(!s || !Object.hasOwn(examples,s.key) || !Array.isArray(s.drafts) || s.drafts.length!==7) return false;
+    if(!s.drafts.every(d=>typeof d.enabled==='boolean'&&Number.isInteger(d.start)&&d.start>=0&&d.start<1440&&(d.end===null||(Number.isInteger(d.end)&&d.end>=0&&d.end<1440)))) return false;
+    key=s.key; drafts=s.drafts; render(); return true;
+  }
+  picker.addEventListener('change',()=>{preset(picker.value);persist();});
+  daysElement.addEventListener('change',event=>{
+    const el=event.target;
+    if(el.dataset.day!==undefined) drafts[Number(el.dataset.day)].enabled=el.checked;
+    else if(el.dataset.start!==undefined&&el.value) drafts[Number(el.dataset.start)].start=parse(el.value);
+    else if(el.dataset.end!==undefined&&el.value) drafts[Number(el.dataset.end)].end=parse(el.value);
+    else return;
+    saved.textContent=''; render(); persist();
+  });
+  daysElement.addEventListener('click',event=>{
+    const add=event.target.closest('[data-add]'),remove=event.target.closest('[data-remove]');
+    if(add){const d=drafts[Number(add.dataset.add)];d.end=Math.min(d.start+60,1440)%1440;}
+    else if(remove) drafts[Number(remove.dataset.remove)].end=null;
+    else return;
+    saved.textContent='';render();persist();
+  });
+  root.querySelector('#ot-save').addEventListener('click',()=>{saved.textContent='Сохранено в макете';persist();});
+  if(!restore(window.openai?.widgetState)) preset('partial');
+  window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState) restore(event.detail.globals.widgetState);});
+})();
+</script>

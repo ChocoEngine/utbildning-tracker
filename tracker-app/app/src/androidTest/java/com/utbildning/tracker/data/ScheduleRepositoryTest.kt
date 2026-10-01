@@ -29,6 +29,27 @@ class ScheduleRepositoryTest {
     }
     @After fun close() = db.close()
 
+    @Test fun occupiedSchedulesExcludeSelfPausedCompletedAndExhaustedCourses() = runBlocking {
+        val self = repo.createCourse("Self", 0)
+        val active = repo.createCourse("Active", 1)
+        val paused = repo.createCourse("Paused", 2)
+        val completed = repo.createCourse("Completed", 3)
+        val exhausted = repo.createCourse("Exhausted", 4, topics = listOf("C"))
+        repo.createCourse("Without schedule", 5)
+        for (course in listOf(self, active, paused, completed, exhausted)) {
+            repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 1200)))
+        }
+        repo.pauseCourse(paused.id)
+        repo.completeCourse(completed.id)
+        repo.toggleTopicCompletion(exhausted.id, dao.getTopics(exhausted.id).single().id)
+        val occupied = repo.getOccupiedSchedules(self.id)
+        assertEquals(listOf(active.id), occupied.map { it.courseId })
+        assertEquals(listOf(WeeklyRule(1, 1200)), occupied.single().rules)
+        repo.updateSchedule(active.id, listOf(WeeklyRule(2, 1230, 1290)), monday + 14)
+        assertEquals(listOf(WeeklyRule(2, 1230, 1290)), repo.getOccupiedSchedules(self.id).single().rules)
+        assertEquals(LocalDate.ofEpochDay(monday + 14), repo.getOccupiedSchedules(self.id).single().endsOn)
+    }
+
     @Test fun endDateWithoutRulesSurvivesReloadAndCanBeEditedOrGivenWeekdays() = runBlocking {
         val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, emptyList(), monday + 30)

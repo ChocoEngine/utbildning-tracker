@@ -146,13 +146,19 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
                                         lerp(MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onSurfaceVariant, .65f) else MaterialTheme.colorScheme.onSurface)
                                     val count = progress[course.id] ?: (0 to 0)
                                     val rules = scheduleRules[course.id].orEmpty()
+                                    val schedule = rules.takeIf { it.isNotEmpty() }
+                                        ?.sortedBy { it.dayOfWeek }
+                                        ?.groupBy { it.startMinute }
+                                        ?.entries
+                                        ?.joinToString(" · ") { (minute, days) ->
+                                            days.joinToString(", ") { DayOfWeek.of(it.dayOfWeek).getDisplayName(TextStyle.SHORT, locale) } +
+                                                " · " + String.format(locale, "%02d:%02d", minute / 60, minute % 60)
+                                        }
                                     val status = when {
                                         course.isCompleted -> stringResource(R.string.course_finished_status)
                                         course.isPaused -> stringResource(R.string.course_paused_status)
-                                        rules.isEmpty() -> stringResource(R.string.course_unscheduled)
-                                        else -> rules.sortedBy { it.dayOfWeek }.groupBy { it.startMinute }.entries.joinToString(" · ") { (minute, days) ->
-                                            days.joinToString(", ") { DayOfWeek.of(it.dayOfWeek).getDisplayName(TextStyle.SHORT, locale) } + " · " + String.format(locale, "%02d:%02d", minute / 60, minute % 60)
-                                        }
+                                        schedule == null -> stringResource(R.string.course_unscheduled)
+                                        else -> schedule
                                     }
                                     val percent = if (count.second > 0) kotlin.math.round(count.first * 100f / count.second).toInt() else 0
                                     Row(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = if (count.second > 0 && !course.isCompleted) 8.dp else 0.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -160,6 +166,11 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
                                             if (course.isPaused || rules.isEmpty()) " · $status" else "",
                                             Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                         if (count.second > 0 && !course.isCompleted) Text("$percent%", style = MaterialTheme.typography.bodySmall)
+                                    }
+                                    if (count.second > 0 && !course.isCompleted && !course.isPaused && schedule != null) {
+                                        Text(schedule, style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.padding(bottom = 8.dp).testTag("course_schedule_${course.id}"))
                                     }
                                     if (count.second > 0 && !course.isCompleted) CourseProgress(count.first.toFloat() / count.second, course.colorId,
                                         Modifier.fillMaxWidth().height(6.dp).alpha(if (course.isPaused) .45f else 1f).testTag("course_progress_${course.id}"))

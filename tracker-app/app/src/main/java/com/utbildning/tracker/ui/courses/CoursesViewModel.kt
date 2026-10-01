@@ -54,7 +54,14 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 list.forEach { course ->
                     if (course.id !in progressJobs) progressJobs[course.id] = viewModelScope.launch {
                         repository.observeCourseDetails(course.id).collect { details ->
-                            details?.let { scheduleRules = scheduleRules + (course.id to repository.getScheduleRules(course.id)); topicProgress = topicProgress + (course.id to (it.topics.count { topic -> topic.isCompleted } to it.topics.size)); refreshProgress() }
+                            details?.let {
+                                // Complete the suspending read before reading shared state: other course
+                                // collectors can update the map while Room loads these rules.
+                                val rules = repository.getScheduleRules(course.id)
+                                scheduleRules = scheduleRules + (course.id to rules)
+                                topicProgress = topicProgress + (course.id to (it.topics.count { topic -> topic.isCompleted } to it.topics.size))
+                                refreshProgress()
+                            }
                         }
                     }
                 }

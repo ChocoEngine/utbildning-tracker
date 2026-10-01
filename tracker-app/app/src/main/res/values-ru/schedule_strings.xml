@@ -6,11 +6,16 @@
     <string name="schedule_end">Окончание</string>
     <string name="schedule_add_end">Добавить окончание</string>
     <string name="schedule_remove_end">Убрать окончание</string>
-    <string name="schedule_until">Дата окончания</string>
+    <string name="schedule_until">Дата завершения курса</string>
     <string name="schedule_choose_date">Выбрать конечную дату</string>
     <string name="schedule_clear_date">Убрать конечную дату</string>
     <string name="schedule_next_day">Следующий день</string>
     <string name="schedule_invalid">Выберите хотя бы один день и конечную дату не раньше сегодняшней.</string>
     <string name="schedule_failed">Не удалось сохранить расписание. Попробуйте ещё раз.</string>
     <string name="schedule_existing">Текущее расписание</string>
+    <string name="schedule_same_time">В то же время:</string>
+    <string name="schedule_conflict_course">%1$s · %2$s</string>
+    <string name="schedule_conflict_time">%1$s–%2$s</string>
+    <string name="schedule_conflict_day">%1$s %2$s–%3$s</string>
+    <string name="schedule_conflict_overnight">%1$s %2$s → %3$s %4$s</string>
 </resources>

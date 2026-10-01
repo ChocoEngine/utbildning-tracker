@@ -6,11 +6,16 @@
     <string name="schedule_end">End</string>
     <string name="schedule_add_end">Add end time</string>
     <string name="schedule_remove_end">Remove end time</string>
-    <string name="schedule_until">End date</string>
+    <string name="schedule_until">Course end date</string>
     <string name="schedule_choose_date">Choose end date</string>
     <string name="schedule_clear_date">Remove end date</string>
     <string name="schedule_next_day">Next day</string>
     <string name="schedule_invalid">Select at least one day and an end date not earlier than today.</string>
     <string name="schedule_failed">Could not save the schedule. Please try again.</string>
     <string name="schedule_existing">The current schedule</string>
+    <string name="schedule_same_time">At the same time:</string>
+    <string name="schedule_conflict_course">%1$s · %2$s</string>
+    <string name="schedule_conflict_time">%1$s–%2$s</string>
+    <string name="schedule_conflict_day">%1$s %2$s–%3$s</string>
+    <string name="schedule_conflict_overnight">%1$s %2$s → %3$s %4$s</string>
 </resources>

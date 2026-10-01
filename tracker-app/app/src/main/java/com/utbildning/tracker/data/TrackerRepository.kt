@@ -45,6 +45,17 @@ class TrackerRepository(
         operations.updateSchedule(courseId, rules, endsOn)
     suspend fun getSchedule(courseId: String) = dao.getSchedule(courseId)
     suspend fun getScheduleRules(courseId: String) = dao.getScheduleRules(courseId)
+    suspend fun getOccupiedSchedules(excludingCourseId: String) = database.withTransaction {
+        dao.getReminderCourses().filter { it.id != excludingCourseId }.mapNotNull { course ->
+            val schedule = dao.getSchedule(course.id) ?: return@mapNotNull null
+            com.utbildning.tracker.domain.OccupiedSchedule(course.id, course.name,
+                LocalDate.ofEpochDay(schedule.startsOn), schedule.endsOn?.let(LocalDate::ofEpochDay),
+                dao.getScheduleRules(course.id).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) })
+        }
+    }
+    fun observeOccupiedSchedules(excludingCourseId: String) =
+        database.invalidationTracker.createFlow("courses", "topics", "schedules", "schedule_rules")
+            .map { getOccupiedSchedules(excludingCourseId) }.distinctUntilChanged()
     fun observeSessions() = dao.observeSessions()
     /** Validation and posting share the write transaction with lifecycle changes. */
     suspend fun withCurrentReminders(trigger: Long, action: (SessionEntity) -> Unit) = database.withTransaction {

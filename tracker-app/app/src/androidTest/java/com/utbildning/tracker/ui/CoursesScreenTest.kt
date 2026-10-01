@@ -56,6 +56,31 @@ class CoursesScreenTest {
         database.close()
     }
 
+    @Test fun allCourseSchedulesSurviveConcurrentLoadingAndRefresh() {
+        val expected = (0..7).associate { index ->
+            val course = seed(name = "Scheduled $index", color = index)
+            runBlocking { repository.saveInitialSchedule(course.id,
+                listOf(com.utbildning.tracker.domain.WeeklyRule(2, 540 + index * 30))) }
+            course.id to (540 + index * 30)
+        }
+        show("ru")
+        lateinit var model: CoursesViewModel
+        compose.runOnIdle { model = ViewModelProvider(modelOwner)[CoursesViewModel::class.java] }
+        fun allLoaded() = expected.all { (id, minute) ->
+            model.scheduleRules[id]?.singleOrNull()?.startMinute == minute
+        }
+        waitFor { allLoaded() }
+        compose.onAllNodesWithText("Без расписания", substring = true).assertCountEquals(0)
+        runBlocking { repository.updateSchedule(expected.keys.first(),
+            listOf(com.utbildning.tracker.domain.WeeklyRule(4, 900))) }
+        waitFor { model.scheduleRules[expected.keys.first()]?.singleOrNull()?.startMinute == 900 }
+        compose.runOnIdle {
+            expected.entries.drop(1).forEach { (id, minute) ->
+                org.junit.Assert.assertEquals(minute, model.scheduleRules[id]?.singleOrNull()?.startMinute)
+            }
+        }
+    }
+
     @Test fun creationDialogValidatesNameAndCreatesCourseWithoutMode() {
         show("ru")
         click("course_add")

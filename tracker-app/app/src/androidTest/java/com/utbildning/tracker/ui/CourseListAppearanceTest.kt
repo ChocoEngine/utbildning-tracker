@@ -41,6 +41,17 @@ class CourseListAppearanceTest {
         compose.onNodeWithTag("course_progress_practice").assertDoesNotExist()
         compose.onNodeWithTag("courses_filter").assertDoesNotExist()
     }
+
+    @Test fun courseWithTopicsShowsProgressAndSchedule() {
+        val course = CourseEntity("lessons", "C lessons", 1, 1, 1)
+        compose.setContent { TrackerTheme { Surface { CourseListContent(listOf(course), emptyList(), mapOf(course.id to (3 to 10)), false, {}, {}, mapOf(course.id to listOf(ScheduleRuleEntity(course.id, 4, 18 * 60 + 30)))) } } }
+        compose.onNodeWithText(context.getString(R.string.course_topics_progress, 3, 10)).assertExists()
+        compose.onNodeWithText("30%").assertExists()
+        compose.onNodeWithText("18:30", substring = true).assertExists()
+        compose.onNodeWithTag("course_schedule_lessons", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag("course_progress_lessons", useUnmergedTree = true).assertExists()
+    }
+
     @Test fun scrollingCoursesKeepsAddAndSummaryInPlace() {
         val courses = (0..15).map { index ->
             if (index < 8) CourseEntity("course-$index", "C $index", index, 1, 1)

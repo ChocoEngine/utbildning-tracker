@@ -144,7 +144,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                     }
                                     clipPath(blob) {
                                         if (rows.size > 4) {
-                                            val alpha = if (rows.any { it.result == SessionResult.DONE }) .94f else .23f
+                                            val alpha = rows.maxOf { calendarInkAlpha(it.result) }
                                             val colors = rows.map { it.colorId }.distinct()
                                             drawPath(blob, courseColor(colors.first()).copy(alpha = alpha * .3f))
                                             for (dotRow in 0..5) for (dotColumn in 0..7) {
@@ -157,7 +157,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                                 val weights = rows.indices.map { if (rows.size in 3..4 && it != 0 && it != rows.lastIndex) .7f else 1f }
                                                 val width = 60f * weights[i] / weights.sum()
                                                 val left = -6f + 60f * weights.take(i).sum() / weights.sum()
-                                                drawRect(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) .94f else .23f),
+                                                drawRect(courseColor(session.colorId).copy(alpha = calendarInkAlpha(session.result)),
                                                     Offset(left*sx, -15*sy), Size((width+.3f)*sx, 65*sy))
                                             }
                                         }
@@ -202,6 +202,12 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
             }
         }
     }
+}
+
+private fun calendarInkAlpha(result: SessionResult) = when (result) {
+    SessionResult.DONE -> .94f
+    SessionResult.PENDING -> .35f
+    SessionResult.SKIPPED -> .23f
 }
 
 @Preview(locale = "ru", showBackground = true)
