@@ -79,6 +79,19 @@ class SessionScreenTest {
         assertTrue(runBlocking { dao.getTopics(course.id).filter { it.isCompleted } }.isEmpty())
     }
 
+    @Test fun selectedTopicKeepsNumberAndShowsCheckOnRight() {
+        show()
+        click("session_topic_${topics[0].id}")
+
+        val number = compose.onNodeWithTag("topic_number_${topics[0].id}", useUnmergedTree = true)
+        val title = compose.onNodeWithTag("topic_title_${topics[0].id}", useUnmergedTree = true)
+        val check = compose.onNodeWithTag("topic_done_${topics[0].id}", useUnmergedTree = true)
+        number.assertTextEquals("1.")
+        check.assertExists()
+        assertTrue(number.fetchSemanticsNode().boundsInRoot.center.x < title.fetchSemanticsNode().boundsInRoot.center.x)
+        assertTrue(title.fetchSemanticsNode().boundsInRoot.center.x < check.fetchSemanticsNode().boundsInRoot.center.x)
+    }
+
     @Test fun cancelDoesNotChangeResultOrCompletion() {
         show()
         click("session_topic_${topics[1].id}")

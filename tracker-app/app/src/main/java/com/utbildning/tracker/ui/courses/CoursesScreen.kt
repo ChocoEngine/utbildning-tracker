@@ -58,6 +58,8 @@ import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.*
 import com.utbildning.tracker.domain.*
 import com.utbildning.tracker.ui.AppHeader
+import com.utbildning.tracker.ui.TopicStatusDivider
+import com.utbildning.tracker.ui.TopicStatusRow
 import com.utbildning.tracker.ui.theme.*
 
 @Composable
@@ -355,10 +357,17 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
 
         Column(Modifier.weight(1f).fillMaxWidth().padding(vertical = 6.dp).verticalScroll(rememberScrollState()).testTag("course_topics_scroll")) {
             draft.topics.sortedBy { it.position }.forEachIndexed { index, topic ->
-                TopicRow(topic.id, topic.title, "${index + 1}.", !draft.completed, onToggle, topic.isCompleted)
-                if (index < draft.topics.lastIndex) HorizontalDivider(
-                    modifier = Modifier.padding(start = 32.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .55f))
+                TopicStatusRow(
+                    topic.id,
+                    topic.title,
+                    "${index + 1}.",
+                    topic.isCompleted,
+                    Modifier.combinedClickable(
+                        onClick = {},
+                        onLongClick = if (!draft.completed) ({ onToggle(topic.id) }) else null,
+                    ).testTag("topic_${topic.id}"),
+                )
+                if (index < draft.topics.lastIndex) TopicStatusDivider()
             }
         }
         if (draft.id != null && draft.editingText == null) {
@@ -489,17 +498,6 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
 private fun CourseSectionDivider() {
     HorizontalDivider(Modifier.padding(vertical = 4.dp),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = .3f))
-}
-
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-@Composable
-private fun TopicRow(id: String, title: String, marker: String, enabled: Boolean, onToggle: (String) -> Unit, completed: Boolean = false) {
-    Row(Modifier.fillMaxWidth().combinedClickable(onClick = {}, onLongClick = if (enabled) ({ onToggle(id) }) else null).padding(vertical = 10.dp).testTag("topic_$id"), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(marker, Modifier.width(24.dp).testTag("topic_number_$id"), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant); Text(title, Modifier.weight(1f).testTag("topic_title_$id"), style = MaterialTheme.typography.bodyMedium, color = if (completed) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface); Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-            if (completed) Icon(painterResource(R.drawable.ic_check), null,
-                Modifier.size(16.dp).testTag("topic_done_$id"))
-        }
-    }
 }
 
 @Composable

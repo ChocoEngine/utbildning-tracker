@@ -2,25 +2,17 @@ package com.utbildning.tracker.ui.session
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
-import android.text.format.DateFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,6 +27,8 @@ import com.utbildning.tracker.R
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.data.local.TopicEntity
+import com.utbildning.tracker.ui.TopicStatusDivider
+import com.utbildning.tracker.ui.TopicStatusRow
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -47,12 +41,13 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
     var error by remember { mutableStateOf(false) }
     var completionCourseId by rememberSaveable(id) { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
-    val locale = LocalConfiguration.current.locales[0]
     LaunchedEffect(details) { if (selected == null && details != null) selected = ArrayList(details!!.selectedTopicIds) }
     BackHandler { if (!busy && completionCourseId == null) onBack() }
     val current = details
     if (current == null) {
-        Column(Modifier.padding(20.dp)) { TextButton(onClick = onBack) { Text(stringResource(R.string.back)) } }
+        IconButton(onClick = onBack, modifier = Modifier.padding(16.dp).testTag("session_back")) {
+            Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
+        }
     } else SessionContent(current.session.courseName, current.selectableTopics, selected.orEmpty().toSet(), busy, error,
         onToggle = { topicId -> selected = ArrayList(selected.orEmpty().let { if (topicId in it) it - topicId else it + topicId }) },
         onCancel = onBack, onSave = {
@@ -66,8 +61,7 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
                 catch (_: Exception) { error = true }
                 finally { busy = false }
             }
-        }, editable = current.canEdit, dateLabel = LocalDate.ofEpochDay(current.session.date).format(DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, "dMMMM"), locale)) + " · " +
-            LocalTime.of(current.session.startMinute / 60, current.session.startMinute % 60).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)))
+        }, editable = current.canEdit)
     completionCourseId?.let { courseId ->
         fun finish(complete: Boolean) {
             scope.launch {
@@ -89,39 +83,36 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
 
 @Composable
 internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: Set<String>, busy: Boolean, error: Boolean,
-    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, dateLabel: String = "", editable: Boolean = true) {
-    Column(Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        TextButton(onClick = onCancel, enabled = !busy, contentPadding = PaddingValues(0.dp), modifier = Modifier.testTag("session_back")) {
-            Icon(painterResource(R.drawable.ic_back), contentDescription = null, modifier = Modifier.size(16.dp))
-            Spacer(Modifier.width(7.dp))
-            Text(stringResource(R.string.back), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, editable: Boolean = true) {
+    Column(Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onCancel, enabled = !busy, modifier = Modifier.testTag("session_back")) {
+                Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
+            }
+            Text(name, style = MaterialTheme.typography.headlineSmall, fontSize = 22.sp, maxLines = 3, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f).testTag("session_title"))
         }
-        if (dateLabel.isNotEmpty()) Text(dateLabel.uppercase(LocalConfiguration.current.locales[0]), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 10.sp, lineHeight = 14.sp, letterSpacing = 1.5.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(name, style = TextStyle(fontFamily = FontFamily.Serif, fontWeight = FontWeight.Normal, fontSize = 22.sp, lineHeight = 29.sp, letterSpacing = (-.6).sp))
-        if (editable) Text(stringResource(R.string.session_choose), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp, letterSpacing = (-.2).sp))
-        LazyColumn(Modifier.weight(1f).fillMaxWidth().testTag("session_topics")) {
-            items(topics, key = { it.id }) { topic ->
+        if (editable) Text(stringResource(R.string.session_choose), style = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp, letterSpacing = (-.2).sp), modifier = Modifier.padding(horizontal = 8.dp))
+        LazyColumn(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 8.dp).testTag("session_topics")) {
+            itemsIndexed(topics, key = { _, topic -> topic.id }) { index, topic ->
                 val isSelected = topic.id in selected
-                Row(
+                TopicStatusRow(
+                    topic.id,
+                    topic.title,
+                    "${topic.position + 1}.",
+                    isSelected,
                     Modifier.fillMaxWidth()
-                        .background(if (isSelected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
                         .toggleable(value = isSelected, enabled = !busy && editable, role = Role.Checkbox, onValueChange = { onToggle(topic.id) })
-                        .heightIn(min = 48.dp).padding(vertical = 12.dp)
                         .semantics { contentDescription = topic.title }.testTag("session_topic_${topic.id}"),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(9.dp),
-                ) {
-                    Text(if (isSelected) "✓" else (topic.position + 1).toString(), Modifier.width(20.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text(topic.title, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                }
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                )
+                if (index < topics.lastIndex) TopicStatusDivider()
             }
         }
-        if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
-        if (editable) Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().testTag("session_save")) { Text(stringResource(R.string.course_save)) }
+        if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(horizontal = 8.dp))
+        if (editable) Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).testTag("session_save")) { Text(stringResource(R.string.course_save)) }
     }
 }
 
 @Preview(locale = "ru", showBackground = true)
 @Composable
-private fun SessionPreview() { TrackerTheme { Surface { SessionContent("Лекции по C", listOf(TopicEntity("a", "c", 0, "Указатели")), setOf("a"), false, false, {}, {}, {}, "26 сентября · 11:00") } } }
+private fun SessionPreview() { TrackerTheme { Surface { SessionContent("Лекции по C", listOf(TopicEntity("a", "c", 0, "Указатели")), setOf("a"), false, false, {}, {}, {}) } } }
