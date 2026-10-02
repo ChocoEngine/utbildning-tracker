@@ -45,8 +45,21 @@ class SessionScreenTest {
         database.close()
     }
 
-    @Test fun pastDetailsHideSaveAndDisableSelection() = checkReadOnly(-1L)
+    @Test fun olderDetailsHideSaveAndDisableSelection() = checkReadOnly(-2L)
     @Test fun futureDetailsHideSaveAndDisableSelection() = checkReadOnly(1L)
+
+    @Test fun yesterdayDetailsAllowSelectionAndKeepTheStartDate() {
+        val yesterday = LocalDate.now().minusDays(1).toEpochDay()
+        runBlocking { dao.updateSession(session.copy(date = yesterday, result = SessionResult.SKIPPED)) }
+        show()
+        compose.onNodeWithTag("session_save").assertIsDisplayed()
+        compose.onNodeWithTag("session_topic_${topics[0].id}").assertIsEnabled()
+        click("session_topic_${topics[0].id}")
+        click("session_save")
+        waitClosed()
+        assertEquals(SessionResult.DONE, runBlocking { dao.getSession(session.id) }?.result)
+        assertEquals(yesterday, runBlocking { dao.getTopic(topics[0].id) }?.completionDate)
+    }
 
     private fun checkReadOnly(offset: Long) {
         runBlocking {
@@ -118,13 +131,35 @@ class SessionScreenTest {
         assertEquals(SessionResult.PENDING, runBlocking { dao.getSession(session.id)!!.result })
     }
 
-    @Test fun cancelDoesNotChangeResultOrCompletion() {
+    @Test fun cancellingYesterdayDoesNotChangeResultOrCompletion() {
+        val yesterday = LocalDate.now().minusDays(1).toEpochDay()
+        runBlocking {
+            session = session.copy(date = yesterday, result = SessionResult.SKIPPED)
+            dao.updateSession(session)
+        }
         show()
         click("session_topic_${topics[1].id}")
         click("session_back")
         waitClosed()
         assertEquals(session, runBlocking { dao.getSession(session.id) })
         assertTrue(runBlocking { dao.getTopics(course.id).filter { it.isCompleted } }.isEmpty())
+    }
+
+    @Test fun externalReminderDestinationOpensYesterdayAsEditable() {
+        val yesterday = LocalDate.now().minusDays(1).toEpochDay()
+        runBlocking { dao.updateSession(session.copy(date = yesterday, result = SessionResult.SKIPPED)) }
+        var handled = false
+        compose.setContent {
+            TrackerTheme {
+                if (visible.value) AppNavigation(repository, requestedSessionId = session.id) { handled = true }
+            }
+        }
+        compose.waitUntil(5_000) { handled && compose.onAllNodesWithTag("session_save").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("session_save").assertIsDisplayed()
+        click("session_topic_${topics[2].id}")
+        click("session_save")
+        compose.waitUntil(5_000) { runBlocking { dao.getSession(session.id)?.result == SessionResult.DONE } }
+        assertEquals(yesterday, runBlocking { dao.getTopic(topics[2].id) }?.completionDate)
     }
 
     @Test fun savedStateRestorationRetainsUnsubmittedTopicSelection() {

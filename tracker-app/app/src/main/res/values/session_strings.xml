@@ -1,4 +1,5 @@
 <resources>
+    <string name="today_heading">Today</string>
     <string name="session_unmarked">Unmarked</string>
     <string name="session_choose">Mark completed topics</string>
     <string name="session_nothing">I studied, but have not finished anything yet</string>
@@ -11,5 +12,7 @@
     <string name="calendar_next">Next month</string>
     <string name="sessions_empty">No sessions</string>
     <string name="today_next">Upcoming sessions</string>
-    <string name="today_empty">No planned sessions</string>
+    <string name="today_empty">No sessions</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="yesterday_empty">There were no sessions</string>
 </resources>

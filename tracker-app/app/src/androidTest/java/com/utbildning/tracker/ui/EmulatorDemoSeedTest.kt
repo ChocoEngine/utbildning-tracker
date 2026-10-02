@@ -64,6 +64,7 @@ class EmulatorDemoSeedTest {
                 Triple("landscapes", "Пейзажи", "Рисование"),
                 Triple("programming", "Задачи по C", "Программирование"),
                 Triple("swedish", "Шведский · A2", "Языки"),
+                Triple("long-title", "Практика алгоритмов и структур данных на C", "Программирование"),
             )
             for ((key, name, category) in definitions) {
                 val priorId = preferences.getString(key, null)
@@ -74,7 +75,11 @@ class EmulatorDemoSeedTest {
                     val color = (0..9).first { it !in used }
                     val scheduled = key != "programming"
                     val created = repository.createCourse(name, color, category, topics)
-                    if (scheduled) repository.saveInitialSchedule(created.id, (1..7).map { WeeklyRule(it, if (key == "swedish") 20 * 60 + 30 else 11 * 60) })
+                    if (scheduled) repository.saveInitialSchedule(created.id, (1..7).map { WeeklyRule(it, when (key) {
+                        "swedish" -> 20 * 60 + 30
+                        "long-title" -> 17 * 60 + 30
+                        else -> 11 * 60
+                    }) })
                     check(repository.getCourseDetails(created.id)!!.topics.map { it.title } == topics)
                     created
                 }
@@ -85,7 +90,7 @@ class EmulatorDemoSeedTest {
                     val date = LocalDate.now().toEpochDay()
                     val dao = database.trackerDao()
                     val timestamp = System.currentTimeMillis()
-                    val examples = listOf("landscapes" to 9 * 60, "programming" to 15 * 60, "swedish" to (20 * 60 + 30))
+                    val examples = listOf("landscapes" to 9 * 60, "programming" to 15 * 60, "long-title" to (17 * 60 + 30), "swedish" to (20 * 60 + 30))
                     for ((key, minute) in examples) {
                         val course = checkNotNull(repository.getCourse(checkNotNull(preferences.getString(key, null))))
                         if (repository.getSchedule(course.id) == null) {

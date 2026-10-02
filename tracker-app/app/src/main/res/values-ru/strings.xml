@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Трекер учёбы</string>
-    <string name="nav_today">Сегодня</string>
+    <string name="app_name">Трекер курсов</string>
+    <string name="nav_today">Занятия</string>
     <string name="nav_calendar">Календарь</string>
     <string name="nav_courses">Курсы</string>
     <string name="settings">Настройки</string>

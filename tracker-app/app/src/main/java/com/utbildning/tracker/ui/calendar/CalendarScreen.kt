@@ -92,7 +92,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
             }
             TextButton(onClick = { val today = LocalDate.now(); onMonth(YearMonth.from(today)); onDay(today) },
                 modifier = Modifier.testTag("calendar_today").background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp))) {
-                Text(stringResource(R.string.nav_today), fontSize = 12.sp)
+                Text(stringResource(R.string.today_heading), fontSize = 12.sp)
             }
         }
         val byDay = sessions.groupBy { it.date }
@@ -154,7 +154,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                         if (rows.size > 4) {
                                             val alpha = rows.maxOf { calendarInkAlpha(it.result) }
                                             val colors = rows.map { it.colorId }.distinct()
-                                            drawPath(blob, courseColor(colors.first()).copy(alpha = alpha * .3f))
+                                            drawPath(blob, courseColor(0).copy(alpha = alpha * .3f))
                                             for (dotRow in 0..5) for (dotColumn in 0..7) {
                                                 val dotColor = colors[(dotRow * 3 + dotColumn) % colors.size]
                                                 drawCircle(courseColor(dotColor).copy(alpha = alpha), 2.4f*sx,

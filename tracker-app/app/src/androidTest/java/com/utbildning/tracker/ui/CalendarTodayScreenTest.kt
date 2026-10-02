@@ -61,11 +61,13 @@ class CalendarTodayScreenTest {
             com.utbildning.tracker.R.string.session_skipped).forEach { assertTrue(description.contains(context.getString(it))) }
     }
 
-    @Test fun todayOmitsPastAndFutureAndRoutesDoneAction() {
+    @Test fun todayShowsYesterdayButOmitsOlderAndFutureSessions() {
         val day = LocalDate.of(2026, 9, 26)
         val now = mutableStateOf(Instant.parse("2026-09-26T11:29:00Z"))
         val sessions = listOf(
-            lesson("past", day.minusDays(1), 600),
+            lesson("old", day.minusDays(2), 600),
+            lesson("yesterday", day.minusDays(1), 600, result = SessionResult.SKIPPED),
+            lesson("completed_yesterday", day.minusDays(1), 660).copy(courseCompleted = true),
             lesson("default", day, 600),
             lesson("explicit", day, 540, end = 720),
             lesson("done", day, 480, result = SessionResult.DONE),
@@ -75,9 +77,13 @@ class CalendarTodayScreenTest {
         var done: String? = null
         compose.setContent { TrackerTheme { TodayContent(sessions, now.value, ZoneOffset.UTC, Locale.ENGLISH,
             onDone = { done = it }, onSkip = {}) } }
-        compose.onNodeWithTag("session_done_past").assertDoesNotExist()
+        compose.onNodeWithTag("session_done_old").assertDoesNotExist()
         compose.onNodeWithTag("session_done_far").assertDoesNotExist()
         compose.onNodeWithTag("session_done_near").assertDoesNotExist()
+        compose.onNodeWithTag("session_done_completed_yesterday").assertDoesNotExist()
+        compose.onNodeWithTag("today_yesterday").assertExists()
+        click("session_done_yesterday")
+        compose.runOnIdle { assertEquals("yesterday", done) }
         compose.onNodeWithTag("question_default").assertDoesNotExist()
         compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         click("session_done_default")
@@ -89,17 +95,77 @@ class CalendarTodayScreenTest {
         compose.onNodeWithTag("question_done").assertDoesNotExist()
     }
 
-    @Test fun localMidnightRemovesYesterdayFromTodayWithoutDisplayingOldQuestion() {
+    @Test fun localMidnightMovesSessionIntoEditableYesterdaySectionWithoutOldQuestion() {
         val day = LocalDate.of(2026, 9, 26)
         val now = mutableStateOf(Instant.parse("2026-09-26T20:59:00Z"))
         val sessions = listOf(lesson("yesterday", day, 600), lesson("newday", day.plusDays(1), 600))
         compose.setContent { TrackerTheme { TodayContent(sessions, now.value, ZoneId.of("Europe/Moscow"), Locale.ENGLISH, {}, {}) } }
         compose.onNodeWithTag("question_yesterday").assertDoesNotExist()
         compose.runOnIdle { now.value = Instant.parse("2026-09-26T21:00:00Z") }
-        compose.onNodeWithTag("session_done_yesterday").assertDoesNotExist()
+        compose.onNodeWithTag("today_yesterday").assertExists()
+        compose.onNodeWithTag("session_done_yesterday").assertExists()
         compose.onNodeWithTag("question_yesterday").assertDoesNotExist()
         compose.onNodeWithTag("session_done_newday").assertExists()
         compose.onNodeWithTag("question_newday").assertDoesNotExist()
+    }
+
+    @Test fun todayAndYesterdayListsScrollIndependently() {
+        val day = LocalDate.of(2026, 9, 26)
+        val today = (0..7).map {
+            lesson("today_$it", day, 8 * 60 + it * 10).let { session ->
+                if (it == 7) session.copy(courseName = "Algorithms and data structures practice in C") else session
+            }
+        }
+        val yesterday = (0..7).map { lesson("yesterday_$it", day.minusDays(1), 8 * 60 + it * 10, result = SessionResult.SKIPPED) }
+        compose.setContent {
+            TrackerTheme {
+                TodayContent(today + yesterday, Instant.parse("2026-09-26T12:00:00Z"), ZoneOffset.UTC, Locale.ENGLISH, {}, {})
+            }
+        }
+
+        compose.onNodeWithTag("today_sessions").performScrollToIndex(today.lastIndex)
+        compose.onNodeWithTag("session_done_today_7").assertIsDisplayed()
+        val timeBounds = compose.onNodeWithTag("session_time_today_7").fetchSemanticsNode().boundsInRoot
+        val blotBounds = compose.onNodeWithTag("session_blot_today_7").fetchSemanticsNode().boundsInRoot
+        val titleBounds = compose.onNodeWithTag("session_title_today_7").fetchSemanticsNode().boundsInRoot
+        val listBounds = compose.onNodeWithTag("today_sessions").fetchSemanticsNode().boundsInRoot
+        assertTrue(blotBounds.left < titleBounds.left)
+        assertTrue(titleBounds.right < timeBounds.left)
+        assertTrue(titleBounds.height > timeBounds.height)
+        assertEquals(listBounds.right, timeBounds.right, 1f)
+        assertEquals((timeBounds.top + timeBounds.bottom) / 2, (blotBounds.top + blotBounds.bottom) / 2, 1f)
+        val yesterdayHeaderTop = compose.onNodeWithTag("today_yesterday").fetchSemanticsNode().boundsInRoot.top
+        val dayDividerWidth = compose.onNodeWithTag("day_sections_divider").fetchSemanticsNode().boundsInRoot.width
+        val sessionDivider = compose.onNodeWithTag("session_divider_today_7").fetchSemanticsNode().boundsInRoot
+        val sessionDividerWidth = sessionDivider.width
+        val buttonLeft = compose.onNodeWithTag("session_done_today_7").fetchSemanticsNode().boundsInRoot.left
+        assertTrue(sessionDividerWidth < dayDividerWidth)
+        assertEquals(buttonLeft, sessionDivider.left)
+
+        compose.onNodeWithTag("yesterday_sessions").performScrollToIndex(yesterday.lastIndex)
+        compose.onNodeWithTag("session_done_yesterday_7").assertIsDisplayed()
+        compose.onNodeWithTag("session_done_today_7").assertIsDisplayed()
+        assertEquals(yesterdayHeaderTop, compose.onNodeWithTag("today_yesterday").fetchSemanticsNode().boundsInRoot.top)
+    }
+
+    @Test fun todayAndYesterdayUseMatchingSectionsAndSeparateEmptyMessages() {
+        val day = LocalDate.of(2026, 9, 26)
+        compose.setContent {
+            TrackerTheme {
+                TodayContent(emptyList(), Instant.parse("2026-09-26T12:00:00Z"), ZoneOffset.UTC, Locale.ENGLISH, {}, {})
+            }
+        }
+
+        val settings = compose.onNodeWithTag("settings").fetchSemanticsNode().boundsInRoot
+        val todayHeader = compose.onNodeWithTag("today_date").fetchSemanticsNode().boundsInRoot
+        val yesterdayHeader = compose.onNodeWithTag("today_yesterday").fetchSemanticsNode().boundsInRoot
+        compose.onNodeWithTag("today_empty").assertExists()
+        compose.onNodeWithTag("yesterday_empty").assertExists()
+        compose.onNodeWithTag("day_sections_divider").assertExists()
+        compose.onNodeWithTag("today_sessions").assertDoesNotExist()
+        compose.onNodeWithTag("yesterday_sessions").assertDoesNotExist()
+        assertTrue(todayHeader.top >= settings.bottom)
+        assertEquals(todayHeader.left, yesterdayHeader.left)
     }
 
     private fun lesson(id: String, day: LocalDate, start: Int, end: Int? = null, result: SessionResult = SessionResult.PENDING) =

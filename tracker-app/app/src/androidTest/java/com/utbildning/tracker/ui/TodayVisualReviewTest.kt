@@ -49,17 +49,26 @@ class TodayVisualReviewTest {
         val configuration = Configuration(context.resources.configuration).apply { setLocale(locale) }
         val localized = context.createConfigurationContext(configuration)
         val date = LocalDate.of(2026, 9, 26)
-        val title = if (language == "ru") "Практика по C" else "Practice in C"
+        val title = if (language == "ru") "Практика алгоритмов и структур данных на C" else "Algorithms and data structures practice in C"
         val sessions = listOf(SessionEntity("today", "course", date.toEpochDay(), 11 * 60, title, 0, 1, 1))
+        val previous = listOf(
+            sessions.first().copy(id = "yesterday_done", date = date.minusDays(1).toEpochDay(), startMinute = 23 * 60 + 30, result = SessionResult.DONE),
+            sessions.first().copy(id = "yesterday_skipped", date = date.minusDays(1).toEpochDay(), startMinute = 10 * 60, result = SessionResult.SKIPPED),
+        )
         val future = listOf(sessions.first().copy(id = "future", date = date.plusDays(1).toEpochDay()))
         val scene = mutableIntStateOf(0)
-        val names = listOf("empty", "upcoming", "current")
+        val names = listOf("empty", "upcoming", "current", "yesterday")
         compose.setContent {
             CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration) {
                 TrackerTheme {
                     Surface(Modifier.requiredWidth(320.dp).height(620.dp).testTag("review_canvas")) {
                         key(scene.intValue) {
-                            TodayContent(when (scene.intValue) { 0 -> emptyList(); 1 -> future; else -> sessions + future }, Instant.parse("2026-09-26T12:00:00Z"), ZoneId.of("Europe/Moscow"), locale, {}, {})
+                            TodayContent(when (scene.intValue) {
+                                0 -> emptyList()
+                                1 -> future
+                                2 -> sessions + future
+                                else -> sessions + previous + future
+                            }, Instant.parse("2026-09-26T12:00:00Z"), ZoneId.of("Europe/Moscow"), locale, {}, {})
                         }
                     }
                 }

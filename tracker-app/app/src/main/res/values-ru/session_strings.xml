@@ -1,4 +1,5 @@
 <resources>
+    <string name="today_heading">Сегодня</string>
     <string name="session_unmarked">Без отметки</string>
     <string name="session_choose">Отметь пройденное</string>
     <string name="session_nothing">Позанимался, но пока ничего не завершил</string>
@@ -11,5 +12,7 @@
     <string name="calendar_next">Следующий месяц</string>
     <string name="sessions_empty">Занятий нет</string>
     <string name="today_next">Ближайшие занятия</string>
-    <string name="today_empty">Нет запланированных занятий</string>
+    <string name="today_empty">Занятий нет</string>
+    <string name="yesterday">Вчера</string>
+    <string name="yesterday_empty">Занятий не было</string>
 </resources>

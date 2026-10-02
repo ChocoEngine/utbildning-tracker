@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 
 @RunWith(AndroidJUnit4::class)
@@ -22,14 +23,15 @@ class SessionResultRepositoryTest {
     private lateinit var topics: List<TopicEntity>
     // UTC yesterday, but already today's calendar date in Moscow.
     private var timestamp = Instant.parse("2026-09-26T22:30:00Z").toEpochMilli()
-    private val date = java.time.LocalDate.of(2026, 9, 27).toEpochDay()
+    private var zoneId = ZoneId.of("Europe/Moscow")
+    private val date = LocalDate.of(2026, 9, 27).toEpochDay()
     private val dao get() = db.trackerDao()
     @Before fun setup() = runBlocking {
         db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext<Context>(), TrackerDatabase::class.java).build()
-        repo = TrackerRepository(db, now = { timestamp }, zone = { ZoneId.of("Europe/Moscow") })
+        repo = TrackerRepository(db, now = { timestamp }, zone = { zoneId })
         course = repo.createCourse("C", 0, topics = listOf("Массивы", "Указатели", "Структуры"))
         topics = dao.getTopics(course.id)
-        for ((id, day) in listOf("today" to date, "past" to date - 1, "future" to date + 1)) {
+        for ((id, day) in listOf("today" to date, "yesterday" to date - 1, "old" to date - 2, "future" to date + 1)) {
             dao.insertSession(SessionEntity(id, course.id, day, 600, "C", 0, timestamp, timestamp))
         }
     }
@@ -109,8 +111,9 @@ class SessionResultRepositoryTest {
         assertEquals(SessionResult.DONE, dao.getSession("practice")!!.result)
     }
 
-    @Test fun pastAndFutureAreReadOnlyWhileAutomaticCatchupWorks() = runBlocking {
-        for (id in listOf("past", "future")) {
+    @Test fun todayAndYesterdayAreEditableWhileOlderAndFutureDatesAreReadOnly() = runBlocking {
+        for (id in listOf("today", "yesterday")) assertTrue(repo.getSessionDetails(id)!!.canEdit)
+        for (id in listOf("old", "future")) {
             assertFalse(repo.getSessionDetails(id)!!.canEdit)
             for (result in SessionResult.entries) {
                 try { repo.setSessionResult(id, result); fail("Date restriction") }
@@ -118,12 +121,55 @@ class SessionResultRepositoryTest {
             }
             assertEquals(SessionResult.PENDING, dao.getSession(id)!!.result)
         }
-        assertTrue(repo.getSessionDetails("today")!!.canEdit)
-        timestamp += 86400000L
-        assertFalse(repo.getSessionDetails("today")!!.canEdit)
-        timestamp -= 86400000L
         repo.synchronize()
-        assertEquals(SessionResult.SKIPPED, repo.getSessionDetails("past")!!.session.result)
-        assertEquals(SessionResult.PENDING, dao.getSession("future")!!.result)
+        assertEquals(SessionResult.SKIPPED, dao.getSession("yesterday")!!.result)
+        assertEquals(SessionResult.SKIPPED, dao.getSession("old")!!.result)
+        repo.setSessionResult("yesterday", SessionResult.DONE, setOf(topics[0].id))
+        assertEquals(date - 1, dao.getTopic(topics[0].id)!!.completionDate)
+        timestamp += 86400000L
+        assertTrue(repo.getSessionDetails("today")!!.canEdit)
+        assertFalse(repo.getSessionDetails("yesterday")!!.canEdit)
+    }
+
+    @Test fun overnightAndOpenEndedYesterdaySessionsCanBeCorrectedAfterAutomaticSkip() = runBlocking {
+        dao.updateSession(dao.getSession("yesterday")!!.copy(startMinute = 23 * 60 + 30, endMinute = 60))
+        val practice = repo.createCourse("Practice", 1)
+        dao.insertSession(SessionEntity("open_ended", practice.id, date - 1, 23 * 60 + 30,
+            practice.name, practice.colorId, timestamp, timestamp, endMinute = null))
+
+        repo.synchronize()
+        assertEquals(SessionResult.SKIPPED, dao.getSession("yesterday")!!.result)
+        assertEquals(SessionResult.SKIPPED, dao.getSession("open_ended")!!.result)
+
+        repo.setSessionResult("yesterday", SessionResult.DONE, setOf(topics[1].id))
+        assertEquals(date - 1, dao.getTopic(topics[1].id)!!.completionDate)
+        val savedYesterday = dao.getSession("yesterday")
+        timestamp += 1_000L
+        assertFalse(repo.setSessionResult("yesterday", SessionResult.DONE, setOf(topics[1].id)))
+        assertEquals(savedYesterday, dao.getSession("yesterday"))
+        assertTrue(repo.markSessionDoneIfNoTopics("open_ended"))
+        assertEquals(SessionResult.DONE, dao.getSession("open_ended")!!.result)
+
+        repo.setSessionResult("yesterday", SessionResult.SKIPPED)
+        assertFalse(dao.getTopic(topics[1].id)!!.isCompleted)
+        assertNull(dao.getTopic(topics[1].id)!!.completionDate)
+    }
+
+    @Test fun editableDatesFollowTheCurrentZoneAndCrossYearBoundary() = runBlocking {
+        assertTrue(repo.getSessionDetails("today")!!.canEdit)
+        assertFalse(repo.getSessionDetails("old")!!.canEdit)
+        zoneId = ZoneId.of("UTC")
+        assertFalse(repo.getSessionDetails("today")!!.canEdit)
+        assertTrue(repo.getSessionDetails("old")!!.canEdit)
+
+        zoneId = ZoneId.of("Europe/Moscow")
+        timestamp = Instant.parse("2026-12-31T22:30:00Z").toEpochMilli()
+        val december31 = LocalDate.of(2026, 12, 31).toEpochDay()
+        dao.insertSession(SessionEntity("year_yesterday", course.id, december31, 23 * 60 + 30,
+            course.name, course.colorId, timestamp, timestamp, endMinute = 60))
+        dao.insertSession(SessionEntity("year_old", course.id, december31 - 1, 23 * 60 + 30,
+            course.name, course.colorId, timestamp, timestamp, endMinute = 60))
+        assertTrue(repo.getSessionDetails("year_yesterday")!!.canEdit)
+        assertFalse(repo.getSessionDetails("year_old")!!.canEdit)
     }
 }

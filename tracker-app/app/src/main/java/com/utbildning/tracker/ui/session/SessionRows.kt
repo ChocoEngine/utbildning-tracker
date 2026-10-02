@@ -34,8 +34,7 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
     val time = LocalTime.of(session.startMinute / 60, session.startMinute % 60).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
     if (todayStyle) {
         Column(Modifier.fillMaxWidth().padding(vertical = 17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(time, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(11.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 val blot = GenericShape { size, _ ->
                     moveTo(size.width * .1f, size.height * .35f)
                     cubicTo(0f, 0f, size.width * .8f, 0f, size.width * .9f, size.height * .3f)
@@ -43,22 +42,25 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
                     cubicTo(0f, size.height, 0f, size.height * .6f, size.width * .1f, size.height * .35f)
                     close()
                 }
-                Box(Modifier.size(22.dp, 25.dp).background(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(22.dp, 25.dp).background(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f), blot).testTag("session_blot_${session.id}"), contentAlignment = Alignment.Center) {
                     if (session.result == SessionResult.SKIPPED) Text("×", style = MaterialTheme.typography.labelSmall)
                 }
-                Text(session.courseName, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                Spacer(Modifier.width(11.dp))
+                Text(session.courseName, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).testTag("session_title_${session.id}"))
+                Spacer(Modifier.width(16.dp))
+                Text(time, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("session_time_${session.id}"))
             }
             val buttonBackground = MaterialTheme.colorScheme.secondaryContainer
             val selectedBackground = MaterialTheme.colorScheme.primary.copy(alpha = .24f).compositeOver(buttonBackground)
             val doneSelected = session.result == SessionResult.DONE
             val skipSelected = session.result == SessionResult.SKIPPED
             if (!session.courseCompleted) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilledTonalButton(onClick = { if (doneSelected) onPending(session.id) else onDone(session.id) }, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (doneSelected) selectedBackground else buttonBackground), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp), modifier = Modifier.semantics { selected = doneSelected }.testTag("session_done_${session.id}")) {
+                FilledTonalButton(onClick = { if (doneSelected) onPending(session.id) else onDone(session.id) }, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (doneSelected) selectedBackground else buttonBackground), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.dp), modifier = Modifier.height(35.dp).semantics { selected = doneSelected }.testTag("session_done_${session.id}")) {
                     Icon(painterResource(R.drawable.ic_check), contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(stringResource(R.string.session_done), style = MaterialTheme.typography.labelMedium)
                 }
-                FilledTonalButton(onClick = { if (skipSelected) onPending(session.id) else onSkip(session.id) }, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (skipSelected) selectedBackground else buttonBackground), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp), modifier = Modifier.semantics { selected = skipSelected }.testTag("session_skip_${session.id}")) {
+                FilledTonalButton(onClick = { if (skipSelected) onPending(session.id) else onSkip(session.id) }, shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.filledTonalButtonColors(containerColor = if (skipSelected) selectedBackground else buttonBackground), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.dp), modifier = Modifier.height(35.dp).semantics { selected = skipSelected }.testTag("session_skip_${session.id}")) {
                     Icon(painterResource(R.drawable.ic_cross), contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(stringResource(R.string.session_skipped), style = MaterialTheme.typography.labelMedium)

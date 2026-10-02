@@ -3,6 +3,7 @@ package com.utbildning.tracker.data
 import androidx.room.withTransaction
 import com.utbildning.tracker.data.local.*
 import com.utbildning.tracker.domain.ScheduleGenerator
+import com.utbildning.tracker.domain.SessionEditPolicy
 import com.utbildning.tracker.domain.SessionTime
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.Instant
@@ -101,16 +102,17 @@ internal class TrackerOperations(
         val session = dao.getSession(sessionId) ?: return@withTransaction null
         val topics = dao.getTopics(session.courseId)
         val own = topics.filter { it.isCompleted && it.completionDate == session.date }.map { it.id }.toSet()
-        val canEdit = session.date == today(now()).toEpochDay() && !course(session.courseId).isCompleted
+        val canEdit = SessionEditPolicy.canEdit(session.date, course(session.courseId).isCompleted, today(now()))
         SessionDetails(session, topics.filter { if (canEdit) !it.isCompleted || it.id in own else it.id in own }, own, canEdit, topics.isNotEmpty())
     }
 
     suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null): Boolean = database.withTransaction {
         val session = dao.getSession(sessionId) ?: fail(RepositoryError.SESSION_NOT_FOUND)
         val course = course(session.courseId)
-        if (course.isCompleted) fail(RepositoryError.COURSE_COMPLETED)
         val timestamp = now()
-        if (session.date != today(timestamp).toEpochDay()) fail(RepositoryError.INVALID_SESSION_DATE)
+        if (!SessionEditPolicy.canEdit(session.date, course.isCompleted, today(timestamp))) {
+            fail(if (course.isCompleted) RepositoryError.COURSE_COMPLETED else RepositoryError.INVALID_SESSION_DATE)
+        }
         val topics = dao.getTopics(session.courseId).associateBy { it.id }
         val own = topics.values.filter { it.isCompleted && it.completionDate == session.date }.map { it.id }.toSet()
         val selected = if (result == SessionResult.DONE) selectedTopicIds ?: own else emptySet()

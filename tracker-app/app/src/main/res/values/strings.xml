@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Study Tracker</string>
-    <string name="nav_today">Today</string>
+    <string name="nav_today">Sessions</string>
     <string name="nav_calendar">Calendar</string>
     <string name="nav_courses">Courses</string>
     <string name="settings">Settings</string>
