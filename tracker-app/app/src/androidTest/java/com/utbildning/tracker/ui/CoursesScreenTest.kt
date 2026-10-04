@@ -1,13 +1,22 @@
 package com.utbildning.tracker.ui
 
 import android.content.Context
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ContentValues
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.provider.MediaStore
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.text.TextRange
 import androidx.room.Room
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -16,6 +25,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.*
 import com.utbildning.tracker.ui.courses.CoursesScreen
@@ -136,18 +146,19 @@ class CoursesScreenTest {
         show()
         click("course_row_${course.id}")
         rename("On blur")
-        click("course_category")
+        click("course_category_open")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "On blur" }
+        applyCategory()
         rename("On exit")
         click("course_cancel")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "On exit" }
         click("course_row_${course.id}")
         rename("A".repeat(51))
-        click("course_cancel")
-        waitFor { compose.onAllNodesWithTag("course_error").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
+            .assertTextEquals("Name must contain no more than 50 characters")
         assertEquals("On exit", runBlocking { dao.getCourse(course.id) }?.name)
-        compose.onNodeWithTag("course_title").assertTextEquals("A".repeat(51))
-        rename("Corrected")
+        assertInputText("On exit")
+        text("course_name", "Corrected")
         click("course_cancel")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "Corrected" }
     }
@@ -162,6 +173,60 @@ class CoursesScreenTest {
         rename("Saved with color")
         compose.onNodeWithTag("color_3").performTouchInput { click() }
         waitFor { runBlocking { dao.getCourse(course.id) }?.let { it.name == "Saved with color" && it.colorId == 3 } == true }
+    }
+
+    @Test fun creationNameRejectsWholeOverLimitEditInRussianAndClearsErrorAfterValidEdit() {
+        show("ru"); click("course_add")
+        assertRejectedEditPreservesSelection("Название должно содержать не более 50 символов")
+        captureError("course_name_create_ru.png")
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(10, 20))
+        compose.onNodeWithTag("course_name").performTextInput("Б".repeat(10))
+        assertInputText("А".repeat(10) + "Б".repeat(10) + "А".repeat(30))
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true).assertDoesNotExist()
+    }
+
+    @Test fun creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits() {
+        show("en"); click("course_add")
+        text("course_name", "A".repeat(50))
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(10, 20))
+        compose.onNodeWithTag("course_name").performTextInput("B".repeat(10))
+        assertInputText("A".repeat(10) + "B".repeat(10) + "A".repeat(30))
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(10, 20))
+        paste("C".repeat(11))
+        assertInputText("A".repeat(10) + "B".repeat(10) + "A".repeat(30))
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
+            .assertTextEquals("Name must contain no more than 50 characters")
+        captureError("course_name_create_en.png")
+    }
+
+    @Test fun editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError() {
+        val savedName = "A".repeat(50)
+        val course = seed(name = savedName)
+        show("en"); click("course_row_${course.id}")
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(12, 18))
+        paste("Z".repeat(7))
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
+            .assertTextEquals("Name must contain no more than 50 characters")
+        captureError("course_name_editor_en.png")
+        assertSelection(TextRange(12, 18))
+        click("course_cancel")
+        waitFor { runBlocking { dao.getCourse(course.id) }?.name == savedName }
+        if (compose.onAllNodesWithTag("course_title").fetchSemanticsNodes().isEmpty()) click("course_row_${course.id}")
+        compose.onNodeWithTag("course_title").assertTextEquals(savedName)
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(12, 18))
+        compose.onNodeWithTag("course_name").performTextInput("Z".repeat(6))
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true).assertDoesNotExist()
+    }
+
+    @Test fun editorNameShowsRussianErrorAndPreservesTextCursorAndSelection() {
+        val course = seed(name = "Курс")
+        show("ru"); click("course_row_${course.id}")
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        assertRejectedEditPreservesSelection("Название должно содержать не более 50 символов")
+        captureError("course_name_editor_ru.png")
+        assertEquals("Курс", runBlocking { dao.getCourse(course.id) }?.name)
     }
 
     @Test fun appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea() {
@@ -336,8 +401,50 @@ class CoursesScreenTest {
     }
 
     private fun rename(value: String) {
-        compose.onNodeWithTag("course_title").performScrollTo().performTouchInput { longClick() }
+        waitFor { compose.onAllNodesWithTag("course_title").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         text("course_name", value)
+    }
+
+    private fun assertRejectedEditPreservesSelection(error: String) {
+        text("course_name", "А".repeat(50))
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(10, 20))
+        paste("Б".repeat(11))
+        assertInputText("А".repeat(50))
+        assertSelection(TextRange(10, 20))
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true).assertTextEquals(error)
+    }
+
+    private fun assertSelection(expected: TextRange) {
+        val actual = compose.onNodeWithTag("course_name").fetchSemanticsNode().config[SemanticsProperties.TextSelectionRange]
+        assertEquals(expected, actual)
+    }
+
+    private fun assertInputText(expected: String) {
+        val actual = compose.onNodeWithTag("course_name").fetchSemanticsNode().config[SemanticsProperties.EditableText].text
+        assertEquals(expected, actual)
+    }
+
+    private fun paste(value: String) {
+        context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("course name", value))
+        compose.onNodeWithTag("course_name").performSemanticsAction(SemanticsActions.PasteText)
+    }
+
+    private fun captureError(name: String) {
+        compose.waitForIdle()
+        val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+        val resolver = context.contentResolver
+        val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
+        checkNotNull(resolver.openOutputStream(uri)).use { stream ->
+            check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream))
+        }
+        resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
     }
 
     private fun show(language: String = "en") {
@@ -345,6 +452,7 @@ class CoursesScreenTest {
         val localized = context.createConfigurationContext(configuration)
         compose.setContent {
             CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration,
+                LocalResources provides localized.resources,
                 LocalViewModelStoreOwner provides modelOwner) {
                 TrackerTheme { Surface { CoursesScreen(onSettings = {}, repository = repository) } }
             }
@@ -362,6 +470,9 @@ class CoursesScreenTest {
 
     private fun courses() = runBlocking { repository.observeCourses().first() }
     private fun categories() = runBlocking { repository.observeCategories().first() }
+    private fun applyCategory() {
+        compose.onNode(hasText("Apply list") or hasText("Применить список")).performClick()
+    }
     private fun waitFor(condition: () -> Boolean) = compose.waitUntil(5_000, condition)
     private fun click(tag: String) {
         waitFor { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }

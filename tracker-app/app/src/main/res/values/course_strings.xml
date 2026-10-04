@@ -36,7 +36,7 @@
     <string name="course_color_unavailable">This color is occupied. Choose another color.</string>
     <string name="course_save_error">Could not save changes. Try again.</string>
     <string name="course_continue">Continue</string>
-    <string name="course_name_too_long">Use no more than 50 characters</string>
+    <string name="course_name_too_long">Name must contain no more than 50 characters</string>
     <string name="course_enable_schedule">Enable schedule</string>
     <string name="course_disable_schedule">Switch to unscheduled</string>
     <string name="course_confirm_disable_schedule">Future sessions without a result and reminders will be removed. Past sessions, recorded results and topic progress will be kept.</string>

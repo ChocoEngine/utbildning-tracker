@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -91,10 +92,8 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
         if (model.creating && draft != null) AlertDialog(onDismissRequest = model::cancel,
             title = { Text(stringResource(R.string.course_add)) },
             text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(draft.name, { value -> model.change { it.copy(name = value) } },
-                    label = { Text(stringResource(R.string.course_name)) }, singleLine = true,
-                    supportingText = { Text("${draft.name.codePointCount(0, draft.name.length)}/50") },
-                    modifier = Modifier.fillMaxWidth().testTag("course_name"))
+                CourseNameField(draft.name, { value -> model.change { it.copy(name = value) } },
+                    Modifier.fillMaxWidth().testTag("course_name"))
                 CategoryField(draft.category, model.categories, { value -> model.change { it.copy(category = value) } },
                     { value -> model.change { it.copy(category = value) } }, {}, { model.removeCategory(it) })
                 model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error")) }
@@ -269,9 +268,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             IconButton(onClick = onCancel, modifier = Modifier.testTag("course_cancel")) {
                 Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
             }
-            if (editingName) OutlinedTextField(draft.name, { value -> onChange { it.copy(name = value) } }, singleLine = true,
-                label = { Text(stringResource(R.string.course_name)) },
-                supportingText = { Text("${draft.name.codePointCount(0, draft.name.length)}/50") },
+            if (editingName) CourseNameField(draft.name, { value -> onChange { it.copy(name = value) } },
                 modifier = Modifier.weight(1f).onGloballyPositioned { nameBounds = it.boundsInRoot() }.focusRequester(focusRequester).onFocusChanged {
                     if (nameFocused && !it.isFocused) { onSave(); editingName = false }
                     nameFocused = it.isFocused
@@ -428,6 +425,38 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
         if (error != null) Text(errorText(error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error"))
 
     }
+}
+
+@Composable
+private fun CourseNameField(value: String, onAccepted: (String) -> Unit, modifier: Modifier = Modifier) {
+    var fieldValue by remember { mutableStateOf(TextFieldValue(value)) }
+    var tooLong by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(value) {
+        if (fieldValue.text != value) fieldValue = TextFieldValue(value)
+    }
+    OutlinedTextField(
+        value = fieldValue,
+        onValueChange = { candidate ->
+            if (candidate.text.codePointCount(0, candidate.text.length) <= 50) {
+                fieldValue = candidate
+                tooLong = false
+                onAccepted(candidate.text)
+            } else {
+                tooLong = true
+            }
+        },
+        label = { Text(stringResource(R.string.course_name)) },
+        singleLine = true,
+        isError = tooLong,
+        supportingText = {
+            Text(
+                if (tooLong) stringResource(R.string.course_name_too_long)
+                else "${fieldValue.text.codePointCount(0, fieldValue.text.length)}/50",
+                modifier = if (tooLong) Modifier.testTag("course_name_length_error") else Modifier,
+            )
+        },
+        modifier = modifier,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
