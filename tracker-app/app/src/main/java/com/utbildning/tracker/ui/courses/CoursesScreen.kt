@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
@@ -82,7 +83,7 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             AppHeader(title = stringResource(R.string.nav_courses), onSettings = onSettings)
             if (model.error != null && !model.creating) Text(errorText(model.error!!), color = MaterialTheme.colorScheme.error)
             CourseListContent(model.courses, model.categories, model.progress, model.showAll,
-                { model.showAll = !model.showAll }, { model.open(it) }, model.scheduleRules)
+                { model.showAll = !model.showAll }, { model.open(it) }, model.scheduleRules, model.topicPaces)
         } else CourseEditorContent(draft, model.categories, model.colors, model.busy, model.error,
             model::change, model::commitName, { model.leave() }, model::applyTopics, { model.removeCategory(it) }, model::toggle,
             { model.openSchedule(onSchedule) }, model::requestLifecycle,
@@ -118,7 +119,8 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
 @Composable
 internal fun CourseListContent(courses: List<CourseEntity>, categories: List<CategoryEntity>,
     progress: Map<String, Pair<Int, Int>>, showAll: Boolean, onFilter: () -> Unit, onOpen: (String?) -> Unit,
-    scheduleRules: Map<String, List<ScheduleRuleEntity>> = emptyMap()) {
+    scheduleRules: Map<String, List<ScheduleRuleEntity>> = emptyMap(),
+    topicPaces: Map<String, Int> = emptyMap()) {
     val locale = LocalConfiguration.current.locales[0]
     Column(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
         if (courses.count { !it.isCompleted } < 10) BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -163,9 +165,12 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
                                         else -> schedule
                                     }
                                     val percent = if (count.second > 0) kotlin.math.round(count.first * 100f / count.second).toInt() else 0
+                                    val pace = topicPaces[course.id]?.takeIf {
+                                        !course.isCompleted && !course.isPaused && rules.isNotEmpty() && count.first < count.second
+                                    }?.let { pluralStringResource(R.plurals.course_topic_pace, it, it) }
                                     Row(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = if (count.second > 0 && !course.isCompleted) 8.dp else 0.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                         Text(if (course.isCompleted || count.second == 0) status else stringResource(R.string.course_topics_progress, count.first, count.second) +
-                                            if (course.isPaused || rules.isEmpty()) " · $status" else "",
+                                            (if (course.isPaused || rules.isEmpty()) " · $status" else pace?.let { " · $it" }.orEmpty()),
                                             Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                         if (count.second > 0 && !course.isCompleted) Text("$percent%", style = MaterialTheme.typography.bodySmall)
                                     }
@@ -514,6 +519,15 @@ private fun errorText(error: String): String = when {
 @Preview(locale = "ru", showBackground = true)
 @Composable
 private fun CoursesScreenPreview() { TrackerTheme { Surface { CourseListContent(emptyList(), emptyList(), emptyMap(), false, {}, {}) } } }
+
+@Preview(name = "Topic pace RU", locale = "ru", widthDp = 320, showBackground = true)
+@Preview(name = "Topic pace EN", locale = "en", widthDp = 320, showBackground = true)
+@Composable
+private fun CourseTopicPacePreview() {
+    val course = CourseEntity("pace", "Лекции по C", 0, 0, 0)
+    TrackerTheme { Surface { CourseListContent(listOf(course), emptyList(), mapOf(course.id to (5 to 24)), false, {}, {},
+        mapOf(course.id to listOf(ScheduleRuleEntity(course.id, 2, 1140))), mapOf(course.id to 3)) } }
+}
 
 @Preview(locale = "ru", showBackground = true)
 @Composable

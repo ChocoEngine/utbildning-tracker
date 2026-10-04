@@ -57,6 +57,33 @@ class TrackerRepository(
         database.invalidationTracker.createFlow("courses", "topics", "schedules", "schedule_rules")
             .map { getOccupiedSchedules(excludingCourseId) }.distinctUntilChanged()
     fun observeSessions() = dao.observeSessions()
+    fun observeTopicPaces(): Flow<Map<String, Int>> = merge(
+        database.invalidationTracker.createFlow("courses", "topics", "schedules", "schedule_rules", "sessions").map { Unit },
+        flow { while (true) { emit(Unit); delay(com.utbildning.tracker.domain.millisUntilNextLocalDay(now(), zone())) } },
+    ).map {
+        database.withTransaction {
+            val currentZone = zone()
+            val instant = java.time.Instant.ofEpochMilli(now())
+            val today = instant.atZone(currentZone).toLocalDate()
+            val sessions = dao.getAllSessions().groupBy { it.courseId }
+            dao.getReminderCourses().mapNotNull { course ->
+                val schedule = dao.getSchedule(course.id) ?: return@mapNotNull null
+                val rules = dao.getScheduleRules(course.id).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
+                val remaining = dao.getTopics(course.id).count { !it.isCompleted }
+                val records = sessions[course.id].orEmpty()
+                val unavailable = records.filter { it.result != SessionResult.PENDING }
+                    .map { LocalDate.ofEpochDay(it.date) }.toMutableSet()
+                // A pending session remains actionable all day. Do not invent a past start
+                // when the calendar never created today's session.
+                if (records.none { it.date == today.toEpochDay() && it.result == SessionResult.PENDING } &&
+                    rules.none { it.dayOfWeek == today.dayOfWeek.value && SessionTime.start(today, it.startMinute, currentZone) >= instant })
+                    unavailable += today
+                com.utbildning.tracker.domain.TopicPace.perSession(remaining,
+                    LocalDate.ofEpochDay(schedule.startsOn), schedule.endsOn?.let(LocalDate::ofEpochDay),
+                    rules, today, unavailable)?.let { course.id to it }
+            }.toMap()
+        }
+    }.distinctUntilChanged()
     /** Validation and posting share the write transaction with lifecycle changes. */
     suspend fun withCurrentReminders(trigger: Long, action: (SessionEntity) -> Unit) = database.withTransaction {
         val currentZone = zone()

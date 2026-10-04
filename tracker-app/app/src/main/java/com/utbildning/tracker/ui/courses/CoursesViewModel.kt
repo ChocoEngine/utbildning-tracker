@@ -30,6 +30,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     var categories by mutableStateOf<List<CategoryEntity>>(emptyList()); private set
     var progress by mutableStateOf<Map<String, Pair<Int, Int>>>(emptyMap()); private set
     var scheduleRules by mutableStateOf<Map<String, List<ScheduleRuleEntity>>>(emptyMap()); private set
+    var topicPaces by mutableStateOf<Map<String, Int>>(emptyMap()); private set
     var draft by mutableStateOf<CourseDraft?>(null); private set
     var colors by mutableStateOf<List<Int>>(emptyList()); private set
     var showAll by mutableStateOf(false)
@@ -45,6 +46,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     private var detailJob: Job? = null
     private val progressJobs = mutableMapOf<String, Job>()
     init {
+        viewModelScope.launch { repository.observeTopicPaces().collect { topicPaces = it } }
         viewModelScope.launch { repository.observeCategories().collect { categories = it } }
         viewModelScope.launch { repository.observeSessions().collect { sessions = it; refreshProgress() } }
         viewModelScope.launch {

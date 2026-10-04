@@ -1,0 +1,6 @@
+<resources>
+    <plurals name="course_topic_pace">
+        <item quantity="one">%1$d topic per session</item>
+        <item quantity="other">%1$d topics per session</item>
+    </plurals>
+</resources>
