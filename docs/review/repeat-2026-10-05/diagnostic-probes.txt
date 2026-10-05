@@ -1,0 +1,6 @@
+
+com.utbildning.tracker.ui.RepeatReviewProbeTest:...
+
+Time: 5.466
+
+OK (3 tests)

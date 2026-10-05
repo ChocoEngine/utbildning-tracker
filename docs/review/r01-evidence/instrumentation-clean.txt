@@ -1,0 +1,442 @@
+Command: /Users/alxshvarts/Library/Android/sdk/platform-tools/adb -s emulator-5556 shell am instrument -w -e timeout_msec 120000 com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner
+
+com.utbildning.tracker.data.CourseFormRepositoryTest:.....
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:........
+com.utbildning.tracker.data.TopicListRepositoryTest:..........
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:...........
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:.
+com.utbildning.tracker.notifications.ReminderTest:..
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:...
+Error in pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest):
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1728 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #1729 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #1788 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px
+       |-Node #1789 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'screen_courses'
+          |-Node #1821 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'course_editor'
+             |-Node #1823 at (l=53.0, t=95.0, r=158.0, b=200.0)px, Tag: 'course_cancel'
+             | ContentDescription = '[Back]'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1825 at (l=168.0, t=105.0, r=912.0, b=189.0)px, Tag: 'course_title'
+             | Focused = 'false'
+             | Text = '[Resume flow]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             | MergeDescendants = 'true'
+             |-Node #1826 at (l=923.0, t=95.0, r=1028.0, b=200.0)px, Tag: 'course_color_toggle'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1828 at (l=168.0, t=221.0, r=362.0, b=274.0)px, Tag: 'course_status'
+             |  |-Node #1830 at (l=242.0, t=226.0, r=362.0, b=269.0)px
+             |    Text = '[Paused]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1831 at (l=42.0, t=296.0, r=320.0, b=401.0)px, Tag: 'course_category_open'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Text = '[Add category]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             | MergeDescendants = 'true'
+             |-Node #1836 at (l=42.0, t=456.0, r=185.0, b=514.0)px
+             | Text = '[Topics]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1837 at (l=196.0, t=433.0, r=301.0, b=538.0)px, Tag: 'topics_edit'
+             | ContentDescription = '[Edit list]'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1839 at (l=882.0, t=468.0, r=1038.0, b=502.0)px
+             | Text = '[1 of 2 topics]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1840 at (l=42.0, t=533.0, r=1038.0, b=596.0)px
+             | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.5, range=0.0..1.0, steps=0)'
+             | MergeDescendants = 'true'
+             |-Node #1841 at (l=42.0, t=597.0, r=1038.0, b=2066.0)px, Tag: 'course_topics_scroll'
+             | IsTraversalGroup = 'true'
+             | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9cf74b'
+             | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+             | Actions = [ScrollBy, ScrollByOffset]
+             |  |-Node #1842 at (l=42.0, t=597.0, r=1038.0, b=712.0)px, Tag: 'topic_bc22976f-8080-403b-978b-d1365baacdd2'
+             |  | Focused = 'false'
+             |  | Text = '[1., C basics]'
+             |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             |  | MergeDescendants = 'true'
+             |  |-Node #1848 at (l=42.0, t=715.0, r=1038.0, b=830.0)px, Tag: 'topic_df4d9acd-029b-40cb-9dae-726aba44a774'
+             |    Focused = 'false'
+             |    Text = '[2., Pointers]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             |    MergeDescendants = 'true'
+             |-Node #1853 at (l=42.0, t=2129.0, r=227.0, b=2163.0)px
+             | Text = '[Course actions]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1854 at (l=42.0, t=2190.0, r=1038.0, b=2316.0)px, Tag: 'course_actions'
+                |-Node #1855 at (l=42.0, t=2190.0, r=364.0, b=2316.0)px, Tag: 'course_complete'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                | Text = '[Complete]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                | MergeDescendants = 'true'
+                |-Node #1858 at (l=380.0, t=2190.0, r=701.0, b=2316.0)px, Tag: 'course_resume'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                | Text = '[Resume]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                | MergeDescendants = 'true'
+                |-Node #1861 at (l=717.0, t=2190.0, r=1038.0, b=2316.0)px, Tag: 'course_delete'
+                  Focused = 'false'
+                  Role = 'Button'
+                  Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                  Text = '[Delete]'
+                  Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                  MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:213)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:103)
+	... 8 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:212)
+	... 10 more
+...
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:
+Error in actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(CourseDraftRecreationTest.kt:75)
+
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:..
+Error in pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse(com.utbildning.tracker.ui.CourseLifecycleScreenTest):
+java.lang.AssertionError: Failed: assertDoesNotExist.
+Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'course_pause')
+Node found:
+Node #7275 at (l=380.0, t=2253.0, r=701.0, b=2379.0)px, Tag: 'course_pause'
+Focused = 'false'
+Role = 'Button'
+Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+Text = '[Pause]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 2 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertDoesNotExist(SemanticsNodeInteraction.kt:101)
+	at com.utbildning.tracker.ui.CourseLifecycleScreenTest.pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse(CourseLifecycleScreenTest.kt:85)
+...
+com.utbildning.tracker.ui.CourseListAppearanceTest:....
+com.utbildning.tracker.ui.CourseTopicPaceTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:....
+Error in categoryDeletionDoesNotRecreateItOnExit(com.utbildning.tracker.ui.CoursesScreenTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categoryDeletionDoesNotRecreateItOnExit(CoursesScreenTest.kt:231)
+
+Error in nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue(CoursesScreenTest.kt:138)
+
+Error in nameSavesOnOutsideTouchWithoutSwallowingColorAction(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.nameSavesOnOutsideTouchWithoutSwallowingColorAction(CoursesScreenTest.kt:158)
+......
+Error in categoryAndColorSaveIndependentlyWithoutLosingRapidChanges(com.utbildning.tracker.ui.CoursesScreenTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categoryAndColorSaveIndependentlyWithoutLosingRapidChanges(CoursesScreenTest.kt:205)
+
+Error in completedFilterAndTenCourseLimitKeepExistingRowsEditable(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.completedFilterAndTenCourseLimitKeepExistingRowsEditable(CoursesScreenTest.kt:260)
+
+Error in categorySuggestionsKeepFocusAndDoNotSavePartialInput(com.utbildning.tracker.ui.CoursesScreenTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categorySuggestionsKeepFocusAndDoNotSavePartialInput(CoursesScreenTest.kt:186)
+.
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.LanguageSettingsTest:.......
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.ScheduleScreenTest:.
+Error in endDateWithoutWeekdaysCanBeSavedAndCleared(com.utbildning.tracker.ui.ScheduleScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.endDateWithoutWeekdaysCanBeSavedAndCleared(ScheduleScreenTest.kt:118)
+
+Error in savedInstanceRestorationRetainsChangedDaysAndClearedDate(com.utbildning.tracker.ui.ScheduleScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.savedInstanceRestorationRetainsChangedDaysAndClearedDate(ScheduleScreenTest.kt:135)
+
+Error in dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit(com.utbildning.tracker.ui.ScheduleScreenTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit(ScheduleScreenTest.kt:89)
+.......
+com.utbildning.tracker.ui.SessionScreenTest:............
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.VisualReviewTest:
+Error in captureEnglishAt320dp(com.utbildning.tracker.ui.VisualReviewTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureScenes(VisualReviewTest.kt:103)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureEnglishAt320dp(VisualReviewTest.kt:57)
+
+Error in captureRussianAt320dp(com.utbildning.tracker.ui.VisualReviewTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureScenes(VisualReviewTest.kt:103)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureRussianAt320dp(VisualReviewTest.kt:56)
+
+
+Time: 356.803
+There were 14 failures:
+1) pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest)
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1728 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #1729 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #1788 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px
+       |-Node #1789 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'screen_courses'
+          |-Node #1821 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'course_editor'
+             |-Node #1823 at (l=53.0, t=95.0, r=158.0, b=200.0)px, Tag: 'course_cancel'
+             | ContentDescription = '[Back]'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1825 at (l=168.0, t=105.0, r=912.0, b=189.0)px, Tag: 'course_title'
+             | Focused = 'false'
+             | Text = '[Resume flow]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             | MergeDescendants = 'true'
+             |-Node #1826 at (l=923.0, t=95.0, r=1028.0, b=200.0)px, Tag: 'course_color_toggle'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1828 at (l=168.0, t=221.0, r=362.0, b=274.0)px, Tag: 'course_status'
+             |  |-Node #1830 at (l=242.0, t=226.0, r=362.0, b=269.0)px
+             |    Text = '[Paused]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1831 at (l=42.0, t=296.0, r=320.0, b=401.0)px, Tag: 'course_category_open'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Text = '[Add category]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             | MergeDescendants = 'true'
+             |-Node #1836 at (l=42.0, t=456.0, r=185.0, b=514.0)px
+             | Text = '[Topics]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1837 at (l=196.0, t=433.0, r=301.0, b=538.0)px, Tag: 'topics_edit'
+             | ContentDescription = '[Edit list]'
+             | Focused = 'false'
+             | Role = 'Button'
+             | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+             | Actions = [OnClick, RequestFocus]
+             | MergeDescendants = 'true'
+             |-Node #1839 at (l=882.0, t=468.0, r=1038.0, b=502.0)px
+             | Text = '[1 of 2 topics]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1840 at (l=42.0, t=533.0, r=1038.0, b=596.0)px
+             | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.5, range=0.0..1.0, steps=0)'
+             | MergeDescendants = 'true'
+             |-Node #1841 at (l=42.0, t=597.0, r=1038.0, b=2066.0)px, Tag: 'course_topics_scroll'
+             | IsTraversalGroup = 'true'
+             | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@9cf74b'
+             | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+             | Actions = [ScrollBy, ScrollByOffset]
+             |  |-Node #1842 at (l=42.0, t=597.0, r=1038.0, b=712.0)px, Tag: 'topic_bc22976f-8080-403b-978b-d1365baacdd2'
+             |  | Focused = 'false'
+             |  | Text = '[1., C basics]'
+             |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             |  | MergeDescendants = 'true'
+             |  |-Node #1848 at (l=42.0, t=715.0, r=1038.0, b=830.0)px, Tag: 'topic_df4d9acd-029b-40cb-9dae-726aba44a774'
+             |    Focused = 'false'
+             |    Text = '[2., Pointers]'
+             |    Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, OnLongClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+             |    MergeDescendants = 'true'
+             |-Node #1853 at (l=42.0, t=2129.0, r=227.0, b=2163.0)px
+             | Text = '[Course actions]'
+             | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+             |-Node #1854 at (l=42.0, t=2190.0, r=1038.0, b=2316.0)px, Tag: 'course_actions'
+                |-Node #1855 at (l=42.0, t=2190.0, r=364.0, b=2316.0)px, Tag: 'course_complete'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                | Text = '[Complete]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                | MergeDescendants = 'true'
+                |-Node #1858 at (l=380.0, t=2190.0, r=701.0, b=2316.0)px, Tag: 'course_resume'
+                | Focused = 'false'
+                | Role = 'Button'
+                | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                | Text = '[Resume]'
+                | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                | MergeDescendants = 'true'
+                |-Node #1861 at (l=717.0, t=2190.0, r=1038.0, b=2316.0)px, Tag: 'course_delete'
+                  Focused = 'false'
+                  Role = 'Button'
+                  Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+                  Text = '[Delete]'
+                  Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+                  MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:213)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:103)
+	... 8 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:212)
+	... 10 more
+2) actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(CourseDraftRecreationTest.kt:75)
+3) pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse(com.utbildning.tracker.ui.CourseLifecycleScreenTest)
+java.lang.AssertionError: Failed: assertDoesNotExist.
+Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'course_pause')
+Node found:
+Node #7275 at (l=380.0, t=2253.0, r=701.0, b=2379.0)px, Tag: 'course_pause'
+Focused = 'false'
+Role = 'Button'
+Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+Text = '[Pause]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 2 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertDoesNotExist(SemanticsNodeInteraction.kt:101)
+	at com.utbildning.tracker.ui.CourseLifecycleScreenTest.pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse(CourseLifecycleScreenTest.kt:85)
+4) categoryDeletionDoesNotRecreateItOnExit(com.utbildning.tracker.ui.CoursesScreenTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categoryDeletionDoesNotRecreateItOnExit(CoursesScreenTest.kt:231)
+5) nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue(CoursesScreenTest.kt:138)
+6) nameSavesOnOutsideTouchWithoutSwallowingColorAction(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.nameSavesOnOutsideTouchWithoutSwallowingColorAction(CoursesScreenTest.kt:158)
+7) categoryAndColorSaveIndependentlyWithoutLosingRapidChanges(com.utbildning.tracker.ui.CoursesScreenTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categoryAndColorSaveIndependentlyWithoutLosingRapidChanges(CoursesScreenTest.kt:205)
+8) completedFilterAndTenCourseLimitKeepExistingRowsEditable(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.CoursesScreenTest.rename(CoursesScreenTest.kt:339)
+	at com.utbildning.tracker.ui.CoursesScreenTest.completedFilterAndTenCourseLimitKeepExistingRowsEditable(CoursesScreenTest.kt:260)
+9) categorySuggestionsKeepFocusAndDoNotSavePartialInput(com.utbildning.tracker.ui.CoursesScreenTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:365)
+	at com.utbildning.tracker.ui.CoursesScreenTest.click(CoursesScreenTest.kt:367)
+	at com.utbildning.tracker.ui.CoursesScreenTest.categorySuggestionsKeepFocusAndDoNotSavePartialInput(CoursesScreenTest.kt:186)
+10) endDateWithoutWeekdaysCanBeSavedAndCleared(com.utbildning.tracker.ui.ScheduleScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.endDateWithoutWeekdaysCanBeSavedAndCleared(ScheduleScreenTest.kt:118)
+11) savedInstanceRestorationRetainsChangedDaysAndClearedDate(com.utbildning.tracker.ui.ScheduleScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.savedInstanceRestorationRetainsChangedDaysAndClearedDate(ScheduleScreenTest.kt:135)
+12) dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit(com.utbildning.tracker.ui.ScheduleScreenTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.clickScrolled(ScheduleScreenTest.kt:199)
+	at com.utbildning.tracker.ui.ScheduleScreenTest.dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit(ScheduleScreenTest.kt:89)
+13) captureEnglishAt320dp(com.utbildning.tracker.ui.VisualReviewTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureScenes(VisualReviewTest.kt:103)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureEnglishAt320dp(VisualReviewTest.kt:57)
+14) captureRussianAt320dp(com.utbildning.tracker.ui.VisualReviewTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:97)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureScenes(VisualReviewTest.kt:103)
+	at com.utbildning.tracker.ui.VisualReviewTest.captureRussianAt320dp(VisualReviewTest.kt:56)
+
+FAILURES!!!
+Tests run: 167,  Failures: 14

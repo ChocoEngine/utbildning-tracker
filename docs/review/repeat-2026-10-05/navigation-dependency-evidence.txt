@@ -1,0 +1,41 @@
+Source: /Users/alxshvarts/.gradle/caches/modules-2/files-2.1/androidx.navigation/navigation-runtime-android/2.9.6/6203fe07fc57c3b294fec0964ee90add58b7fadb/navigation-runtime-android-2.9.6-sources.jar
+
+commonMain/androidx/navigation/internal/NavControllerImpl.kt
+88:     internal var navigatorStateToRestore: SavedState? = null
+89:     internal var backStackToRestore: Array<SavedState>? = null
+90:
+91:     internal val backQueue: ArrayDeque<NavBackStackEntry> = ArrayDeque()
+92:
+93:     internal val _currentBackStack: MutableStateFlow<List<NavBackStackEntry>> =
+94:         MutableStateFlow(emptyList())
+95:
+
+commonMain/androidx/navigation/internal/NavControllerImpl.kt
+1746:         return getBackStackEntry(finalRoute)
+1747:     }
+1748:
+1749:     internal val currentBackStackEntry: NavBackStackEntry?
+1750:         get() = backQueue.lastOrNull()
+1751:
+1752:     internal val _currentBackStackEntryFlow: MutableSharedFlow<NavBackStackEntry> =
+1753:         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+commonMain/androidx/navigation/NavController.kt
+584:      *
+585:      * @return the topmost entry on the back stack or null if the back stack is empty
+586:      */
+587:     public open val currentBackStackEntry: NavBackStackEntry?
+588:
+589:     /**
+590:      * A [Flow] that will emit the currently active [NavBackStackEntry] whenever it changes. If
+591:      * there is no active [NavBackStackEntry], no item will be emitted.
+
+commonMain/androidx/navigation/NavController.kt
+590:      * A [Flow] that will emit the currently active [NavBackStackEntry] whenever it changes. If
+591:      * there is no active [NavBackStackEntry], no item will be emitted.
+592:      */
+593:     public val currentBackStackEntryFlow: Flow<NavBackStackEntry>
+594:
+595:     /**
+596:      * The previous visible [NavBackStackEntry].
+597:      *

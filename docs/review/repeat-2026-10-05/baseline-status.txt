@@ -1,0 +1,27 @@
+ M AGENTS.md
+ M POST_MVP_PLAN.md
+ M docs/COURSE_UI_REVISION.md
+ M docs/DATA_CONTRACT.md
+ M docs/NOTIFICATIONS.md
+ M docs/SCHEDULE_CONTRACT.md
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/CourseLifecycleRepositoryTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/ScheduleRepositoryTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/SessionResultRepositoryTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/AppNavigationTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CalendarTodayScreenTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseDraftRecreationTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseLifecycleScreenTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CoursesScreenTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/ScheduleScreenTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/TodayVisualReviewTest.kt
+ M tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/VisualReviewTest.kt
+ M tracker-app/app/src/main/java/com/utbildning/tracker/data/TrackerOperations.kt
+ M tracker-app/app/src/main/java/com/utbildning/tracker/ui/calendar/CalendarScreen.kt
+?? docs/checks/course-list-geometry/
+?? docs/checks/r02-r01-001/
+?? docs/checks/r03-n01/
+?? docs/review/
+?? tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseListGeometryReviewTest.kt
+?? tracker-app/app/src/main/java/com/utbildning/tracker/domain/CalendarSessionStatus.kt
+?? tracker-app/app/src/test/java/com/utbildning/tracker/domain/CalendarSessionStatusTest.kt
+?? utbildning-tracker-c0d8941.apk

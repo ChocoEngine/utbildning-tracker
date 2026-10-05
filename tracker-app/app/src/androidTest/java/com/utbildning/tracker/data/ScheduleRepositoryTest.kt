@@ -160,13 +160,16 @@ class ScheduleRepositoryTest {
         assertFalse(dao.getCourse(course.id)!!.isCompleted)
     }
 
-    @Test fun midnightSkipsYesterdayButLeavesTodayPending() = runBlocking {
+    @Test fun firstMidnightLeavesYesterdayAndTodayPending() = runBlocking {
         val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 23 * 60), WeeklyRule(2, 60)))
         clock = Instant.parse("2026-09-29T00:00:00Z").toEpochMilli()
         repo.synchronize()
-        assertEquals(SessionResult.SKIPPED, dao.getSessions(course.id).first().result)
+        assertEquals(SessionResult.PENDING, dao.getSessions(course.id).first().result)
         assertEquals(SessionResult.PENDING, dao.getSessions(course.id)[1].result)
+        clock = Instant.parse("2026-09-30T00:00:00Z").toEpochMilli()
+        repo.synchronize()
+        assertEquals(SessionResult.SKIPPED, dao.getSessions(course.id).first().result)
     }
 
     @Test fun absenceBeyondInitialHorizonLeavesGapAndGeneratesFutureOnly() = runBlocking {

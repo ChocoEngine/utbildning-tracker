@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.utbildning.tracker.R
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.TrackerDatabase
 import com.utbildning.tracker.ui.courses.CoursesScreen
@@ -69,16 +70,18 @@ class CourseDraftRecreationTest {
         click("course_add")
         compose.onNodeWithTag("course_name").performTextReplacement("C draft")
         compose.onNodeWithTag("course_category").performTextReplacement("New category")
-        compose.onNodeWithTag("course_category").performClick()
         click("course_continue")
+        click("course_category_open")
+        compose.onNodeWithTag("course_category").assertTextContains("New category")
+        compose.onNodeWithText(compose.activity.getString(R.string.topics_apply)).performClick()
         click("topics_edit")
-        compose.onNodeWithTag("topics_input").performScrollTo().performTextReplacement("Pointers\nArrays")
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag("topics_input").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("topics_input").performTextReplacement("Pointers\nArrays")
         application.registerActivityLifecycleCallbacks(reattachContent)
         compose.activityRule.scenario.recreate()
         compose.waitForIdle()
         compose.runOnIdle { assertSame(original, ViewModelProvider(compose.activity)[CoursesViewModel::class.java]) }
         compose.onNodeWithTag("course_title").assertTextContains("C draft")
-        compose.onNodeWithTag("course_category").assertTextContains("New category")
         compose.onNodeWithTag("topics_input").assertTextContains("Pointers\nArrays")
         assertEquals(1, runBlocking { repository.observeCourses().first() }.size)
         assertEquals(1, runBlocking { repository.observeCategories().first() }.size)

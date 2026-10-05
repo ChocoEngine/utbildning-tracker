@@ -152,7 +152,7 @@ private fun DaySessionsSection(
                         modifier = Modifier.padding(end = 48.dp).testTag("session_divider_${session.id}"),
                         color = MaterialTheme.colorScheme.outlineVariant,
                     )
-                    SessionRow(session, locale, onDone, onSkip, onPending = onPending, todayStyle = true)
+                    SessionRow(session, locale, onDone, onSkip, onPending = onPending)
                 }
             }
         }

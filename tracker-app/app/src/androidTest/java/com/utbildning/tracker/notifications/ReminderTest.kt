@@ -9,10 +9,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.AppContainer
+import com.utbildning.tracker.data.PendingSessionActionResult
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.TrackerDatabase
+import com.utbildning.tracker.data.local.SessionEntity
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.domain.WeeklyRule
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
@@ -50,6 +53,110 @@ class ReminderTest {
         val deadline = System.currentTimeMillis() + 5_000
         while (!condition() && System.currentTimeMillis() < deadline) delay(50)
         assertTrue(message, condition())
+    }
+
+    private fun postQuestion(sessionId: String, title: String = "Question") {
+        manager.createNotificationChannel(android.app.NotificationChannel(
+            "course_starts", context.getString(R.string.reminder_channel), android.app.NotificationManager.IMPORTANCE_DEFAULT,
+        ))
+        manager.notify(sessionId, 2, android.app.Notification.Builder(context, "course_starts")
+            .setSmallIcon(R.drawable.ic_book).setContentTitle(title).build())
+    }
+
+    @Test fun staleRepeatedDeletedAndCompletedActionsClearQuestionsWithoutChangingData() = runBlocking {
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        val today = LocalDate.now()
+        val now = today.atTime(12, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val local = TrackerRepository(db, now = { now })
+        val dao = db.trackerDao()
+        var nextColor = 0
+        try {
+            suspend fun fixture(id: String, date: LocalDate): Pair<String, SessionEntity> {
+                val course = local.createCourse(id, nextColor++)
+                local.saveInitialSchedule(course.id, listOf(WeeklyRule(today.plusDays(1).dayOfWeek.value, 13 * 60)))
+                val session = SessionEntity(id, course.id, date.toEpochDay(), 10 * 60, course.name, course.colorId, now, now)
+                dao.insertSession(session)
+                return course.id to session
+            }
+            for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
+                val (_, stale) = fixture("stale_$result", today.minusDays(2))
+                postQuestion(stale.id)
+                assertEquals(PendingSessionActionResult.IGNORED,
+                    ReminderScheduler.applyPendingAction(context, stale.id, result, local))
+                assertEquals(SessionResult.PENDING, dao.getSession(stale.id)!!.result)
+                assertTrue(manager.activeNotifications.none { it.tag == stale.id })
+            }
+
+            val (_, synchronized) = fixture("stale_after_sync", today.minusDays(2))
+            local.synchronize()
+            postQuestion(synchronized.id)
+            assertEquals(PendingSessionActionResult.IGNORED,
+                ReminderScheduler.applyPendingAction(context, synchronized.id, SessionResult.SKIPPED, local))
+            assertEquals(SessionResult.SKIPPED, dao.getSession(synchronized.id)!!.result)
+            assertTrue(manager.activeNotifications.none { it.tag == synchronized.id })
+
+            val (_, repeated) = fixture("repeated", today)
+            assertEquals(PendingSessionActionResult.APPLIED,
+                ReminderScheduler.applyPendingAction(context, repeated.id, SessionResult.SKIPPED, local))
+            postQuestion(repeated.id)
+            assertEquals(PendingSessionActionResult.IGNORED,
+                ReminderScheduler.applyPendingAction(context, repeated.id, SessionResult.DONE, local))
+            assertEquals(SessionResult.SKIPPED, dao.getSession(repeated.id)!!.result)
+            assertTrue(manager.activeNotifications.none { it.tag == repeated.id })
+
+            val (deletedCourse, deleted) = fixture("deleted", today)
+            local.deleteCourse(deletedCourse)
+            postQuestion(deleted.id)
+            assertEquals(PendingSessionActionResult.IGNORED,
+                ReminderScheduler.applyPendingAction(context, deleted.id, SessionResult.SKIPPED, local))
+            assertTrue(manager.activeNotifications.none { it.tag == deleted.id })
+
+            val (completedCourse, completed) = fixture("completed", today)
+            local.completeCourse(completedCourse)
+            postQuestion(completed.id)
+            assertEquals(PendingSessionActionResult.IGNORED,
+                ReminderScheduler.applyPendingAction(context, completed.id, SessionResult.DONE, local))
+            assertTrue(manager.activeNotifications.none { it.tag == completed.id })
+        } finally {
+            db.close()
+            manager.cancelAll()
+            ReminderScheduler.reconcile(context, repository)
+        }
+    }
+
+    @Test fun writeFailureDoesNotClearQuestionAndRetryCanStillApply() = runBlocking {
+        val name = "reminder-write-failure.db"
+        context.deleteDatabase(name)
+        val today = LocalDate.now()
+        val now = today.atTime(12, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+        var db = TrackerDatabase.open(context, name)
+        var local = TrackerRepository(db, now = { now })
+        val course = local.createCourse("Retry action", 0)
+        local.saveInitialSchedule(course.id, listOf(WeeklyRule(today.plusDays(1).dayOfWeek.value, 13 * 60)))
+        db.trackerDao().insertSession(SessionEntity("retry_action", course.id, today.toEpochDay(), 10 * 60,
+            course.name, course.colorId, now, now))
+        postQuestion("retry_action")
+        db.close()
+
+        val failure = runCatching {
+            ReminderScheduler.applyPendingAction(context, "retry_action", SessionResult.SKIPPED, local)
+        }.exceptionOrNull()
+        assertNotNull("Closed storage must surface as a write failure", failure)
+        assertTrue("A failed write must not look acknowledged", manager.activeNotifications.any { it.tag == "retry_action" })
+
+        db = TrackerDatabase.open(context, name)
+        local = TrackerRepository(db, now = { now })
+        try {
+            assertEquals(PendingSessionActionResult.APPLIED,
+                ReminderScheduler.applyPendingAction(context, "retry_action", SessionResult.SKIPPED, local))
+            assertEquals(SessionResult.SKIPPED, db.trackerDao().getSession("retry_action")!!.result)
+            assertTrue(manager.activeNotifications.none { it.tag == "retry_action" })
+        } finally {
+            db.close()
+            context.deleteDatabase(name)
+            manager.cancelAll()
+            ReminderScheduler.reconcile(context, repository)
+        }
     }
 
     @Test fun dueRemindersRespectPauseCompletionDeletionExhaustionAndEarlyResult() = runBlocking {

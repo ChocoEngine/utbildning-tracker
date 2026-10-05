@@ -28,7 +28,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import androidx.lifecycle.withResumed
 import androidx.compose.foundation.background
@@ -87,20 +86,17 @@ fun AppNavigation(
         if (repository != null && requestedSessionId != null) {
             val open = when (requestedSessionAction) {
                 ReminderScheduler.ACTION_COMPLETE_SESSION -> when (
-                    repository.applyPendingSessionAction(requestedSessionId, SessionResult.DONE)
+                    ReminderScheduler.applyPendingAction(context, requestedSessionId, SessionResult.DONE, repository)
                 ) {
                     PendingSessionActionResult.NEEDS_TOPICS -> true
-                    PendingSessionActionResult.APPLIED -> {
-                        ReminderScheduler.reconcile(context, repository)
-                        false
-                    }
+                    PendingSessionActionResult.APPLIED -> false
                     PendingSessionActionResult.IGNORED -> false
                 }
                 else -> repository.getSessionDetails(requestedSessionId) != null
             }
             // External intents can arrive during initial composition, before NavHost
             // installs its graph. Wait for the first destination instead of racing it.
-            snapshotFlow { navController.currentBackStackEntry }.filterNotNull().first()
+            navController.currentBackStackEntryFlow.first()
             // Room may suspend; external navigation must run on the Android main
             // thread while the host can receive lifecycle changes.
             withContext(Dispatchers.Main.immediate) {
@@ -178,7 +174,7 @@ fun AppNavigation(
                 else AppHeader(stringResource(R.string.nav_today), onSettings = openSettings)
             }
             composable(MainDestination.Calendar.route) {
-                if (repository != null) CalendarScreen(openSettings, repository, openSession)
+                if (repository != null) CalendarScreen(openSettings, repository)
                 else AppHeader(stringResource(R.string.nav_calendar), onSettings = openSettings)
             }
             composable(MainDestination.Courses.route) {

@@ -141,7 +141,7 @@ class CoursesScreenTest {
         assertTrue(courses().isEmpty()); assertTrue(categories().isEmpty())
     }
 
-    @Test fun nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue() {
+    @Test fun nameCommitsOnFocusLossAndLeaving() {
         val course = seed()
         show()
         click("course_row_${course.id}")
@@ -152,15 +152,6 @@ class CoursesScreenTest {
         rename("On exit")
         click("course_cancel")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "On exit" }
-        click("course_row_${course.id}")
-        rename("A".repeat(51))
-        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
-            .assertTextEquals("Name must contain no more than 50 characters")
-        assertEquals("On exit", runBlocking { dao.getCourse(course.id) }?.name)
-        assertInputText("On exit")
-        text("course_name", "Corrected")
-        click("course_cancel")
-        waitFor { runBlocking { dao.getCourse(course.id) }?.name == "Corrected" }
     }
 
     @Test fun nameSavesOnOutsideTouchWithoutSwallowingColorAction() {
@@ -171,6 +162,7 @@ class CoursesScreenTest {
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "Saved on background" }
         compose.onNodeWithTag("course_title").assertTextEquals("Saved on background")
         rename("Saved with color")
+        click("course_color_toggle")
         compose.onNodeWithTag("color_3").performTouchInput { click() }
         waitFor { runBlocking { dao.getCourse(course.id) }?.let { it.name == "Saved with color" && it.colorId == 3 } == true }
     }
@@ -197,6 +189,28 @@ class CoursesScreenTest {
         compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
             .assertTextEquals("Name must contain no more than 50 characters")
         captureError("course_name_create_en.png")
+    }
+
+    @Test fun creationAndEditorCountSupplementaryUnicodeAsSingleCodePoints() {
+        val fiftyEmoji = "😀".repeat(50)
+        show("en"); click("course_add")
+        text("course_name", fiftyEmoji)
+        assertInputText(fiftyEmoji)
+        paste("C")
+        assertInputText(fiftyEmoji)
+        compose.onNodeWithTag("course_name_length_error", useUnmergedTree = true)
+            .assertTextEquals("Name must contain no more than 50 characters")
+        click("course_cancel")
+
+        val course = seed(name = "C".repeat(49) + "😀")
+        if (compose.onAllNodesWithTag("course_row_${course.id}").fetchSemanticsNodes().isEmpty()) show("en")
+        click("course_row_${course.id}")
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(0, 1))
+        paste("😀😀")
+        assertInputText("C".repeat(49) + "😀")
+        assertSelection(TextRange(0, 1))
+        assertEquals("C".repeat(49) + "😀", runBlocking { dao.getCourse(course.id) }?.name)
     }
 
     @Test fun editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError() {
@@ -248,8 +262,9 @@ class CoursesScreenTest {
         val course = seed()
         runBlocking { dao.insertCategory(CategoryEntity("existing", "Programming")) }
         show(); click("course_row_${course.id}")
-        click("course_category")
+        click("course_category_open")
         val field = compose.onNodeWithTag("course_category")
+        field.performClick()
         field.assertIsFocused()
         for (letter in "Programming new") {
             field.performTextInput(letter.toString())
@@ -259,6 +274,8 @@ class CoursesScreenTest {
         }
         field.assertTextContains("Programming new")
         compose.onNodeWithTag("category_menu").assertDoesNotExist()
+        applyCategory()
+        click("course_color_toggle")
         click("color_3")
         waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "Programming new" }
     }
@@ -267,15 +284,18 @@ class CoursesScreenTest {
         val course = seed()
         runBlocking { dao.insertCategory(CategoryEntity("existing", "Existing")) }
         show(); click("course_row_${course.id}")
-        click("course_category"); click("category_option_existing")
+        click("course_category_open"); click("course_category"); click("category_option_existing")
         waitFor { runBlocking { dao.getCourse(course.id) }?.categoryId == "existing" }
-        text("course_category", "New category")
-        click("color_3")
-        click("color_6")
+        click("course_category_open"); text("course_category", "New category")
+        applyCategory()
+        click("course_color_toggle"); click("color_3")
+        click("course_color_toggle"); click("color_6")
         waitFor { runBlocking { dao.getCourse(course.id) }?.colorId == 6 }
         waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "New category" }
         click("course_cancel"); click("course_row_${course.id}")
+        click("course_color_toggle")
         compose.onNodeWithTag("color_6").assertIsSelected()
+        click("course_category_open")
         compose.onNodeWithTag("course_category").assertTextContains("New category")
     }
 
@@ -293,11 +313,13 @@ class CoursesScreenTest {
 
     @Test fun categoryDeletionDoesNotRecreateItOnExit() {
         val course = seed(category = "Shared", topics = listOf("Pointers"))
-        show(); click("course_row_${course.id}"); click("course_category")
+        show(); click("course_row_${course.id}"); click("course_category_open"); click("course_category")
         click("category_delete_${course.categoryId}"); click("category_delete_cancel")
         assertEquals(1, categories().size)
-        click("course_category"); click("category_delete_${course.categoryId}"); click("category_delete_confirm")
+        compose.onNodeWithTag("course_category").performClick()
+        click("category_delete_${course.categoryId}"); click("category_delete_confirm")
         waitFor { categories().isEmpty() }
+        applyCategory()
         click("course_cancel")
         waitFor { compose.onAllNodesWithTag("course_row_${course.id}").fetchSemanticsNodes().isNotEmpty() }
         assertTrue(categories().isEmpty())
@@ -308,7 +330,7 @@ class CoursesScreenTest {
         seed()
         show()
         compose.onNodeWithTag("courses_filter").assertDoesNotExist()
-        click("course_add"); click("course_category")
+        click("course_add"); compose.onNodeWithTag("course_category").performClick()
         compose.onNodeWithTag("category_menu").assertDoesNotExist()
         click("course_cancel")
     }

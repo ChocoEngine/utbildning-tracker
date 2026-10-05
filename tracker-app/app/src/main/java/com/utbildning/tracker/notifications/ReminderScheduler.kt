@@ -64,6 +64,7 @@ object ReminderScheduler {
         val courses = repository.observeReminderCourses().first().map { it.id }.toSet()
         return repository.observeSessions().first().filter { it.courseId in courses && it.result == SessionResult.PENDING }
             .filter { repository.getSchedule(it.courseId) != null }
+            .filter { repository.getSessionDetails(it.id)?.canEdit == true }
     }
 
     private suspend fun reconcileLocked(context: Context, repository: TrackerRepository) {
@@ -155,11 +156,22 @@ object ReminderScheduler {
 
     private fun requestCode(sessionId: String, action: String) = 31 * sessionId.hashCode() + action.hashCode()
 
-    suspend fun skipPending(context: Context, sessionId: String, repository: TrackerRepository = AppContainer.repository(context)) {
-        if (repository.applyPendingSessionAction(sessionId, SessionResult.SKIPPED) == PendingSessionActionResult.APPLIED) {
+    suspend fun applyPendingAction(
+        context: Context,
+        sessionId: String,
+        result: SessionResult,
+        repository: TrackerRepository = AppContainer.repository(context),
+    ): PendingSessionActionResult {
+        val outcome = repository.applyPendingSessionAction(sessionId, result)
+        if (outcome != PendingSessionActionResult.NEEDS_TOPICS) {
             context.getSystemService(NotificationManager::class.java).cancel(sessionId, QUESTION_NOTIFICATION)
             reconcile(context, repository)
         }
+        return outcome
+    }
+
+    suspend fun skipPending(context: Context, sessionId: String, repository: TrackerRepository = AppContainer.repository(context)) {
+        applyPendingAction(context, sessionId, SessionResult.SKIPPED, repository)
     }
 
     private fun start(session: SessionEntity, zone: ZoneId) = SessionTime.start(LocalDate.ofEpochDay(session.date), session.startMinute, zone).toEpochMilli()

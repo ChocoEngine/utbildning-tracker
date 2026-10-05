@@ -46,7 +46,7 @@ internal class TrackerOperations(
         dao.insertSchedule(ScheduleEntity(courseId, date, endsOn))
         rules.forEach { dao.insertScheduleRule(ScheduleRuleEntity(courseId, it.dayOfWeek, it.startMinute, it.endMinute)) }
         dao.updateCourse(course.copy(isPaused = false, updatedAt = timestamp))
-        reconcileExhaustion(courseId)
+        reconcileExhaustion(courseId, generateIfAvailable = false)
         generate(courseId, date + 90, timestamp)
     }
 
@@ -64,7 +64,7 @@ internal class TrackerOperations(
         dao.insertSchedule(ScheduleEntity(courseId, date, endsOn))
         rules.forEach { dao.insertScheduleRule(ScheduleRuleEntity(courseId, it.dayOfWeek, it.startMinute, it.endMinute)) }
         dao.updateCourse(course.copy(updatedAt = timestamp))
-        reconcileExhaustion(courseId)
+        reconcileExhaustion(courseId, generateIfAvailable = false)
         generate(courseId, date + 90, timestamp)
     }
 
@@ -76,7 +76,8 @@ internal class TrackerOperations(
             reconcileExhaustion(it.id)
             generate(it.id, through, timestamp)
         }
-        dao.getAllSessions().filter { it.date < date && it.result == SessionResult.PENDING }.forEach {
+        val lastEditableDate = date - 1
+        dao.getAllSessions().filter { it.date < lastEditableDate && it.result == SessionResult.PENDING }.forEach {
             dao.updateSession(it.copy(result = SessionResult.SKIPPED, updatedAt = timestamp))
         }
     }
@@ -157,7 +158,7 @@ internal class TrackerOperations(
         PendingSessionActionResult.APPLIED
     }
 
-    suspend fun reconcileExhaustion(courseId: String) {
+    suspend fun reconcileExhaustion(courseId: String, generateIfAvailable: Boolean = true) {
         val course = course(courseId)
         if (course.isCompleted) return
         val timestamp = now()
@@ -171,7 +172,7 @@ internal class TrackerOperations(
                     dao.updateSchedule(schedule.copy(generatedThrough = through))
                 }
             }
-        } else {
+        } else if (generateIfAvailable) {
             generate(courseId, today(timestamp).toEpochDay() + 90, timestamp)
         }
     }
@@ -181,14 +182,19 @@ internal class TrackerOperations(
     }
 
     suspend fun completeCourse(courseId: String) = database.withTransaction {
-        synchronize()
         val course = course(courseId)
         if (!course.isCompleted) {
             val timestamp = now()
+            dao.getSessions(courseId).forEach { session ->
+                if (start(session) > timestamp) {
+                    dao.deleteSession(session.id)
+                } else if (session.result == SessionResult.PENDING) {
+                    dao.updateSession(session.copy(result = SessionResult.DONE, updatedAt = timestamp))
+                }
+            }
             dao.getTopics(courseId).filter { !it.isCompleted }.forEach {
                 dao.updateTopic(it.copy(isCompleted = true, completionDate = null))
             }
-            removeFuturePending(courseId, timestamp)
             dao.deleteSchedule(courseId)
             dao.updateCourse(course.copy(colorId = null, isCompleted = true, isPaused = false, completedAt = timestamp, updatedAt = timestamp))
         }

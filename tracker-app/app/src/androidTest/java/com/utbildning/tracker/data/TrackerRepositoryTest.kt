@@ -58,6 +58,27 @@ class TrackerRepositoryTest {
         assertEquals((0..9).toList(), repository.availableColors())
     }
 
+    @Test fun courseNameLimitCountsUnicodeCodePointsAndFailedWritesAreAtomic() = runBlocking {
+        val fiftyEmoji = "😀".repeat(50)
+        val created = repository.createCourse(fiftyEmoji, 0, "Original")
+        assertEquals(50, created.name.codePointCount(0, created.name.length))
+
+        rejects(RepositoryError.NAME_TOO_LONG) {
+            repository.createCourse("😀".repeat(51), 1, "Must not exist")
+        }
+        rejects(RepositoryError.NAME_TOO_LONG) {
+            repository.updateCourse(created.id, "C".repeat(49) + "😀😀", 1, "Changed")
+        }
+        rejects(RepositoryError.NAME_TOO_LONG) {
+            repository.saveCourseForm(created.id, "Я".repeat(50) + "😀", 1, "Changed", "New topic")
+        }
+
+        assertEquals(created, dao.getCourse(created.id))
+        assertEquals(listOf("Original"), repository.observeCategories().first().map { it.name })
+        assertTrue(dao.getTopics(created.id).isEmpty())
+        assertEquals(listOf(0) + (1..9).toList(), repository.availableColors(created.id))
+    }
+
     @Test fun categoryMatchingIsExactUnicodeCaseInsensitiveAndReassignmentIsLocal() = runBlocking {
         val first = repository.createCourse("C", 0, " Программирование ")
         val second = repository.createCourse("Практика", 1, "программирование")

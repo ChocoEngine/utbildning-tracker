@@ -1,0 +1,471 @@
+{
+  "test": [
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/CalendarSessionStatusTest.kt",
+      "tests": [
+        "pastPendingIsOnlyProjectedAsSkipped",
+        "explicitResultsAreNeverProjectedDifferently"
+      ],
+      "lines": 22
+    },
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/LocalDayTest.kt",
+      "tests": [
+        "nextRunIsLocalMidnightRatherThanOneMinuteLater",
+        "dayBoundaryRespectsShortAndLongDstDays"
+      ],
+      "lines": 17
+    },
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/ScheduleGeneratorTest.kt",
+      "tests": [
+        "differentTimesAndInclusiveBoundariesAcrossYear",
+        "leapDayAndDisjointWindow",
+        "timezoneChangesInstantButNotCalendarIdentity",
+        "dstGapShiftsAndOverlapUsesEarlierOffset",
+        "overnightAndFallbackQuestionTimes",
+        "invalidIntervalsAndDuplicateWeekdaysRejected"
+      ],
+      "lines": 51
+    },
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/ScheduleOverlapTest.kt",
+      "tests": [
+        "partialAndEqualStartOverlapButTouchingAndZeroDurationDoNot",
+        "missingEndIsOneHourForBothCoursesAndStopsAtMidnight",
+        "explicitOvernightChecksAdjacentDaysAndWeekBoundary",
+        "scheduleDateBoundsMustContainAnActualSharedWeekday",
+        "overnightBoundsReferToStartDatesIncludingPreviousDay",
+        "findsMultipleCoursesBeyondCalendarGenerationHorizon",
+        "emulatorThursdayElevenToFiveThirtyIncludesEveningCoursesButDaytimeDoesNot",
+        "boundedWeeklyCalculationMatchesExplicitCalendarIntervals"
+      ],
+      "lines": 104
+    },
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/TopicListEditorTest.kt",
+      "tests": [
+        "parsesLineEndingsTrimsAndKeepsOriginalLineNumbers",
+        "completedConflictsReportEveryOriginalLineUsingUnicodeCaseAndTrim",
+        "reorderAndDuplicatesUseStableFifoIdsWithoutCollapsingLines",
+        "fifoTiesUseIdAndRemovedDuplicateIsArchived",
+        "changedCaseIsNewTopicAndArchivedRowsNeverReappear",
+        "completedPositionsAreReservedAndCompletedRowsExcludedFromText",
+        "discardingPlanLeavesOriginalSnapshotUnchanged"
+      ],
+      "lines": 67
+    },
+    {
+      "path": "tracker-app/app/src/test/java/com/utbildning/tracker/domain/TopicPaceTest.kt",
+      "tests": [
+        "roundsUpAndKeepsMinimumOne",
+        "hidesWithoutRemainingTopicsOrRemainingSchedule",
+        "excludesResolvedSessionsAndUsesInclusiveStartAndEnd",
+        "countsBeyondCalendarHorizonAndMatchesGenerator"
+      ],
+      "lines": 38
+    }
+  ],
+  "androidTest": [
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/CourseFormRepositoryTest.kt",
+      "tests": [
+        "formCreatesBothModesAndParsesBlankLines",
+        "conflictingTopicsRollBackMetadataCategoryAndColorTogether",
+        "completedFormRejectsAllChanges",
+        "deletionRequiresConfirmationForCompletedCoursesAndPreservesData",
+        "emptyCategoryDeletesImmediatelyAndNullDraftPreservesTopics"
+      ],
+      "lines": 92
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/CourseLifecycleRepositoryTest.kt",
+      "tests": [
+        "exhaustionAndResumeDoNotBackfillSuspensionInterval",
+        "addingNewTopicResumesAndDoesNotEraseCompletedTopic",
+        "exhaustionAndResumeSurviveDatabaseReopen",
+        "courseWithoutTopicsKeepsGeneratingAndRemindersRemainEligible",
+        "pauseCatchesUpAndKeepsStartedAndExplicitlyMarkedFutureSessions",
+        "completionUsesOriginalResultsAndFullStartInstantAndIsIdempotent",
+        "completionSupportsPausedAndUnscheduledCoursesWithOrWithoutTopics"
+      ],
+      "lines": 190
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/ManualTopicCompletionTest.kt",
+      "tests": [
+        "eitherModeCanToggleOutOfOrderWithoutCalendarRows",
+        "removingSessionCompletionKeepsHistoryAndSessionResult",
+        "invalidAndCompletedTopicsRejectWithoutMutatingProgress"
+      ],
+      "lines": 71
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/MvpScenarioTest.kt",
+      "tests": [
+        "homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle"
+      ],
+      "lines": 113
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/ScheduleRepositoryTest.kt",
+      "tests": [
+        "occupiedSchedulesExcludeSelfPausedCompletedAndExhaustedCourses",
+        "endDateWithoutRulesSurvivesReloadAndCanBeEditedOrGivenWeekdays",
+        "switchingModesKeepsHistoryAndProgressAndCanGenerateAgain",
+        "generationDoesNotAddSecondSessionOnAnExistingDate",
+        "disablingWithoutTopicsKeepsCourseAndStartedSessions",
+        "failedEnablingAndCompletedCourseKeepTheirMode",
+        "initialGenerationSkipsPastStartAndExpandsFarHorizonWithoutDuplicates",
+        "longAbsenceCatchesUpOnlyPastPendingAndEndDateDoesNotCompleteCourse",
+        "firstMidnightLeavesYesterdayAndTodayPending",
+        "absenceBeyondInitialHorizonLeavesGapAndGeneratesFutureOnly",
+        "invalidRulesPauseAndReplacementDoNotMutateSchedule",
+        "renamingAndRecoloringOnlyRefreshFutureUnmarkedSnapshots",
+        "editingSchedulePreservesHistoryProgressAndRecordedFutureResults",
+        "invalidScheduleEditLeavesExistingScheduleAndCalendarUnchanged"
+      ],
+      "lines": 258
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/SessionResultRepositoryTest.kt",
+      "tests": [
+        "selectionChangesAndResetsOnlyItsOwnTopics",
+        "repeatedSaveIsIdempotentAndChangedSelectionIsReconciled",
+        "manualRemarkBecomesIndependentAndCourseCompletionKeepsDates",
+        "completionOfferIsOnlyReturnedByTheResultThatClosesLastTopics",
+        "directCompletionOnlyHandlesCoursesWithoutTopics",
+        "pendingNotificationActionsAreAtomicAndNeverOverwriteAResult",
+        "pendingNotificationActionsIgnoreMissingOldFutureAndCompletedSessions",
+        "todayAndYesterdayAreEditableWhileOlderAndFutureDatesAreReadOnly",
+        "overnightAndOpenEndedYesterdaySessionsStayPendingAndCanBeCorrected",
+        "editableDatesFollowTheCurrentZoneAndCrossYearBoundary"
+      ],
+      "lines": 210
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/TopicListRepositoryTest.kt",
+      "tests": [
+        "reorderDuplicatesAndNewTopicsPersistWithStableIds",
+        "completedTopicsStayUntouchedAndRemovingHistoricalTopicArchivesIt",
+        "emptyListIsAllowedAndCompletedTopicsRemain",
+        "scheduledListMayBeEmptiedWithoutCreatingCalendarRecords",
+        "saveRechecksCompletionAfterDraftWasPreparedAndReportsSourceLines",
+        "cancellingDraftWritesNothingIncludingCourseTimestamp",
+        "unchangedTextSaveDoesNotChangeTimestampOrIds",
+        "savedListAndArchivedHistorySurviveDatabaseReopen",
+        "lateInsertFailureRollsBackDeletedRowsReorderingAndTimestamp",
+        "missingAndCompletedCoursesRejectEdits"
+      ],
+      "lines": 176
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/TopicPaceRepositoryTest.kt",
+      "tests": [
+        "pendingTodayCountsAndResultsTopicsAndScheduleRefreshPace"
+      ],
+      "lines": 42
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/TrackerRepositoryTest.kt",
+      "tests": [
+        "creationTrimsInputsAndPersistsInitialTopicsWithoutCalendar",
+        "invalidInputLeavesNoCourseCategoryOrColorReservation",
+        "categoryMatchingIsExactUnicodeCaseInsensitiveAndReassignmentIsLocal",
+        "explicitCategoryRenamePreservesLinksAndRejectsConflicts",
+        "tenUnfinishedCoursesIncludePausedAndUnscheduledButNotCompleted",
+        "failedEditPreservesOriginalCourseCategoryAndReservation",
+        "editMovesReservationAndPreservesProgressWithCurrentCourseMetadata",
+        "completedCourseClearsColorAndRejectsMetadataEdits",
+        "competingCreatesCannotReserveSameColor",
+        "concurrentCategoryResolutionCreatesOnlyOneSharedCategory",
+        "lateTopicConstraintFailureRollsBackCategoryCourseAndColor"
+      ],
+      "lines": 200
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/local/ExhaustionMigrationTest.kt",
+      "tests": [
+        "versionFiveDropsExhaustionWithoutLosingHistoryAndCanResume"
+      ],
+      "lines": 84
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/local/SchemaSimplificationMigrationTest.kt",
+      "tests": [
+        "versionFourPreservesDataAndRemovesRedundantStorage",
+        "freshDatabaseAlsoUsesPartialIndexAndCompletionReleasesColor"
+      ],
+      "lines": 109
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/local/TrackerDatabaseTest.kt",
+      "tests": [
+        "constructorsRejectInvalidRangesAndCompletionDateWithoutCompletion",
+        "manualCompletionDoesNotCreateCalendarEntries",
+        "missingParentsAndCrossCourseLinksAreRejected",
+        "duplicateKeysAbortWithoutReplacingExistingData",
+        "deletingCategoryAndSchedulePreservesCourseAndHistory",
+        "deletingCourseCascadesOnlyItsOwnData",
+        "removingCompletionAndEditingTopicPreservesSessionResult",
+        "failedTransactionRollsBackEarlierWrites",
+        "fileDatabasePersistsTopicProgressAndSessionResultsAfterReopen"
+      ],
+      "lines": 199
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/data/local/TrackerMigrationTest.kt",
+      "tests": [
+        "versionThreeTransfersOnlyCurrentCompletionsAndDropsOldTables",
+        "versionOneFileMigratesAndPreservesCourseTopicAndSchedule"
+      ],
+      "lines": 132
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/notifications/LocalizedReminderDeliveryTest.kt",
+      "tests": [
+        "realAlarmsUseSelectedLanguageAndPreserveCourseName"
+      ],
+      "lines": 64
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/notifications/RecoveryProbeTest.kt",
+      "tests": [
+        "recoveryAndPermissionIndependence"
+      ],
+      "lines": 43
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/notifications/ReminderNavigationTest.kt",
+      "tests": [
+        "realExactAlarmDeliversOnceAndTapRendersSelectedSession"
+      ],
+      "lines": 97
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/notifications/ReminderTest.kt",
+      "tests": [
+        "dueRemindersRespectPauseCompletionDeletionExhaustionAndEarlyResult",
+        "endReminderAsksForResultAndRecordsBothEvents"
+      ],
+      "lines": 150
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/AppHeaderTest.kt",
+      "tests": [
+        "longTitleLeavesSettingsAccessibleInNarrowWindowWithLargeText"
+      ],
+      "lines": 45
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/AppNavigationTest.kt",
+      "tests": [
+        "settingsReturnsToEachOriginTab",
+        "repeatedTabSelectionDoesNotTrapBackAndRecreationKeepsDestination",
+        "newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions",
+        "pausedCourseCanResumeThroughScheduleWithoutLosingProgress",
+        "courseEditorHidesTabsAndReturningToListRestoresThem",
+        "existingScheduledCourseWithoutScheduleCanBeConfigured",
+        "unscheduledCourseCanCancelEnableAndEditThroughPencil"
+      ],
+      "lines": 224
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CalendarIntegrationTest.kt",
+      "tests": [
+        "openingFarMonthGeneratesReadOnlyCalendarAndRejectsResultChanges"
+      ],
+      "lines": 69
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CalendarTodayScreenTest.kt",
+      "tests": [
+        "calendarNavigatesLeapMonthAndRoutesResultsForSelectedDay",
+        "calendarShowsOneInkAndPerSessionBarsWithSkippedMarks",
+        "calendarProjectsYesterdayPendingAsSkippedWithoutMutatingInput",
+        "todayShowsYesterdayButOmitsOlderAndFutureSessions",
+        "localMidnightMovesSessionIntoEditableYesterdaySectionWithoutOldQuestion",
+        "todayAndYesterdayListsScrollIndependently",
+        "todayAndYesterdayUseMatchingSectionsAndSeparateEmptyMessages"
+      ],
+      "lines": 187
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseDetailsReviewTest.kt",
+      "tests": [
+        "resumePreservesProgressWithoutSchedule",
+        "russian",
+        "english"
+      ],
+      "lines": 149
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseDraftRecreationTest.kt",
+      "tests": [
+        "actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor"
+      ],
+      "lines": 99
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseEditorLayoutTest.kt",
+      "tests": [
+        "togglingCompletionPreservesTitleBoundsAndPencilOpensEditor",
+        "longTopicListScrollsWithoutMovingHeaderOrActionsAt320dp"
+      ],
+      "lines": 67
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseLifecycleScreenTest.kt",
+      "tests": [
+        "completionCancelPreservesCourseAndConfirmationCompletesTopicsAndReleasesColor",
+        "pauseCancelPreservesScheduleAndConfirmationKeepsProgressAndColor",
+        "pauseWorksForActiveCoursesWithAndWithoutSchedule",
+        "deletionRequiresConfirmationAndDoesNotTouchOtherCourse",
+        "completedTopicsShowInlineMessageWithoutCompletionDialog",
+        "completedCourseIsReadOnlyAndHasNoColorPicker"
+      ],
+      "lines": 175
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseListAppearanceTest.kt",
+      "tests": [
+        "pausedAndFinishedHaveDistinctMarkersAndProgress",
+        "courseWithoutTopicsShowsScheduleAndNoSessionCount",
+        "courseWithTopicsShowsProgressAndSchedule",
+        "scrollingCoursesKeepsAddAndSummaryInPlace"
+      ],
+      "lines": 68
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseListGeometryReviewTest.kt",
+      "tests": [
+        "russianLongNamesKeepPercentAlignedAt320dp",
+        "englishLongNamesKeepPercentAlignedAt320dp"
+      ],
+      "lines": 120
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CourseTopicPaceTest.kt",
+      "tests": [
+        "russianNarrowListShowsPaceAfterCountAndHidesCompletedPace",
+        "englishNarrowListShowsPaceAfterCountAndHidesCompletedPace"
+      ],
+      "lines": 61
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/CoursesScreenTest.kt",
+      "tests": [
+        "allCourseSchedulesSurviveConcurrentLoadingAndRefresh",
+        "creationDialogValidatesNameAndCreatesCourseWithoutMode",
+        "courseCanBeCreatedWithoutTopicsOrScheduleAndTopicsAddedLater",
+        "cancelInitialDialogDoesNotCreateCourseOrCategory",
+        "nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue",
+        "nameSavesOnOutsideTouchWithoutSwallowingColorAction",
+        "creationNameRejectsWholeOverLimitEditInRussianAndClearsErrorAfterValidEdit",
+        "creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits",
+        "editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError",
+        "editorNameShowsRussianErrorAndPreservesTextCursorAndSelection",
+        "appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea",
+        "categorySuggestionsKeepFocusAndDoNotSavePartialInput",
+        "categoryAndColorSaveIndependentlyWithoutLosingRapidChanges",
+        "completedTopicConflictDisablesApplyWithoutChangingProgress",
+        "categoryDeletionDoesNotRecreateItOnExit",
+        "emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses",
+        "completedFilterAndTenCourseLimitKeepExistingRowsEditable",
+        "topicOrderAndNumbersStayFixedAfterLongPressInBothModes",
+        "entireProgressBlockOpensCourse",
+        "pauseAndResumeStayInEditorAndAllowPausingAgain",
+        "completionStaysInEditorWithCompletedStatus"
+      ],
+      "lines": 500
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/EmulatorDemoSeedTest.kt",
+      "tests": [
+        "keepThreeDemoCourses",
+        "seedDemoCourses"
+      ],
+      "lines": 177
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/EmulatorLongTitleSeedTest.kt",
+      "tests": [
+        "addLongTitleCourse"
+      ],
+      "lines": 54
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/LanguageSettingsTest.kt",
+      "tests": [
+        "languageChoicesTranslateSettingsAccessibilityAndNavigation",
+        "explicitLanguageSurvivesActivityRecreationAndRelaunch",
+        "externalLanguageChangeIsReflectedAndSystemChoiceClearsOverride",
+        "selectingSystemLanguageAndItsExplicitEquivalentUpdatesSelection",
+        "unsupportedLanguagesUseEnglishAndOnlySupportedLanguagesAreDeclared",
+        "guideCanBeReadAndReopenedInBothLanguages",
+        "changingLanguagePreservesNamesScheduleAndTopicProgress"
+      ],
+      "lines": 225
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/ScheduleOverlapReviewTest.kt",
+      "tests": [
+        "russian",
+        "english"
+      ],
+      "lines": 103
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/ScheduleScreenTest.kt",
+      "tests": [
+        "addingEndSuggestsHourButCancelKeepsItAbsent",
+        "addingEndNearMidnightSuggestsEndOfDay",
+        "customTuesdayAndSaturdayTimesArePassedToSaveUnchanged",
+        "dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit",
+        "noWeekdaysAndNoDateSavesUnscheduledAndSelectingDayEnablesSchedule",
+        "endDateWithoutWeekdaysCanBeSavedAndCleared",
+        "savedInstanceRestorationRetainsChangedDaysAndClearedDate",
+        "completedCourseScheduleIsReadOnly",
+        "overnightWarningDisappearsAfterRemovingEndAndDoesNotBlockSaving",
+        "defaultHourWarnsAndUncheckingDayRemovesWarning",
+        "repositoryChangesRefreshWarningsInOpenScreen"
+      ],
+      "lines": 200
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/SessionScreenTest.kt",
+      "tests": [
+        "olderDetailsHideSaveAndDisableSelection",
+        "futureDetailsHideSaveAndDisableSelection",
+        "yesterdayDetailsAllowSelectionAndKeepTheStartDate",
+        "editableSessionOffersSkipAndClearsOnlyItsOwnTopicCompletions",
+        "choosingSeveralTopicsOutOfOrderPersistsSingleDoneSession",
+        "nothingCompletedClearsDraftSelectionAndSavesFactOfStudyOnly",
+        "selectedTopicKeepsNumberAndShowsCheckOnRight",
+        "todayMarksNoTopicCourseDoneWithoutOpeningSessionScreen",
+        "todayStillOpensTopicSelectionForCourseWithTopics",
+        "cancellingYesterdayDoesNotChangeResultOrCompletion",
+        "externalReminderDestinationOpensYesterdayAsEditable",
+        "savedStateRestorationRetainsUnsubmittedTopicSelection",
+        "correctionPreselectsOwnTopicsAndPreservesIndependentManualCompletion"
+      ],
+      "lines": 219
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/TodayVisualReviewTest.kt",
+      "tests": [
+        "captureRussianAt320dp",
+        "captureEnglishAt320dp"
+      ],
+      "lines": 115
+    },
+    {
+      "path": "tracker-app/app/src/androidTest/java/com/utbildning/tracker/ui/VisualReviewTest.kt",
+      "tests": [
+        "captureRussianAt320dp",
+        "captureEnglishAt320dp"
+      ],
+      "lines": 145
+    }
+  ]
+}

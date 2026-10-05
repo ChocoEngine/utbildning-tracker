@@ -6,6 +6,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.utbildning.tracker.data.local.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -84,6 +88,8 @@ class SessionResultRepositoryTest {
         repo.toggleTopicCompletion(course.id, topics[0].id)
         repo.toggleTopicCompletion(course.id, topics[0].id)
         assertNull(dao.getTopic(topics[0].id)!!.completionDate)
+        // Keep this session in history: at completion time its 10:00 local start has passed.
+        timestamp = Instant.parse("2026-09-27T09:00:00Z").toEpochMilli()
         repo.completeCourse(course.id)
         assertEquals(date, dao.getTopic(topics[1].id)!!.completionDate)
         assertNull(dao.getTopic(topics[2].id)!!.completionDate)
@@ -132,6 +138,40 @@ class SessionResultRepositoryTest {
         assertEquals(SessionResult.DONE, dao.getSession("practice_action")!!.result)
     }
 
+    @Test fun concurrentPendingActionsAndCourseCompletionHaveConsistentAtomicOutcomes() = runBlocking {
+        val noTopics = repo.createCourse("Concurrent practice", 1)
+        dao.insertSession(SessionEntity("concurrent", noTopics.id, date, 720,
+            noTopics.name, noTopics.colorId, timestamp, timestamp))
+        val start = CompletableDeferred<Unit>()
+        val competing = listOf(SessionResult.DONE, SessionResult.SKIPPED).map { result ->
+            async(Dispatchers.IO) { start.await(); repo.applyPendingSessionAction("concurrent", result) }
+        }
+        start.complete(Unit)
+        val outcomes = competing.awaitAll()
+        assertEquals(1, outcomes.count { it == PendingSessionActionResult.APPLIED })
+        assertEquals(1, outcomes.count { it == PendingSessionActionResult.IGNORED })
+        assertTrue(dao.getSession("concurrent")!!.result in setOf(SessionResult.DONE, SessionResult.SKIPPED))
+
+        val completionStart = CompletableDeferred<Unit>()
+        val action = async(Dispatchers.IO) {
+            completionStart.await()
+            repo.applyPendingSessionAction("today", SessionResult.SKIPPED)
+        }
+        val completion = async(Dispatchers.IO) {
+            completionStart.await()
+            repo.completeCourse(course.id)
+        }
+        completionStart.complete(Unit)
+        action.await()
+        completion.await()
+
+        assertTrue(repo.getCourse(course.id)!!.isCompleted)
+        assertTrue(dao.getTopics(course.id).all { it.isCompleted })
+        val survivingSession = dao.getSession("today")
+        assertTrue(survivingSession == null || survivingSession.result in setOf(SessionResult.DONE, SessionResult.SKIPPED))
+        assertTrue(dao.getTopics(course.id).none { it.completionDate == date })
+    }
+
     @Test fun pendingNotificationActionsIgnoreMissingOldFutureAndCompletedSessions() = runBlocking {
         assertEquals(PendingSessionActionResult.IGNORED,
             repo.applyPendingSessionAction("missing", SessionResult.SKIPPED))
@@ -155,7 +195,7 @@ class SessionResultRepositoryTest {
             assertEquals(SessionResult.PENDING, dao.getSession(id)!!.result)
         }
         repo.synchronize()
-        assertEquals(SessionResult.SKIPPED, dao.getSession("yesterday")!!.result)
+        assertEquals(SessionResult.PENDING, dao.getSession("yesterday")!!.result)
         assertEquals(SessionResult.SKIPPED, dao.getSession("old")!!.result)
         repo.setSessionResult("yesterday", SessionResult.DONE, setOf(topics[0].id))
         assertEquals(date - 1, dao.getTopic(topics[0].id)!!.completionDate)
@@ -164,15 +204,15 @@ class SessionResultRepositoryTest {
         assertFalse(repo.getSessionDetails("yesterday")!!.canEdit)
     }
 
-    @Test fun overnightAndOpenEndedYesterdaySessionsCanBeCorrectedAfterAutomaticSkip() = runBlocking {
+    @Test fun overnightAndOpenEndedYesterdaySessionsStayPendingAndCanBeCorrected() = runBlocking {
         dao.updateSession(dao.getSession("yesterday")!!.copy(startMinute = 23 * 60 + 30, endMinute = 60))
         val practice = repo.createCourse("Practice", 1)
         dao.insertSession(SessionEntity("open_ended", practice.id, date - 1, 23 * 60 + 30,
             practice.name, practice.colorId, timestamp, timestamp, endMinute = null))
 
         repo.synchronize()
-        assertEquals(SessionResult.SKIPPED, dao.getSession("yesterday")!!.result)
-        assertEquals(SessionResult.SKIPPED, dao.getSession("open_ended")!!.result)
+        assertEquals(SessionResult.PENDING, dao.getSession("yesterday")!!.result)
+        assertEquals(SessionResult.PENDING, dao.getSession("open_ended")!!.result)
 
         repo.setSessionResult("yesterday", SessionResult.DONE, setOf(topics[1].id))
         assertEquals(date - 1, dao.getTopic(topics[1].id)!!.completionDate)

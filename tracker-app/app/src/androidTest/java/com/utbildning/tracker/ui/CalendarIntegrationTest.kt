@@ -44,14 +44,12 @@ class CalendarIntegrationTest {
             }
         }
         assertTrue(runBlocking { dao.getSessions(course.id) }.none { it.date == target.toEpochDay() })
-        var requestedSession: String? = null
-        compose.setContent { TrackerTheme { if (visible.value) CalendarScreen({}, repository) { requestedSession = it } } }
+        compose.setContent { TrackerTheme { if (visible.value) CalendarScreen({}, repository) } }
         repeat(6) { compose.onNodeWithTag("calendar_grid").performTouchInput { swipeLeft() } }
         compose.waitUntil(10_000) { runBlocking { dao.getSessions(course.id) }.any { it.date == target.toEpochDay() } }
         val session = runBlocking { dao.getSessions(course.id) }.single { it.date == target.toEpochDay() }
         click("calendar_day_${target.toEpochDay()}")
         compose.onNodeWithTag("calendar_session_${session.id}").assertHasNoClickAction()
-        compose.runOnIdle { assertNull(requestedSession) }
         try {
             runBlocking { repository.setSessionResult(session.id, SessionResult.SKIPPED) }
             fail("Future sessions must be read-only")

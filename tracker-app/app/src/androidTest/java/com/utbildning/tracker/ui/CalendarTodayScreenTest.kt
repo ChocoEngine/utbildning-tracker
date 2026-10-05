@@ -20,20 +20,16 @@ import org.junit.runner.RunWith
 class CalendarTodayScreenTest {
     @get:Rule val compose = createComposeRule()
 
-    @Test fun calendarNavigatesLeapMonthAndRoutesResultsForSelectedDay() {
+    @Test fun calendarNavigatesLeapMonthAndKeepsSelectedDayReadOnly() {
         val leapDay = LocalDate.of(2028, 2, 29)
         val month = mutableStateOf(YearMonth.from(leapDay))
         val selected = mutableStateOf(leapDay.minusDays(1))
         val sessions = listOf(lesson("first", leapDay, 600), lesson("second", leapDay, 720, result = SessionResult.DONE))
-        var done: String? = null
-        var skipped: String? = null
         compose.setContent { TrackerTheme { CalendarContent(month.value, selected.value, sessions, Locale.ENGLISH,
-            onMonth = { month.value = it; selected.value = it.atDay(1) }, onDay = { selected.value = it },
-            onDone = { done = it }, onSkip = { skipped = it }) } }
+            onMonth = { month.value = it; selected.value = it.atDay(1) }, onDay = { selected.value = it }) } }
         compose.onNodeWithTag("session_done_first").assertDoesNotExist()
         click("calendar_day_${leapDay.toEpochDay()}")
         compose.onNodeWithTag("calendar_session_first").assertHasNoClickAction()
-        compose.runOnIdle { assertNull(done); assertNull(skipped) }
         compose.onNodeWithTag("session_skip_second").assertDoesNotExist()
         compose.onNodeWithTag("calendar_grid").performTouchInput { swipeLeft() }
         compose.onNodeWithTag("calendar_day_${LocalDate.of(2028, 3, 31).toEpochDay()}").assertExists()
@@ -46,7 +42,7 @@ class CalendarTodayScreenTest {
         compose.runOnIdle { assertEquals(YearMonth.now(), month.value); assertEquals(LocalDate.now(), selected.value) }
     }
 
-    @Test fun calendarShowsOneInkAndPerSessionBarsWithSkippedMarks() {
+    @Test fun calendarDaySemanticsDescribePendingDoneAndSkippedSessions() {
         val date = LocalDate.of(2028, 2, 29)
         val sessions = listOf(
             lesson("pending", date, 600, result = SessionResult.PENDING).copy(colorId = 0),
@@ -54,11 +50,24 @@ class CalendarTodayScreenTest {
             lesson("skip_a", date, 660, result = SessionResult.SKIPPED).copy(colorId = 2),
             lesson("skip_b", date, 690, result = SessionResult.SKIPPED).copy(colorId = 3),
         )
-        compose.setContent { TrackerTheme { CalendarContent(YearMonth.from(date), date, sessions, Locale.ENGLISH, {}, {}, {}, {}) } }
+        compose.setContent { TrackerTheme { CalendarContent(YearMonth.from(date), date, sessions, Locale.ENGLISH, {}, {}, today = date) } }
         val description = compose.onNodeWithTag("calendar_day_${date.toEpochDay()}").fetchSemanticsNode().config.toString()
         val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
         listOf(com.utbildning.tracker.R.string.session_planned, com.utbildning.tracker.R.string.session_done,
             com.utbildning.tracker.R.string.session_skipped).forEach { assertTrue(description.contains(context.getString(it))) }
+    }
+
+    @Test fun calendarProjectsYesterdayPendingAsSkippedWithoutMutatingInput() {
+        val today = LocalDate.of(2028, 3, 1)
+        val yesterday = today.minusDays(1)
+        val pending = lesson("pending_yesterday", yesterday, 600)
+        compose.setContent { TrackerTheme { CalendarContent(YearMonth.from(yesterday), yesterday, listOf(pending), Locale.ENGLISH, {}, {}, today = today) } }
+
+        val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+        val description = compose.onNodeWithTag("calendar_day_${yesterday.toEpochDay()}").fetchSemanticsNode().config.toString()
+        assertTrue(description.contains(context.getString(com.utbildning.tracker.R.string.session_skipped)))
+        compose.onNodeWithText(context.getString(com.utbildning.tracker.R.string.session_skipped)).assertExists()
+        assertEquals(SessionResult.PENDING, pending.result)
     }
 
     @Test fun todayShowsYesterdayButOmitsOlderAndFutureSessions() {
@@ -84,15 +93,9 @@ class CalendarTodayScreenTest {
         compose.onNodeWithTag("today_yesterday").assertExists()
         click("session_done_yesterday")
         compose.runOnIdle { assertEquals("yesterday", done) }
-        compose.onNodeWithTag("question_default").assertDoesNotExist()
-        compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         click("session_done_default")
         compose.runOnIdle { assertEquals("default", done); now.value = Instant.parse("2026-09-26T11:30:00Z") }
-        compose.onNodeWithTag("question_default").assertDoesNotExist()
-        compose.onNodeWithTag("question_explicit").assertDoesNotExist()
         compose.runOnIdle { now.value = Instant.parse("2026-09-26T12:00:00Z") }
-        compose.onNodeWithTag("question_explicit").assertDoesNotExist()
-        compose.onNodeWithTag("question_done").assertDoesNotExist()
     }
 
     @Test fun localMidnightMovesSessionIntoEditableYesterdaySectionWithoutOldQuestion() {

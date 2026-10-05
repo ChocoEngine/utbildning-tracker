@@ -37,6 +37,8 @@ import androidx.compose.ui.text.style.TextAlign
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.*
+import com.utbildning.tracker.domain.calendarSessionResult
+import com.utbildning.tracker.domain.millisUntilNextLocalDay
 import com.utbildning.tracker.ui.AppHeader
 import com.utbildning.tracker.ui.theme.*
 import kotlinx.coroutines.CancellationException
@@ -47,13 +49,22 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepository, onSession: (String) -> Unit) {
+internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepository) {
     val sessions by remember(repository) { repository.observeSessions() }.collectAsState(emptyList())
     var month by rememberSaveable { mutableStateOf(YearMonth.now().toString()) }
     var day by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
     val locale = LocalConfiguration.current.locales[0]
-    val scope = rememberCoroutineScope()
     var error by remember { mutableStateOf(false) }
+    var today by remember { mutableStateOf(LocalDate.now()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            val zone = ZoneId.systemDefault()
+            today = LocalDate.now(zone)
+            // Recheck the zone while open; a timezone change can move the local date
+            // without recreating this composition.
+            kotlinx.coroutines.delay(minOf(millisUntilNextLocalDay(System.currentTimeMillis(), zone), 60_000L))
+        }
+    }
     LaunchedEffect(repository, month) {
         try { repository.synchronize(YearMonth.parse(month).atEndOfMonth().toEpochDay()); error = false }
         catch (cancel: CancellationException) { throw cancel }
@@ -63,23 +74,15 @@ internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepositor
         AppHeader(title = stringResource(R.string.nav_calendar), onSettings = onSettings)
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
         CalendarContent(YearMonth.parse(month), LocalDate.ofEpochDay(day), sessions, locale,
-            onMonth = { month = it.toString(); day = it.atDay(1).toEpochDay() }, onDay = { day = it.toEpochDay() }, onDone = { id ->
-                scope.launch {
-                    try {
-                        if (!repository.markSessionDoneIfNoTopics(id)) onSession(id)
-                        error = false
-                    } catch (cancel: CancellationException) { throw cancel }
-                    catch (_: Exception) { error = true }
-                }
-            },
-            onSkip = { id -> scope.launch { try { repository.setSessionResult(id, SessionResult.SKIPPED); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } } },
-            onPending = { id -> scope.launch { try { repository.setSessionResult(id, SessionResult.PENDING); error = false } catch (cancel: CancellationException) { throw cancel } catch (_: Exception) { error = true } } })
+            onMonth = { month = it.toString(); day = it.atDay(1).toEpochDay() }, onDay = { day = it.toEpochDay() },
+            today = today)
     }
 }
 
 @Composable
 internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: List<SessionEntity>, locale: Locale,
-    onMonth: (YearMonth) -> Unit, onDay: (LocalDate) -> Unit, onDone: (String) -> Unit, onSkip: (String) -> Unit, onPending: (String) -> Unit = {}) {
+    onMonth: (YearMonth) -> Unit, onDay: (LocalDate) -> Unit,
+    today: LocalDate = LocalDate.now()) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)) {
         val previousDescription = stringResource(R.string.calendar_previous)
         val nextDescription = stringResource(R.string.calendar_next)
@@ -121,7 +124,9 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                     val done = stringResource(R.string.session_done)
                     val skipped = stringResource(R.string.session_skipped)
                     val planned = stringResource(R.string.session_planned)
-                    val description = date.format(DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.FULL).withLocale(locale)) + rows.joinToString(prefix = if (rows.isEmpty()) "" else "; ", separator = "; ") { it.courseName + ": " + when(it.result) { SessionResult.DONE -> done; SessionResult.SKIPPED -> skipped; SessionResult.PENDING -> planned } }
+                    val description = date.format(DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.FULL).withLocale(locale)) + rows.joinToString(prefix = if (rows.isEmpty()) "" else "; ", separator = "; ") { session ->
+                        session.courseName + ": " + when(calendarSessionResult(session.result, session.date, today)) { SessionResult.DONE -> done; SessionResult.SKIPPED -> skipped; SessionResult.PENDING -> planned }
+                    }
                     Box(Modifier.weight(1f).height(52.dp).padding(2.dp).background(if (date == selected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp)).clickable { onDay(date) }.semantics(mergeDescendants = false) { contentDescription = description }.testTag("calendar_day_${date.toEpochDay()}").padding(horizontal = 4.dp, vertical = 2.dp), contentAlignment = Alignment.TopCenter) {
                         Text(number.toString(), modifier = Modifier.zIndex(1f), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
                         if (rows.isNotEmpty()) {
@@ -152,7 +157,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                     }
                                     clipPath(blob) {
                                         if (rows.size > 4) {
-                                            val alpha = rows.maxOf { calendarInkAlpha(it.result) }
+                                            val alpha = rows.maxOf { calendarInkAlpha(calendarSessionResult(it.result, it.date, today)) }
                                             val colors = rows.map { it.colorId }.distinct()
                                             drawPath(blob, courseColor(0).copy(alpha = alpha * .3f))
                                             for (dotRow in 0..5) for (dotColumn in 0..7) {
@@ -165,13 +170,13 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                                                 val weights = rows.indices.map { if (rows.size in 3..4 && it != 0 && it != rows.lastIndex) .7f else 1f }
                                                 val width = 60f * weights[i] / weights.sum()
                                                 val left = -6f + 60f * weights.take(i).sum() / weights.sum()
-                                                drawRect(courseColor(session.colorId).copy(alpha = calendarInkAlpha(session.result)),
+                                                drawRect(courseColor(session.colorId).copy(alpha = calendarInkAlpha(calendarSessionResult(session.result, session.date, today))),
                                                     Offset(left*sx, -15*sy), Size((width+.3f)*sx, 65*sy))
                                             }
                                         }
                                     }
                                     rows.forEachIndexed { i, session ->
-                                        if (rows.size <= 4 && session.result == SessionResult.SKIPPED) {
+                                        if (rows.size <= 4 && calendarSessionResult(session.result, session.date, today) == SessionResult.SKIPPED) {
                                             val x = (8f + (i+.5f)*32f/rows.size)*sx
                                             val y = 15*sy
                                             val mark = Path().apply {
@@ -196,6 +201,7 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
         if (visible.isEmpty()) Text(stringResource(R.string.sessions_empty), Modifier.padding(vertical = 16.dp))
         Spacer(Modifier.height(8.dp))
         visible.forEach { session ->
+            val displayResult = calendarSessionResult(session.result, session.date, today)
             Row(Modifier.fillMaxWidth().testTag("calendar_session_${session.id}").padding(vertical = 9.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(Modifier.width(4.dp).height(22.dp).background(courseColor(session.colorId), RoundedCornerShape(4.dp)))
@@ -203,8 +209,8 @@ internal fun CalendarContent(month: YearMonth, selected: LocalDate, sessions: Li
                     .format(DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT).withLocale(locale)),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(session.courseName, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-                if (session.result != SessionResult.PENDING) {
-                    Text(stringResource(if (session.result == SessionResult.DONE) R.string.session_done else R.string.session_skipped),
+                if (displayResult != SessionResult.PENDING) {
+                    Text(stringResource(if (displayResult == SessionResult.DONE) R.string.session_done else R.string.session_skipped),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
@@ -220,4 +226,4 @@ private fun calendarInkAlpha(result: SessionResult) = when (result) {
 
 @Preview(locale = "ru", showBackground = true)
 @Composable
-private fun CalendarPreview() { TrackerTheme { Surface { CalendarContent(YearMonth.of(2026,9), LocalDate.of(2026,9,26), emptyList(), Locale.forLanguageTag("ru"), {}, {}, {}, {}) } } }
+private fun CalendarPreview() { TrackerTheme { Surface { CalendarContent(YearMonth.of(2026,9), LocalDate.of(2026,9,26), emptyList(), Locale.forLanguageTag("ru"), {}, {}, today = LocalDate.of(2026,9,26)) } } }

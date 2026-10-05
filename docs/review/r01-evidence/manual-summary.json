@@ -1,0 +1,22 @@
+{
+  "device": "emulator-5556",
+  "manual_screen_width_dp": 411,
+  "category_rows": [
+    [
+      "ReviewC",
+      "4273999b-73e9-457f-9824-2a83c2ccb50e",
+      "Alpha"
+    ],
+    [
+      "ReviewD",
+      "4273999b-73e9-457f-9824-2a83c2ccb50e",
+      "Alpha"
+    ]
+  ],
+  "integrity_check": "ok",
+  "same_existing_category_id": true,
+  "name_creation_field_code_points": 51,
+  "name_editor_field_code_points": 51,
+  "category_popup_closed_after_selection": true,
+  "category_reopened_value": "Alpha"
+}

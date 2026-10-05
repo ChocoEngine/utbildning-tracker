@@ -20,7 +20,7 @@ data class CourseDraft(
     val id: String? = null, val name: String = "", val category: String = "",
     val color: Int? = 0, val hasSchedule: Boolean = false,
     val completed: Boolean = false, val topics: List<EditableTopic> = emptyList(),
-    val text: String = "", val editingText: String? = null, val topicsChanged: Boolean = false,
+    val text: String = "", val editingText: String? = null,
     val paused: Boolean = false,
     val rules: List<ScheduleRuleEntity> = emptyList(), val endsOn: Long? = null,
 )
@@ -81,17 +81,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             val topics = repository.getTopicEditorTopics(id)
             draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
                 details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused, rules = repository.getScheduleRules(id), endsOn = repository.getSchedule(id)?.endsOn)
-            detailJob = viewModelScope.launch {
-                repository.observeCourseDetails(id).collect { current ->
-                    current ?: return@collect
-                    val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, topic.isCompleted) }
-                val rules = repository.getScheduleRules(id)
-                val endsOn = repository.getSchedule(id)?.endsOn
-                    draft?.takeIf { it.id == id }?.let { old ->
-                        draft = old.copy(rules = rules, endsOn = endsOn, hasSchedule = current.hasSchedule, topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused, text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
-                    }
-                }
-            }
+            observeDetails(id)
         }
     }
     fun cancel() { creating = false; detailJob?.cancel(); draft = null; error = null; lifecycleAction = null }
@@ -110,6 +100,9 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics),
             paused = details.course.isPaused, rules = repository.getScheduleRules(id), endsOn = repository.getSchedule(id)?.endsOn)
         colors = repository.availableColors(id)
+        observeDetails(id)
+    }
+    private fun observeDetails(id: String) {
         detailJob?.cancel()
         detailJob = viewModelScope.launch {
             repository.observeCourseDetails(id).collect { current ->
@@ -119,7 +112,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 val endsOn = repository.getSchedule(id)?.endsOn
                 draft?.takeIf { it.id == id }?.let { old ->
                     draft = old.copy(rules = rules, endsOn = endsOn, hasSchedule = current.hasSchedule, topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused,
-                        text = if (old.topicsChanged) old.text else TopicListEditor.editableText(latest))
+                        text = TopicListEditor.editableText(latest))
                 }
             }
         }
@@ -213,7 +206,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 attach(saved.id)
             } else {
                 repository.saveTopicList(current.id, text)
-                change { it.copy(text = text, editingText = null, topicsChanged = false) }
+                change { it.copy(text = text, editingText = null) }
             }
         }
     }

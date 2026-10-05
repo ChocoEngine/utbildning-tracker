@@ -96,6 +96,13 @@ class MvpScenarioTest {
             assertEquals(6, repo.getCourseDetails(homework.id)!!.topics.filter { it.isCompleted }.size)
             assertNull(repo.getSchedule(homework.id))
             assertNotNull(db.trackerDao().getCourse(homework.id))
+            timestamp = listOf(lectureSession, practiceSession).maxBy { it.date * 1_440L + it.startMinute }.let { latest ->
+                java.time.LocalDate.ofEpochDay(latest.date)
+                    .atStartOfDay(java.time.ZoneOffset.UTC)
+                    .plusMinutes(latest.startMinute.toLong() + 1)
+                    .toInstant()
+                    .toEpochMilli()
+            }
             repo.completeCourse(lectures.id)
             assertEquals(3, repo.getCourseDetails(lectures.id)!!.topics.filter { it.isCompleted }.size)
             assertEquals(SessionResult.DONE, repo.getSessionDetails(lectureSession.id)!!.session.result)

@@ -32,14 +32,14 @@ class TopicListEditorTest {
         assertTrue(result.deletedIds.isEmpty())
     }
 
-    @Test fun fifoTiesUseIdAndRemovedDuplicateIsArchived() {
+    @Test fun fifoTiesUseIdAndReportRemovedDuplicate() {
         val result = TopicListEditor.plan("Same", listOf(
             EditableTopic("b", "Same", 0), EditableTopic("a", "Same", 0)))
         assertEquals("a", result.topics.single().existingId)
         assertEquals(listOf("b"), result.deletedIds)
     }
 
-    @Test fun changedCaseIsNewTopicAndArchivedRowsNeverReappear() {
+    @Test fun changedCaseCreatesNewTopicWhileExactTitleKeepsItsId() {
         val result = TopicListEditor.plan("pointers\nOld", listOf(
             EditableTopic("active", "Pointers", 0),
             EditableTopic("archived", "Old", 1, isCompleted = false)))

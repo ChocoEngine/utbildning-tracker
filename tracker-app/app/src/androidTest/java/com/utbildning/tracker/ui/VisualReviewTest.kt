@@ -21,6 +21,8 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -73,6 +75,8 @@ class VisualReviewTest {
             course.name, index, 1, 1, result = when (index) { 0, 3, 6 -> SessionResult.DONE; 1, 4, 7, 9 -> SessionResult.SKIPPED; else -> SessionResult.PENDING }) } +
             listOf(1, 4, 7).mapIndexed { index, color -> SessionEntity("calendar_extra_$index", "course_${index + 7}", date.toEpochDay(), 13 * 60 + index * 30,
                 "${title} ${index + 8}", color, 1, 1, result = SessionResult.SKIPPED) }
+        val calendarSessions = sessions + SessionEntity("yesterday_pending", courses.first().id, date.minusDays(1).toEpochDay(), 23 * 60 + 30,
+            courses.first().name, courses.first().colorId, 1, 1, endMinute = 60)
         val scene = mutableIntStateOf(0)
         val names = listOf("course_list", "course_new", "course_edit", "topic_editor", "calendar", "today", "session", "schedule", "guide")
         compose.setContent {
@@ -85,7 +89,7 @@ class VisualReviewTest {
                                 1 -> CourseEditorContent(CourseDraft(name = title, category = category), emptyList(), (0..9).toList(), false, null, {}, {}, {}, {}, {}, {})
                                 2 -> CourseEditorContent(CourseDraft(id = "course_0", name = title, category = category, topics = editableTopics, text = text), emptyList(), listOf(0), false, null, {}, {}, {}, {}, {}, {})
                                 3 -> CourseEditorContent(CourseDraft(id = "course_0", name = title, category = category, topics = editableTopics, text = text, editingText = text), emptyList(), listOf(0), false, null, {}, {}, {}, {}, {}, {})
-                                4 -> CalendarContent(YearMonth.from(date), date, sessions, locale, {}, {}, {}, {})
+                                4 -> CalendarContent(YearMonth.from(date), date.minusDays(1), calendarSessions, locale, {}, {}, today = date)
                                 5 -> TodayContent(sessions, Instant.parse("2026-09-26T10:00:00Z"), ZoneId.of("Europe/Moscow"), locale, {}, {})
                                 6 -> SessionContent(title, topics, completedIds, false, false, {}, {}, {})
                                 7 -> ScheduleContent(initial = listOf(WeeklyRule(2, 19 * 60, 20 * 60 + 30), WeeklyRule(6, 11 * 60)), initialEnd = date.plusMonths(3).toEpochDay())
@@ -100,11 +104,11 @@ class VisualReviewTest {
             compose.runOnIdle { scene.intValue = index }
             capture(context, "${language}_${name}_320dp.png")
             if (name == "topic_editor") {
-                compose.onNodeWithTag("topics_input").performScrollTo()
+                compose.onNodeWithTag("topics_input").performTouchInput { swipeUp() }
                 capture(context, "${language}_topic_editor_scrolled_320dp.png")
             }
             if (name == "schedule") {
-                compose.onNodeWithTag("schedule_date").performScrollTo()
+                compose.onNodeWithTag("schedule_day_7").performScrollTo()
                 capture(context, "${language}_schedule_end_320dp.png")
             }
         }

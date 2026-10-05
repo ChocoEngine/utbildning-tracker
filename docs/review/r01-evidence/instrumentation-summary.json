@@ -1,0 +1,63 @@
+{
+  "tests_run": 167,
+  "failures": 14,
+  "seed_tests_require_explicit_arguments": 4,
+  "failure_details": [
+    {
+      "test": "pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest)",
+      "error": "java.lang.AssertionError: Printing with useUnmergedTree = 'false'"
+    },
+    {
+      "test": "actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse(com.utbildning.tracker.ui.CourseLifecycleScreenTest)",
+      "error": "java.lang.AssertionError: Failed: assertDoesNotExist."
+    },
+    {
+      "test": "categoryDeletionDoesNotRecreateItOnExit(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms"
+    },
+    {
+      "test": "nameCommitsOnFocusLossAndLeavingAndRejectsInvalidValue(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "nameSavesOnOutsideTouchWithoutSwallowingColorAction(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "categoryAndColorSaveIndependentlyWithoutLosingRapidChanges(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms"
+    },
+    {
+      "test": "completedFilterAndTenCourseLimitKeepExistingRowsEditable(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "categorySuggestionsKeepFocusAndDoNotSavePartialInput(com.utbildning.tracker.ui.CoursesScreenTest)",
+      "error": "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms"
+    },
+    {
+      "test": "endDateWithoutWeekdaysCanBeSavedAndCleared(com.utbildning.tracker.ui.ScheduleScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "savedInstanceRestorationRetainsChangedDaysAndClearedDate(com.utbildning.tracker.ui.ScheduleScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit(com.utbildning.tracker.ui.ScheduleScreenTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "captureEnglishAt320dp(com.utbildning.tracker.ui.VisualReviewTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    },
+    {
+      "test": "captureRussianAt320dp(com.utbildning.tracker.ui.VisualReviewTest)",
+      "error": "java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction"
+    }
+  ]
+}

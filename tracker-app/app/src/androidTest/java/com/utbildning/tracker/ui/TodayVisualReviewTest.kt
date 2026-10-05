@@ -52,6 +52,7 @@ class TodayVisualReviewTest {
         val title = if (language == "ru") "Практика алгоритмов и структур данных на C" else "Algorithms and data structures practice in C"
         val sessions = listOf(SessionEntity("today", "course", date.toEpochDay(), 11 * 60, title, 0, 1, 1))
         val previous = listOf(
+            sessions.first().copy(id = "yesterday_pending", date = date.minusDays(1).toEpochDay(), startMinute = 8 * 60, result = SessionResult.PENDING),
             sessions.first().copy(id = "yesterday_done", date = date.minusDays(1).toEpochDay(), startMinute = 23 * 60 + 30, result = SessionResult.DONE),
             sessions.first().copy(id = "yesterday_skipped", date = date.minusDays(1).toEpochDay(), startMinute = 10 * 60, result = SessionResult.SKIPPED),
         )

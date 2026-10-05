@@ -100,11 +100,14 @@ class AppNavigationTest {
         try {
             compose.onNodeWithTag("nav_courses").performClick()
             compose.onNodeWithTag("course_row_${course.id}").performScrollTo().performClick()
+            compose.onNodeWithTag("course_schedule").assertDoesNotExist()
+            compose.onNodeWithTag("course_resume").performClick()
+            compose.waitUntil(10_000) { runBlocking { !repository.getCourse(course.id)!!.isPaused } }
             waitForTag("course_schedule")
             compose.onNodeWithTag("course_schedule").assertIsDisplayed().performClick()
             compose.onNodeWithTag("schedule_day_3").performScrollTo().performClick()
             pressBack()
-            org.junit.Assert.assertTrue(runBlocking { repository.getCourse(course.id)!!.isPaused })
+            org.junit.Assert.assertFalse(runBlocking { repository.getCourse(course.id)!!.isPaused })
             waitForTag("course_schedule")
             compose.onNodeWithTag("course_schedule").performClick()
             compose.onNodeWithTag("schedule_day_3").performScrollTo().performClick()

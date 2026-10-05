@@ -86,15 +86,15 @@ class ScheduleScreenTest {
         var calls = 0
         compose.setContent { TrackerTheme { ScheduleContent(initial = listOf(WeeklyRule(2, 1140)), initialEnd = end,
             onSave = { _, date -> saved = date; calls++ }) } }
-        clickScrolled("schedule_date")
+        compose.onNodeWithTag("schedule_date").performClick()
         compose.onNodeWithTag("schedule_date_cancel").performClick()
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertEquals(end, saved); assertEquals(1, calls) }
-        clickScrolled("schedule_date")
+        compose.onNodeWithTag("schedule_date").performClick()
         compose.onNodeWithTag("schedule_date_apply").performClick()
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertEquals(end, saved); assertEquals(2, calls) }
-        clickScrolled("schedule_clear_date")
+        compose.onNodeWithTag("schedule_clear_date").performClick()
         compose.onNodeWithTag("schedule_clear_date").assertDoesNotExist()
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertNull(saved); assertEquals(3, calls) }
@@ -115,11 +115,11 @@ class ScheduleScreenTest {
         var saved: Pair<List<WeeklyRule>, Long?>? = null
         compose.setContent { TrackerTheme { ScheduleContent(initialEnd = end,
             onSave = { rules, date -> saved = rules to date }) } }
-        clickScrolled("schedule_date")
+        compose.onNodeWithTag("schedule_date").performClick()
         compose.onNodeWithTag("schedule_date_apply").performClick()
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertEquals(emptyList<WeeklyRule>() to end, saved) }
-        clickScrolled("schedule_clear_date")
+        compose.onNodeWithTag("schedule_clear_date").performClick()
         compose.onNodeWithTag("schedule_save").performClick()
         compose.runOnIdle { assertEquals(emptyList<WeeklyRule>() to null, saved) }
     }
@@ -132,7 +132,7 @@ class ScheduleScreenTest {
             onSave = { rules, date -> saved = rules to date }) } }
         clickScrolled("schedule_day_2")
         clickScrolled("schedule_day_6")
-        clickScrolled("schedule_clear_date")
+        compose.onNodeWithTag("schedule_clear_date").performClick()
         restoration.emulateSavedInstanceStateRestore()
         compose.onNodeWithTag("schedule_day_2").assertIsOn()
         compose.onNodeWithTag("schedule_day_6").assertIsOff()

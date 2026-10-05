@@ -50,9 +50,14 @@ class CourseLifecycleScreenTest {
         click("course_complete")
         clickDialog("course_action_cancel")
         assertFalse(runBlocking { dao.getCourse(course.id) }!!.isCompleted)
+        compose.runOnIdle { ViewModelProvider(owner)[CoursesViewModel::class.java].change { it.copy(name = "Renamed") } }
         click("course_complete")
         clickDialog("course_action_confirm")
         waitFor { runBlocking { dao.getCourse(course.id) }!!.isCompleted }
+        assertEquals("Renamed", runBlocking { dao.getCourse(course.id) }!!.name)
+        compose.onNodeWithTag("course_title").assertExists()
+        waitFor { compose.onAllNodesWithTag("course_status").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("course_status").assertExists()
         assertEquals(manual, runBlocking { dao.getTopic(topics.first().id)?.takeIf { it.isCompleted } })
         assertNull(runBlocking { dao.getTopic(topics.last().id)?.takeIf { it.isCompleted } }?.completionDate)
         assertNull(runBlocking { dao.getCourse(course.id) }!!.colorId)
@@ -79,10 +84,17 @@ class CourseLifecycleScreenTest {
         assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
     }
 
-    @Test fun pauseIsHiddenForUnscheduledAndStillWorksForScheduledCourse() {
+    @Test fun pauseWorksForActiveCoursesWithAndWithoutSchedule() {
         val free = repositoryCourseUnscheduled()
         show(free.id)
-        compose.onNodeWithTag("course_pause").assertDoesNotExist()
+        compose.onNodeWithTag("course_pause").assertExists()
+        click("course_pause")
+        clickDialog("course_action_cancel")
+        assertFalse(runBlocking { dao.getCourse(free.id) }!!.isPaused)
+        click("course_pause")
+        clickDialog("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(free.id) }!!.isPaused }
+        assertEquals(listOf("Pointers"), runBlocking { dao.getTopics(free.id) }.map { it.title })
         click("course_cancel")
         val scheduled = seed()
         click("course_row_${scheduled.id}")
@@ -90,7 +102,7 @@ class CourseLifecycleScreenTest {
         click("course_pause")
         clickDialog("course_action_confirm")
         waitFor { runBlocking { dao.getCourse(scheduled.id) }!!.isPaused }
-        assertFalse(runBlocking { dao.getCourse(free.id) }!!.isPaused)
+        assertTrue(runBlocking { dao.getCourse(free.id) }!!.isPaused)
     }
 
     private fun repositoryCourseUnscheduled() = runBlocking {

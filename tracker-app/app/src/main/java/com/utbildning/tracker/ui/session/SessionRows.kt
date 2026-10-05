@@ -25,15 +25,9 @@ import java.time.format.FormatStyle
 import java.util.Locale
 
 @Composable
-internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String) -> Unit, onSkip: (String) -> Unit, question: Boolean = false, onPending: (String) -> Unit = {}, todayStyle: Boolean = false) {
-    val status = stringResource(when(session.result) {
-        SessionResult.DONE -> R.string.session_done
-        SessionResult.SKIPPED -> R.string.session_skipped
-        SessionResult.PENDING -> R.string.session_planned
-    })
+internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String) -> Unit, onSkip: (String) -> Unit, onPending: (String) -> Unit = {}) {
     val time = LocalTime.of(session.startMinute / 60, session.startMinute % 60).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
-    if (todayStyle) {
-        Column(Modifier.fillMaxWidth().padding(vertical = 17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxWidth().padding(vertical = 17.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 val blot = GenericShape { size, _ ->
                     moveTo(size.width * .1f, size.height * .35f)
@@ -66,20 +60,5 @@ internal fun SessionRow(session: SessionEntity, locale: Locale, onDone: (String)
                     Text(stringResource(R.string.session_skipped), style = MaterialTheme.typography.labelMedium)
                 }
             }
-        }
-        return
-    }
-    Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.width(5.dp).height(72.dp).background(courseColor(session.colorId).copy(alpha = if (session.result == SessionResult.DONE) 1f else .35f)))
-        Column(Modifier.weight(1f)) {
-            Text(session.courseName, style = MaterialTheme.typography.titleMedium)
-            Text(time + " · " + status)
-            if (question) Text(stringResource(R.string.session_question), modifier = Modifier.testTag("question_${session.id}"))
-            if (!session.courseCompleted) Row {
-                TextButton(onClick = { onDone(session.id) }, modifier = Modifier.testTag("session_done_${session.id}")) { Text(stringResource(R.string.session_done)) }
-                TextButton(onClick = { onSkip(session.id) }, modifier = Modifier.testTag("session_skip_${session.id}")) { Text(stringResource(R.string.session_skipped)) }
-            }
-            if (!session.courseCompleted && session.result != SessionResult.PENDING) TextButton(onClick = { onPending(session.id) }, modifier = Modifier.testTag("session_pending_${session.id}")) { Text(stringResource(R.string.session_unmarked)) }
-        }
     }
 }

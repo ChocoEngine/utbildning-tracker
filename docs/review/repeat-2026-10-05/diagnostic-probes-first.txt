@@ -1,0 +1,57 @@
+
+com.utbildning.tracker.ui.RepeatReviewProbeTest:
+Error in observesBlockedIncrementalReductionOfLegacyName(com.utbildning.tracker.ui.RepeatReviewProbeTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA])
+Semantics of the node:
+Node #37 at (l=168.0, t=41.0, r=912.0, b=266.0)px, Tag: 'course_name'
+ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+EditableText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+Error = 'Invalid input'
+FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@fc12430'
+Focused = 'true'
+ImeAction = 'Default'
+InputText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+IsEditable = 'true'
+Text = '[Name, Name must contain no more than 50 characters]'
+TextSelectionRange = 'TextRange(0, 0)'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, InsertTextAtCursor, MagnifierPositionInRoot, OnClick, OnFillData, OnLongClick, PasteText, PerformImeAction, RequestFocus, ScrollBy, ScrollByOffset, SetSelection, SetText, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 9 siblings
+Selector used: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.RepeatReviewProbeTest.observesBlockedIncrementalReductionOfLegacyName(RepeatReviewProbeTest.kt:47)
+.
+
+Time: 4.755
+There was 1 failure:
+1) observesBlockedIncrementalReductionOfLegacyName(com.utbildning.tracker.ui.RepeatReviewProbeTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA])
+Semantics of the node:
+Node #37 at (l=168.0, t=41.0, r=912.0, b=266.0)px, Tag: 'course_name'
+ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+EditableText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+Error = 'Invalid input'
+FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@fc12430'
+Focused = 'true'
+ImeAction = 'Default'
+InputText = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+IsEditable = 'true'
+Text = '[Name, Name must contain no more than 50 characters]'
+TextSelectionRange = 'TextRange(0, 0)'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, InsertTextAtCursor, MagnifierPositionInRoot, OnClick, OnFillData, OnLongClick, PasteText, PerformImeAction, RequestFocus, ScrollBy, ScrollByOffset, SetSelection, SetText, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 9 siblings
+Selector used: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.RepeatReviewProbeTest.observesBlockedIncrementalReductionOfLegacyName(RepeatReviewProbeTest.kt:47)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1

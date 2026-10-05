@@ -112,25 +112,79 @@ class CourseLifecycleRepositoryTest {
         assertEquals(3, dao.getSessions(course.id).size)
     }
 
-    @Test fun completeKeepsExistingSourcesHistoryAndReleasesColorDeleteCascades() = runBlocking {
+    @Test fun completionUsesOriginalResultsAndFullStartInstantAndIsIdempotent() = runBlocking {
+        val moscow = ZoneId.of("Europe/Moscow")
+        clock = Instant.parse("2026-10-05T09:00:00Z").toEpochMilli() // 12:00 in Moscow.
+        repo = TrackerRepository(db, now = { clock }, zone = { moscow })
         val course = repo.createCourse("C", 0, topics = listOf("Массивы", "Указатели"))
-        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
+        val other = repo.createCourse("Other", 1)
+        val day = LocalDate.parse("2026-10-05")
+        dao.insertSchedule(ScheduleEntity(course.id, day.minusDays(1).toEpochDay()))
+        dao.insertScheduleRule(ScheduleRuleEntity(course.id, 1, 720))
+        fun session(id: String, date: LocalDate, minute: Int, result: SessionResult = SessionResult.PENDING) =
+            SessionEntity(id, course.id, date.toEpochDay(), minute, course.name, course.colorId, 11, 11, result = result)
+        listOf(
+            session("yesterday_pending", day.minusDays(1), 600),
+            session("overnight_pending", day.minusDays(1), 23 * 60 + 30),
+            session("started_pending", day, 660),
+            session("exact_pending", day, 720),
+            session("started_done", day, 600, SessionResult.DONE),
+            session("started_skipped", day, 630, SessionResult.SKIPPED),
+            session("future_pending", day, 721),
+            session("future_done", day.plusDays(1), 600, SessionResult.DONE),
+            session("future_skipped", day.plusDays(1), 630, SessionResult.SKIPPED),
+        ).forEach { dao.insertSession(it) }
+        dao.insertSession(SessionEntity("other_pending", other.id, day.minusDays(1).toEpochDay(), 600,
+            other.name, other.colorId, 22, 22))
         val topics = dao.getTopics(course.id)
-        val session = dao.getSessions(course.id).first()
-        repo.setSessionResult(session.id, SessionResult.DONE, setOf(topics.first().id))
-        val own = dao.getTopic(topics.first().id)?.takeIf { it.isCompleted }
+        dao.updateTopic(topics.first().copy(isCompleted = true, completionDate = day.minusDays(3).toEpochDay()))
+        val completedBefore = dao.getTopic(topics.first().id)!!
+        val doneBefore = dao.getSession("started_done")!!
+        val skippedBefore = dao.getSession("started_skipped")!!
+
         repo.completeCourse(course.id)
-        assertTrue(dao.getCourse(course.id)!!.isCompleted)
-        assertEquals(own, dao.getTopic(topics.first().id)?.takeIf { it.isCompleted })
-        assertNull(dao.getTopic(topics.last().id)?.takeIf { it.isCompleted }?.completionDate)
-        assertEquals(SessionResult.DONE, dao.getSession(session.id)?.result)
-        assertNull(dao.getCourse(course.id)!!.colorId)
+
+        val completed = dao.getCourse(course.id)!!
+        assertTrue(completed.isCompleted)
+        assertFalse(completed.isPaused)
+        assertEquals(clock, completed.completedAt)
+        assertNull(completed.colorId)
         assertNull(dao.getSchedule(course.id))
-        val another = repo.createCourse("Another", 0)
-        repo.deleteCourse(course.id)
-        assertNull(dao.getCourse(course.id))
-        assertTrue(dao.getTopics(course.id).isEmpty())
-        assertTrue(dao.getSessions(course.id).isEmpty())
-        assertNotNull(dao.getCourse(another.id))
+        assertEquals(completedBefore, dao.getTopic(topics.first().id))
+        assertTrue(dao.getTopic(topics.last().id)!!.isCompleted)
+        assertNull(dao.getTopic(topics.last().id)!!.completionDate)
+        for (id in listOf("yesterday_pending", "overnight_pending", "started_pending", "exact_pending"))
+            assertEquals(id, SessionResult.DONE, dao.getSession(id)?.result)
+        assertEquals(doneBefore.result, dao.getSession("started_done")?.result)
+        assertEquals(doneBefore.updatedAt, dao.getSession("started_done")?.updatedAt)
+        assertEquals(skippedBefore.result, dao.getSession("started_skipped")?.result)
+        assertEquals(skippedBefore.updatedAt, dao.getSession("started_skipped")?.updatedAt)
+        for (id in listOf("future_pending", "future_done", "future_skipped")) assertNull(id, dao.getSession(id))
+        assertEquals(SessionResult.PENDING, dao.getSession("other_pending")?.result)
+
+        val savedCourse = dao.getCourse(course.id)
+        val savedSessions = dao.getSessions(course.id).map { it.record() }
+        val savedTopics = dao.getTopics(course.id)
+        clock += 86_400_000L
+        repo.completeCourse(course.id)
+        assertEquals(savedCourse, dao.getCourse(course.id))
+        assertEquals(savedSessions, dao.getSessions(course.id).map { it.record() })
+        assertEquals(savedTopics, dao.getTopics(course.id))
+    }
+
+    @Test fun completionSupportsPausedAndUnscheduledCoursesWithOrWithoutTopics() = runBlocking {
+        val scheduled = repo.createCourse("Paused", 0, topics = listOf("Topic"))
+        repo.saveInitialSchedule(scheduled.id, listOf(WeeklyRule(1, 720)))
+        repo.pauseCourse(scheduled.id)
+        val free = repo.createCourse("Free", 1)
+
+        repo.completeCourse(scheduled.id)
+        repo.completeCourse(free.id)
+
+        assertTrue(dao.getCourse(scheduled.id)!!.isCompleted)
+        assertFalse(dao.getCourse(scheduled.id)!!.isPaused)
+        assertTrue(dao.getTopics(scheduled.id).single().isCompleted)
+        assertTrue(dao.getCourse(free.id)!!.isCompleted)
+        assertTrue(dao.getTopics(free.id).isEmpty())
     }
 }

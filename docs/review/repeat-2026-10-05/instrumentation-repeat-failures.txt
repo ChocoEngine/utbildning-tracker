@@ -1,0 +1,45 @@
+
+com.utbildning.tracker.data.MvpScenarioTest:
+Error in homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle(com.utbildning.tracker.data.MvpScenarioTest):
+java.lang.NullPointerException
+	at com.utbildning.tracker.data.MvpScenarioTest$homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle$1.invokeSuspend(MvpScenarioTest.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.data.MvpScenarioTest.homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle(MvpScenarioTest.kt:18)
+
+com.utbildning.tracker.ui.SessionScreenTest:
+Error in externalReminderDestinationOpensYesterdayAsEditable(com.utbildning.tracker.ui.SessionScreenTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.SessionScreenTest.externalReminderDestinationOpensYesterdayAsEditable(SessionScreenTest.kt:167)
+
+
+Time: 6.692
+There were 2 failures:
+1) homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle(com.utbildning.tracker.data.MvpScenarioTest)
+java.lang.NullPointerException
+	at com.utbildning.tracker.data.MvpScenarioTest$homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle$1.invokeSuspend(MvpScenarioTest.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.data.MvpScenarioTest.homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle(MvpScenarioTest.kt:18)
+2) externalReminderDestinationOpensYesterdayAsEditable(com.utbildning.tracker.ui.SessionScreenTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.SessionScreenTest.externalReminderDestinationOpensYesterdayAsEditable(SessionScreenTest.kt:167)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
