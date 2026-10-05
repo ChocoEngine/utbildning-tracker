@@ -111,6 +111,39 @@ class SessionResultRepositoryTest {
         assertEquals(SessionResult.DONE, dao.getSession("practice")!!.result)
     }
 
+    @Test fun pendingNotificationActionsAreAtomicAndNeverOverwriteAResult() = runBlocking {
+        assertEquals(PendingSessionActionResult.NEEDS_TOPICS,
+            repo.applyPendingSessionAction("today", SessionResult.DONE))
+        assertEquals(SessionResult.PENDING, dao.getSession("today")!!.result)
+        assertEquals(PendingSessionActionResult.APPLIED,
+            repo.applyPendingSessionAction("today", SessionResult.SKIPPED))
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("today", SessionResult.DONE))
+        assertEquals(SessionResult.SKIPPED, dao.getSession("today")!!.result)
+        assertTrue(dao.getTopics(course.id).none { it.isCompleted })
+
+        val noTopics = repo.createCourse("Practice action", 1)
+        dao.insertSession(SessionEntity("practice_action", noTopics.id, date, 720,
+            noTopics.name, noTopics.colorId, timestamp, timestamp))
+        assertEquals(PendingSessionActionResult.APPLIED,
+            repo.applyPendingSessionAction("practice_action", SessionResult.DONE))
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("practice_action", SessionResult.SKIPPED))
+        assertEquals(SessionResult.DONE, dao.getSession("practice_action")!!.result)
+    }
+
+    @Test fun pendingNotificationActionsIgnoreMissingOldFutureAndCompletedSessions() = runBlocking {
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("missing", SessionResult.SKIPPED))
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("old", SessionResult.SKIPPED))
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("future", SessionResult.DONE))
+        repo.completeCourse(course.id)
+        assertEquals(PendingSessionActionResult.IGNORED,
+            repo.applyPendingSessionAction("today", SessionResult.SKIPPED))
+    }
+
     @Test fun todayAndYesterdayAreEditableWhileOlderAndFutureDatesAreReadOnly() = runBlocking {
         for (id in listOf("today", "yesterday")) assertTrue(repo.getSessionDetails(id)!!.canEdit)
         for (id in listOf("old", "future")) {

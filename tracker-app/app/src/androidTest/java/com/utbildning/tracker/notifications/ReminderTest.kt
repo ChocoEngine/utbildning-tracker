@@ -68,7 +68,18 @@ class ReminderTest {
                 when (case) {
                     "pause" -> local.pauseCourse(course.id)
                     "disable_schedule" -> local.disableSchedule(course.id)
-                    "complete" -> local.completeCourse(course.id)
+                    "complete" -> {
+                        manager.notify(session.id, 1, android.app.Notification.Builder(context, "course_starts")
+                            .setSmallIcon(R.drawable.ic_book).setContentTitle(course.name).build())
+                        awaitCondition("Completion fixture has an active notification") {
+                            manager.activeNotifications.any { it.tag == session.id }
+                        }
+                        local.completeCourse(course.id)
+                        ReminderScheduler.reconcile(context, local)
+                        awaitCondition("Completion reconciliation cancels the active notification") {
+                            manager.activeNotifications.none { it.tag == session.id }
+                        }
+                    }
                     "delete" -> local.deleteCourse(course.id)
                     "exhausted" -> local.toggleTopicCompletion(course.id, local.getCourseDetails(course.id)!!.topics.single().id)
                     "result" -> local.setSessionResult(session.id, SessionResult.SKIPPED)
@@ -79,6 +90,8 @@ class ReminderTest {
                 ReminderScheduler.receive(context, trigger, local)
                 if (case == "control") {
                     awaitCondition("Due positive control delivers") { manager.activeNotifications.any { it.tag == session.id } }
+                    assertEquals("Start reminders have no result actions", 0,
+                        manager.activeNotifications.single { it.tag == session.id }.notification.actions?.size ?: 0)
                 } else {
                     assertTrue("$case must not post", manager.activeNotifications.none { it.tag == session.id })
                     assertFalse("$case must not record delivery", context.getSharedPreferences("reminders", Context.MODE_PRIVATE)
@@ -115,6 +128,15 @@ class ReminderTest {
             val posted = manager.activeNotifications.single { it.tag == session.id }
             assertEquals("End reminder replaces the start notification with a fresh alert", 2, posted.id)
             assertEquals(context.getString(R.string.reminder_question), posted.notification.extras.getString("android.text"))
+            val actions = posted.notification.actions
+            assertNotNull(actions)
+            assertEquals(2, actions!!.size)
+            assertEquals(context.getString(R.string.session_done), actions[0].title.toString())
+            assertEquals(context.getString(R.string.session_skipped), actions[1].title.toString())
+            assertTrue("Done opens Activity directly", actions[0].actionIntent.isActivity)
+            assertTrue("Skipped is handled in the receiver", actions[1].actionIntent.isBroadcast)
+            assertNotEquals("Buttons need distinct PendingIntent identities", actions[0].actionIntent, actions[1].actionIntent)
+            assertNotEquals("Body and Done need distinct PendingIntent identities", posted.notification.contentIntent, actions[0].actionIntent)
             val delivered = context.getSharedPreferences("reminders", Context.MODE_PRIVATE)
                 .getStringSet("delivered", emptySet()).orEmpty()
             assertTrue("A late start reminder is suppressed", session.id in delivered)

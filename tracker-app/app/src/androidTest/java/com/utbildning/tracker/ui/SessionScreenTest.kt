@@ -61,6 +61,16 @@ class SessionScreenTest {
         assertEquals(yesterday, runBlocking { dao.getTopic(topics[0].id) }?.completionDate)
     }
 
+    @Test fun editableSessionOffersSkipAndClearsOnlyItsOwnTopicCompletions() {
+        runBlocking { repository.setSessionResult(session.id, SessionResult.DONE, setOf(topics[0].id)) }
+        show()
+        compose.onNodeWithTag("session_save").assertIsDisplayed()
+        compose.onNodeWithTag("session_skip").assertIsDisplayed().performClick()
+        waitClosed()
+        assertEquals(SessionResult.SKIPPED, runBlocking { dao.getSession(session.id) }?.result)
+        assertFalse(runBlocking { dao.getTopic(topics[0].id)!! }.isCompleted)
+    }
+
     private fun checkReadOnly(offset: Long) {
         runBlocking {
             dao.updateSession(session.copy(date = LocalDate.now().toEpochDay() + offset))

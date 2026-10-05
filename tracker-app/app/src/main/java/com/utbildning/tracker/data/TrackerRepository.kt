@@ -103,6 +103,8 @@ class TrackerRepository(
     ).map { getSessionDetails(sessionId) }.distinctUntilChanged()
     suspend fun setSessionResult(sessionId: String, result: SessionResult, selectedTopicIds: Set<String>? = null) =
         operations.setSessionResult(sessionId, result, selectedTopicIds)
+    suspend fun applyPendingSessionAction(sessionId: String, result: SessionResult) =
+        operations.applyPendingSessionAction(sessionId, result)
     suspend fun markSessionDoneIfNoTopics(sessionId: String): Boolean {
         val details = getSessionDetails(sessionId) ?: throw RepositoryException(RepositoryError.SESSION_NOT_FOUND)
         if (details.hasTopics) return false

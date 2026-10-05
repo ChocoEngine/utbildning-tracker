@@ -17,9 +17,10 @@ import com.utbildning.tracker.notifications.ReminderScheduler
 
 class MainActivity : ComponentActivity() {
     private var pendingSessionId by mutableStateOf<String?>(null)
+    private var pendingSessionAction by mutableStateOf<String?>(null)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) pendingSessionId = intent.getStringExtra("sessionId")
+        if (savedInstanceState == null) accept(intent)
         val repository = AppContainer.repository(applicationContext)
         ReminderScheduler.startObserving(applicationContext, repository)
         enableEdgeToEdge(
@@ -28,13 +29,22 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             TrackerTheme {
-                AppNavigation(repository, pendingSessionId) { pendingSessionId = null }
+                AppNavigation(repository, pendingSessionId, onSessionHandled = {
+                    pendingSessionId = null
+                    pendingSessionAction = null
+                }, requestedSessionAction = pendingSessionAction)
             }
         }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        pendingSessionId = intent.getStringExtra("sessionId")
+        setIntent(intent)
+        accept(intent)
+    }
+
+    private fun accept(intent: Intent) {
+        pendingSessionId = intent.getStringExtra(ReminderScheduler.EXTRA_SESSION_ID)
+        pendingSessionAction = intent.action
     }
 }

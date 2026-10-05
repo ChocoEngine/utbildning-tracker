@@ -28,6 +28,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import androidx.lifecycle.withResumed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +53,8 @@ import com.utbildning.tracker.ui.schedule.ScheduleScreen
 import com.utbildning.tracker.ui.session.SessionScreen
 import com.utbildning.tracker.ui.guide.GuideScreen
 import com.utbildning.tracker.notifications.ReminderScheduler
+import com.utbildning.tracker.data.PendingSessionActionResult
+import com.utbildning.tracker.data.local.SessionResult
 import androidx.compose.ui.platform.LocalContext
 import com.utbildning.tracker.ui.calendar.CalendarScreen
 import com.utbildning.tracker.ui.courses.CoursesScreen
@@ -69,19 +73,39 @@ private enum class MainDestination(
 }
 
 @Composable
-fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: String? = null, onSessionHandled: () -> Unit = {}) {
-    if (repository != null) SynchronizeOnResume(repository)
+fun AppNavigation(
+    repository: TrackerRepository? = null,
+    requestedSessionId: String? = null,
+    requestedSessionAction: String? = null,
+    onSessionHandled: () -> Unit = {},
+) {
     val navController = rememberNavController()
     val hostLifecycle = LocalLifecycleOwner.current.lifecycle
     val handled by rememberUpdatedState(onSessionHandled)
-    LaunchedEffect(requestedSessionId) {
+    val context = LocalContext.current
+    LaunchedEffect(requestedSessionId, requestedSessionAction) {
         if (repository != null && requestedSessionId != null) {
-            val exists = repository.getSessionDetails(requestedSessionId) != null
+            val open = when (requestedSessionAction) {
+                ReminderScheduler.ACTION_COMPLETE_SESSION -> when (
+                    repository.applyPendingSessionAction(requestedSessionId, SessionResult.DONE)
+                ) {
+                    PendingSessionActionResult.NEEDS_TOPICS -> true
+                    PendingSessionActionResult.APPLIED -> {
+                        ReminderScheduler.reconcile(context, repository)
+                        false
+                    }
+                    PendingSessionActionResult.IGNORED -> false
+                }
+                else -> repository.getSessionDetails(requestedSessionId) != null
+            }
+            // External intents can arrive during initial composition, before NavHost
+            // installs its graph. Wait for the first destination instead of racing it.
+            snapshotFlow { navController.currentBackStackEntry }.filterNotNull().first()
             // Room may suspend; external navigation must run on the Android main
             // thread while the host can receive lifecycle changes.
             withContext(Dispatchers.Main.immediate) {
                 hostLifecycle.withResumed {
-                    if (exists) navController.navigate("session/$requestedSessionId") { launchSingleTop = true }
+                    if (open) navController.navigate("session/$requestedSessionId") { launchSingleTop = true }
                     handled()
                 }
             }
@@ -90,6 +114,9 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
     var courseExit by remember { mutableStateOf<((() -> Unit) -> Unit)?>(null) }
     val entry by navController.currentBackStackEntryAsState()
     val route = entry?.destination?.route ?: MainDestination.Today.route
+    if (repository != null) {
+        SynchronizeOnResume(repository, requestedSessionId == null && route != "session/{sessionId}")
+    }
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         bottomBar = {
@@ -173,7 +200,7 @@ fun AppNavigation(repository: TrackerRepository? = null, requestedSessionId: Str
 }
 
 @Composable
-private fun SynchronizeOnResume(repository: TrackerRepository) {
+private fun SynchronizeOnResume(repository: TrackerRepository, enabled: Boolean) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var resumed by remember { mutableStateOf(lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) }
@@ -182,8 +209,8 @@ private fun SynchronizeOnResume(repository: TrackerRepository) {
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer) }
     }
-    LaunchedEffect(repository, resumed) {
-        if (resumed) while (true) {
+    LaunchedEffect(repository, resumed, enabled) {
+        if (resumed && enabled) while (true) {
             try { repository.synchronize(); ReminderScheduler.reconcile(context, repository) }
             catch (e: CancellationException) { throw e }
             catch (e: Exception) { android.util.Log.e("Tracker", "Calendar synchronization failed", e) }

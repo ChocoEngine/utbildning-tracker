@@ -5,13 +5,15 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.ParcelFileDescriptor
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import com.utbildning.tracker.MainActivity
 import com.utbildning.tracker.data.AppContainer
 import com.utbildning.tracker.data.local.SessionResult
@@ -29,7 +31,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ReminderNavigationTest {
-    @get:Rule val compose = createAndroidComposeRule<MainActivity>()
+    @get:Rule val compose = createEmptyComposeRule()
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val repository = AppContainer.repository(context)
     private val manager = context.getSystemService(NotificationManager::class.java)
@@ -43,12 +45,19 @@ class ReminderNavigationTest {
             ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(it)).use { stream -> stream.readBytes() }
         }
         assertTrue(ReminderScheduler.allowed(context))
+        context.startActivity(android.content.Intent(context, MainActivity::class.java)
+            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK))
     }
 
     @After fun cleanup(): Unit = runBlocking {
         courseId?.let { repository.deleteCourse(it) }
         ReminderScheduler.reconcile(context, repository)
         manager.cancelAll()
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            listOf(Stage.RESUMED, Stage.PAUSED, Stage.STOPPED).flatMap {
+                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(it)
+            }.distinct().forEach { it.finishAndRemoveTask() }
+        }
     }
 
     @Test fun realExactAlarmDeliversOnceAndTapRendersSelectedSession() = runBlocking {

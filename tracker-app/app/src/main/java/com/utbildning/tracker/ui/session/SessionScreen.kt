@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.LocalContext
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.SessionResult
@@ -41,6 +42,7 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
     var error by remember { mutableStateOf(false) }
     var completionCourseId by rememberSaveable(id) { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     LaunchedEffect(details) { if (selected == null && details != null) selected = ArrayList(details!!.selectedTopicIds) }
     BackHandler { if (!busy && completionCourseId == null) onBack() }
     val current = details
@@ -55,7 +57,20 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
                 busy = true; error = false
                 try {
                     val offerCompletion = repository.setSessionResult(id, SessionResult.DONE, selected.orEmpty().toSet())
+                    com.utbildning.tracker.notifications.ReminderScheduler.reconcile(context, repository)
                     if (offerCompletion) completionCourseId = current.session.courseId else onBack()
+                }
+                catch (cancel: CancellationException) { throw cancel }
+                catch (_: Exception) { error = true }
+                finally { busy = false }
+            }
+        }, onSkip = {
+            scope.launch {
+                busy = true; error = false
+                try {
+                    repository.setSessionResult(id, SessionResult.SKIPPED)
+                    com.utbildning.tracker.notifications.ReminderScheduler.reconcile(context, repository)
+                    onBack()
                 }
                 catch (cancel: CancellationException) { throw cancel }
                 catch (_: Exception) { error = true }
@@ -83,7 +98,7 @@ internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: ()
 
 @Composable
 internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: Set<String>, busy: Boolean, error: Boolean,
-    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, editable: Boolean = true) {
+    onToggle: (String) -> Unit, onCancel: () -> Unit, onSave: () -> Unit, onSkip: () -> Unit = {}, editable: Boolean = true) {
     Column(Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onCancel, enabled = !busy, modifier = Modifier.testTag("session_back")) {
@@ -109,7 +124,12 @@ internal fun SessionContent(name: String, topics: List<TopicEntity>, selected: S
             }
         }
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(horizontal = 8.dp))
-        if (editable) Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).testTag("session_save")) { Text(stringResource(R.string.course_save)) }
+        if (editable) Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = onSkip, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(1f).testTag("session_skip")) { Text(stringResource(R.string.session_skipped)) }
+            Button(onClick = onSave, enabled = !busy, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(1f).testTag("session_save")) { Text(stringResource(R.string.session_done)) }
+        }
     }
 }
 

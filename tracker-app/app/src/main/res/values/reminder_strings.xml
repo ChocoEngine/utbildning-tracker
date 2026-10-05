@@ -1,7 +1,7 @@
 <resources>
     <string name="reminder_channel">Course reminders</string>
     <string name="reminder_start">Time to study</string>
-    <string name="reminder_question">How did the session go? Mark the result</string>
+    <string name="reminder_question">Did you manage to study?</string>
     <string name="reminder_title">Reminders</string>
     <string name="reminder_enable">Allow notifications</string>
     <string name="reminder_exact">Allow precise reminders</string>

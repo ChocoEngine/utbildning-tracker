@@ -18,6 +18,8 @@ data class SessionDetails(
     val hasTopics: Boolean = selectableTopics.isNotEmpty(),
 )
 
+enum class PendingSessionActionResult { APPLIED, NEEDS_TOPICS, IGNORED }
+
 /** Calendar and lifecycle transactions; called through TrackerRepository. */
 internal class TrackerOperations(
     private val database: TrackerDatabase,
@@ -134,6 +136,25 @@ internal class TrackerOperations(
         dao.updateCourse(course.copy(updatedAt = timestamp))
         reconcileExhaustion(session.courseId)
         result == SessionResult.DONE && !wasExhausted && dao.getTopics(session.courseId).let { it.isNotEmpty() && it.all { topic -> topic.isCompleted } }
+    }
+
+    /** Applies a notification action only while the session is still unmarked. */
+    suspend fun applyPendingSessionAction(sessionId: String, result: SessionResult): PendingSessionActionResult = database.withTransaction {
+        require(result == SessionResult.DONE || result == SessionResult.SKIPPED)
+        val session = dao.getSession(sessionId) ?: return@withTransaction PendingSessionActionResult.IGNORED
+        val course = dao.getCourse(session.courseId) ?: return@withTransaction PendingSessionActionResult.IGNORED
+        val timestamp = now()
+        if (session.result != SessionResult.PENDING ||
+            !SessionEditPolicy.canEdit(session.date, course.isCompleted, today(timestamp))) {
+            return@withTransaction PendingSessionActionResult.IGNORED
+        }
+        if (result == SessionResult.DONE && dao.getTopics(session.courseId).isNotEmpty()) {
+            return@withTransaction PendingSessionActionResult.NEEDS_TOPICS
+        }
+        dao.updateSession(session.copy(result = result, updatedAt = timestamp))
+        dao.updateCourse(course.copy(updatedAt = timestamp))
+        reconcileExhaustion(session.courseId)
+        PendingSessionActionResult.APPLIED
     }
 
     suspend fun reconcileExhaustion(courseId: String) {
