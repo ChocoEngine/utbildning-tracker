@@ -1,0 +1,163 @@
+^D
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:..
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:......
+com.utbildning.tracker.ui.CourseListAppearanceTest:....
+com.utbildning.tracker.ui.CourseListGeometryReviewTest:..
+com.utbildning.tracker.ui.CourseTopicPaceTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:....
+Error in editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(CoursesScreenTest.kt:221)
+....
+Error in appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'topic_ab301af3-7702-4fd1-8afc-fab5e86326e5')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(CoursesScreenTest.kt:259)
+
+Error in creationDialogValidatesNameAndCreatesCourseWithoutMode(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [Лекции C])
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationDialogValidatesNameAndCreatesCourseWithoutMode(CoursesScreenTest.kt:109)
+
+Error in courseCanBeCreatedWithoutTopicsOrScheduleAndTopicsAddedLater(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_schedule')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.courseCanBeCreatedWithoutTopicsOrScheduleAndTopicsAddedLater(CoursesScreenTest.kt:125)
+.....
+Error in editorNameShowsRussianErrorAndPreservesTextCursorAndSelection(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameShowsRussianErrorAndPreservesTextCursorAndSelection(CoursesScreenTest.kt:241)
+..
+Error in pauseAndResumeStayInEditorAndAllowPausingAgain(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Assert failed: The component with TestTag = 'course_resume' is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.utbildning.tracker.ui.CoursesScreenTest.pauseAndResumeStayInEditorAndAllowPausingAgain(CoursesScreenTest.kt:449)
+...
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.LanguageSettingsTest:.......
+com.utbildning.tracker.ui.NavigationEntryFlowTest:.
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.ScheduleScreenTest:...........
+com.utbildning.tracker.ui.SessionScreenTest:.............
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.VisualReviewTest:..
+
+Time: 715.618
+There were 6 failures:
+1) editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(CoursesScreenTest.kt:221)
+2) appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'topic_ab301af3-7702-4fd1-8afc-fab5e86326e5')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(CoursesScreenTest.kt:259)
+3) creationDialogValidatesNameAndCreatesCourseWithoutMode(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [Лекции C])
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationDialogValidatesNameAndCreatesCourseWithoutMode(CoursesScreenTest.kt:109)
+4) courseCanBeCreatedWithoutTopicsOrScheduleAndTopicsAddedLater(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_schedule')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.courseCanBeCreatedWithoutTopicsOrScheduleAndTopicsAddedLater(CoursesScreenTest.kt:125)
+5) editorNameShowsRussianErrorAndPreservesTextCursorAndSelection(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameShowsRussianErrorAndPreservesTextCursorAndSelection(CoursesScreenTest.kt:241)
+6) pauseAndResumeStayInEditorAndAllowPausingAgain(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Assert failed: The component with TestTag = 'course_resume' is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.utbildning.tracker.ui.CoursesScreenTest.pauseAndResumeStayInEditorAndAllowPausingAgain(CoursesScreenTest.kt:449)
+
+FAILURES!!!
+Tests run: 194,  Failures: 6
+
+

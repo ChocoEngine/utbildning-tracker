@@ -1,0 +1,10 @@
+^D
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+
+Time: 69.009
+
+OK (5 tests)
+
+

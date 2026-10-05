@@ -1,0 +1,9 @@
+^D
+com.utbildning.tracker.ui.CoursesScreenTest:..
+com.utbildning.tracker.ui.SessionScreenTest:.
+
+Time: 25.922
+
+OK (3 tests)
+
+

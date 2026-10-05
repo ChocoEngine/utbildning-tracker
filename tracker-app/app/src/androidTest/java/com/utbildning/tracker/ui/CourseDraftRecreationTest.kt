@@ -68,10 +68,13 @@ class CourseDraftRecreationTest {
             modelJob = original!!.viewModelScope.coroutineContext[Job]
         }
         click("course_add")
+        waitForTag("course_name")
         compose.onNodeWithTag("course_name").performTextReplacement("C draft")
         compose.onNodeWithTag("course_category").performTextReplacement("New category")
         click("course_continue")
+        compose.waitUntil(5_000) { original?.draft?.id != null }
         click("course_category_open")
+        waitForTag("course_category")
         compose.onNodeWithTag("course_category").assertTextContains("New category")
         compose.onNodeWithText(compose.activity.getString(R.string.topics_apply)).performClick()
         click("topics_edit")
@@ -92,8 +95,12 @@ class CourseDraftRecreationTest {
     }
 
     private fun click(tag: String) {
-        compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+        waitForTag(tag)
         runCatching { compose.onNodeWithTag(tag).performScrollTo() }
         compose.onNodeWithTag(tag).performClick()
+    }
+
+    private fun waitForTag(tag: String) {
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
     }
 }

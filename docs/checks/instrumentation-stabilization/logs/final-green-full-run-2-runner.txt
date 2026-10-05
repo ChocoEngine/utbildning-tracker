@@ -1,0 +1,80 @@
+^D
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:.
+Error in questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository(com.utbildning.tracker.notifications.ReminderNavigationTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.notifications.ReminderNavigationTest$questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository$1.invokeSuspend(ReminderNavigationTest.kt:129)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderNavigationTest.questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository(ReminderNavigationTest.kt:103)
+
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:......
+com.utbildning.tracker.ui.CourseListAppearanceTest:....
+com.utbildning.tracker.ui.CourseListGeometryReviewTest:..
+com.utbildning.tracker.ui.CourseTopicPaceTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:........................
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.LanguageSettingsTest:.......
+com.utbildning.tracker.ui.NavigationEntryFlowTest:.
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.ScheduleScreenTest:...........
+com.utbildning.tracker.ui.SessionScreenTest:.............
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.VisualReviewTest:..
+
+Time: 614.556
+There was 1 failure:
+1) questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository(com.utbildning.tracker.notifications.ReminderNavigationTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.notifications.ReminderNavigationTest$questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository$1.invokeSuspend(ReminderNavigationTest.kt:129)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderNavigationTest.questionActionIntentsRunThroughReceiverAndColdActivityIntoRepository(ReminderNavigationTest.kt:103)
+
+FAILURES!!!
+Tests run: 194,  Failures: 1
+
+

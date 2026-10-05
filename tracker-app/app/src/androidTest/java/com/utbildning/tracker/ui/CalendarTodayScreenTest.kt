@@ -93,7 +93,8 @@ class CalendarTodayScreenTest {
         compose.onNodeWithTag("today_yesterday").assertExists()
         click("session_done_yesterday")
         compose.runOnIdle { assertEquals("yesterday", done) }
-        click("session_done_default")
+        compose.onNodeWithTag("today_sessions").performScrollToNode(hasTestTag("session_done_default"))
+        compose.onNodeWithTag("session_done_default").performClick()
         compose.runOnIdle { assertEquals("default", done); now.value = Instant.parse("2026-09-26T11:30:00Z") }
         compose.runOnIdle { now.value = Instant.parse("2026-09-26T12:00:00Z") }
     }

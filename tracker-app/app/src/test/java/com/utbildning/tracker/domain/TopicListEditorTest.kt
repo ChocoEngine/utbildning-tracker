@@ -12,6 +12,39 @@ class TopicListEditorTest {
         assertTrue(TopicListEditor.parse(" \r\n\t\n").isEmpty())
     }
 
+    @Test fun normalizesEachTitleByUnicodeCodePointsAfterTrim() {
+        val ninetyNine = "Я".repeat(99)
+        val hundred = "😀".repeat(100)
+        val mixed = "C".repeat(98) + "😀Ж"
+        val lines = TopicListEditor.parse("  $ninetyNine  \n$hundred\n${hundred}X\n  ${mixed}tail  ")
+
+        assertEquals(listOf(99, 100, 100, 100), lines.map { it.title.codePointCount(0, it.title.length) })
+        assertEquals(ninetyNine, lines[0].title)
+        assertEquals(hundred, lines[1].title)
+        assertEquals(hundred, lines[2].title)
+        assertEquals(mixed, lines[3].title)
+        assertFalse(lines.any { it.title.firstOrNull()?.isLowSurrogate() == true })
+        assertFalse(lines.any { it.title.lastOrNull()?.isHighSurrogate() == true })
+    }
+
+    @Test fun veryLongLinesAreLimitedIndependentlyWithoutCollapsingDuplicates() {
+        val longEmoji = "🧠".repeat(10_000)
+        val result = TopicListEditor.parse("${longEmoji}A\nshort\n${longEmoji}B")
+
+        assertEquals(listOf(100, 5, 100), result.map { it.title.codePointCount(0, it.title.length) })
+        assertEquals(result[0].title, result[2].title)
+        assertEquals(listOf(1, 2, 3), result.map { it.lineNumber })
+    }
+
+    @Test fun trimmingHappensBeforeLimitAndBlankLinesKeepFollowingSourceNumbers() {
+        val title = "A".repeat(99) + "😀"
+        val parsed = TopicListEditor.parse("\n  $title overflow  \n \nsecond")
+
+        assertEquals(listOf(2, 4), parsed.map { it.lineNumber })
+        assertEquals(title, parsed[0].title)
+        assertEquals(100, parsed[0].title.codePointCount(0, parsed[0].title.length))
+    }
+
     @Test fun completedConflictsReportEveryOriginalLineUsingUnicodeCaseAndTrim() {
         val existing = listOf(EditableTopic("done", " Массивы ", 0, isCompleted = true))
         try {
@@ -19,6 +52,17 @@ class TopicListEditorTest {
             fail("Expected completed topic conflicts")
         } catch (exception: TopicListConflictException) {
             assertEquals(listOf(2, 4), exception.lineNumbers)
+        }
+    }
+
+    @Test fun completedConflictIsDetectedAfterTruncationWithOriginalLineNumber() {
+        val completedTitle = "Т".repeat(99) + "😀"
+        val existing = listOf(EditableTopic("done", completedTitle, 0, isCompleted = true))
+        try {
+            TopicListEditor.plan("\n\n  ${completedTitle}ignored\n", existing)
+            fail("Expected completed topic conflict")
+        } catch (exception: TopicListConflictException) {
+            assertEquals(listOf(3), exception.lineNumbers)
         }
     }
 

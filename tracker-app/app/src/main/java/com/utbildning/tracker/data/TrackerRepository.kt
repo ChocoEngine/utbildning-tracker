@@ -231,7 +231,7 @@ class TrackerRepository(
     ): CourseEntity = database.withTransaction {
         val title = checkedCourseName(name)
         checkColor(colorId)
-        val topicTitles = topics.map { it.trim() }
+        val topicTitles = topics.map(TopicListEditor::normalizeTitle)
         if (topicTitles.any { it.isEmpty() }) fail(RepositoryError.INVALID_TOPIC)
         if (dao.countUnfinishedCourses() >= COLOR_COUNT) fail(RepositoryError.COURSE_LIMIT)
         requireAvailableColor(colorId)

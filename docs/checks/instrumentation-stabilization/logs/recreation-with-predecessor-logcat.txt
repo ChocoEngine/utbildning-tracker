@@ -1,0 +1,116 @@
+^D--------- beginning of main
+10-05 21:22:16.943  5274  5274 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-05 21:22:17.258  5274  5274 I AndroidRuntime: Using default boot image
+10-05 21:22:17.258  5274  5274 I AndroidRuntime: Leaving lock profiling enabled
+10-05 21:22:17.809  5274  5274 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+10-05 21:22:20.929  5288  5303 I TestRunner: run started: 1 tests
+10-05 21:22:20.931  5288  5303 I TestRunner: started: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+--------- beginning of system
+10-05 21:22:21.238   604  1969 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:22:21.528   604  1564 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:22:21.555   604  1980 W ActivityTaskManager: takeTaskSnapshot: taskId=1307 not found or not visible
+10-05 21:22:22.470   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +1s236ms
+10-05 21:22:24.946   604  1204 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:22:25.515   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +602ms
+10-05 21:22:26.181  5288  5303 E TestRunner: failed: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+10-05 21:22:26.209  5288  5303 E TestRunner: ----- begin exception -----
+10-05 21:22:26.209  5288  5303 E TestRunner: java.lang.AssertionError: Action performScrollTo() failed.
+10-05 21:22:26.209  5288  5303 E TestRunner: Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'session_done_default')
+10-05 21:22:26.209  5288  5303 E TestRunner: 
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at com.utbildning.tracker.ui.CalendarTodayScreenTest.click(CalendarTodayScreenTest.kt:176)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at com.utbildning.tracker.ui.CalendarTodayScreenTest.todayShowsYesterdayButOmitsOlderAndFutureSessions(CalendarTodayScreenTest.kt:96)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.lang.Thread.run(Thread.java:1119)
+10-05 21:22:26.210  5288  5303 E TestRunner: ----- end exception -----
+10-05 21:22:26.211  5288  5303 I TestRunner: finished: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+10-05 21:22:26.230  5288  5303 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored
+10-05 21:22:26.265  5274  5274 I AndroidRuntime: VM exiting with result code 0.
+10-05 21:22:54.124   604  1980 I ActivityTaskManager: Config changes=20000d00 {1.0 310mcc260mnc [en_US] ldltr sw411dp w411dp h914dp 420dpi nrml long port finger qwerty/v/v dpad/v winConfig={ mBounds=Rect(0, 0 - 1080, 2400) mAppBounds=Rect(0, 0 - 1080, 2400) mMaxBounds=Rect(0, 0 - 1080, 2400) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} s.128 fontWeightAdjustment=0}
+10-05 21:23:01.476  5369  5369 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-05 21:23:01.490  5369  5369 I AndroidRuntime: Using default boot image
+10-05 21:23:01.490  5369  5369 I AndroidRuntime: Leaving lock profiling enabled
+10-05 21:23:01.942  5369  5369 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+10-05 21:23:02.864  5380  5394 I TestRunner: run started: 1 tests
+10-05 21:23:02.865  5380  5394 I TestRunner: started: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-05 21:23:02.990   604   648 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:23:03.216   604  1969 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:23:03.634   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +591ms
+10-05 21:23:19.266   604   901 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:23:19.727   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +468ms
+10-05 21:23:20.319  5380  5394 I TestRunner: finished: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-05 21:23:20.336  5380  5394 I TestRunner: run finished: 1 tests, 0 failed, 0 ignored
+10-05 21:23:20.451  5369  5369 I AndroidRuntime: VM exiting with result code 0.
+10-05 21:23:26.712  5450  5450 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-05 21:23:26.720  5450  5450 I AndroidRuntime: Using default boot image
+10-05 21:23:26.720  5450  5450 I AndroidRuntime: Leaving lock profiling enabled
+10-05 21:23:26.887  5450  5450 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+10-05 21:23:27.715  5462  5476 I TestRunner: run started: 4 tests
+10-05 21:23:27.716  5462  5476 I TestRunner: started: resumePreservesProgressWithoutSchedule(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:23:27.926   604   648 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:23:28.267   604   648 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:23:29.118   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +1s225ms
+10-05 21:23:30.367   604  1982 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:23:30.785   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +431ms
+10-05 21:23:31.095  5462  5476 I TestRunner: finished: resumePreservesProgressWithoutSchedule(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:23:31.122  5462  5476 I TestRunner: started: english(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:23:31.170   604   901 W ActivityTaskManager: Finishing task with all activities already finished
+10-05 21:23:31.170   604   901 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{166808797 u0 com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity t1313 f}}
+10-05 21:23:31.230   604  1564 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:23:31.848   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +656ms
+10-05 21:23:47.154   604  1588 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:23:47.529   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +374ms
+10-05 21:23:48.885  5462  5476 I TestRunner: finished: english(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:23:48.887  5462  5476 I TestRunner: started: russian(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:23:48.922   604  1588 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:23:49.130   604  1564 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:23:49.137   604   944 W ActivityTaskManager: takeTaskSnapshot: taskId=1315 not found or not visible
+10-05 21:23:49.172   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +220ms
+10-05 21:24:01.896   604  1607 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:24:02.254   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +361ms
+10-05 21:24:02.747  5462  5476 I TestRunner: finished: russian(com.utbildning.tracker.ui.CourseDetailsReviewTest)
+10-05 21:24:02.766  5462  5476 I TestRunner: started: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-05 21:24:02.888   604  1969 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:24:02.888   604  1982 W ActivityTaskManager: Finishing task with all activities already finished
+10-05 21:24:02.895   604  1982 W ActivityTaskManager: Duplicate finish request for r=ActivityRecord{203462650 u0 com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity t1317 f}}
+10-05 21:24:03.201   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +363ms
+10-05 21:24:03.218   604   648 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:24:03.219   604   648 W ActivityTaskManager: takeTaskSnapshot: taskId=1317 not found or not visible
+10-05 21:24:09.360   604  1607 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:24:09.722   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +384ms
+10-05 21:24:10.128  5462  5476 E TestRunner: failed: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-05 21:24:10.129  5462  5476 E TestRunner: ----- begin exception -----
+10-05 21:24:10.129  5462  5476 E TestRunner: java.lang.AssertionError: Failed to assert the following: (Text + InputText + EditableText contains 'New category' (ignoreCase: false))
+10-05 21:24:10.129  5462  5476 E TestRunner: Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_category')
+10-05 21:24:10.129  5462  5476 E TestRunner: 
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:208)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at com.utbildning.tracker.ui.CourseDraftRecreationTest.actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(CourseDraftRecreationTest.kt:75)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+10-05 21:24:10.129  5462  5476 E TestRunner: 	at java.lang.Thread.run(Thread.java:1119)
+10-05 21:24:10.131  5462  5476 E TestRunner: ----- end exception -----
+10-05 21:24:10.132  5462  5476 I TestRunner: finished: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-05 21:24:10.139  5462  5476 I TestRunner: run finished: 4 tests, 1 failed, 0 ignored
+10-05 21:24:10.174  5450  5450 I AndroidRuntime: VM exiting with result code 0.

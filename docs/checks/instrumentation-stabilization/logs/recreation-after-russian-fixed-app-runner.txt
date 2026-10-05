@@ -1,0 +1,9 @@
+^D
+com.utbildning.tracker.ui.CourseDetailsReviewTest:.
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+
+Time: 44.061
+
+OK (2 tests)
+
+

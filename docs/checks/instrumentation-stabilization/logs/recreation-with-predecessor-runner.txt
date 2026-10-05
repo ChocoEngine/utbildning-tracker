@@ -1,0 +1,36 @@
+^D
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:
+Error in actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest):
+java.lang.AssertionError: Failed to assert the following: (Text + InputText + EditableText contains 'New category' (ignoreCase: false))
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_category')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:208)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(CourseDraftRecreationTest.kt:75)
+
+
+Time: 42.424
+There was 1 failure:
+1) actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+java.lang.AssertionError: Failed to assert the following: (Text + InputText + EditableText contains 'New category' (ignoreCase: false))
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_category')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:208)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(CourseDraftRecreationTest.kt:75)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+

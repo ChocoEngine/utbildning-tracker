@@ -1,0 +1,38 @@
+^D--------- beginning of main
+10-05 21:22:16.943  5274  5274 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-05 21:22:17.258  5274  5274 I AndroidRuntime: Using default boot image
+10-05 21:22:17.258  5274  5274 I AndroidRuntime: Leaving lock profiling enabled
+10-05 21:22:17.809  5274  5274 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+10-05 21:22:20.929  5288  5303 I TestRunner: run started: 1 tests
+10-05 21:22:20.931  5288  5303 I TestRunner: started: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+--------- beginning of system
+10-05 21:22:21.238   604  1969 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+10-05 21:22:21.528   604  1564 W ActivityTaskManager: takeTaskSnapshot: taskId=233 not found or not visible
+10-05 21:22:21.555   604  1980 W ActivityTaskManager: takeTaskSnapshot: taskId=1307 not found or not visible
+10-05 21:22:22.470   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker/androidx.activity.ComponentActivity for user 0: +1s236ms
+10-05 21:22:24.946   604  1204 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 xflg=0x4 cmp=com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_VISIBLE_WINDOW) result code=0
+10-05 21:22:25.515   604   652 I ActivityTaskManager: Displayed com.utbildning.tracker.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +602ms
+10-05 21:22:26.181  5288  5303 E TestRunner: failed: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+10-05 21:22:26.209  5288  5303 E TestRunner: ----- begin exception -----
+10-05 21:22:26.209  5288  5303 E TestRunner: java.lang.AssertionError: Action performScrollTo() failed.
+10-05 21:22:26.209  5288  5303 E TestRunner: Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'session_done_default')
+10-05 21:22:26.209  5288  5303 E TestRunner: 
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at com.utbildning.tracker.ui.CalendarTodayScreenTest.click(CalendarTodayScreenTest.kt:176)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at com.utbildning.tracker.ui.CalendarTodayScreenTest.todayShowsYesterdayButOmitsOlderAndFutureSessions(CalendarTodayScreenTest.kt:96)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+10-05 21:22:26.209  5288  5303 E TestRunner: 	at java.lang.Thread.run(Thread.java:1119)
+10-05 21:22:26.210  5288  5303 E TestRunner: ----- end exception -----
+10-05 21:22:26.211  5288  5303 I TestRunner: finished: todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+10-05 21:22:26.230  5288  5303 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored
+10-05 21:22:26.265  5274  5274 I AndroidRuntime: VM exiting with result code 0.

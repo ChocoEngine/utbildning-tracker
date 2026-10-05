@@ -23,6 +23,7 @@ import com.utbildning.tracker.data.local.TrackerDatabase
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.util.UUID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -118,9 +119,10 @@ class ReminderNavigationTest {
             val startMinute = (now.hour * 60 + now.minute - 1).coerceAtLeast(0)
             val endMinute = now.hour * 60 + now.minute
             val created = System.currentTimeMillis()
-            val skip = SessionEntity("action_skip", skipCourse.id, LocalDate.now().toEpochDay(), startMinute,
+            val runId = UUID.randomUUID().toString()
+            val skip = SessionEntity("action_skip_$runId", skipCourse.id, LocalDate.now().toEpochDay(), startMinute,
                 skipCourse.name, skipCourse.colorId, created, created, endMinute = endMinute)
-            val done = SessionEntity("action_done", doneCourse.id, LocalDate.now().toEpochDay(), startMinute,
+            val done = SessionEntity("action_done_$runId", doneCourse.id, LocalDate.now().toEpochDay(), startMinute,
                 doneCourse.name, doneCourse.colorId, created, created, endMinute = endMinute)
             dao.insertSession(skip)
             dao.insertSession(done)

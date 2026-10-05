@@ -1,0 +1,8 @@
+^D
+com.utbildning.tracker.notifications.ReminderNavigationTest:.
+
+Time: 8.165
+
+OK (1 test)
+
+

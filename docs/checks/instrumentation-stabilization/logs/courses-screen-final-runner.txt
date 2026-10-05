@@ -1,0 +1,119 @@
+^D
+com.utbildning.tracker.ui.CoursesScreenTest:
+Error in creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.utbildning.tracker.ui.CoursesScreenTest.scrollTo(CoursesScreenTest.kt:561)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:555)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits(CoursesScreenTest.kt:183)
+...
+Error in editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA])
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(CoursesScreenTest.kt:231)
+
+Error in cancelInitialDialogDoesNotCreateCourseOrCategory(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.utbildning.tracker.ui.CoursesScreenTest.scrollTo(CoursesScreenTest.kt:561)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:555)
+	at com.utbildning.tracker.ui.CoursesScreenTest.cancelInitialDialogDoesNotCreateCourseOrCategory(CoursesScreenTest.kt:139)
+...
+Error in appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'topic_871c32a0-82ea-4b3e-b03c-bc17e7f434eb')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(CoursesScreenTest.kt:259)
+.............
+Error in creationAndEditorCountSupplementaryUnicodeAsSingleCodePoints(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationAndEditorCountSupplementaryUnicodeAsSingleCodePoints(CoursesScreenTest.kt:209)
+
+
+Time: 191.034
+There were 5 failures:
+1) creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.utbildning.tracker.ui.CoursesScreenTest.scrollTo(CoursesScreenTest.kt:561)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:555)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationNameShowsEnglishErrorAndAcceptsReplacementOnlyWhenResultFits(CoursesScreenTest.kt:183)
+2) editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText = [AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA])
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals(Assertions.kt:185)
+	at androidx.compose.ui.test.AssertionsKt.assertTextEquals$default(Assertions.kt:181)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(CoursesScreenTest.kt:231)
+3) cancelInitialDialogDoesNotCreateCourseOrCategory(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.utbildning.tracker.ui.CoursesScreenTest.scrollTo(CoursesScreenTest.kt:561)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:555)
+	at com.utbildning.tracker.ui.CoursesScreenTest.cancelInitialDialogDoesNotCreateCourseOrCategory(CoursesScreenTest.kt:139)
+4) appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'topic_871c32a0-82ea-4b3e-b03c-bc17e7f434eb')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.utbildning.tracker.ui.CoursesScreenTest.appliedTopicsPersistImmediatelyAndCancelOnlyDiscardsTextarea(CoursesScreenTest.kt:259)
+5) creationAndEditorCountSupplementaryUnicodeAsSingleCodePoints(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CoursesScreenTest.creationAndEditorCountSupplementaryUnicodeAsSingleCodePoints(CoursesScreenTest.kt:209)
+
+FAILURES!!!
+Tests run: 24,  Failures: 5
+
+

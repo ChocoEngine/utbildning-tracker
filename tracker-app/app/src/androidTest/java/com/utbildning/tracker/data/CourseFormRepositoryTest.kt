@@ -37,6 +37,17 @@ class CourseFormRepositoryTest {
         assertTrue(repository.getCourseDetails(practice.id)!!.topics.isEmpty())
     }
 
+    @Test fun formCreationNormalizesTextLinesIndependently() = runBlocking {
+        val emoji = "😀".repeat(100)
+        val course = repository.saveCourseForm(name = "C", colorId = 0,
+            topicText = "  ${"Я".repeat(99)}  \n\n${emoji}tail\n${"Mixed".repeat(1_000)}")
+        val titles = dao.getTopics(course.id).map { it.title }
+
+        assertEquals(listOf(99, 100, 100), titles.map { it.codePointCount(0, it.length) })
+        assertEquals(emoji, titles[1])
+        assertFalse(titles.any { it.lastOrNull()?.isHighSurrogate() == true })
+    }
+
     @Test fun conflictingTopicsRollBackMetadataCategoryAndColorTogether() = runBlocking {
         val original = repository.createCourse("C", 0, "Old", listOf("Массивы", "Указатели"))
         val topics = dao.getTopics(original.id)
@@ -51,6 +62,24 @@ class CourseFormRepositoryTest {
         assertEquals(0, dao.getCourse(original.id)?.colorId)
         assertEquals(listOf("Old"), dao.getCategories().map { it.name })
         assertEquals(topics.mapIndexed { i, topic -> topic.copy(isCompleted = i == 0) }, dao.getTopics(original.id))
+    }
+
+    @Test fun conflictCreatedByTruncationRollsBackMetadataCategoryColorAndTopics() = runBlocking {
+        val completedTitle = "К".repeat(99) + "🧠"
+        val original = repository.createCourse("C", 0, "Old", listOf(completedTitle, "Keep"))
+        val topics = dao.getTopics(original.id)
+        val completed = topics.first().copy(isCompleted = true, completionDate = 17)
+        dao.updateTopic(completed)
+
+        try {
+            repository.saveCourseForm(original.id, "Changed", 1, "New", "\n\n${completedTitle}suffix\nReplacement")
+            fail("Expected conflict after truncation")
+        } catch (expected: TopicListConflictException) {
+            assertEquals(listOf(3), expected.lineNumbers)
+        }
+        assertEquals(original, dao.getCourse(original.id))
+        assertEquals(listOf("Old"), dao.getCategories().map { it.name })
+        assertEquals(listOf(completed, topics[1]), dao.getTopics(original.id))
     }
 
     @Test fun completedFormRejectsAllChanges() = runBlocking {
@@ -88,5 +117,16 @@ class CourseFormRepositoryTest {
         repository.saveCourseForm(course.id, "New", 0)
         assertEquals(topics, dao.getTopics(course.id))
         assertNotNull(dao.getCourse(course.id))
+    }
+
+    @Test fun openingAndSavingOtherFieldsDoNotNormalizeExistingLongTopics() = runBlocking {
+        val course = repository.createCourse("C", 0)
+        val legacy = TopicEntity("legacy", course.id, 0, "  ${"🧠".repeat(120)}  ",
+            isCompleted = true, completionDate = 88)
+        dao.insertTopic(legacy)
+
+        assertEquals(legacy.title, repository.getTopicEditorTopics(course.id).single().title)
+        repository.saveCourseForm(course.id, "Renamed", 0, "New category", topicText = null)
+        assertEquals(legacy, dao.getTopic(legacy.id))
     }
 }

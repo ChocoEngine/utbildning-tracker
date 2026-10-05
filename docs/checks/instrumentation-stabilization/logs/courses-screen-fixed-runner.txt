@@ -1,0 +1,35 @@
+^D
+com.utbildning.tracker.ui.CoursesScreenTest:..
+Error in emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_category')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:60)
+	at com.utbildning.tracker.ui.CoursesScreenTest.emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses(CoursesScreenTest.kt:382)
+.....................
+
+Time: 207.777
+There was 1 failure:
+1) emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses(com.utbildning.tracker.ui.CoursesScreenTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_category')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:60)
+	at com.utbildning.tracker.ui.CoursesScreenTest.emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses(CoursesScreenTest.kt:382)
+
+FAILURES!!!
+Tests run: 24,  Failures: 1
+
+

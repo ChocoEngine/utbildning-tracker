@@ -211,9 +211,11 @@ class SessionScreenTest {
         compose.waitUntil(5_000) { compose.onAllNodesWithTag("session_topics").fetchSemanticsNodes().isNotEmpty() }
     }
     private fun click(tag: String) {
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
         val node = compose.onNodeWithTag(tag)
         if (tag.startsWith("session_topic_")) node.performScrollTo()
         node.performClick()
+        compose.waitForIdle()
     }
     private fun waitClosed() = compose.waitUntil(5_000) { !visible.value }
 }

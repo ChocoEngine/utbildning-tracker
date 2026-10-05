@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.os.SystemClock
 import android.provider.MediaStore
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
@@ -105,6 +106,7 @@ class CoursesScreenTest {
         text("course_category", "Программирование")
         compose.onNodeWithTag("category_menu").assertDoesNotExist()
         click("course_continue")
+        waitForTag("course_title")
         compose.onNodeWithTag("course_title").assertTextEquals("Лекции C")
         compose.onNodeWithTag("settings").assertDoesNotExist()
         compose.onNodeWithTag("course_save").assertDoesNotExist()
@@ -121,6 +123,7 @@ class CoursesScreenTest {
         val saved = courses().single()
         assertTrue(runBlocking { dao.getTopics(saved.id) }.isEmpty())
         assertNull(runBlocking { dao.getSchedule(saved.id) })
+        waitForTag("course_schedule")
         compose.onNodeWithTag("course_schedule").assertExists()
         compose.onNodeWithTag("mode_unscheduled").assertDoesNotExist()
         click("topics_edit")
@@ -203,8 +206,9 @@ class CoursesScreenTest {
         click("course_cancel")
 
         val course = seed(name = "C".repeat(49) + "😀")
-        if (compose.onAllNodesWithTag("course_row_${course.id}").fetchSemanticsNodes().isEmpty()) show("en")
+        waitForTag("course_row_${course.id}")
         click("course_row_${course.id}")
+        waitForTag("course_title")
         compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(0, 1))
         paste("😀😀")
@@ -217,6 +221,7 @@ class CoursesScreenTest {
         val savedName = "A".repeat(50)
         val course = seed(name = savedName)
         show("en"); click("course_row_${course.id}")
+        waitForTag("course_title")
         compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(12, 18))
         paste("Z".repeat(7))
@@ -227,6 +232,7 @@ class CoursesScreenTest {
         click("course_cancel")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == savedName }
         if (compose.onAllNodesWithTag("course_title").fetchSemanticsNodes().isEmpty()) click("course_row_${course.id}")
+        waitForTag("course_title")
         compose.onNodeWithTag("course_title").assertTextEquals(savedName)
         compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         compose.onNodeWithTag("course_name").performTextInputSelection(TextRange(12, 18))
@@ -237,6 +243,7 @@ class CoursesScreenTest {
     @Test fun editorNameShowsRussianErrorAndPreservesTextCursorAndSelection() {
         val course = seed(name = "Курс")
         show("ru"); click("course_row_${course.id}")
+        waitForTag("course_title")
         compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         assertRejectedEditPreservesSelection("Название должно содержать не более 50 символов")
         captureError("course_name_editor_ru.png")
@@ -255,7 +262,49 @@ class CoursesScreenTest {
         assertEquals(listOf("Arrays", "Pointers", "Functions"), after.map { it.title })
         assertEquals(before.getValue("Arrays").id, after[0].id)
         click("course_cancel"); click("course_row_${original.id}")
-        compose.onNodeWithTag("topic_${after[2].id}").assertExists()
+        waitFor { compose.onAllNodesWithTag("topic_${after[2].id}", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("topic_${after[2].id}", useUnmergedTree = true).assertExists()
+    }
+
+    @Test fun longMultilineTopicPasteIsUnrestrictedUntilApplyThenShowsStoredTitlesInRussian() {
+        val longEmoji = "😀".repeat(101)
+        val pasted = "  $longEmoji  \n\n  ${"Т".repeat(150)}  "
+        val expected = "😀".repeat(100) + "\n" + "Т".repeat(100)
+        show("ru"); click("course_add")
+        waitFor { compose.onAllNodesWithTag("course_name").fetchSemanticsNodes().isNotEmpty() }
+        text("course_name", "Длинные темы"); click("course_continue")
+        waitFor { courses().size == 1 }
+        val course = courses().single()
+        val original = runBlocking { dao.getTopics(course.id) }
+        click("topics_edit")
+
+        text("topics_input", "x")
+        compose.onNodeWithTag("topics_input").performTextInputSelection(TextRange(0, 1))
+        pasteInto("topics_input", pasted)
+        assertInputText("topics_input", pasted)
+        click("topics_cancel")
+        assertEquals(original, runBlocking { dao.getTopics(course.id) })
+
+        click("topics_edit"); text("topics_input", "x")
+        compose.onNodeWithTag("topics_input").performTextInputSelection(TextRange(0, 1))
+        pasteInto("topics_input", pasted)
+        click("topics_apply")
+        waitFor { runBlocking { dao.getTopics(course.id) }.map { it.title } == expected.lines() }
+        click("topics_edit")
+        assertInputText("topics_input", expected)
+        SystemClock.sleep(3_500)
+        captureScreenshot("topic_title_limit_ru.png")
+        click("topics_cancel"); click("course_cancel"); click("course_row_${course.id}"); click("topics_edit")
+        assertInputText("topics_input", expected)
+    }
+
+    @Test fun savedLongMixedTopicReopensWithStoredTextInEnglish() {
+        val mixed = "C".repeat(98) + "🧠Ж"
+        val course = seed(topics = listOf("${mixed}ignored", "Short"))
+        show("en"); click("course_row_${course.id}"); click("topics_edit")
+
+        assertInputText("topics_input", "$mixed\nShort")
+        captureScreenshot("topic_title_limit_en.png")
     }
 
     @Test fun categorySuggestionsKeepFocusAndDoNotSavePartialInput() {
@@ -330,7 +379,7 @@ class CoursesScreenTest {
         seed()
         show()
         compose.onNodeWithTag("courses_filter").assertDoesNotExist()
-        click("course_add"); compose.onNodeWithTag("course_category").performClick()
+        click("course_add"); waitForTag("course_category"); compose.onNodeWithTag("course_category").performClick()
         compose.onNodeWithTag("category_menu").assertDoesNotExist()
         click("course_cancel")
     }
@@ -339,6 +388,7 @@ class CoursesScreenTest {
         val active = (0..9).map { seed(name = "C $it", color = it) }
         runBlocking { dao.insertCourse(CourseEntity("completed", "Completed", null, 1, 2, isCompleted = true, completedAt = 2)) }
         show()
+        waitFor { active.all { compose.onAllNodesWithTag("course_row_${it.id}").fetchSemanticsNodes().isNotEmpty() } }
         compose.onNodeWithTag("course_add").assertDoesNotExist()
         click("courses_filter"); scrollTo("course_row_completed")
         compose.onNodeWithTag("course_row_completed").assertIsDisplayed()
@@ -404,6 +454,7 @@ class CoursesScreenTest {
         click("course_pause"); click("course_action_confirm")
         waitFor { runBlocking { dao.getCourse(course.id) }!!.isPaused }
         compose.onNodeWithTag("course_editor").assertIsDisplayed()
+        waitForTag("course_resume")
         compose.onNodeWithTag("course_resume").assertIsDisplayed()
     }
 
@@ -442,17 +493,25 @@ class CoursesScreenTest {
         assertEquals(expected, actual)
     }
 
-    private fun assertInputText(expected: String) {
-        val actual = compose.onNodeWithTag("course_name").fetchSemanticsNode().config[SemanticsProperties.EditableText].text
+    private fun assertInputText(expected: String) = assertInputText("course_name", expected)
+
+    private fun assertInputText(tag: String, expected: String) {
+        val actual = compose.onNodeWithTag(tag).fetchSemanticsNode().config[SemanticsProperties.EditableText].text
         assertEquals(expected, actual)
     }
 
     private fun paste(value: String) {
-        context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("course name", value))
-        compose.onNodeWithTag("course_name").performSemanticsAction(SemanticsActions.PasteText)
+        pasteInto("course_name", value)
     }
 
-    private fun captureError(name: String) {
+    private fun pasteInto(tag: String, value: String) {
+        context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("tracker text", value))
+        compose.onNodeWithTag(tag).performSemanticsAction(SemanticsActions.PasteText)
+    }
+
+    private fun captureError(name: String) = captureScreenshot(name)
+
+    private fun captureScreenshot(name: String) {
         compose.waitForIdle()
         val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
         val values = ContentValues().apply {
@@ -496,12 +555,16 @@ class CoursesScreenTest {
         compose.onNode(hasText("Apply list") or hasText("Применить список")).performClick()
     }
     private fun waitFor(condition: () -> Boolean) = compose.waitUntil(5_000, condition)
+    private fun waitForTag(tag: String) = waitFor {
+        compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
+    }
     private fun click(tag: String) {
-        waitFor { compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+        waitForTag(tag)
         if (!tag.startsWith("category_delete_")) scrollTo(tag)
         compose.onNodeWithTag(tag).performClick()
     }
     private fun text(tag: String, value: String) {
+        waitForTag(tag)
         scrollTo(tag)
         compose.onNodeWithTag(tag).performTextReplacement(value)
 

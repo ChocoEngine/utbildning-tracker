@@ -1,0 +1,31 @@
+^D
+com.utbildning.tracker.ui.CalendarTodayScreenTest:
+Error in todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'session_done_default')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+	at com.utbildning.tracker.ui.CalendarTodayScreenTest.click(CalendarTodayScreenTest.kt:176)
+	at com.utbildning.tracker.ui.CalendarTodayScreenTest.todayShowsYesterdayButOmitsOlderAndFutureSessions(CalendarTodayScreenTest.kt:96)
+
+
+Time: 5.301
+There was 1 failure:
+1) todayShowsYesterdayButOmitsOlderAndFutureSessions(com.utbildning.tracker.ui.CalendarTodayScreenTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'session_done_default')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+	at com.utbildning.tracker.ui.CalendarTodayScreenTest.click(CalendarTodayScreenTest.kt:176)
+	at com.utbildning.tracker.ui.CalendarTodayScreenTest.todayShowsYesterdayButOmitsOlderAndFutureSessions(CalendarTodayScreenTest.kt:96)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

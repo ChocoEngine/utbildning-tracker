@@ -206,7 +206,8 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 attach(saved.id)
             } else {
                 repository.saveTopicList(current.id, text)
-                change { it.copy(text = text, editingText = null) }
+                val saved = repository.getTopicEditorTopics(current.id)
+                change { it.copy(topics = saved, text = TopicListEditor.editableText(saved), editingText = null) }
             }
         }
     }

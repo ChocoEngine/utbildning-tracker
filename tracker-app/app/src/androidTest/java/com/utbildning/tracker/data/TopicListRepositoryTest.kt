@@ -44,6 +44,58 @@ class TopicListRepositoryTest {
         assertTrue(dao.observeTopics(course.id).first().filter { it.isCompleted }.isEmpty())
     }
 
+    @Test fun publicCreateAndSaveLimitEveryTitleByCodePointAndRemainIdempotent() = runBlocking {
+        val ninetyNine = "Я".repeat(99)
+        val hundredEmoji = "😀".repeat(100)
+        val mixedLimit = "C".repeat(98) + "🧠Ж"
+        val veryLong = "🧠".repeat(5_000)
+        val course = repository.createCourse("C", 0, topics = listOf(
+            "  $ninetyNine  ", hundredEmoji, hundredEmoji + "tail", "  ${mixedLimit}tail  ", veryLong,
+        ))
+        val created = dao.getTopics(course.id)
+
+        assertEquals(listOf(99, 100, 100, 100, 100),
+            created.map { it.title.codePointCount(0, it.title.length) })
+        assertEquals(hundredEmoji, created[1].title)
+        assertEquals(hundredEmoji, created[2].title)
+        assertNotEquals(created[1].id, created[2].id)
+        assertEquals(mixedLimit, created[3].title)
+        assertFalse(created.any { it.title.firstOrNull()?.isLowSurrogate() == true })
+        assertFalse(created.any { it.title.lastOrNull()?.isHighSurrogate() == true })
+
+        val firstId = created.first().id
+        dao.updateTopic(created.first().copy(isCompleted = true, completionDate = 42))
+        timestamp = 200
+        val editable = "${hundredEmoji}extra\n\n${hundredEmoji}again\n  ${mixedLimit}more  \n$veryLong"
+        val saved = repository.saveTopicList(course.id, editable)
+        val editableSaved = saved.filterNot { it.isCompleted }
+        assertEquals(listOf(hundredEmoji, hundredEmoji, mixedLimit, "🧠".repeat(100)), editableSaved.map { it.title })
+        assertEquals(4, editableSaved.map { it.id }.distinct().size)
+        assertEquals(dao.getTopic(firstId)?.copy(), created.first().copy(isCompleted = true, completionDate = 42))
+
+        val beforeRepeat = dao.getTopics(course.id)
+        timestamp = 300
+        assertEquals(beforeRepeat, repository.saveTopicList(course.id, editable))
+        assertEquals(100L, dao.getCourse(course.id)?.updatedAt)
+    }
+
+    @Test fun conflictAfterLimitKeepsCompletedTopicAndAllOtherRowsUntouched() = runBlocking {
+        val completedTitle = "A".repeat(99) + "😀"
+        val course = repository.createCourse("C", 0, topics = listOf(completedTitle, "Keep"))
+        val original = dao.getTopics(course.id)
+        val completed = original.first().copy(isCompleted = true, completionDate = 73)
+        dao.updateTopic(completed)
+
+        try {
+            repository.saveTopicList(course.id, "\nKeep\n\n${completedTitle}suffix")
+            fail("Expected conflict after truncation")
+        } catch (exception: TopicListConflictException) {
+            assertEquals(listOf(4), exception.lineNumbers)
+        }
+        assertEquals(listOf(completed, original[1]), dao.getTopics(course.id))
+        assertEquals(course, dao.getCourse(course.id))
+    }
+
     @Test fun completedTopicsStayUntouchedAndRemovingHistoricalTopicArchivesIt() = runBlocking {
         val course = repository.createCourse("C", 0, topics = listOf("Remove", "Done", "Keep"))
         val old = dao.getTopics(course.id)
@@ -117,6 +169,20 @@ class TopicListRepositoryTest {
         timestamp = 200
         assertEquals(original, repository.saveTopicList(course.id, " First \r\n\r\nSecond\n"))
         assertEquals(course, dao.getCourse(course.id))
+    }
+
+    @Test fun explicitlySavingLegacyLongEditableTopicTruncatesTitleButKeepsId() = runBlocking {
+        val course = repository.createCourse("C", 0)
+        val longTitle = "🧠".repeat(120)
+        val legacy = TopicEntity("legacy", course.id, 0, longTitle)
+        dao.insertTopic(legacy)
+        timestamp = 200
+
+        val saved = repository.saveTopicList(course.id, longTitle).single()
+        assertEquals(legacy.id, saved.id)
+        assertEquals(legacy.position, saved.position)
+        assertEquals("🧠".repeat(100), saved.title)
+        assertEquals(200L, dao.getCourse(course.id)?.updatedAt)
     }
 
     @Test fun savedListAndArchivedHistorySurviveDatabaseReopen() = runBlocking {

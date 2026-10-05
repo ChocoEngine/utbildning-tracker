@@ -19,9 +19,17 @@ class TopicListConflictException(val lineNumbers: List<Int>) :
     IllegalArgumentException("TOPIC_LIST_CONFLICT")
 
 object TopicListEditor {
+    const val MAX_TITLE_CODE_POINTS = 100
+
+    fun normalizeTitle(title: String): String {
+        val trimmed = title.trim()
+        if (trimmed.codePointCount(0, trimmed.length) <= MAX_TITLE_CODE_POINTS) return trimmed
+        return trimmed.substring(0, trimmed.offsetByCodePoints(0, MAX_TITLE_CODE_POINTS))
+    }
+
     fun parse(text: String): List<TopicLine> = text.lineSequence()
         .mapIndexedNotNull { index, line ->
-            line.trim().takeIf { it.isNotEmpty() }?.let { TopicLine(index + 1, it) }
+            normalizeTitle(line).takeIf { it.isNotEmpty() }?.let { TopicLine(index + 1, it) }
         }.toList()
 
     fun editableText(topics: List<EditableTopic>): String = editable(topics)
@@ -37,7 +45,7 @@ object TopicListEditor {
         if (conflicts.isNotEmpty()) throw TopicListConflictException(conflicts)
 
         val existing = editable(topics)
-        val byTitle = existing.groupBy { it.title.trim() }
+        val byTitle = existing.groupBy { normalizeTitle(it.title) }
             .mapValues { (_, matches) -> ArrayDeque(matches) }
         val retainedIds = mutableSetOf<String>()
         val occupiedPositions = completed.map { it.position }.toSet()

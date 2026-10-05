@@ -1,0 +1,8 @@
+^D
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+
+Time: 17.472
+
+OK (1 test)
+
+
