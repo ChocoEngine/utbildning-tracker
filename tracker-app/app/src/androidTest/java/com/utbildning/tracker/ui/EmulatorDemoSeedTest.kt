@@ -72,7 +72,7 @@ class EmulatorDemoSeedTest {
                 val topics = instrumentation.context.assets.open("demo/$key.txt").bufferedReader().use { it.readLines().filter(String::isNotBlank) }
                 val course = database.withTransaction {
                     val used = database.trackerDao().getCourses().filter { !it.isCompleted }.map { it.colorId }.toSet()
-                    val color = (0..9).first { it !in used }
+                    val color = (0..9).firstOrNull { it !in used } ?: return@withTransaction null
                     val scheduled = key != "programming"
                     val created = repository.createCourse(name, color, category, topics)
                     if (scheduled) repository.saveInitialSchedule(created.id, (1..7).map { WeeklyRule(it, when (key) {
@@ -82,7 +82,7 @@ class EmulatorDemoSeedTest {
                     }) })
                     check(repository.getCourseDetails(created.id)!!.topics.map { it.title } == topics)
                     created
-                }
+                } ?: continue
                 check(preferences.edit().putString(key, course.id).commit())
             }
             if (InstrumentationRegistry.getArguments().getString("seedToday") == "true") {
@@ -92,7 +92,8 @@ class EmulatorDemoSeedTest {
                     val timestamp = System.currentTimeMillis()
                     val examples = listOf("landscapes" to 9 * 60, "programming" to 15 * 60, "long-title" to (17 * 60 + 30), "swedish" to (20 * 60 + 30))
                     for ((key, minute) in examples) {
-                        val course = checkNotNull(repository.getCourse(checkNotNull(preferences.getString(key, null))))
+                        val courseId = preferences.getString(key, null) ?: continue
+                        val course = repository.getCourse(courseId) ?: continue
                         if (repository.getSchedule(course.id) == null) {
                             // Keep the fixture usable with the original schedule API as well.
                             repository.saveInitialSchedule(course.id, (1..7).map { WeeklyRule(it, minute) })
