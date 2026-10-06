@@ -1,0 +1,45 @@
+
+com.utbildning.tracker.notifications.ReminderTest:....
+Error in reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(com.utbildning.tracker.notifications.ReminderTest):
+java.lang.AssertionError: expected:<[candidate_yesterday]> but was:<[candidate_yesterday, candidate_old, candidate_done, 0|com.utbildning.tracker|g:Aggregate_AlertingSection]>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.utbildning.tracker.notifications.ReminderTest$reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites$1.invokeSuspend(ReminderTest.kt:130)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderTest.reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(ReminderTest.kt:108)
+.
+com.utbildning.tracker.data.SessionResultRepositoryTest:.............
+com.utbildning.tracker.ui.AppNavigationTest:.......
+
+Time: 72.2
+There was 1 failure:
+1) reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(com.utbildning.tracker.notifications.ReminderTest)
+java.lang.AssertionError: expected:<[candidate_yesterday]> but was:<[candidate_yesterday, candidate_old, candidate_done, 0|com.utbildning.tracker|g:Aggregate_AlertingSection]>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.utbildning.tracker.notifications.ReminderTest$reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites$1.invokeSuspend(ReminderTest.kt:130)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderTest.reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(ReminderTest.kt:108)
+
+FAILURES!!!
+Tests run: 26,  Failures: 1
+
+

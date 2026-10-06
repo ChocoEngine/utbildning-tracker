@@ -1,0 +1,74 @@
+
+com.utbildning.tracker.notifications.ReminderTest:....
+Error in reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(com.utbildning.tracker.notifications.ReminderTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.utbildning.tracker.data.local.CourseEntity.<init>(Entities.kt:56)
+	at com.utbildning.tracker.data.local.CourseEntity.copy(Unknown Source:28)
+	at com.utbildning.tracker.data.local.CourseEntity.copy$default(Unknown Source:64)
+	at com.utbildning.tracker.notifications.ReminderTest$reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites$1.invokeSuspend(ReminderTest.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderTest.reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(ReminderTest.kt:75)
+.
+com.utbildning.tracker.data.SessionResultRepositoryTest:.
+Error in reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses(com.utbildning.tracker.data.SessionResultRepositoryTest):
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.utbildning.tracker.data.local.CourseEntity.<init>(Entities.kt:56)
+	at com.utbildning.tracker.data.local.CourseEntity.copy(Unknown Source:28)
+	at com.utbildning.tracker.data.local.CourseEntity.copy$default(Unknown Source:64)
+	at com.utbildning.tracker.data.SessionResultRepositoryTest$reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses$1.invokeSuspend(SessionResultRepositoryTest.kt:70)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.data.SessionResultRepositoryTest.reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses(SessionResultRepositoryTest.kt:67)
+...........
+com.utbildning.tracker.ui.AppNavigationTest:.......
+
+Time: 79.1
+There were 2 failures:
+1) reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(com.utbildning.tracker.notifications.ReminderTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.utbildning.tracker.data.local.CourseEntity.<init>(Entities.kt:56)
+	at com.utbildning.tracker.data.local.CourseEntity.copy(Unknown Source:28)
+	at com.utbildning.tracker.data.local.CourseEntity.copy$default(Unknown Source:64)
+	at com.utbildning.tracker.notifications.ReminderTest$reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites$1.invokeSuspend(ReminderTest.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderTest.reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites(ReminderTest.kt:75)
+2) reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses(com.utbildning.tracker.data.SessionResultRepositoryTest)
+java.lang.IllegalArgumentException: Failed requirement.
+	at com.utbildning.tracker.data.local.CourseEntity.<init>(Entities.kt:56)
+	at com.utbildning.tracker.data.local.CourseEntity.copy(Unknown Source:28)
+	at com.utbildning.tracker.data.local.CourseEntity.copy$default(Unknown Source:64)
+	at com.utbildning.tracker.data.SessionResultRepositoryTest$reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses$1.invokeSuspend(SessionResultRepositoryTest.kt:70)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.data.SessionResultRepositoryTest.reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses(SessionResultRepositoryTest.kt:67)
+
+FAILURES!!!
+Tests run: 26,  Failures: 2
+
+

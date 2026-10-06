@@ -1,0 +1,13 @@
+--------- beginning of main
+10-06 15:57:21.565  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:21.627  5540  5540 D ScheduleReturnTrace: write complete 61 ms; reconcile begin
+10-06 15:57:25.529  5540  5540 D ScheduleReturnTrace: reconcile complete 3963 ms; return begin
+10-06 15:57:25.529  5540  5540 D ScheduleReturnTrace: return complete 3964 ms
+10-06 15:57:26.529  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:26.539  5540  5540 D ScheduleReturnTrace: write complete 10 ms; reconcile begin
+10-06 15:57:29.288  5540  5540 D ScheduleReturnTrace: reconcile complete 2759 ms; return begin
+10-06 15:57:29.288  5540  5540 D ScheduleReturnTrace: return complete 2759 ms
+10-06 15:57:29.796  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:29.848  5540  5540 D ScheduleReturnTrace: write complete 52 ms; reconcile begin
+10-06 15:57:30.932  5540  5540 D ScheduleReturnTrace: reconcile complete 1136 ms; return begin
+10-06 15:57:30.933  5540  5540 D ScheduleReturnTrace: return complete 1137 ms

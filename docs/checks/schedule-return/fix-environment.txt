@@ -1,0 +1,11 @@
+AVD: ScheduleReturnFix (new dedicated AVD)
+Serial: emulator-5558
+API: 36; image google_apis_playstore/arm64-v8a
+Screen: 840 x 1418 px, density 420 (320 x 540 dp)
+Timezone: Europe/Moscow
+JDK: temurin 17.0.13
+SDK: /Users/alxshvarts/Library/Android/sdk
+Cold boot: -no-snapshot -no-boot-anim -no-audio
+Animations: window/transition/animator scales 0
+APK install: adb -s emulator-5558 install -r (no data clearing)
+Seed: R05EmulatorSeedTest seedR05=true

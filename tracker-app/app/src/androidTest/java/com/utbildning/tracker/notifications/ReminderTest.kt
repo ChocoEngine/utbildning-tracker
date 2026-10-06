@@ -49,6 +49,121 @@ class ReminderTest {
         manager.cancelAll()
     }
 
+    @Test fun futureSessionRegistersAlarmBeforeItsDateBecomesEditable() = runBlocking {
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        val local = TrackerRepository(db)
+        val tomorrow = LocalDate.now().plusDays(1)
+        try {
+            val course = local.createCourse("Future C reminder", 0, topics = listOf("One"))
+            local.saveInitialSchedule(course.id, listOf(WeeklyRule(tomorrow.dayOfWeek.value, 13 * 60)))
+            val session = db.trackerDao().getSessions(course.id).first { it.date == tomorrow.toEpochDay() }
+            assertFalse("Future result stays read-only", local.getSessionDetails(session.id)!!.canEdit)
+            ReminderScheduler.reconcile(context, local)
+            val expected = tomorrow.atTime(13, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            fun registeredStart(): Boolean {
+                val dump = android.os.ParcelFileDescriptor.AutoCloseInputStream(
+                    InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("dumpsys alarm"),
+                ).bufferedReader().use { it.readText() }
+                return Regex("RTC_WAKEUP #\\d+: Alarm\\{[^\\n}]*origWhen $expected [^\\n}]* ${Regex.escape(context.packageName)}\\}")
+                    .containsMatchIn(dump)
+            }
+            assertTrue("Tomorrow's start must already have a registered RTC_WAKEUP alarm", registeredStart())
+            repeat(2) {
+                ReminderScheduler.reconcile(context, local)
+                assertTrue(registeredStart())
+                assertTrue("Reconciliation does not post a future notification",
+                    manager.activeNotifications.none { it.tag == session.id })
+            }
+            val dao = db.trackerDao()
+            // Bound this fixture to one session so a later occurrence cannot mask cancellation.
+            dao.getSessions(course.id).filter { it.id != session.id }.forEach { dao.deleteSession(it.id) }
+            for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
+                dao.updateSession(session.copy(result = result))
+                ReminderScheduler.reconcile(context, local)
+                assertFalse("$result cancels future planning", registeredStart())
+                dao.updateSession(session)
+            }
+            for (inactive in listOf(course.copy(isPaused = true), course.copy(isCompleted = true, colorId = null, completedAt = System.currentTimeMillis()))) {
+                dao.updateCourse(inactive)
+                ReminderScheduler.reconcile(context, local)
+                assertFalse("Inactive course cancels future planning", registeredStart())
+                dao.updateCourse(course)
+            }
+            val topic = dao.getTopics(course.id).single()
+            dao.updateTopic(topic.copy(isCompleted = true))
+            ReminderScheduler.reconcile(context, local)
+            assertFalse("Exhaustion cancels future planning", registeredStart())
+            dao.updateTopic(topic)
+            ReminderScheduler.reconcile(context, local)
+            assertTrue("Restored active course registers future alarm", registeredStart())
+            dao.deleteSchedule(course.id)
+            ReminderScheduler.reconcile(context, local)
+            assertFalse("Disabled schedule cancels future planning", registeredStart())
+        } finally {
+            db.close()
+            ReminderScheduler.reconcile(context, repository)
+        }
+    }
+
+    @Test fun reconciliationKeepsYesterdayQuestionAndCancelsIneligibleQuestionsWithoutWrites() = runBlocking {
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        val today = LocalDate.now()
+        val local = TrackerRepository(db)
+        val dao = db.trackerDao()
+        try {
+            val course = local.createCourse("Candidate questions", 0, topics = listOf("One"))
+            local.saveInitialSchedule(course.id, listOf(WeeklyRule(today.plusDays(1).dayOfWeek.value, 13 * 60)))
+            for ((id, date, result) in listOf(
+                Triple("candidate_yesterday", today.minusDays(1), SessionResult.PENDING),
+                Triple("candidate_old", today.minusDays(2), SessionResult.PENDING),
+                Triple("candidate_done", today, SessionResult.DONE),
+                Triple("candidate_skipped", today.plusDays(1), SessionResult.SKIPPED),
+            )) {
+                dao.insertSession(SessionEntity(id, course.id, date.toEpochDay(), 600,
+                    course.name, course.colorId, 0, 0, result = result))
+                postQuestion(id)
+            }
+            fun questionIds() = manager.activeNotifications.mapNotNull { it.tag }
+                .filter { it.startsWith("candidate_") }.toSet()
+            awaitCondition("All fixture questions are posted") { questionIds().size == 4 }
+            val before = dao.getAllSessions()
+            val beforeTopics = dao.getTopics(course.id)
+            repeat(2) {
+                ReminderScheduler.reconcile(context, local)
+                awaitCondition("Only yesterday's pending question remains") {
+                    questionIds() == setOf("candidate_yesterday")
+                }
+                assertEquals(setOf("candidate_yesterday"), questionIds())
+                assertEquals(before, dao.getAllSessions())
+                assertEquals(beforeTopics, dao.getTopics(course.id))
+            }
+            for (inactive in listOf(course.copy(isPaused = true), course.copy(isCompleted = true, colorId = null, completedAt = System.currentTimeMillis()))) {
+                dao.updateCourse(inactive)
+                ReminderScheduler.reconcile(context, local)
+                awaitCondition("Inactive questions are cancelled") { questionIds().isEmpty() }
+                assertTrue(local.getReminderCandidates().isEmpty())
+                dao.updateCourse(course)
+                postQuestion("candidate_yesterday")
+                awaitCondition("Restored fixture question is posted") { "candidate_yesterday" in questionIds() }
+            }
+            dao.updateTopic(beforeTopics.single().copy(isCompleted = true))
+            ReminderScheduler.reconcile(context, local)
+            awaitCondition("Inactive questions are cancelled") { questionIds().isEmpty() }
+            assertTrue(local.getReminderCandidates().isEmpty())
+            dao.updateTopic(beforeTopics.single())
+            postQuestion("candidate_yesterday")
+            awaitCondition("Fixture question is posted before schedule deletion") { "candidate_yesterday" in questionIds() }
+            dao.deleteSchedule(course.id)
+            ReminderScheduler.reconcile(context, local)
+            awaitCondition("Inactive questions are cancelled") { questionIds().isEmpty() }
+            assertTrue(local.getReminderCandidates().isEmpty())
+            assertEquals(before, dao.getAllSessions())
+        } finally {
+            db.close()
+            ReminderScheduler.reconcile(context, repository)
+        }
+    }
+
     private suspend fun awaitCondition(message: String, condition: () -> Boolean) {
         val deadline = System.currentTimeMillis() + 5_000
         while (!condition() && System.currentTimeMillis() < deadline) delay(50)

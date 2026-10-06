@@ -1,0 +1,8 @@
+
+com.utbildning.tracker.ui.R05EmulatorSeedTest:.
+
+Time: 1.501
+
+OK (1 test)
+
+

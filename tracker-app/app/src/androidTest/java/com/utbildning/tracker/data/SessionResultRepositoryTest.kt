@@ -41,6 +41,45 @@ class SessionResultRepositoryTest {
     }
     @After fun close() = db.close()
 
+    @Test fun reminderCandidatesUseRepositoryDateWithoutChangingResultsOrTopics() = runBlocking {
+        repo.saveInitialSchedule(course.id, listOf(com.utbildning.tracker.domain.WeeklyRule(1, 800)))
+        val sessions = dao.getAllSessions()
+        val beforeTopics = dao.getTopics(course.id)
+        assertEquals(setOf("today", "yesterday", "future"),
+            repo.getReminderCandidates().filter { it.id in setOf("today", "yesterday", "old", "future") }.map { it.id }.toSet())
+        assertFalse(repo.getSessionDetails("future")!!.canEdit)
+        // The same instant is September 26 in UTC: September 25 is still yesterday there.
+        zoneId = ZoneId.of("UTC")
+        assertTrue(repo.getReminderCandidates().any { it.id == "old" })
+        zoneId = ZoneId.of("Europe/Moscow")
+        assertFalse(repo.getReminderCandidates().any { it.id == "old" })
+        assertEquals(sessions, dao.getAllSessions())
+        assertEquals(beforeTopics, dao.getTopics(course.id))
+        for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
+            dao.updateSession(dao.getSession("today")!!.copy(result = result))
+            assertFalse(repo.getReminderCandidates().any { it.id == "today" })
+        }
+        timestamp += 86_400_000
+        assertFalse(repo.getReminderCandidates().any { it.id == "yesterday" })
+        assertEquals(SessionResult.PENDING, dao.getSession("yesterday")!!.result)
+    }
+
+    @Test fun reminderCandidatesExcludeInactiveOrUnscheduledOrExhaustedCourses() = runBlocking {
+        repo.saveInitialSchedule(course.id, listOf(com.utbildning.tracker.domain.WeeklyRule(1, 800)))
+        assertTrue(repo.getReminderCandidates().isNotEmpty())
+        for (inactive in listOf(course.copy(isPaused = true), course.copy(isCompleted = true, colorId = null, completedAt = System.currentTimeMillis()))) {
+            dao.updateCourse(inactive)
+            assertTrue(repo.getReminderCandidates().isEmpty())
+        }
+        dao.updateCourse(course)
+        topics.forEach { dao.updateTopic(it.copy(isCompleted = true)) }
+        assertTrue(repo.getReminderCandidates().isEmpty())
+        dao.updateTopic(topics.first())
+        assertTrue(repo.getReminderCandidates().isNotEmpty())
+        dao.deleteSchedule(course.id)
+        assertTrue(repo.getReminderCandidates().isEmpty())
+    }
+
     @Test fun selectionChangesAndResetsOnlyItsOwnTopics() = runBlocking {
         val other = repo.createCourse("Other", 1, topics = listOf("Other"))
         val otherTopic = dao.getTopics(other.id).single().copy(isCompleted = true, completionDate = date)

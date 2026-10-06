@@ -1,0 +1,10 @@
+
+com.utbildning.tracker.notifications.ReminderTest:......
+com.utbildning.tracker.data.SessionResultRepositoryTest:.............
+com.utbildning.tracker.ui.AppNavigationTest:.
+
+Time: 18.271
+
+OK (20 tests)
+
+

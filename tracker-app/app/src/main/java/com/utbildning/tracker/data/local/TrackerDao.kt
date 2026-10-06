@@ -65,6 +65,16 @@ interface TrackerDao {
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getAllSessions(): List<SessionEntity>
 
+    @Query("""SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted
+        FROM sessions s JOIN courses c ON c.id = s.courseId
+        JOIN schedules schedule ON schedule.courseId = c.id
+        WHERE s.result = 'PENDING' AND s.date >= :earliestDate
+        AND c.isCompleted = 0 AND c.isPaused = 0
+        AND (NOT EXISTS(SELECT 1 FROM topics WHERE courseId = c.id)
+            OR EXISTS(SELECT 1 FROM topics WHERE courseId = c.id AND isCompleted = 0))
+        ORDER BY s.date, s.startMinute, s.id""")
+    suspend fun getReminderCandidates(earliestDate: Long): List<SessionEntity>
+
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     fun observeSessions(): Flow<List<SessionEntity>>
 

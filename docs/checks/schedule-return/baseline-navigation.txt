@@ -1,0 +1,307 @@
+
+com.utbildning.tracker.ui.AppNavigationTest:..
+Error in unscheduledCourseCanCancelEnableAndEditThroughPencil(com.utbildning.tracker.ui.AppNavigationTest):
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1286 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #1287 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #1763 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px
+       |-Node #1766 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'screen_schedule'
+          |-Node #1768 at (l=53.0, t=116.0, r=158.0, b=221.0)px, Tag: 'back'
+          | ContentDescription = '[Back]'
+          | Focused = 'false'
+          | Role = 'Button'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          | Actions = [OnClick, RequestFocus]
+          | MergeDescendants = 'true'
+          |-Node #1770 at (l=189.0, t=116.0, r=1017.0, b=221.0)px
+          | Text = '[Schedule]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1772 at (l=53.0, t=273.0, r=315.0, b=316.0)px
+          | Text = '[Course end date]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1774 at (l=64.0, t=327.0, r=169.0, b=432.0)px, Tag: 'schedule_date'
+          | ContentDescription = '[Choose end date]'
+          | Role = 'Button'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          | [Disabled]
+          | Actions = [OnClick]
+          | MergeDescendants = 'true'
+          |-Node #1777 at (l=0.0, t=445.0, r=1080.0, b=2105.0)px
+          | IsTraversalGroup = 'true'
+          | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@46b3484'
+          | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+          | Actions = [ScrollBy, ScrollByOffset]
+          |  |-Node #1780 at (l=85.0, t=477.0, r=148.0, b=540.0)px, Tag: 'schedule_day_1'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@dbdc46d'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1781 at (l=166.0, t=487.0, r=294.0, b=530.0)px
+          |  | Text = '[Monday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1785 at (l=85.0, t=606.0, r=148.0, b=669.0)px, Tag: 'schedule_day_2'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@4f408a2'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'On'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1786 at (l=166.0, t=616.0, r=302.0, b=659.0)px
+          |  | Text = '[Tuesday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1816 at (l=53.0, t=700.0, r=1027.0, b=975.0)px
+          |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 12.0.dp), topEnd = CornerSize(size = 12.0.dp), bottomEnd = CornerSize(size = 12.0.dp), bottomStart = CornerSize(size = 12.0.dp))'
+          |  |  |-Node #1818 at (l=79.0, t=711.0, r=433.0, b=816.0)px, Tag: 'schedule_start_2'
+          |  |  | Role = 'Button'
+          |  |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          |  |  | Text = '[Start 8:00 PM]'
+          |  |  | [Disabled]
+          |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+          |  |  | MergeDescendants = 'true'
+          |  |  |-Node #1823 at (l=496.0, t=711.0, r=1027.0, b=816.0)px, Tag: 'schedule_add_end_2'
+          |  |  | Role = 'Button'
+          |  |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          |  |  | Text = '[Add end time]'
+          |  |  | [Disabled]
+          |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+          |  |  | MergeDescendants = 'true'
+          |  |  |-Node #1826 at (l=74.0, t=837.0, r=1006.0, b=954.0)px, Tag: 'schedule_conflicts_2'
+          |  |     |-Node #1829 at (l=132.0, t=837.0, r=351.0, b=871.0)px
+          |  |     | Text = '[At the same time:]'
+          |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |     |-Node #1830 at (l=132.0, t=871.0, r=1006.0, b=954.0)px
+          |  |       Text = '[C pointers arrays memory structured programming · Tue 11:30 AM → Wed 1:00 AM]'
+          |  |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1790 at (l=85.0, t=1010.0, r=148.0, b=1073.0)px, Tag: 'schedule_day_3'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@5d53933'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1791 at (l=166.0, t=1020.0, r=352.0, b=1063.0)px
+          |  | Text = '[Wednesday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1795 at (l=85.0, t=1139.0, r=148.0, b=1202.0)px, Tag: 'schedule_day_4'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@3a914f0'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1796 at (l=166.0, t=1149.0, r=317.0, b=1192.0)px
+          |  | Text = '[Thursday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1800 at (l=85.0, t=1268.0, r=148.0, b=1331.0)px, Tag: 'schedule_day_5'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@4ff3a69'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1801 at (l=166.0, t=1278.0, r=265.0, b=1321.0)px
+          |  | Text = '[Friday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1805 at (l=85.0, t=1397.0, r=148.0, b=1460.0)px, Tag: 'schedule_day_6'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@aae0cee'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1806 at (l=166.0, t=1407.0, r=309.0, b=1450.0)px
+          |  | Text = '[Saturday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1810 at (l=85.0, t=1526.0, r=148.0, b=1589.0)px, Tag: 'schedule_day_7'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@220358f'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1811 at (l=166.0, t=1536.0, r=285.0, b=1579.0)px
+          |    Text = '[Sunday]'
+          |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1813 at (l=53.0, t=2169.0, r=1027.0, b=2274.0)px, Tag: 'schedule_save'
+            Role = 'Button'
+            Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+            Text = '[Save]'
+            [Disabled]
+            Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+            MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:294)
+	at com.utbildning.tracker.ui.AppNavigationTest.unscheduledCourseCanCancelEnableAndEditThroughPencil(AppNavigationTest.kt:237)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:293)
+	... 67 more
+....
+
+Time: 59.556
+There was 1 failure:
+1) unscheduledCourseCanCancelEnableAndEditThroughPencil(com.utbildning.tracker.ui.AppNavigationTest)
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1286 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+ |-Node #1287 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #1763 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px
+       |-Node #1766 at (l=0.0, t=63.0, r=1080.0, b=2337.0)px, Tag: 'screen_schedule'
+          |-Node #1768 at (l=53.0, t=116.0, r=158.0, b=221.0)px, Tag: 'back'
+          | ContentDescription = '[Back]'
+          | Focused = 'false'
+          | Role = 'Button'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          | Actions = [OnClick, RequestFocus]
+          | MergeDescendants = 'true'
+          |-Node #1770 at (l=189.0, t=116.0, r=1017.0, b=221.0)px
+          | Text = '[Schedule]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1772 at (l=53.0, t=273.0, r=315.0, b=316.0)px
+          | Text = '[Course end date]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1774 at (l=64.0, t=327.0, r=169.0, b=432.0)px, Tag: 'schedule_date'
+          | ContentDescription = '[Choose end date]'
+          | Role = 'Button'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          | [Disabled]
+          | Actions = [OnClick]
+          | MergeDescendants = 'true'
+          |-Node #1777 at (l=0.0, t=445.0, r=1080.0, b=2105.0)px
+          | IsTraversalGroup = 'true'
+          | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@46b3484'
+          | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=0.0, reverseScrolling=false)'
+          | Actions = [ScrollBy, ScrollByOffset]
+          |  |-Node #1780 at (l=85.0, t=477.0, r=148.0, b=540.0)px, Tag: 'schedule_day_1'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@dbdc46d'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1781 at (l=166.0, t=487.0, r=294.0, b=530.0)px
+          |  | Text = '[Monday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1785 at (l=85.0, t=606.0, r=148.0, b=669.0)px, Tag: 'schedule_day_2'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@4f408a2'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'On'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1786 at (l=166.0, t=616.0, r=302.0, b=659.0)px
+          |  | Text = '[Tuesday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1816 at (l=53.0, t=700.0, r=1027.0, b=975.0)px
+          |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 12.0.dp), topEnd = CornerSize(size = 12.0.dp), bottomEnd = CornerSize(size = 12.0.dp), bottomStart = CornerSize(size = 12.0.dp))'
+          |  |  |-Node #1818 at (l=79.0, t=711.0, r=433.0, b=816.0)px, Tag: 'schedule_start_2'
+          |  |  | Role = 'Button'
+          |  |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          |  |  | Text = '[Start 8:00 PM]'
+          |  |  | [Disabled]
+          |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+          |  |  | MergeDescendants = 'true'
+          |  |  |-Node #1823 at (l=496.0, t=711.0, r=1027.0, b=816.0)px, Tag: 'schedule_add_end_2'
+          |  |  | Role = 'Button'
+          |  |  | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+          |  |  | Text = '[Add end time]'
+          |  |  | [Disabled]
+          |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+          |  |  | MergeDescendants = 'true'
+          |  |  |-Node #1826 at (l=74.0, t=837.0, r=1006.0, b=954.0)px, Tag: 'schedule_conflicts_2'
+          |  |     |-Node #1829 at (l=132.0, t=837.0, r=351.0, b=871.0)px
+          |  |     | Text = '[At the same time:]'
+          |  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |     |-Node #1830 at (l=132.0, t=871.0, r=1006.0, b=954.0)px
+          |  |       Text = '[C pointers arrays memory structured programming · Tue 11:30 AM → Wed 1:00 AM]'
+          |  |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1790 at (l=85.0, t=1010.0, r=148.0, b=1073.0)px, Tag: 'schedule_day_3'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@5d53933'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1791 at (l=166.0, t=1020.0, r=352.0, b=1063.0)px
+          |  | Text = '[Wednesday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1795 at (l=85.0, t=1139.0, r=148.0, b=1202.0)px, Tag: 'schedule_day_4'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@3a914f0'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1796 at (l=166.0, t=1149.0, r=317.0, b=1192.0)px
+          |  | Text = '[Thursday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1800 at (l=85.0, t=1268.0, r=148.0, b=1331.0)px, Tag: 'schedule_day_5'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@4ff3a69'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1801 at (l=166.0, t=1278.0, r=265.0, b=1321.0)px
+          |  | Text = '[Friday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1805 at (l=85.0, t=1397.0, r=148.0, b=1460.0)px, Tag: 'schedule_day_6'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@aae0cee'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1806 at (l=166.0, t=1407.0, r=309.0, b=1450.0)px
+          |  | Text = '[Saturday]'
+          |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |  |-Node #1810 at (l=85.0, t=1526.0, r=148.0, b=1589.0)px, Tag: 'schedule_day_7'
+          |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=2)'
+          |  | FillableData = 'androidx.compose.ui.autofill.AndroidFillableData@220358f'
+          |  | Role = 'Checkbox'
+          |  | ToggleableState = 'Off'
+          |  | [Disabled]
+          |  | Actions = [OnClick, OnFillData]
+          |  | MergeDescendants = 'true'
+          |  |-Node #1811 at (l=166.0, t=1536.0, r=285.0, b=1579.0)px
+          |    Text = '[Sunday]'
+          |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+          |-Node #1813 at (l=53.0, t=2169.0, r=1027.0, b=2274.0)px, Tag: 'schedule_save'
+            Role = 'Button'
+            Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+            Text = '[Save]'
+            [Disabled]
+            Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, SetTextSubstitution, ShowTextSubstitution]
+            MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:294)
+	at com.utbildning.tracker.ui.AppNavigationTest.unscheduledCourseCanCancelEnableAndEditThroughPencil(AppNavigationTest.kt:237)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:293)
+	... 67 more
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

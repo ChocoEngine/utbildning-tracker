@@ -1,0 +1,22 @@
+@Test fun futureSessionRegistersAlarmBeforeItsDateBecomesEditable() = runBlocking {
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        val local = TrackerRepository(db)
+        val tomorrow = LocalDate.now().plusDays(1)
+        try {
+            val course = local.createCourse("Future C reminder", 0)
+            local.saveInitialSchedule(course.id, listOf(WeeklyRule(tomorrow.dayOfWeek.value, 13 * 60)))
+            val session = db.trackerDao().getSessions(course.id).first { it.date == tomorrow.toEpochDay() }
+            assertFalse("Future result stays read-only", local.getSessionDetails(session.id)!!.canEdit)
+            ReminderScheduler.reconcile(context, local)
+            val expected = tomorrow.atTime(13, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val dump = android.os.ParcelFileDescriptor.AutoCloseInputStream(
+                InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("dumpsys alarm"),
+            ).bufferedReader().use { it.readText() }
+            assertTrue("Tomorrow's start must already have a registered RTC_WAKEUP alarm",
+                Regex("RTC_WAKEUP #\\d+: Alarm\\{[^\\n}]*origWhen $expected [^\\n}]* ${Regex.escape(context.packageName)}\\}")
+                    .containsMatchIn(dump))
+        } finally {
+            db.close()
+            ReminderScheduler.reconcile(context, repository)
+        }
+    }

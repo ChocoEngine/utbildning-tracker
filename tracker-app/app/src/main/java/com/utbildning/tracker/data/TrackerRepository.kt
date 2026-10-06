@@ -84,14 +84,19 @@ class TrackerRepository(
             }.toMap()
         }
     }.distinctUntilChanged()
+    /** A read-only snapshot; future result permissions do not restrict alarm planning. */
+    suspend fun getReminderCandidates(): List<SessionEntity> = database.withTransaction {
+        val yesterday = java.time.Instant.ofEpochMilli(now()).atZone(zone()).toLocalDate().minusDays(1)
+        dao.getReminderCandidates(yesterday.toEpochDay())
+    }
+
     /** Validation and posting share the write transaction with lifecycle changes. */
     suspend fun withCurrentReminders(trigger: Long, action: (SessionEntity) -> Unit) = database.withTransaction {
         val currentZone = zone()
-        val courses = dao.getReminderCourses().map { it.id }.toSet()
-        dao.getAllSessions().filter { it.courseId in courses && it.result == SessionResult.PENDING }.forEach {
+        getReminderCandidates().forEach {
             val date = LocalDate.ofEpochDay(it.date)
-            if (dao.getSchedule(it.courseId) != null && (SessionTime.start(date, it.startMinute, currentZone).toEpochMilli() == trigger ||
-                    SessionTime.question(date, it.startMinute, it.endMinute, currentZone).toEpochMilli() == trigger)) action(it)
+            if (SessionTime.start(date, it.startMinute, currentZone).toEpochMilli() == trigger ||
+                    SessionTime.question(date, it.startMinute, it.endMinute, currentZone).toEpochMilli() == trigger) action(it)
         }
     }
     suspend fun synchronize(throughDate: Long? = null) = operations.synchronize(throughDate)

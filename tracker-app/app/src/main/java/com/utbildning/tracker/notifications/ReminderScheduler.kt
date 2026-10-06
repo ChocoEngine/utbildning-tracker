@@ -60,18 +60,11 @@ object ReminderScheduler {
         reconcileLocked(context, repository)
     }
 
-    private suspend fun eligible(repository: TrackerRepository): List<SessionEntity> {
-        val courses = repository.observeReminderCourses().first().map { it.id }.toSet()
-        return repository.observeSessions().first().filter { it.courseId in courses && it.result == SessionResult.PENDING }
-            .filter { repository.getSchedule(it.courseId) != null }
-            .filter { repository.getSessionDetails(it.id)?.canEdit == true }
-    }
-
     private suspend fun reconcileLocked(context: Context, repository: TrackerRepository) {
         val alarm = context.getSystemService(AlarmManager::class.java)
         val notifications = context.getSystemService(NotificationManager::class.java)
         alarm.cancel(pending(context))
-        val sessions = eligible(repository)
+        val sessions = repository.getReminderCandidates()
         val ids = sessions.map { it.id }.toSet()
         notifications.activeNotifications.filter { it.tag != null && it.tag !in ids }.forEach { notifications.cancel(it.tag, it.id) }
         if (!allowed(context)) return

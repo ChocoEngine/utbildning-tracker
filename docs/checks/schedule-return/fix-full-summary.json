@@ -1,0 +1,89 @@
+{
+  "total": 202,
+  "passed": 196,
+  "failed": [
+    {
+      "class": "com.utbildning.tracker.ui.R05EditorReviewTest",
+      "current": "171",
+      "test": "russianEditorAndKeyboard",
+      "code": -2
+    }
+  ],
+  "assumptions": [
+    {
+      "class": "com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest",
+      "current": "88",
+      "test": "realAlarmCrossesMidnightForExplicitEndAndNinetyMinuteFallback",
+      "code": -4
+    },
+    {
+      "class": "com.utbildning.tracker.ui.EmulatorDemoSeedTest",
+      "current": "159",
+      "test": "keepThreeDemoCourses",
+      "code": -4
+    },
+    {
+      "class": "com.utbildning.tracker.ui.EmulatorDemoSeedTest",
+      "current": "160",
+      "test": "seedDemoCourses",
+      "code": -4
+    },
+    {
+      "class": "com.utbildning.tracker.ui.EmulatorLongTitleSeedTest",
+      "current": "161",
+      "test": "addLongTitleCourse",
+      "code": -4
+    },
+    {
+      "class": "com.utbildning.tracker.ui.R05EmulatorSeedTest",
+      "current": "172",
+      "test": "seedAcceptanceCourses",
+      "code": -4
+    }
+  ],
+  "navigation": [
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "99",
+      "test": "courseEditorHidesTabsAndReturningToListRestoresThem",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "100",
+      "test": "newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "101",
+      "test": "unscheduledCourseCanCancelEnableAndEditThroughPencil",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "102",
+      "test": "pausedCourseCanResumeThroughScheduleWithoutLosingProgress",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "103",
+      "test": "repeatedTabSelectionDoesNotTrapBackAndRecreationKeepsDestination",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "104",
+      "test": "settingsReturnsToEachOriginTab",
+      "code": 0
+    },
+    {
+      "class": "com.utbildning.tracker.ui.AppNavigationTest",
+      "current": "105",
+      "test": "existingScheduledCourseWithoutScheduleCanBeConfigured",
+      "code": 0
+    }
+  ],
+  "time_seconds": "507.298"
+}

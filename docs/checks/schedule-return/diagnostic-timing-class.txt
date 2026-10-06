@@ -1,0 +1,30 @@
+--------- beginning of main
+10-06 15:57:21.565  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:21.627  5540  5540 D ScheduleReturnTrace: write complete 61 ms; reconcile begin
+10-06 15:57:25.529  5540  5540 D ScheduleReturnTrace: reconcile complete 3963 ms; return begin
+10-06 15:57:25.529  5540  5540 D ScheduleReturnTrace: return complete 3964 ms
+10-06 15:57:26.529  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:26.539  5540  5540 D ScheduleReturnTrace: write complete 10 ms; reconcile begin
+10-06 15:57:29.288  5540  5540 D ScheduleReturnTrace: reconcile complete 2759 ms; return begin
+10-06 15:57:29.288  5540  5540 D ScheduleReturnTrace: return complete 2759 ms
+10-06 15:57:29.796  5540  5540 D ScheduleReturnTrace: save begin
+10-06 15:57:29.848  5540  5540 D ScheduleReturnTrace: write complete 52 ms; reconcile begin
+10-06 15:57:30.932  5540  5540 D ScheduleReturnTrace: reconcile complete 1136 ms; return begin
+10-06 15:57:30.933  5540  5540 D ScheduleReturnTrace: return complete 1137 ms
+10-06 15:58:40.706  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:58:44.649  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:58:44.699  5702  5702 D ScheduleReturnTrace: write complete 51 ms; reconcile begin
+10-06 15:58:48.184  5702  5702 D ScheduleReturnTrace: reconcile complete 3535 ms; return begin
+10-06 15:58:48.184  5702  5702 D ScheduleReturnTrace: return complete 3536 ms
+10-06 15:58:48.898  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:58:49.002  5702  5702 D ScheduleReturnTrace: write complete 104 ms; reconcile begin
+10-06 15:58:51.319  5702  5702 D ScheduleReturnTrace: reconcile complete 2422 ms; return begin
+10-06 15:58:51.319  5702  5702 D ScheduleReturnTrace: return complete 2422 ms
+10-06 15:58:51.728  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:58:51.744  5702  5702 D ScheduleReturnTrace: write complete 16 ms; reconcile begin
+10-06 15:58:52.916  5702  5702 D ScheduleReturnTrace: reconcile complete 1188 ms; return begin
+10-06 15:58:52.917  5702  5702 D ScheduleReturnTrace: return complete 1189 ms
+10-06 15:58:55.966  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:58:55.975  5702  5702 D ScheduleReturnTrace: write complete 9 ms; reconcile begin
+10-06 15:59:05.461  5702  5702 D ScheduleReturnTrace: save begin
+10-06 15:59:05.475  5702  5702 D ScheduleReturnTrace: write complete 15 ms; reconcile begin
