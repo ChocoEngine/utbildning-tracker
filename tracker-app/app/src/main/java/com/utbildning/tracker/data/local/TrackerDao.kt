@@ -90,6 +90,9 @@ interface TrackerDao {
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     fun observeSessions(): Flow<List<SessionEntity>>
 
+    @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId WHERE s.date BETWEEN :firstDate AND :lastDate ORDER BY s.date, s.startMinute, s.id")
+    fun observeSessionsBetween(firstDate: Long, lastDate: Long): Flow<List<SessionEntity>>
+
     @Query("DELETE FROM sessions WHERE id = :id")
     suspend fun deleteSession(id: String)
 

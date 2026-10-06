@@ -57,6 +57,10 @@ class TrackerRepository(
         database.invalidationTracker.createFlow("courses", "topics", "schedules", "schedule_rules")
             .map { getOccupiedSchedules(excludingCourseId) }.distinctUntilChanged()
     fun observeSessions() = dao.observeSessions()
+    fun observeSessionsBetween(firstDate: Long, lastDate: Long) = dao.observeSessionsBetween(firstDate, lastDate)
+    fun observeReminderChanges(): Flow<Unit> =
+        database.invalidationTracker.createFlow("sessions", "courses", "topics", "schedules", "schedule_rules")
+            .map { Unit }
     fun observeTopicPaces(): Flow<Map<String, Int>> = merge(
         database.invalidationTracker.createFlow("courses", "topics", "schedules", "schedule_rules", "sessions").map { Unit },
         flow { while (true) { emit(Unit); delay(com.utbildning.tracker.domain.millisUntilNextLocalDay(now(), zone())) } },

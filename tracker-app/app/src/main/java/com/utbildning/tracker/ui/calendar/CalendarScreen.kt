@@ -50,8 +50,11 @@ import java.util.Locale
 
 @Composable
 internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepository) {
-    val sessions by remember(repository) { repository.observeSessions() }.collectAsState(emptyList())
     var month by rememberSaveable { mutableStateOf(YearMonth.now().toString()) }
+    val selectedMonth = YearMonth.parse(month)
+    val sessions by remember(repository, selectedMonth) {
+        repository.observeSessionsBetween(selectedMonth.atDay(1).toEpochDay(), selectedMonth.atEndOfMonth().toEpochDay())
+    }.collectAsState(emptyList())
     var day by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
     val locale = LocalConfiguration.current.locales[0]
     var error by remember { mutableStateOf(false) }

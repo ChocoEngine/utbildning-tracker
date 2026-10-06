@@ -38,7 +38,7 @@ object ReminderScheduler {
         observing = true
         val app = context.applicationContext
         scope.launch {
-            combine(repository.observeSessions(), repository.observeReminderCourses()) { _, _ -> Unit }.collect {
+            repository.observeReminderChanges().collect {
                 try { reconcile(app, repository) }
                 catch (e: CancellationException) { throw e }
                 catch (e: Exception) { android.util.Log.e("Tracker", "Reminder reconciliation failed", e) }

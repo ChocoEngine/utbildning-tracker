@@ -35,7 +35,6 @@ import java.util.Locale
 
 @Composable
 internal fun TodayScreen(onSettings: () -> Unit, repository: TrackerRepository, onSession: (String) -> Unit) {
-    val sessions by remember(repository) { repository.observeSessions() }.collectAsState(emptyList())
     var now by remember { mutableStateOf(Instant.now()) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle) {
@@ -44,12 +43,17 @@ internal fun TodayScreen(onSettings: () -> Unit, repository: TrackerRepository, 
         onDispose { lifecycle.removeObserver(observer) }
     }
     LaunchedEffect(Unit) { while (true) { now = Instant.now(); delay(60_000L - System.currentTimeMillis() % 60_000L) } }
+    val zone = ZoneId.systemDefault()
+    val today = now.atZone(zone).toLocalDate()
+    val sessions by remember(repository, today) {
+        repository.observeSessionsBetween(today.minusDays(1).toEpochDay(), today.toEpochDay())
+    }.collectAsState(emptyList())
     val locale = LocalConfiguration.current.locales[0]
     val scope = rememberCoroutineScope()
     var error by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().testTag("screen_today")) {
         if (error) Text(stringResource(R.string.session_error), color = MaterialTheme.colorScheme.error)
-        TodayContent(sessions, now, ZoneId.systemDefault(), locale, onDone = { id ->
+        TodayContent(sessions, now, zone, locale, onDone = { id ->
             scope.launch {
                 try {
                     if (!repository.markSessionDoneIfNoTopics(id)) onSession(id)
