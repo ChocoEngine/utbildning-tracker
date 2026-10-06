@@ -1,0 +1,66 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 4208290 Realtime: 4208290
+
+** MEMINFO in pid 4762 [com.utbildning.tracker] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    14367    14328       24       46    15160    29044    21360     3056
+  Dalvik Heap    14887     9484     5248       30    15636    12878     6439     6439
+ Dalvik Other    10066     4544       52        2    15916                           
+        Stack     1404     1404        0        0     1408                           
+       Ashmem       61        0        0        0      540                           
+    Other dev       10        0        4        0      300                           
+     .so mmap     6803      284     1092       16    35064                           
+    .jar mmap     6180        0      684        0    43244                           
+    .apk mmap    31066        0    30776        0    32108                           
+    .ttf mmap     1093        0      824        0     1448                           
+    .dex mmap       19        0        0        0      876                           
+    .oat mmap       98        0        0        0     1716                           
+    .art mmap    12369     8728     1992      106    26432                           
+   Other mmap     3269        4      188        0     7120                           
+      Unknown      743      592      140        1     1232                           
+        TOTAL   102636    39368    41024      201   198200    41922    27799     9495
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    20204                          42068
+         Native Heap:    14328                          15160
+                Code:    33780                         125504
+               Stack:     1404                           1408
+            Graphics:        0                              0
+       Private Other:    10676
+              System:    22244
+             Unknown:                                   14060
+ 
+           TOTAL PSS:   102636            TOTAL RSS:   198200       TOTAL SWAP PSS:      201
+ 
+ Objects
+               Views:       31         ViewRootImpl:        2
+         AppContexts:        9           Activities:        3
+              Assets:       21        AssetManagers:        0
+       Local Binders:       76        Proxy Binders:       55
+       Parcel memory:        6         Parcel count:       26
+    Death Recipients:        0             WebViews:        0
+ 
+ Native Allocations
+                         Count                       Total(kB)
+                        ------                         ------
+   Bitmap (malloced):       51                            119
+    Other (malloced):     1226                            115
+ Other (nonmalloced):      177                            108
+ 
+ SQL
+         MEMORY_USED:      392
+  PAGECACHE_OVERFLOW:      220          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b) cache hits cache misses cache size  Dbname
+PER CONNECTION STATS
+         4      292            108   969   243    12  /data/user/0/com.utbildning.tracker/databases/tracker.db
+         4       16                    0     0     0    (attached) temp
+         4      292             55    43    25     4  /data/user/0/com.utbildning.tracker/databases/tracker.db (1)
+POOL STATS
+     cache hits  cache misses    cache size  Dbname
+           1012           272          1284  /data/user/0/com.utbildning.tracker/databases/tracker.db

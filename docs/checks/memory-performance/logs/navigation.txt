@@ -1,0 +1,419 @@
+
+com.utbildning.tracker.ui.AppNavigationTest:
+Error in courseEditorHidesTabsAndReturningToListRestoresThem(com.utbildning.tracker.ui.AppNavigationTest):
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$courseEditorHidesTabsAndReturningToListRestoresThem$course$1.invokeSuspend(AppNavigationTest.kt:164)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.courseEditorHidesTabsAndReturningToListRestoresThem(AppNavigationTest.kt:163)
+
+Error in newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest):
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1 at (l=0.0, t=0.0, r=840.0, b=1418.0)px
+ |-Node #2 at (l=0.0, t=0.0, r=840.0, b=1418.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #141 at (l=0.0, t=63.0, r=840.0, b=1110.0)px
+    |  |-Node #142 at (l=0.0, t=63.0, r=840.0, b=1110.0)px, Tag: 'screen_courses'
+    |     |-Node #144 at (l=63.0, t=116.0, r=651.0, b=221.0)px
+    |     | Text = '[Courses]'
+    |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |-Node #145 at (l=683.0, t=116.0, r=788.0, b=221.0)px, Tag: 'settings'
+    |     | ContentDescription = '[Settings]'
+    |     | Focused = 'false'
+    |     | Role = 'Button'
+    |     | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+    |     | Actions = [OnClick, RequestFocus]
+    |     | MergeDescendants = 'true'
+    |     |-Node #149 at (l=58.0, t=273.0, r=782.0, b=853.0)px, Tag: 'course_list_scroll'
+    |     | IsTraversalGroup = 'true'
+    |     | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@d6b226e'
+    |     | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=2243.0, reverseScrolling=false)'
+    |     | Actions = [ScrollBy, ScrollByOffset]
+    |     |  |-Node #162 at (l=58.0, t=289.0, r=254.0, b=323.0)px
+    |     |  | Text = '[РИСОВАНИЕ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #164 at (l=58.0, t=339.0, r=782.0, b=603.0)px, Tag: 'course_row_d6826ddc-8d29-4986-8f63-9fcfbf7b1063'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Пейзажи, 0 of 32 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 11:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #176 at (l=58.0, t=606.0, r=782.0, b=806.0)px, Tag: 'course_row_5266e236-f636-49f8-b45b-d8d1a8905617'
+    |     |  | Focused = 'false'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Практика рисования, Paused]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #186 at (l=58.0, t=869.0, r=415.0, b=903.0)px
+    |     |  | Text = '[ПРОГРАММИРОВАНИЕ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #188 at (l=58.0, t=919.0, r=782.0, b=1183.0)px, Tag: 'course_row_c2bdd922-82b8-494e-b372-d1e46be86a4a'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Задачи по C, 0 of 71 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 15:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #200 at (l=58.0, t=1186.0, r=782.0, b=1503.0)px, Tag: 'course_row_0678beb8-d374-420e-9f2b-ce3575df4d35'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Практика алгоритмов и структур данных на C, 0 of 3 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 17:30]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #212 at (l=58.0, t=1506.0, r=782.0, b=1715.0)px, Tag: 'course_row_3c951148-7d49-47d7-9d1d-6838744ccb71'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.25, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Указатели и память, 1 of 4 topics · Paused, 25%]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #223 at (l=58.0, t=1718.0, r=782.0, b=1982.0)px, Tag: 'course_row_008abcb7-468f-4eed-a169-65984a244d09'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.083333336, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Лекции и практика по C, 2 of 24 topics · 2 topics per session, 8%, Tue · 19:00 · Sat · 11:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #236 at (l=58.0, t=2045.0, r=169.0, b=2079.0)px
+    |     |  | Text = '[ЯЗЫКИ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #238 at (l=58.0, t=2095.0, r=782.0, b=2359.0)px, Tag: 'course_row_078913a6-2868-4d2b-bd10-12ae78cb9696'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Шведский · A2, 0 of 5 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 20:30]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #250 at (l=58.0, t=2362.0, r=782.0, b=2562.0)px, Tag: 'course_row_d56ab4ba-aa7c-4c43-9175-966984e52246'
+    |     |  | Focused = 'false'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Разговорная практика, Tue, Thu · 19:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #260 at (l=58.0, t=2625.0, r=279.0, b=2659.0)px
+    |     |  | Text = '[NO CATEGORY]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #262 at (l=58.0, t=2675.0, r=782.0, b=2884.0)px, Tag: 'course_row_de0fce54-bddf-476e-badd-74910701f13c'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Чтение, 0 of 2 topics · Unscheduled, 0%]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #273 at (l=58.0, t=2887.0, r=782.0, b=3096.0)px, Tag: 'course_row_93fff4bc-397f-44fc-85ff-1ca014b43d70'
+    |     |    Focused = 'false'
+    |     |    ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |    Shape = 'RectangleShape'
+    |     |    Text = '[Практика C, 0 of 2 topics · Unscheduled, 0%]'
+    |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |    MergeDescendants = 'true'
+    |     |-Node #155 at (l=58.0, t=988.0, r=292.0, b=1022.0)px
+    |     | Text = '[Total completed: 3]'
+    |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |-Node #283 at (l=551.0, t=953.0, r=782.0, b=1058.0)px, Tag: 'courses_filter'
+    |       Focused = 'false'
+    |       Role = 'Button'
+    |       Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+    |       Text = '[Show all]'
+    |       Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |       MergeDescendants = 'true'
+    |-Node #14 at (l=0.0, t=1113.0, r=840.0, b=1418.0)px
+      IsContainer = 'true'
+      Shape = 'RectangleShape'
+       |-Node #15 at (l=0.0, t=1113.0, r=840.0, b=1355.0)px
+         [SelectableGroup]
+          |-Node #16 at (l=11.0, t=1129.0, r=255.0, b=1339.0)px, Tag: 'nav_today'
+          | Focused = 'false'
+          | Role = 'Tab'
+          | Selected = 'false'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+          | Text = '[Sessions]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+          | MergeDescendants = 'true'
+          |-Node #25 at (l=298.0, t=1129.0, r=542.0, b=1339.0)px, Tag: 'nav_calendar'
+          | Focused = 'false'
+          | Role = 'Tab'
+          | Selected = 'false'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+          | Text = '[Calendar]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+          | MergeDescendants = 'true'
+          |-Node #34 at (l=585.0, t=1129.0, r=829.0, b=1339.0)px, Tag: 'nav_courses'
+            Focused = 'false'
+            Role = 'Tab'
+            Selected = 'true'
+            Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+            Text = '[Courses]'
+            Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+            MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:294)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:85)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:293)
+	... 67 more
+
+Error in unscheduledCourseCanCancelEnableAndEditThroughPencil(com.utbildning.tracker.ui.AppNavigationTest):
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$unscheduledCourseCanCancelEnableAndEditThroughPencil$course$1.invokeSuspend(AppNavigationTest.kt:221)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.unscheduledCourseCanCancelEnableAndEditThroughPencil(AppNavigationTest.kt:220)
+
+Error in pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest):
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$pausedCourseCanResumeThroughScheduleWithoutLosingProgress$course$1.invokeSuspend(AppNavigationTest.kt:117)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:116)
+..
+Error in existingScheduledCourseWithoutScheduleCanBeConfigured(com.utbildning.tracker.ui.AppNavigationTest):
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$existingScheduledCourseWithoutScheduleCanBeConfigured$course$1.invokeSuspend(AppNavigationTest.kt:200)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.existingScheduledCourseWithoutScheduleCanBeConfigured(AppNavigationTest.kt:199)
+
+
+Time: 15.29
+There were 5 failures:
+1) courseEditorHidesTabsAndReturningToListRestoresThem(com.utbildning.tracker.ui.AppNavigationTest)
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$courseEditorHidesTabsAndReturningToListRestoresThem$course$1.invokeSuspend(AppNavigationTest.kt:164)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.courseEditorHidesTabsAndReturningToListRestoresThem(AppNavigationTest.kt:163)
+2) newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest)
+java.lang.AssertionError: Printing with useUnmergedTree = 'false'
+Node #1 at (l=0.0, t=0.0, r=840.0, b=1418.0)px
+ |-Node #2 at (l=0.0, t=0.0, r=840.0, b=1418.0)px
+   IsContainer = 'true'
+   Shape = 'RectangleShape'
+    |-Node #141 at (l=0.0, t=63.0, r=840.0, b=1110.0)px
+    |  |-Node #142 at (l=0.0, t=63.0, r=840.0, b=1110.0)px, Tag: 'screen_courses'
+    |     |-Node #144 at (l=63.0, t=116.0, r=651.0, b=221.0)px
+    |     | Text = '[Courses]'
+    |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |-Node #145 at (l=683.0, t=116.0, r=788.0, b=221.0)px, Tag: 'settings'
+    |     | ContentDescription = '[Settings]'
+    |     | Focused = 'false'
+    |     | Role = 'Button'
+    |     | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 50.0%), topEnd = CornerSize(size = 50.0%), bottomEnd = CornerSize(size = 50.0%), bottomStart = CornerSize(size = 50.0%))'
+    |     | Actions = [OnClick, RequestFocus]
+    |     | MergeDescendants = 'true'
+    |     |-Node #149 at (l=58.0, t=273.0, r=782.0, b=853.0)px, Tag: 'course_list_scroll'
+    |     | IsTraversalGroup = 'true'
+    |     | Shape = 'androidx.compose.foundation.VerticalScrollableClipShape@d6b226e'
+    |     | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=2243.0, reverseScrolling=false)'
+    |     | Actions = [ScrollBy, ScrollByOffset]
+    |     |  |-Node #162 at (l=58.0, t=289.0, r=254.0, b=323.0)px
+    |     |  | Text = '[РИСОВАНИЕ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #164 at (l=58.0, t=339.0, r=782.0, b=603.0)px, Tag: 'course_row_d6826ddc-8d29-4986-8f63-9fcfbf7b1063'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Пейзажи, 0 of 32 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 11:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #176 at (l=58.0, t=606.0, r=782.0, b=806.0)px, Tag: 'course_row_5266e236-f636-49f8-b45b-d8d1a8905617'
+    |     |  | Focused = 'false'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Практика рисования, Paused]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #186 at (l=58.0, t=869.0, r=415.0, b=903.0)px
+    |     |  | Text = '[ПРОГРАММИРОВАНИЕ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #188 at (l=58.0, t=919.0, r=782.0, b=1183.0)px, Tag: 'course_row_c2bdd922-82b8-494e-b372-d1e46be86a4a'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Задачи по C, 0 of 71 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 15:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #200 at (l=58.0, t=1186.0, r=782.0, b=1503.0)px, Tag: 'course_row_0678beb8-d374-420e-9f2b-ce3575df4d35'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Практика алгоритмов и структур данных на C, 0 of 3 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 17:30]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #212 at (l=58.0, t=1506.0, r=782.0, b=1715.0)px, Tag: 'course_row_3c951148-7d49-47d7-9d1d-6838744ccb71'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.25, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Указатели и память, 1 of 4 topics · Paused, 25%]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #223 at (l=58.0, t=1718.0, r=782.0, b=1982.0)px, Tag: 'course_row_008abcb7-468f-4eed-a169-65984a244d09'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.083333336, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Лекции и практика по C, 2 of 24 topics · 2 topics per session, 8%, Tue · 19:00 · Sat · 11:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #236 at (l=58.0, t=2045.0, r=169.0, b=2079.0)px
+    |     |  | Text = '[ЯЗЫКИ]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #238 at (l=58.0, t=2095.0, r=782.0, b=2359.0)px, Tag: 'course_row_078913a6-2868-4d2b-bd10-12ae78cb9696'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Шведский · A2, 0 of 5 topics, 0%, Mon, Tue, Wed, Thu, Fri, Sat, Sun · 20:30]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #250 at (l=58.0, t=2362.0, r=782.0, b=2562.0)px, Tag: 'course_row_d56ab4ba-aa7c-4c43-9175-966984e52246'
+    |     |  | Focused = 'false'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Разговорная практика, Tue, Thu · 19:00]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #260 at (l=58.0, t=2625.0, r=279.0, b=2659.0)px
+    |     |  | Text = '[NO CATEGORY]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |  |-Node #262 at (l=58.0, t=2675.0, r=782.0, b=2884.0)px, Tag: 'course_row_de0fce54-bddf-476e-badd-74910701f13c'
+    |     |  | Focused = 'false'
+    |     |  | ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |  | Shape = 'RectangleShape'
+    |     |  | Text = '[Чтение, 0 of 2 topics · Unscheduled, 0%]'
+    |     |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |  | MergeDescendants = 'true'
+    |     |  |-Node #273 at (l=58.0, t=2887.0, r=782.0, b=3096.0)px, Tag: 'course_row_93fff4bc-397f-44fc-85ff-1ca014b43d70'
+    |     |    Focused = 'false'
+    |     |    ProgressBarRangeInfo = 'ProgressBarRangeInfo(current=0.0, range=0.0..1.0, steps=0)'
+    |     |    Shape = 'RectangleShape'
+    |     |    Text = '[Практика C, 0 of 2 topics · Unscheduled, 0%]'
+    |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |     |    MergeDescendants = 'true'
+    |     |-Node #155 at (l=58.0, t=988.0, r=292.0, b=1022.0)px
+    |     | Text = '[Total completed: 3]'
+    |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+    |     |-Node #283 at (l=551.0, t=953.0, r=782.0, b=1058.0)px, Tag: 'courses_filter'
+    |       Focused = 'false'
+    |       Role = 'Button'
+    |       Shape = 'RoundedCornerShape(topStart = CornerSize(size = 13.0.dp), topEnd = CornerSize(size = 13.0.dp), bottomEnd = CornerSize(size = 13.0.dp), bottomStart = CornerSize(size = 13.0.dp))'
+    |       Text = '[Show all]'
+    |       Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+    |       MergeDescendants = 'true'
+    |-Node #14 at (l=0.0, t=1113.0, r=840.0, b=1418.0)px
+      IsContainer = 'true'
+      Shape = 'RectangleShape'
+       |-Node #15 at (l=0.0, t=1113.0, r=840.0, b=1355.0)px
+         [SelectableGroup]
+          |-Node #16 at (l=11.0, t=1129.0, r=255.0, b=1339.0)px, Tag: 'nav_today'
+          | Focused = 'false'
+          | Role = 'Tab'
+          | Selected = 'false'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+          | Text = '[Sessions]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+          | MergeDescendants = 'true'
+          |-Node #25 at (l=298.0, t=1129.0, r=542.0, b=1339.0)px, Tag: 'nav_calendar'
+          | Focused = 'false'
+          | Role = 'Tab'
+          | Selected = 'false'
+          | Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+          | Text = '[Calendar]'
+          | Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+          | MergeDescendants = 'true'
+          |-Node #34 at (l=585.0, t=1129.0, r=829.0, b=1339.0)px, Tag: 'nav_courses'
+            Focused = 'false'
+            Role = 'Tab'
+            Selected = 'true'
+            Shape = 'RoundedCornerShape(topStart = CornerSize(size = 16.0.dp), topEnd = CornerSize(size = 16.0.dp), bottomEnd = CornerSize(size = 16.0.dp), bottomStart = CornerSize(size = 16.0.dp))'
+            Text = '[Courses]'
+            Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+            MergeDescendants = 'true'
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:294)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:85)
+	... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForTag(AppNavigationTest.kt:293)
+	... 67 more
+3) unscheduledCourseCanCancelEnableAndEditThroughPencil(com.utbildning.tracker.ui.AppNavigationTest)
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$unscheduledCourseCanCancelEnableAndEditThroughPencil$course$1.invokeSuspend(AppNavigationTest.kt:221)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.unscheduledCourseCanCancelEnableAndEditThroughPencil(AppNavigationTest.kt:220)
+4) pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest)
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$pausedCourseCanResumeThroughScheduleWithoutLosingProgress$course$1.invokeSuspend(AppNavigationTest.kt:117)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:116)
+5) existingScheduledCourseWithoutScheduleCanBeConfigured(com.utbildning.tracker.ui.AppNavigationTest)
+java.util.NoSuchElementException: List is empty.
+	at kotlin.collections.CollectionsKt___CollectionsKt.first(_Collections.kt:222)
+	at com.utbildning.tracker.ui.AppNavigationTest$existingScheduledCourseWithoutScheduleCanBeConfigured$course$1.invokeSuspend(AppNavigationTest.kt:200)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.ui.AppNavigationTest.existingScheduledCourseWithoutScheduleCanBeConfigured(AppNavigationTest.kt:199)
+
+FAILURES!!!
+Tests run: 7,  Failures: 5
+
+

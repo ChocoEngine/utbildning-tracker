@@ -1,0 +1,5 @@
+2026-10-07, tracker-app/, JDK 17
+Command: /usr/bin/env JAVA_HOME=/Users/alxshvarts/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home ./gradlew app:assembleDebug app:assembleDebugAndroidTest --console=plain
+BUILD SUCCESSFUL in 784ms
+69 actionable tasks: 69 up-to-date
+This is a result summary; full console output was not saved.

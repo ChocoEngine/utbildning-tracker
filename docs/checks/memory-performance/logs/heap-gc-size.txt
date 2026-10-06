@@ -1,0 +1,1 @@
+-rwxrwx--- 1 shell shell 50984742 2026-10-07 01:48 /data/local/tmp/perf07-gc.hprof

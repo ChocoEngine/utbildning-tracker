@@ -1,0 +1,154 @@
+  ACTIVITY com.utbildning.tracker/.MainActivity d83494a pid=4762 userId=0 uid=10214 displayId=0(type=INTERNAL)
+    Local Activity d478377 State:
+      mResumed=true mStopped=false mFinished=false
+      mIsInMultiWindowMode=false mIsInPictureInPictureMode=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 310mcc260mnc [en_US] ldltr sw320dp w540dp h320dp 420dpi nrml long land finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1418, 840) mAppBounds=Rect(0, 0 - 1418, 840) mMaxBounds=Rect(0, 0 - 1418, 840) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90} s.7 fontWeightAdjustment=0}
+      mLoadersStarted=true
+      Active Fragments in 89d1ab3:
+        #0: ReportFragment{2791870 #0 androidx.lifecycle.LifecycleDispatcher.report_fragment_tag}
+          mFragmentId=#0 mContainerId=#0 mTag=androidx.lifecycle.LifecycleDispatcher.report_fragment_tag
+          mState=5 mIndex=0 mWho=android:fragment:0 mBackStackNesting=0
+          mAdded=true mRemoving=false mFromLayout=false mInLayout=false
+          mHidden=false mDetached=false mMenuVisible=true mHasMenu=false
+          mRetainInstance=false mRetaining=false mUserVisibleHint=true
+          mFragmentManager=FragmentManager{89d1ab3 in HostCallbacks{9a1b7e9}}
+          mHost=android.app.Activity$HostCallbacks@9a1b7e9
+          Child FragmentManager{71a7c6e in ReportFragment{2791870}}:
+            FragmentManager misc state:
+              mHost=android.app.Activity$HostCallbacks@9a1b7e9
+              mContainer=android.app.Fragment$1@344af0f
+              mParent=ReportFragment{2791870 #0 androidx.lifecycle.LifecycleDispatcher.report_fragment_tag}
+              mCurState=5 mStateSaved=false mDestroyed=false
+      Added Fragments:
+        #0: ReportFragment{2791870 #0 androidx.lifecycle.LifecycleDispatcher.report_fragment_tag}
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@9a1b7e9
+        mContainer=android.app.Activity$HostCallbacks@9a1b7e9
+        mCurState=5 mStateSaved=false mDestroyed=false
+    ViewRoot:
+      mAdded=true
+      mRemoved=false
+      mStopped=false
+      mPausedForTransition=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false
+      mReportNextDraw=false
+      mLastReportedMergedConfiguration={mGlobalConfig={1.0 310mcc260mnc [en_US] ldltr sw320dp w540dp h320dp 420dpi nrml long land finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1418, 840) mAppBounds=Rect(0, 0 - 1418, 840) mMaxBounds=Rect(0, 0 - 1418, 840) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90} s.306 fontWeightAdjustment=0} mOverrideConfig={1.0 310mcc260mnc [en_US] ldltr sw320dp w540dp h320dp 420dpi nrml long land finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1418, 840) mAppBounds=Rect(0, 0 - 1418, 840) mMaxBounds=Rect(0, 0 - 1418, 840) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90} s.7 fontWeightAdjustment=0}}
+      mLastConfigurationFromResources={1.0 310mcc260mnc [en_US] ldltr sw320dp w540dp h320dp 420dpi nrml long land finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1418, 840) mAppBounds=Rect(0, 0 - 1418, 840) mMaxBounds=Rect(0, 0 - 1418, 840) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90} s.3 fontWeightAdjustment=0}
+      mLastReportedActivityWindowInfo=ActivityWindowInfo{isEmbedded=false, taskBounds=Rect(0, 0 - 1418, 840), taskFragmentBounds=Rect(0, 0 - 1418, 840)}
+      mIsAmbientMode=false
+      mUnbufferedInputSource=0
+      mAttachInfo=       AttachInfo:
+        mHasWindowFocus=true
+        mWindowVisibility=0
+        mInTouchMode=true
+        mUnbufferedDispatchRequested=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$WindowInputEventReceiver
+       mInputChannel: eea9b51 com.utbildning.tracker/com.utbildning.tracker.MainActivity
+       mSeqMap: {}
+       mReceiverPtr:
+        mInputConsumer:
+          mResampleTouch = true
+          mChannel = eea9b51 com.utbildning.tracker/com.utbildning.tracker.MainActivity
+          mMsgDeferred: false
+          Batches:
+              <empty>
+          mSeqChains:
+              <empty>
+          mConsumeTimes:
+              <empty>
+          
+        mBatchedInputEventPending: false
+        mOutboundQueue:
+          <empty>
+        
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=4183302 (1392 ms ago)
+    InsetsController:
+        InsetsState
+          mDisplayFrame=Rect(0, 0 - 1418, 840)
+          mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}
+          mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=0, center=Point(0, 0)}, RoundedCorner{position=TopRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomRight, radius=0, center=Point(0, 0)}, RoundedCorner{position=BottomLeft, radius=0, center=Point(0, 0)}]}
+          mRoundedCornerFrame=Rect(0, 0 - 1418, 840)
+          mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1165, 0 - 1381, 63) rotation=1}
+          mDisplayShape=DisplayShape{ spec=-1893857183 displayWidth=1080 displayHeight=2400 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}
+            InsetsSource id=df050001 type=navigationBars frame=[0,777][1418,840] visible=true flags=SUPPRESS_SCRIM|ANIMATE_RESIZING sideHint=BOTTOM boundingRects=null
+            InsetsSource id=df050004 type=systemGestures frame=[0,0][78,840] visible=true flags= sideHint=LEFT boundingRects=null
+            InsetsSource id=df050005 type=mandatorySystemGestures frame=[0,756][1418,840] visible=true flags= sideHint=BOTTOM boundingRects=null
+            InsetsSource id=df050006 type=tappableElement frame=[0,0][0,0] visible=true flags= sideHint=NONE boundingRects=null
+            InsetsSource id=df050024 type=systemGestures frame=[1340,0][1418,840] visible=true flags= sideHint=RIGHT boundingRects=null
+            InsetsSource id=3 type=ime frame=[0,0][0,0] visible=false flags= sideHint=NONE boundingRects=null
+            InsetsSource id=6460000 type=statusBars frame=[0,0][1418,63] visible=true flags= sideHint=TOP boundingRects=null
+            InsetsSource id=6460005 type=mandatorySystemGestures frame=[0,0][1418,63] visible=true flags= sideHint=TOP boundingRects=null
+            InsetsSource id=6460006 type=tappableElement frame=[0,0][1418,63] visible=true flags= sideHint=TOP boundingRects=null
+        mIsPredictiveBackImeHideAnimInProgress=false
+    WindowOnBackDispatcher:
+        Top Callback: android.app.Activity$$ExternalSyntheticLambda0@76b3feb
+        Callbacks: 
+          Callback: android.app.Activity$$ExternalSyntheticLambda0@76b3feb Priority=-1
+    ImeBackAnimationController:
+        mLastProgress=0.0
+        mTriggerBack=false
+        mIsPreCommitAnimationInProgress=false
+        mStartRootScrollY=0
+        isBackAnimationAllowed=true
+        isAdjustPan=true
+        isHideAnimationInProgress=false
+    View Hierarchy:
+      com.android.internal.policy.DecorView{62f4b9c V.E...... R....... 0,0-1418,840 aid=5}[MainActivity]
+        androidx.core.view.insets.SystemBarStateMonitor$1{1d4e9a5 V.E...... ........ 0,0-1418,840}
+        android.widget.LinearLayout{175f17a V.E...... ........ 0,0-1418,840}
+          android.view.ViewStub{d272d2b G.E...... ......I. 0,0-0,0 #10201ed android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{3b38588 V.E...... ........ 0,0-1418,840 #1020002 android:id/content}
+            androidx.compose.ui.platform.ComposeView{54f7b21 V.E...... ........ 0,0-1418,840}
+              androidx.compose.ui.platform.AndroidComposeView{b1d251d VFED..... ........ 0,0-1418,840 aid=1073741829}
+                android.view.View{6e1ab46 V.ED..... ........ 0,0-0,0}
+        androidx.core.view.insets.ProtectionLayout{e697107 V.E...... ........ 0,0-1418,840}
+          android.view.View{5bf7234 V.ED..... ........ 0,0-1418,63}
+          android.view.View{f87a85d I.ED..... ......ID 0,0-0,840}
+          android.view.View{6fd35d2 I.ED..... ......ID 1418,0-1418,840}
+          android.view.View{2a216a3 I.ED..... ......ID 0,840-1418,840}
+    Looper (main, tid 2) {4614e88}
+      (MessageQueue is using Legacy implementation)
+      Message 0: { when=+59ms what=40 target=android.view.ViewRootImpl$ViewRootHandler }
+      Message 1: { when=+1s540ms what=43 target=android.view.ViewRootImpl$ViewRootHandler }
+      Message 2: { when=+1s550ms what=39 target=android.view.ViewRootImpl$ViewRootHandler }
+      (Total messages: 3, polling=false, quitting=false)
+    ResourcesManager:
+      total apks: 5
+      resources: 7
+      resource impls: 3
+    1 dumpables:
+    #0: AutofillManager
+        AutofillManager:
+          sessionId: 2147483647
+          state: UNKNOWN
+          context: com.utbildning.tracker.MainActivity@d478377
+          service client: null
+          client: android.view.autofill.AutofillClientController@6fb7da0 (android.os.BinderProxy@4eaf678)
+          enabled: false
+          enabledAugmentedOnly: false
+          hasService: true
+          hasCallback: true
+          onInvisibleCalled false
+          last autofilled data: null
+          id of last fill UI shown: null
+          tracked views: null
+          fillable ids: null
+          entered ids: null
+          save trigger id: null
+          save on finish(): false
+          options: logLvl=0, compatMode=false, augmented=false, appDisabledExpiration=0
+          fill dialog enabled: false
+          fill dialog enabled hints: []
+          compat mode enabled: false
+          debug: false verbose: false
+        Autofill Compat Mode: false

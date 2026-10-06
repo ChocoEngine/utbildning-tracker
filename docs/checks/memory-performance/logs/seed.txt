@@ -1,0 +1,20 @@
+Performing Streamed Install
+Success
+Performing Streamed Install
+Success
+
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:.
+
+Time: 0.144
+
+OK (2 tests)
+
+
+Starting: Intent { cmp=com.utbildning.tracker/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.utbildning.tracker/.MainActivity
+TotalTime: 685
+WaitTime: 697
+Complete

@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.utbildning.tracker/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.utbildning.tracker/.MainActivity
+TotalTime: 630
+WaitTime: 631
+Complete
