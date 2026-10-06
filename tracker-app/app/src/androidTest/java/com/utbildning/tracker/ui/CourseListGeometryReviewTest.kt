@@ -109,7 +109,7 @@ class CourseListGeometryReviewTest {
         val bitmap = compose.onNodeWithTag("geometry_canvas").captureToImage().asAndroidBitmap()
         val resolver = context.contentResolver
         val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerListGeometry")
             put(MediaStore.Images.Media.IS_PENDING, 1)

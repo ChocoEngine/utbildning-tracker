@@ -14,6 +14,7 @@ import com.utbildning.tracker.ui.session.SessionScreen
 import com.utbildning.tracker.ui.today.TodayScreen
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.time.LocalDate
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.runBlocking
 import org.junit.*
 import org.junit.Assert.*
@@ -21,7 +22,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SessionScreenTest {
-    @get:Rule val compose = createComposeRule()
+    @get:Rule val compose = createComposeRule(effectContext = StandardTestDispatcher())
     private lateinit var database: TrackerDatabase
     private lateinit var repository: TrackerRepository
     private val dao get() = database.trackerDao()

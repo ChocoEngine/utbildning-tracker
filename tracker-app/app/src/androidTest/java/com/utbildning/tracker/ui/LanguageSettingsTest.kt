@@ -22,6 +22,7 @@ import com.utbildning.tracker.R
 import com.utbildning.tracker.data.AppContainer
 import com.utbildning.tracker.domain.WeeklyRule
 import java.time.LocalDate
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.first
 import org.junit.After
@@ -34,7 +35,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LanguageSettingsTest {
     @get:Rule
-    val compose = createEmptyComposeRule()
+    val compose = createEmptyComposeRule(effectContext = StandardTestDispatcher())
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val localeManager = context.getSystemService(LocaleManager::class.java)

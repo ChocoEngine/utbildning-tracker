@@ -219,7 +219,7 @@ class ReminderTest {
         assumeTrue("Needs a same-day start minute", due.hour * 60 + due.minute > 0)
         val trigger = due.toInstant().toEpochMilli()
         val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
-        val local = TrackerRepository(db, now = { trigger - 2 * 60_000 })
+        val local = TrackerRepository(db, now = { trigger - 60_000 })
         val course = local.createCourse("End reminder", 0)
         try {
             local.saveInitialSchedule(course.id, listOf(WeeklyRule(

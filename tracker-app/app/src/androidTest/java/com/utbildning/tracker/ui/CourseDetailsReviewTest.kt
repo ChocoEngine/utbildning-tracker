@@ -136,7 +136,7 @@ class CourseDetailsReviewTest {
 
     private fun save(context: Context, bitmap: Bitmap, name: String) {
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
             put(MediaStore.Images.Media.IS_PENDING, 1)

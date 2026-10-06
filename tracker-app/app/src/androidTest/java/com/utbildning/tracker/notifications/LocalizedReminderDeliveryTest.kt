@@ -41,9 +41,19 @@ class LocalizedReminderDeliveryTest {
                 assertEquals(language, context.resources.configuration.locales[0].language)
                 val course = repository.createCourse("Лекции по C · Arrays", repository.availableColors().first())
                 try {
-                    val next = ZonedDateTime.now().plusMinutes(1).withSecond(0).withNano(0)
+                    // This fixture exercises a today's session. At 23:59 the next
+                    // minute belongs to tomorrow and is outside reminder eligibility.
+                    var now = ZonedDateTime.now()
+                    if (now.plusMinutes(1).toLocalDate() != now.toLocalDate()) {
+                        val midnight = now.toLocalDate().plusDays(1).atStartOfDay(now.zone)
+                        delay((midnight.toInstant().toEpochMilli() - System.currentTimeMillis()).coerceAtLeast(0))
+                        now = ZonedDateTime.now()
+                    }
+                    val next = now.plusMinutes(1).withSecond(0).withNano(0)
                     repository.saveInitialSchedule(course.id, listOf(WeeklyRule(next.dayOfWeek.value, next.hour * 60 + next.minute)))
                     val session = repository.observeSessions().first().first { it.courseId == course.id }
+                    assertEquals(next.toLocalDate().toEpochDay(), session.date)
+                    assertTrue("Today's alarm fixture must be eligible", repository.getSessionDetails(session.id)!!.canEdit)
                     ReminderScheduler.reconcile(context, repository)
                     val deadline = next.toInstant().toEpochMilli() + 25_000
                     while (manager.activeNotifications.none { it.tag == session.id } && System.currentTimeMillis() < deadline) delay(100)

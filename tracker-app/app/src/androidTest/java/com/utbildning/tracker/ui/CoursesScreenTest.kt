@@ -35,6 +35,7 @@ import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.util.Locale
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -45,7 +46,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class CoursesScreenTest {
-    @get:Rule val compose = createComposeRule()
+    @get:Rule val compose = createComposeRule(effectContext = StandardTestDispatcher())
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private lateinit var database: TrackerDatabase
     private lateinit var repository: TrackerRepository
@@ -281,6 +282,10 @@ class CoursesScreenTest {
         text("topics_input", "x")
         compose.onNodeWithTag("topics_input").performTextInputSelection(TextRange(0, 1))
         pasteInto("topics_input", pasted)
+        waitFor {
+            compose.onNodeWithTag("topics_input").fetchSemanticsNode()
+                .config[SemanticsProperties.EditableText].text == pasted
+        }
         assertInputText("topics_input", pasted)
         click("topics_cancel")
         assertEquals(original, runBlocking { dao.getTopics(course.id) })
@@ -288,6 +293,10 @@ class CoursesScreenTest {
         click("topics_edit"); text("topics_input", "x")
         compose.onNodeWithTag("topics_input").performTextInputSelection(TextRange(0, 1))
         pasteInto("topics_input", pasted)
+        waitFor {
+            compose.onNodeWithTag("topics_input").fetchSemanticsNode()
+                .config[SemanticsProperties.EditableText].text == pasted
+        }
         click("topics_apply")
         waitFor { runBlocking { dao.getTopics(course.id) }.map { it.title } == expected.lines() }
         click("topics_edit")
@@ -505,8 +514,18 @@ class CoursesScreenTest {
     }
 
     private fun pasteInto(tag: String, value: String) {
-        context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("tracker text", value))
-        compose.onNodeWithTag(tag).performSemanticsAction(SemanticsActions.PasteText)
+        val node = compose.onNodeWithTag(tag)
+        node.performSemanticsAction(SemanticsActions.RequestFocus) { it() }
+        compose.waitForIdle()
+        node.assertIsFocused()
+        val clipboard = context.getSystemService(ClipboardManager::class.java)
+        compose.runOnIdle { clipboard.setPrimaryClip(ClipData.newPlainText("tracker text", value)) }
+        waitFor { clipboard.primaryClip?.getItemAt(0)?.text?.toString() == value }
+        compose.waitForIdle()
+        node.performSemanticsAction(SemanticsActions.PasteText) { action ->
+            assertTrue("Focused field must accept the system clipboard paste", action())
+        }
+        compose.waitForIdle()
     }
 
     private fun captureError(name: String) = captureScreenshot(name)
@@ -515,7 +534,7 @@ class CoursesScreenTest {
         compose.waitForIdle()
         val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
         val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, name)
+            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
             put(MediaStore.Images.Media.IS_PENDING, 1)

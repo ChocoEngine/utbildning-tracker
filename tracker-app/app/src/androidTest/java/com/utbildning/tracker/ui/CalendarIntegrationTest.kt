@@ -13,6 +13,7 @@ import com.utbildning.tracker.domain.WeeklyRule
 import com.utbildning.tracker.ui.calendar.CalendarScreen
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.time.YearMonth
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.runBlocking
 import org.junit.*
 import org.junit.Assert.*
@@ -20,7 +21,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class CalendarIntegrationTest {
-    @get:Rule val compose = createComposeRule()
+    @get:Rule val compose = createComposeRule(effectContext = StandardTestDispatcher())
     private lateinit var database: TrackerDatabase
     private lateinit var repository: TrackerRepository
     private val visible = mutableStateOf(true)
