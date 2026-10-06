@@ -33,7 +33,7 @@
 - [x] PERF-03 — оптимизировать `synchronize()`.
 - [x] PERF-04 — ограничить множество доставленных уведомлений.
 - [x] PERF-05 — добавить индексы Room под итоговые запросы.
-- [ ] PERF-06 — сделать экранные подписки lifecycle-aware.
+- [x] PERF-06 — сделать экранные подписки lifecycle-aware.
 - [ ] PERF-07 — выполнить одну итоговую проверку памяти и производительности.
 - [ ] QA-UTIL-01 — исправить идемпотентное заполнение эмулятора.
 
@@ -398,6 +398,24 @@ SchemaSimplificationMigrationTest/ExhaustionMigrationTest, JVM/lint и заме�
 ### Проверка
 
 Выполнить общую минимальную команду один раз.
+
+### Выполнено 2026-10-07
+
+Добавлена явная зависимость lifecycle-runtime-compose общей версии lifecycle
+2.9.4. Экранные Flow Today, Calendar, Session и Schedule переведены на
+collectAsStateWithLifecycle с порогом STARTED по умолчанию. Таймеры Today и
+Calendar выполняются в repeatOnLifecycle(STARTED), сразу обновляют время/дату
+при каждом входе и отменяются ниже STARTED. LaunchedEffect привязан к lifecycle:
+его смена или выход из композиции отменяет прежний цикл. Интервалы, локальный
+часовой пояс, ReminderScheduler и SynchronizeOnResume сохранены.
+
+Минимальная команда под JDK 17 из tracker-app/ прошла:
+`app:assembleDebug app:testDebugUnitTest --console=plain`, BUILD SUCCESSFUL,
+33/33 JVM без пропусков. Первую ошибку компиляции из-за имени параметра
+initial вместо initialValue исправили; повторная проверка успешна.
+Instrumentation, lint, фон/возврат и повороты на устройстве, реальная смена даты
+и замеры памяти не запускались. Схема Room и UI не менялись. PERF-07 не начат:
+перед ним план требует также завершить QA-UTIL-01 отдельной задачей.
 
 ## PERF-07 — итоговая проверка памяти и производительности
 

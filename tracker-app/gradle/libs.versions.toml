@@ -12,6 +12,7 @@ ksp = "2.3.6"
 lifecycle = "2.9.4"
 
 [libraries]
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }

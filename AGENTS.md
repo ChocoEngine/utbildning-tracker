@@ -1,5 +1,13 @@
 # База знаний для работы над проектом
 
+PERF-06 выполнен 2026-10-07: экранные Flow Today/Calendar/Session/Schedule
+используют collectAsStateWithLifecycle; таймеры Today/Calendar работают внутри
+repeatOnLifecycle(STARTED) с немедленным обновлением при входе. Добавлена
+lifecycle-runtime-compose 2.9.4. Сборка и 33/33 JVM прошли; instrumentation,
+фон/возврат/повороты на устройстве и замеры памяти не запускались. Следующий
+пункт — PERF-07, после обязательного QA-UTIL-01; начинать по отдельному запросу.
+[Результат](docs/PERFORMANCE_PLAN.md#perf-06--сделать-экранные-подписки-lifecycle-aware).
+
 PERF-05 выполнен 2026-10-07: Room v7, индексы sessions(date, startMinute)
 и sessions(result, date), миграция 6→7 без пересоздания таблиц. Направленный
 TrackerMigrationTest прошёл 4/4 на отдельном API 36 AVD: данные, индексы,

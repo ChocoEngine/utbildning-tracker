@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun SessionScreen(repository: TrackerRepository, id: String, onBack: () -> Unit) {
-    val details by remember(repository, id) { repository.observeSessionDetails(id) }.collectAsState(initial = null)
+    val details by remember(repository, id) { repository.observeSessionDetails(id) }.collectAsStateWithLifecycle(initialValue = null)
     var selected by rememberSaveable(id) { mutableStateOf<ArrayList<String>?>(null) }
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf(false) }

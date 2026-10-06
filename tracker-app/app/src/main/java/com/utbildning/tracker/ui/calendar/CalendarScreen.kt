@@ -9,6 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.zIndex
@@ -54,18 +58,21 @@ internal fun CalendarScreen(onSettings: () -> Unit, repository: TrackerRepositor
     val selectedMonth = YearMonth.parse(month)
     val sessions by remember(repository, selectedMonth) {
         repository.observeSessionsBetween(selectedMonth.atDay(1).toEpochDay(), selectedMonth.atEndOfMonth().toEpochDay())
-    }.collectAsState(emptyList())
+    }.collectAsStateWithLifecycle(emptyList())
     var day by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
     val locale = LocalConfiguration.current.locales[0]
     var error by remember { mutableStateOf(false) }
     var today by remember { mutableStateOf(LocalDate.now()) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            val zone = ZoneId.systemDefault()
-            today = LocalDate.now(zone)
-            // Recheck the zone while open; a timezone change can move the local date
-            // without recreating this composition.
-            kotlinx.coroutines.delay(minOf(millisUntilNextLocalDay(System.currentTimeMillis(), zone), 60_000L))
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            while (true) {
+                val zone = ZoneId.systemDefault()
+                today = LocalDate.now(zone)
+                // Recheck the zone while open; a timezone change can move the local date
+                // without recreating this composition.
+                kotlinx.coroutines.delay(minOf(millisUntilNextLocalDay(System.currentTimeMillis(), zone), 60_000L))
+            }
         }
     }
     LaunchedEffect(repository, month) {

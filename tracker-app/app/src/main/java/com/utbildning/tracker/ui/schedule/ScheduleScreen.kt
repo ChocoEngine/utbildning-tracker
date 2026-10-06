@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
@@ -48,7 +49,7 @@ fun ScheduleScreen(repository: TrackerRepository, courseId: String, onBack: () -
     var saving by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val occupied by remember(repository, courseId) { repository.observeOccupiedSchedules(courseId) }
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle(initialValue = emptyList())
     LaunchedEffect(courseId) {
         val schedule = repository.getSchedule(courseId)
         existing = schedule != null

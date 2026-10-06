@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
@@ -16,7 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.utbildning.tracker.R
 import com.utbildning.tracker.data.TrackerRepository
@@ -37,17 +38,19 @@ import java.util.Locale
 internal fun TodayScreen(onSettings: () -> Unit, repository: TrackerRepository, onSession: (String) -> Unit) {
     var now by remember { mutableStateOf(Instant.now()) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(lifecycle) {
-        val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_RESUME) now = Instant.now() }
-        lifecycle.addObserver(observer)
-        onDispose { lifecycle.removeObserver(observer) }
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            while (true) {
+                now = Instant.now()
+                delay(60_000L - System.currentTimeMillis() % 60_000L)
+            }
+        }
     }
-    LaunchedEffect(Unit) { while (true) { now = Instant.now(); delay(60_000L - System.currentTimeMillis() % 60_000L) } }
     val zone = ZoneId.systemDefault()
     val today = now.atZone(zone).toLocalDate()
     val sessions by remember(repository, today) {
         repository.observeSessionsBetween(today.minusDays(1).toEpochDay(), today.toEpochDay())
-    }.collectAsState(emptyList())
+    }.collectAsStateWithLifecycle(emptyList())
     val locale = LocalConfiguration.current.locales[0]
     val scope = rememberCoroutineScope()
     var error by remember { mutableStateOf(false) }
