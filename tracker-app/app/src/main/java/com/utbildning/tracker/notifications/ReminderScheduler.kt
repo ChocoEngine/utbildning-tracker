@@ -67,10 +67,16 @@ object ReminderScheduler {
         val sessions = repository.getReminderCandidates()
         val ids = sessions.map { it.id }.toSet()
         notifications.activeNotifications.filter { it.tag != null && it.tag !in ids }.forEach { notifications.cancel(it.tag, it.id) }
+        val allowedKeys = sessions.flatMap { listOf(it.id, questionKey(it)) }.toSet()
+        val preferences = context.getSharedPreferences("reminders", Context.MODE_PRIVATE)
+        val savedDelivered = preferences.getStringSet("delivered", emptySet()).orEmpty()
+        val delivered = savedDelivered.intersect(allowedKeys)
+        if (delivered != savedDelivered) {
+            preferences.edit().putStringSet("delivered", delivered).apply()
+        }
         if (!allowed(context)) return
         val zone = ZoneId.systemDefault()
         val now = System.currentTimeMillis()
-        val delivered = context.getSharedPreferences("reminders", Context.MODE_PRIVATE).getStringSet("delivered", emptySet()).orEmpty()
         // A concurrent refresh at the exact event time must not cancel a due, not-yet-delivered alarm.
         val next = sessions.flatMap { session ->
             buildList {

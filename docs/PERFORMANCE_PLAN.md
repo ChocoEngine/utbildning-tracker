@@ -31,7 +31,7 @@
 - [x] PERF-01 — убрать постоянную Room-подписку на каждый курс.
 - [x] PERF-02 — использовать диапазонные выборки занятий.
 - [x] PERF-03 — оптимизировать `synchronize()`.
-- [ ] PERF-04 — ограничить множество доставленных уведомлений.
+- [x] PERF-04 — ограничить множество доставленных уведомлений.
 - [ ] PERF-05 — добавить индексы Room под итоговые запросы.
 - [ ] PERF-06 — сделать экранные подписки lifecycle-aware.
 - [ ] PERF-07 — выполнить одну итоговую проверку памяти и производительности.
@@ -271,6 +271,21 @@ BUILD SUCCESSFUL, 33/33 JVM. Instrumentation не запускался по гр
 ```bash
 /usr/bin/env JAVA_HOME=/Users/alxshvarts/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home ./gradlew app:assembleDebug app:testDebugUnitTest app:assembleDebugAndroidTest
 ```
+
+### Выполнено 2026-10-06
+
+После получения кандидатов `delivered` пересекается с ключами `session.id`
+и `question:${session.id}`. Следующий alarm рассчитывается по сокращённому
+множеству; при изменении очистка сохраняется через `apply()`, в том числе
+при пустом списке кандидатов и отключённых разрешениях. Ключи актуальных
+кандидатов сохраняются, запись после доставки по-прежнему использует `commit()`.
+Mutex, атомарная проверка, PendingIntent и порядок уведомлений не изменены.
+
+Команда под JDK 17 из `tracker-app/` прошла:
+`app:assembleDebug app:testDebugUnitTest app:assembleDebugAndroidTest`,
+BUILD SUCCESSFUL, 33/33 JVM. Instrumentation и реальная повторная доставка
+на устройстве не проверялись; androidTest только собран. Динамические замеры
+памяти предусмотрены PERF-07. Схема Room и UI не менялись.
 
 ## PERF-05 — добавить индексы Room под итоговые запросы
 
