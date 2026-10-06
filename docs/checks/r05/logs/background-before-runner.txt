@@ -1,0 +1,23 @@
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:
+Error in backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest):
+java.lang.AssertionError: Active field was not stored while Activity was stopped
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.assertStoredWhileStopped(CourseDraftRecreationTest.kt:133)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:107)
+
+
+Time: 22.558
+There was 1 failure:
+1) backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+java.lang.AssertionError: Active field was not stored while Activity was stopped
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.assertStoredWhileStopped(CourseDraftRecreationTest.kt:133)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:107)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

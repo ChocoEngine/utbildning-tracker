@@ -1,0 +1,21 @@
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:
+Error in backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:108)
+
+
+Time: 67.795
+There was 1 failure:
+1) backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:108)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

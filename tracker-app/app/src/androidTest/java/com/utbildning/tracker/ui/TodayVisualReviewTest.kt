@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -60,9 +61,9 @@ class TodayVisualReviewTest {
         val scene = mutableIntStateOf(0)
         val names = listOf("empty", "upcoming", "current", "yesterday")
         compose.setContent {
-            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration) {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration, LocalResources provides localized.resources) {
                 TrackerTheme {
-                    Surface(Modifier.requiredWidth(320.dp).height(620.dp).testTag("review_canvas")) {
+                    Surface(Modifier.requiredWidth(320.dp).height(reviewHeight()).testTag("review_canvas")) {
                         key(scene.intValue) {
                             TodayContent(when (scene.intValue) {
                                 0 -> emptyList()

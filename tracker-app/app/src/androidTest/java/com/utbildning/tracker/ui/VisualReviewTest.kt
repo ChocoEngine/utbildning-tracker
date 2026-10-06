@@ -16,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
@@ -80,9 +82,9 @@ class VisualReviewTest {
         val scene = mutableIntStateOf(0)
         val names = listOf("course_list", "course_new", "course_edit", "topic_editor", "calendar", "today", "session", "schedule", "guide")
         compose.setContent {
-            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration) {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration, LocalResources provides localized.resources) {
                 TrackerTheme {
-                    Surface(Modifier.requiredWidth(320.dp).height(620.dp).testTag("review_canvas")) {
+                    Surface(Modifier.requiredWidth(320.dp).height(reviewHeight()).testTag("review_canvas")) {
                         key(scene.intValue) {
                             when (scene.intValue) {
                                 0 -> CourseListContent(courses, listOf(CategoryEntity("category", category)), courses.associate { it.id to (3 to 40) }, false, {}, {})
@@ -126,7 +128,8 @@ class VisualReviewTest {
         }
         check(frames.await(3, TimeUnit.SECONDS)) { "Review scene did not receive two display frames" }
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        val bitmap = compose.onNodeWithTag("review_canvas").captureToImage().asAndroidBitmap()
+        val node = if (name.contains("topic_editor")) compose.onNode(isDialog()) else compose.onNodeWithTag("review_canvas")
+        val bitmap = node.captureToImage().asAndroidBitmap()
         save(context, bitmap, name)
     }
 

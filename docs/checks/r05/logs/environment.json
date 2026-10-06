@@ -1,0 +1,14 @@
+{
+  "ro.build.version.sdk": "36",
+  "ro.build.fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+  "persist.sys.timezone": "Europe/Moscow",
+  "ro.kernel.qemu": "1",
+  "serial": "emulator-5556",
+  "size": "Physical size: 1080x2400\nOverride size: 840x1418",
+  "density": "Physical density: 420",
+  "app_sha256": "f6f52f7ee6ae725327e56b9bc839dc6571d07bbf0255553eb5d5fd174597c6d8",
+  "test_sha256": "0df6b16e3b1a2608eaea426ba73a9d1d2b2ffbf7f7a662d09c435eca036aa2c6",
+  "test_sha256_full_runner": "7f122d5bb22c425ff0c31f4a846177c2c8a8d47f265d33a26ba72c8dc72bfac7",
+  "app_sha256_full_runner": "2412976fcab8097527ba23c1669dafb17c64b34706e5751967fc0f48859a54f8",
+  "last_local_change": "Первичный диалог скрывает заголовок только при IME, RU/EN регрессия проверяет высоту ошибки; расписание/уведомления/фон не менялись."
+}

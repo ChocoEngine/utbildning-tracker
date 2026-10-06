@@ -1,0 +1,24 @@
+
+com.utbildning.tracker.ui.R05EditorReviewTest:
+Error in englishEditorAndKeyboard(com.utbildning.tracker.ui.R05EditorReviewTest):
+java.lang.AssertionError: Error text is clipped
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.utbildning.tracker.ui.R05EditorReviewTest.review(R05EditorReviewTest.kt:98)
+	at com.utbildning.tracker.ui.R05EditorReviewTest.englishEditorAndKeyboard(R05EditorReviewTest.kt:46)
+.
+com.utbildning.tracker.ui.CoursesScreenTest:........................
+
+Time: 252.115
+There was 1 failure:
+1) englishEditorAndKeyboard(com.utbildning.tracker.ui.R05EditorReviewTest)
+java.lang.AssertionError: Error text is clipped
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.utbildning.tracker.ui.R05EditorReviewTest.review(R05EditorReviewTest.kt:98)
+	at com.utbildning.tracker.ui.R05EditorReviewTest.englishEditorAndKeyboard(R05EditorReviewTest.kt:46)
+
+FAILURES!!!
+Tests run: 26,  Failures: 1
+
+

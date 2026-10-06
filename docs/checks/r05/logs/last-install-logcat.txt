@@ -1,0 +1,302 @@
+--------- beginning of main
+I/tombstoned(  237): received crash request for pid 432
+I/tombstoned(  237): found intercept fd 512 for pid 432 and type kDebuggerdNativeBacktrace
+I/crash_dump64(12121): performing dump of process 432 (target tid = 432)
+I/AconfigPackage(11873): com.google.android.input.twoshay.flags is mapped to vendor
+I/AconfigPackage(11873): libgooglecamerahal.flags is mapped to vendor
+I/AconfigPackage(11873): com.android.ipsec.flags is mapped to com.android.ipsec
+W/tombstoned(  237): skipping tombstone file creation due to intercept
+I/system_server(  604): libdebuggerd_client: done dumping process 432
+--------- beginning of system
+I/ActivityManager(  604): Collecting stacks for native pid 435
+W/watchdog(  604): type=1400 audit(0.0:181): avc:  denied  { read } for  name="transactions" dev="binder" ino=1048587 scontext=u:r:system_server:s0 tcontext=u:object_r:binderfs_logs_transactions:s0 tclass=file permissive=0
+E/system_server(  604): Could not open /dev/binderfs/binder_logs/transactions. Likely a permissions issue. errno: 2
+E/android.os.Debug(  604): Failed to get binder state info for pid: 435 status: -2: No such file or directory
+I/system_server(  604): libdebuggerd_client: started dumping process 435
+I/tombstoned(  237): registered intercept for pid 435 and type kDebuggerdNativeBacktrace
+I/libc    (  435): Requested dump for pid 435 (binder:435_2)
+I/crash_dump64(12127): obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+I/tombstoned(  237): received crash request for pid 435
+I/tombstoned(  237): found intercept fd 512 for pid 435 and type kDebuggerdNativeBacktrace
+I/crash_dump64(12127): performing dump of process 435 (target tid = 435)
+I/AconfigPackage(11873): com.android.nfc.module.flags is mapped to com.android.nfcservices
+I/AconfigPackage(11873): com.android.adservices.ondevicepersonalization.flags is mapped to com.android.ondevicepersonalization
+I/cn_CronetUrlRequestContext( 1335): destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@7ea075e
+I/system_server(  604): libdebuggerd_client: done dumping process 435
+W/tombstoned(  237): skipping tombstone file creation due to intercept
+I/AconfigPackage(11873): com.android.bluetooth.flags is mapped to com.android.bt
+I/ActivityManager(  604): Collecting stacks for native pid 440
+E/system_server(  604): Could not open /dev/binderfs/binder_logs/transactions. Likely a permissions issue. errno: 2
+E/android.os.Debug(  604): Failed to get binder state info for pid: 440 status: -2: No such file or directory
+I/system_server(  604): libdebuggerd_client: started dumping process 440
+W/watchdog(  604): type=1400 audit(0.0:182): avc:  denied  { read } for  name="transactions" dev="binder" ino=1048587 scontext=u:r:system_server:s0 tcontext=u:object_r:binderfs_logs_transactions:s0 tclass=file permissive=0
+I/tombstoned(  237): registered intercept for pid 440 and type kDebuggerdNativeBacktrace
+I/libc    (  440): Requested dump for pid 440 (android.hardwar)
+I/crash_dump64(12132): obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+I/tombstoned(  237): received crash request for pid 440
+I/tombstoned(  237): found intercept fd 512 for pid 440 and type kDebuggerdNativeBacktrace
+I/crash_dump64(12132): performing dump of process 440 (target tid = 440)
+I/AconfigPackage(11873): com.android.devicelock.flags is mapped to com.android.devicelock
+I/AconfigPackage(11873): android.os.profiling is mapped to com.android.profiling
+I/AconfigPackage(11873): com.android.os.statsd.flags is mapped to com.android.os.statsd
+W/tombstoned(  237): skipping tombstone file creation due to intercept
+I/system_server(  604): libdebuggerd_client: done dumping process 440
+I/AconfigPackage(11873): com.android.cellbroadcastreceiver.flags is mapped to com.android.cellbroadcast
+I/ActivityManager(  604): Collecting stacks for native pid 187
+W/watchdog(  604): type=1400 audit(0.0:183): avc:  denied  { read } for  name="transactions" dev="binder" ino=1048587 scontext=u:r:system_server:s0 tcontext=u:object_r:binderfs_logs_transactions:s0 tclass=file permissive=0
+E/system_server(  604): Could not open /dev/binderfs/binder_logs/transactions. Likely a permissions issue. errno: 2
+E/android.os.Debug(  604): Failed to get binder state info for pid: 187 status: -2: No such file or directory
+I/system_server(  604): libdebuggerd_client: started dumping process 187
+I/tombstoned(  237): registered intercept for pid 187 and type kDebuggerdNativeBacktrace
+I/AconfigPackage(11873): com.android.adservices.flags is mapped to com.android.adservices
+I/AconfigPackage(11873): com.android.sdksandbox.flags is mapped to com.android.adservices
+I/AconfigPackage(11873): com.android.uwb.flags is mapped to com.android.uwb
+I/AconfigPackage(11873): com.android.ranging.flags is mapped to com.android.uwb
+I/AconfigPackage(11873): android.graphics.pdf.flags is mapped to com.android.mediaprovider
+I/AconfigPackage(11873): com.android.providers.media.flags is mapped to com.android.mediaprovider
+I/AconfigPackage(11873): android.graphics.pdf.flags.readonly is mapped to com.android.mediaprovider
+I/AconfigPackage(11873): com.android.net.ct.flags is mapped to com.android.tethering
+I/AconfigPackage(11873): com.android.net.flags is mapped to com.android.tethering
+I/AconfigPackage(11873): android.net.vcn is mapped to com.android.tethering
+I/AconfigPackage(11873): com.android.nearby.flags is mapped to com.android.tethering
+I/AconfigPackage(11873): android.net.http is mapped to com.android.tethering
+I/AconfigPackage(11873): com.android.net.thread.flags is mapped to com.android.tethering
+I/libc    (  187): Requested dump for pid 187 (servicemanager)
+I/crash_dump64(12137): obtaining output fd from tombstoned, type: kDebuggerdNativeBacktrace
+I/tombstoned(  237): received crash request for pid 187
+I/tombstoned(  237): found intercept fd 512 for pid 187 and type kDebuggerdNativeBacktrace
+I/crash_dump64(12137): performing dump of process 187 (target tid = 187)
+I/AconfigPackage(11873): com.android.system.virtualmachine.flags is mapped to com.android.virt
+E/FeatureFlagsImplExport(11873): android.os.flagging.AconfigStorageReadException: ERROR_PACKAGE_NOT_FOUND: package android.xr cannot be found on the device
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07578) locale list changing from [] to [en-US]
+D/UiAutomationConnection(11873): Created on user UserHandle{0}
+I/system_server(  604): libdebuggerd_client: done dumping process 187
+W/tombstoned(  237): skipping tombstone file creation due to intercept
+I/ActivityManager(  604): dumpStackTraces extraPids=[]
+I/ActivityManager(  604): Done dumping
+I/ActivityManager(  604): Force stopping com.utbildning.tracker appid=10222 user=0: start instr
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e05638) locale list changing from [] to [en-US]
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+D/BackgroundInstallControlService(  604): Package event received: 0
+V/Configuration(  604): Updating configuration, locales updated from [] to [en,en_US]
+V/GrammaticalInflectionUtils(  604): AttributionSource: android.content.AttributionSource@e08d3036 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+D/BackgroundInstallControlService(  604): Package event received: 0
+W/ActivityManager(  604): Slow operation: 132ms so far, now at startProcess: asking zygote to start proc
+D/Zygote  (  412): Forked child process 12140
+W/ActivityManager(  604): Slow operation: 148ms so far, now at startProcess: returned from zygote!
+W/ActivityManager(  604): Slow operation: 149ms so far, now at startProcess: done updating battery stats
+W/ActivityManager(  604): Slow operation: 149ms so far, now at startProcess: building log message
+I/ActivityManager(  604): Start proc 12140:com.utbildning.tracker/u0a222 for added application com.utbildning.tracker
+W/ActivityManager(  604): Slow operation: 149ms so far, now at startProcess: starting to update pids map
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e068f8) locale list changing from [] to [en-US]
+I/ildning.tracker(12140): Late-enabling -Xcheck:jni
+I/ActivityManager(  604): ProcessObserver broadcast disabled
+W/ActivityManager(  604): Slow operation: 206ms so far, now at startProcess: done updating pids map
+I/ildning.tracker(12140): Using CollectorTypeCMC GC.
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e0c6b8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e05318) locale list changing from [] to [en-US]
+I/adbd    (  485): jdwp connection from 12140
+D/nativeloader(12140): Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e04698) locale list changing from [] to [en-US]
+D/ActivityManager(  604): freezing 2564 com.android.vending:background
+D/ActivityManager(  604): freezing 2458 com.android.vending
+D/InetDiagMessage(  604): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+D/InetDiagMessage(  604): Destroyed 2 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+D/InetDiagMessage(  604): Destroyed live tcp sockets for uids={10145} in 2ms
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02758) locale list changing from [] to [en-US]
+W/ActivityManager(  604): Slow operation: 72ms so far, now at attachApplicationLocked: immediately before bindApplication
+W/ActivityManager(  604): Slow operation: 101ms so far, now at attachApplicationLocked: immediately after bindApplication
+W/ActivityManager(  604): Slow operation: 101ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+W/ActivityManager(  604): Slow operation: 102ms so far, now at attachApplicationLocked: after updateOomAdjLocked
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e06c18) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e09e18) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07898) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07ed8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02d98) locale list changing from [] to [en-US]
+I/ildning.tracker(12140): AssetManager2(0xb400007020de4f78) locale list changing from [en-US] to [en]
+W/ActivityThread(12140): Package uses different ABI(s) than its instrumentation: package[com.utbildning.tracker]: arm64-v8a, null instrumentation[com.utbildning.tracker.test]: null, null
+D/ApplicationLoaders(12140): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders(12140): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+W/ildning.tracker(12140): ClassLoaderContext classpath element mismatch. expected=/system/framework/android.test.base.jar, found=/system_ext/framework/androidx.window.extensions.jar (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+W/ildning.tracker(12140): ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02438) locale list changing from [] to [en-US]
+W/ildning.tracker(12140): ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e09af8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e065d8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e08518) locale list changing from [] to [en-US]
+D/InetDiagMessage(  604): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+D/InetDiagMessage(  604): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+D/InetDiagMessage(  604): Destroyed live tcp sockets for uids={10147} in 3ms
+D/InetDiagMessage(  604): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+D/InetDiagMessage(  604): Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+D/InetDiagMessage(  604): Destroyed live tcp sockets for uids={20147} in 0ms
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dee578) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07bb8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df9158) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e036f8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df2a38) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e01498) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e01498) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e036f8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df7b78) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df9158) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07bb8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dee578) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e08518) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df4658) locale list changing from [] to [en-US]
+I/DropBoxManagerService(  604): add tag=system_server_pre_watchdog isTagEnabled=true flags=0x6
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e094b8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e065d8) locale list changing from [] to [en-US]
+W/Looper  (  604): Slow dispatch took 154ms android.fg app=system_server main=false group=FOREGROUND h=com.android.server.DropBoxManagerService$DropBoxManagerBroadcastHandler c=null m=1
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07258) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df3cf8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e049b8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02438) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02d98) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e09e18) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e02a78) locale list changing from [] to [en-US]
+W/dumpsys (12156): Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: package
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_AdsDynamite_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_CronetDynamite_installtime.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_DynamiteLoader_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_DynamiteModulesA_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_DynamiteModulesC_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_GoogleCertificates_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_MapsDynamite_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_MeasurementDynamite_installtime.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: odex next to the dex file (/data/app/~~Sj7PIvdF7pCTRjw082WPbA==/com.google.android.gms-JbI6AXCdEktpWRCOW5VUiA==/oat/arm64/split_all_locale_splits.odex) is kOatUpToDate with filter 'speed' executable 'false'
+I/artd    ( 2346): GetBestInfo: vdex next to the dex file (/data/user/0/com.google.android.gms/app_dg_cache/D7B77D0A5C81560DEC3D5970D91F7DE4B29C9599/oat/arm64/the.vdex) is kOatUpToDate with filter 'verify' executable 'false'
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000002/DynamiteLoader.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000005/GoogleCertificates.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000f/dl-MlkitBarcodeUi.optional_261133100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000009/dl-TfliteDynamiteDynamite.integ_252130102100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000029/dl-IdentityCredentialsPlatform.optional_261133100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000e/dl-Appsearch.optional_261133100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: vdex next to the dex file (/data/user/0/com.google.android.gms/app_dg_cache/D6F3613D77E3345A974691A7A7DC69F4388889A4/oat/arm64/the.vdex) is kOatUpToDate with filter 'verify' executable 'false'
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000014/dl-PlayCloudSearch.optional_261133100000.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user/0/com.google.android.gms/app_dg_cache/B6402974DF4684369D814F4D7E0A178D1E5CD2F5/the.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user/0/com.google.android.gms/app_dg_cache/C979021594972B0BA2D39F27BF33D93C4B1302BC/the.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000028/dl-TfliteDynamiteDynamite.integ_262730502100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user/0/com.google.android.gms/app_dg_cache/A8F89F306FD1BA172E06F6F2B9F79826D0309BB6/the.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000a/dl-MlkitBarcodeUi.optional_250834100400.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/0000000d/dl-VisionOcr.optional_261133100000.apk has no usable artifacts
+I/artd    ( 2346): GetBestInfo: /data/user/0/com.google.android.gms/app_dg_cache/707FFD883BF2A7896692338F9625CA52336E933B/the.apk has no usable artifacts
+W/artd    ( 2346): Could not get dex checksums for location /data/app/~~vbqJlmjuJNrCfCNZb8qyJQ==/com.android.vending-wwNpqOEFONuaCSXIUQ_f0g==/base.apk, fd=-1
+I/artd    ( 2346): GetBestInfo: /data/user_de/0/com.google.android.gms/app_chimera/m/00000010/dl-MlkitOcrCommon.optional_261133100400.apk has no usable artifacts
+W/IPCThreadState(  604): Sending oneway calls to frozen process.
+D/SatelliteController(  974): iisInCarrierRoamingNbIotNtn: satellite is disabled
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e07898) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e04698) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e05318) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e0c6b8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e04058) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e081f8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e05958) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfe8d8) locale list changing from [] to [en-US]
+D/nativeloader(12140): Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/base.apk:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/lib/arm64:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/lib/arm64:/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/base.apk!/lib/arm64-v8a:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.utbildning.tracker
+I/ildning.tracker(12140): AssetManager2(0xb400007020de5bf8) locale list changing from [] to [en]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e03d38) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dffb98) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df36b8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df68b8) locale list changing from [] to [en-US]
+V/GraphicsEnvironment(12140): Currently set values for:
+V/GraphicsEnvironment(12140):   angle_gl_driver_selection_pkgs=[]
+V/GraphicsEnvironment(12140):   angle_gl_driver_selection_values=[]
+V/GraphicsEnvironment(12140): com.utbildning.tracker is not listed in per-application setting
+V/GraphicsEnvironment(12140): ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+V/GraphicsEnvironment(12140): com.utbildning.tracker is not listed in ANGLE allowlist or settings, returning default
+V/GraphicsEnvironment(12140): Neither updatable production driver nor prerelease driver is supported.
+D/ApplicationLoaders(12140): Returning zygote-cached class loader: /system/framework/android.test.base.jar
+D/nativeloader(12140): Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/lib/arm64:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/lib/arm64, permitted_path=/data:/mnt/expand
+D/ApplicationLoaders(12140): Returning zygote-cached class loader: /system/framework/android.test.base.jar
+D/nativeloader(12140): Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/lib/arm64:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/lib/arm64, permitted_path=/data:/mnt/expand
+W/ildning.tracker(12140): ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/base.apk*3528613899:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/base.apk*647996624]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+W/ildning.tracker(12140): ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/base.apk*3528613899:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/base.apk*647996624]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+W/ildning.tracker(12140): ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~1vx_3mO6axaKxvdUOTzlMg==/com.utbildning.tracker.test-VZ_w-_YqqQz6Redo7cZN8w==/base.apk*3528613899:/data/app/~~lFe1hTehK20--OMK5yjv2w==/com.utbildning.tracker-Y7OF6t2qX7qMsu6_XNKB0A==/base.apk*647996624]{PCL[/system_ext/framework/androidx.window.extensions.jar*1030441313]#PCL[/system_ext/framework/androidx.window.sidecar.jar*3860983653]})
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfd618) locale list changing from [] to [en-US]
+I/ildning.tracker(12140): AssetManager2(0xb400007020dec318) locale list changing from [] to [en]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020df9dd8) locale list changing from [] to [en-US]
+I/AndroidJUnitRunner(12140): newApplication android.app.Application
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfebf8) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfccb8) locale list changing from [] to [en-US]
+I/AndroidJUnitRunner(12140): onCreate Bundle[mParcelledData.dataSize=208]
+D/AndroidJUnitRunner(12140): Use the raw file system for managing file I/O.
+V/TestEventClient(12140): No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+D/AndroidJUnitRunner(12140): onStart is called.
+D/ActivityManager(  604): freezing 1335 com.google.android.gms
+I/InstrConnection(12140): Could not send broadcast or register receiver (isolatedProcess?)
+I/TestRunner(12140): run started: 26 tests
+I/TestRunner(12140): started: englishEditorAndKeyboard(com.utbildning.tracker.ui.R05EditorReviewTest)
+W/FileTestStorage(12140): Output properties is not supported.
+I/Tracing (12140): Tracer added: class androidx.test.platform.tracing.AndroidXTracer
+D/EventInjectionStrategy(12140): Creating injection strategy with input manager.
+I/ildning.tracker(12140): hiddenapi: Accessing hidden method Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager; (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/InputManagerEventInjectionStrategy; (domain=app) using reflection: allowed
+I/ildning.tracker(12140): hiddenapi: Accessing hidden method Landroid/hardware/input/InputManager;->injectInputEvent(Landroid/view/InputEvent;I)Z (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/InputManagerEventInjectionStrategy; (domain=app) using reflection: allowed
+I/ildning.tracker(12140): hiddenapi: Accessing hidden field Landroid/hardware/input/InputManager;->INJECT_INPUT_EVENT_MODE_WAIT_FOR_FINISH:I (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/InputManagerEventInjectionStrategy; (domain=app) using reflection: allowed
+I/ildning.tracker(12140): hiddenapi: Accessing hidden method Landroid/os/MessageQueue;->next()Landroid/os/Message; (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/Interrogator; (domain=app) using reflection: allowed
+I/ildning.tracker(12140): hiddenapi: Accessing hidden field Landroid/os/MessageQueue;->mMessages:Landroid/os/Message; (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/Interrogator; (domain=app) using reflection: allowed
+I/ildning.tracker(12140): hiddenapi: Accessing hidden method Landroid/os/Message;->recycleUnchecked()V (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/test/espresso/base/Interrogator; (domain=app) using reflection: allowed
+D/IdlingRegistry(12140): Registering idling resources: [androidx.compose.ui.test.EspressoLink@6881d40]
+W/Settings(12140): Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+E/ashmem  (12140): Pinning is deprecated since Android Q. Please use trim or other methods.
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfe5b8) locale list changing from [] to [en-US]
+I/system_server(  604): AssetManager2(0xb400007020e18878) locale list changing from [] to [en-US]
+V/Configuration(  604): Updating configuration, locales updated from [] to [en,en_US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfcfd8) locale list changing from [] to [en-US]
+V/GrammaticalInflectionUtils(  604): AttributionSource: android.content.AttributionSource@e08d3036 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+W/OptProp (  604): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_OVERRIDE
+W/OptProp (  604): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_FULLSCREEN_OVERRIDE
+W/OptProp (  604): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_RESIZEABLE_ACTIVITY_OVERRIDES
+W/OptProp (  604): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_MIN_ASPECT_RATIO_OVERRIDE
+I/BpBinder(  483): onLastStrongRef automatically unlinking death recipients: 
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020e00818) locale list changing from [] to [en-US]
+W/OptProp (  604): Cannot read opt property android.window.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE
+I/ActivityTaskManager(  604): START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 xflg=0x4 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity} with LAUNCH_MULTIPLE from uid 10222 (BAL_ALLOW_PERMISSION) result code=0
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfc998) locale list changing from [] to [en-US]
+I/ndroid.systemui(  850): AssetManager2(0xb400007020df1458) locale list changing from [] to [en-US]
+I/.apps.wellbeing( 1348): AssetManager2(0xb400007020dfb098) locale list changing from [] to [en-US]
+V/WindowManagerShell(  850): Transition requested (#946): android.os.BinderProxy@c95eaec TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=5761 effectiveUid=10222 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=com.utbildning.tracker/androidx.activity.ComponentActivity } baseActivity=ComponentInfo{com.utbildning.tracker/androidx.activity.ComponentActivity} topActivity=ComponentInfo{com.utbildning.tracker/androidx.activity.ComponentActivity} origActivity=null realActivity=ComponentInfo{com.utbildning.tracker/androidx.activity.ComponentActivity} numActivities=1 lastActiveTime=4275697 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@7f11eb5} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 0 - 0, 0) topActivityInfo=ActivityInfo{e03694a androidx.activity.ComponentActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isTopActivityNoDisplay=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false isActivityStackTransparent=false lastNonFullscreenBounds=Rect(147, 289 - 693, 1129) capturedLink=null capturedLinkTimestamp=0 requestedVisibleTypes=-9 topActivityRequestOpenInBrowserEducationTimestamp=0 appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false eligibleForLetterboxEducation= false isLetterboxEducationEnabled= true isLetterboxDoubleTapEnabled= false eligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 topActivityAppBounds=Rect(0, 0 - 840, 1418) isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false hasMinAspectRatioOverride=false topActivityLetterboxBounds=null cameraCompatTaskInfo=CameraCompatTaskInfo { freeformCameraCompatMode=inactive}} topActivityMainWindowFrame=null}, pipChange = null, remoteTransition = null, displayChange = null, flags = 0, debugId = 946 }
+D/CompatChangeReporter(  604): Compat change id reported: 377864165; UID 10222; state: ENABLED
+D/ShellSplitScreen(  850): logExit: no-op, mLoggerSessionId is null
+W/ActivityTaskManager(  604): Activity top resumed state loss timeout for ActivityRecord{47643488 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t2}
+I/Choreographer(  604): Skipped 35 frames!  The application may be doing too much work on its main thread.
+W/ActivityTaskManager(  604): Activity pause timeout for ActivityRecord{47643488 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t2}
+I/BpBinder(  483): onLastStrongRef automatically unlinking death recipients: 

@@ -1,0 +1,62 @@
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:..
+com.utbildning.tracker.ui.R05EditorReviewTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:.....................
+Error in longMultilineTopicPasteIsUnrestrictedUntilApplyThenShowsStoredTitlesInRussian(com.utbildning.tracker.ui.CoursesScreenTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:576)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitForTag(CoursesScreenTest.kt:577)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:586)
+	at com.utbildning.tracker.ui.CoursesScreenTest.longMultilineTopicPasteIsUnrestrictedUntilApplyThenShowsStoredTitlesInRussian(CoursesScreenTest.kt:282)
+..
+com.utbildning.tracker.ui.VisualReviewTest:..
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.CourseListGeometryReviewTest:..
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.ScheduleScreenTest:...........
+com.utbildning.tracker.ui.SessionScreenTest:.............
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.AppNavigationTest:.
+Error in newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest):
+java.lang.AssertionError: Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus(TextActions.kt:124)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus$default(TextActions.kt:119)
+	at androidx.compose.ui.test.TextActionsKt.performTextInput(TextActions.kt:39)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:86)
+.....
+
+Time: 705.205
+There were 2 failures:
+1) longMultilineTopicPasteIsUnrestrictedUntilApplyThenShowsStoredTitlesInRussian(com.utbildning.tracker.ui.CoursesScreenTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitFor(CoursesScreenTest.kt:576)
+	at com.utbildning.tracker.ui.CoursesScreenTest.waitForTag(CoursesScreenTest.kt:577)
+	at com.utbildning.tracker.ui.CoursesScreenTest.text(CoursesScreenTest.kt:586)
+	at com.utbildning.tracker.ui.CoursesScreenTest.longMultilineTopicPasteIsUnrestrictedUntilApplyThenShowsStoredTitlesInRussian(CoursesScreenTest.kt:282)
+2) newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest)
+java.lang.AssertionError: Failed to perform text input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus(TextActions.kt:124)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus$default(TextActions.kt:119)
+	at androidx.compose.ui.test.TextActionsKt.performTextInput(TextActions.kt:39)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:86)
+
+FAILURES!!!
+Tests run: 79,  Failures: 2
+
+

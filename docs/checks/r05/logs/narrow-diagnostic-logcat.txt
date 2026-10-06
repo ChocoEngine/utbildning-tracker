@@ -1,0 +1,5 @@
+--------- beginning of main
+10-06 12:35:33.955  5815  5831 I TestRunner: run started: 79 tests
+10-06 12:35:33.960  5815  5831 I TestRunner: started: backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-06 12:36:13.394  5815  5831 I TestRunner: finished: backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+10-06 12:36:13.414  5815  5831 I TestRunner: started: actualActivityRecreationRetainsCreatedCourseAndOpenTopicEditor(com.utbildning.tracker.ui.CourseDraftRecreationTest)

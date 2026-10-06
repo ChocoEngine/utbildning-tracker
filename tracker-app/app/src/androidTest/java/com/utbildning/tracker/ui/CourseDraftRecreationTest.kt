@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -92,6 +93,44 @@ class CourseDraftRecreationTest {
         compose.waitUntil(5_000) { runBlocking { repository.observeCourses().first() }.size == 1 }
         val saved = runBlocking { repository.observeCourses().first() }.single()
         assertEquals(listOf("Pointers", "Arrays"), runBlocking { database.trackerDao().getTopics(saved.id) }.map { it.title })
+    }
+
+    @Test fun backgroundSavesActiveFieldsWithoutApplyingTopicDraft() {
+        val course = runBlocking { repository.createCourse("C", 0, topics = listOf("Pointers")) }
+        compose.setContent { TrackerTheme { CoursesScreen({}, repository) } }
+        click("course_row_${course.id}")
+        waitForTag("course_title")
+        compose.onNodeWithTag("course_title").performTouchInput { longClick() }
+        waitForTag("course_name")
+        compose.onNodeWithTag("course_name").performTextReplacement("C background")
+        // A stopped Activity must not depend on focus loss or composition disposal.
+        assertStoredWhileStopped { runBlocking { repository.getCourse(course.id)?.name == "C background" } }
+        assertEquals(listOf("Pointers"), runBlocking { database.trackerDao().getTopics(course.id) }.map { it.title })
+        compose.onNodeWithTag("course_name").assertTextContains("C background")
+        click("course_category_open")
+        waitForTag("course_category")
+        compose.onNodeWithTag("course_category").performTextReplacement("Background category")
+        assertStoredWhileStopped { runBlocking { repository.getCourseDetails(course.id)?.category?.name == "Background category" } }
+        compose.onNodeWithText(compose.activity.getString(R.string.topics_apply)).performClick()
+        click("topics_edit")
+        compose.onNodeWithTag("topics_input").performTextReplacement("Unapplied arrays")
+        compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
+        assertEquals(listOf("Pointers"), runBlocking { database.trackerDao().getTopics(course.id) }.map { it.title })
+        compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
+        compose.onNodeWithTag("topics_input").assertTextContains("Unapplied arrays")
+    }
+
+    private fun assertStoredWhileStopped(condition: () -> Boolean) {
+        compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)
+        var stored = false
+        try {
+            val deadline = System.currentTimeMillis() + 5_000
+            while (System.currentTimeMillis() < deadline) {
+                if (condition()) { stored = true; break }
+                Thread.sleep(50)
+            }
+        } finally { compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED) }
+        assertTrue("Active field was not stored while Activity was stopped", stored)
     }
 
     private fun click(tag: String) {

@@ -73,6 +73,14 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
         }
     })
     val registerExit by rememberUpdatedState(onExitHandler)
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(model, lifecycle) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_STOP) model.saveOnBackground()
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
     DisposableEffect(model, model.draft != null) {
         registerExit(if (model.draft != null) ({ after -> model.leave(after) }) else null)
         onDispose { registerExit(null) }
@@ -90,8 +98,10 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             { model.openSchedule(onSchedule) }, model::requestLifecycle,
             model::commitCategory, model::selectCategory, model::selectColor)
         if (model.creating && draft != null) AlertDialog(onDismissRequest = model::cancel,
-            title = { Text(stringResource(R.string.course_add)) },
-            text = { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            modifier = Modifier.imePadding().systemBarsPadding(),
+            properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
+            title = if (WindowInsets.ime.getBottom(androidx.compose.ui.platform.LocalDensity.current) > 0) null else ({ Text(stringResource(R.string.course_add)) }),
+            text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 CourseNameField(draft.name, { value -> model.change { it.copy(name = value) } },
                     Modifier.fillMaxWidth().testTag("course_name"))
                 CategoryField(draft.category, model.categories, { value -> model.change { it.copy(category = value) } },
@@ -304,7 +314,8 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             Text(if (draft.category.isBlank()) stringResource(R.string.course_add_category) else "${stringResource(R.string.course_category)}: ${draft.category} ⌄")
         }
         if (categoryOpen) AlertDialog(onDismissRequest = { focus.clearFocus(); onCategoryCommit(); categoryOpen = false },
-            title = { Text(stringResource(R.string.course_category)) },
+            modifier = Modifier.imePadding().systemBarsPadding(),
+            properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
             text = { CategoryField(draft.category, categories, { value -> onChange { it.copy(category = value) } }, { value -> onCategorySelected(value); categoryOpen = false }, onCategoryCommit, onDeleteCategory) },
             confirmButton = { TextButton(onClick = { focus.clearFocus(); onCategoryCommit(); categoryOpen = false }) { Text(stringResource(R.string.topics_apply)) } })
         if (!draft.completed && !draft.paused) {
@@ -399,6 +410,8 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
         }
         if (draft.editingText != null && !draft.completed) {
             AlertDialog(onDismissRequest = { onChange { it.copy(editingText = null) } },
+                modifier = Modifier.imePadding().systemBarsPadding(),
+                properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
                 title = { Text(stringResource(R.string.topics_edit)) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -474,7 +487,7 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
         Text(stringResource(R.string.course_category), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
         Box {
-            TextField(value, { onChange(it); expanded = true }, singleLine = true,
+            TextField(value, { onChange(it); expanded = it.isNotBlank() }, singleLine = true,
                 placeholder = { Text(stringResource(R.string.course_no_category)) },
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -82,7 +83,7 @@ class CourseDetailsReviewTest {
         val scene = mutableIntStateOf(0)
         val topics = (1..40).map { EditableTopic("topic_$it", "${it}: C — pointers, arrays and memory", it - 1, it < 3) }
         compose.setContent {
-            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration) {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration, LocalResources provides localized.resources) {
                 TrackerTheme { Surface(Modifier.requiredWidth(320.dp).height(540.dp).testTag("review_canvas")) {
                     key(scene.intValue) { CourseEditorContent(CourseDraft(id = "course", name = "Лекции и практические занятия по программированию C", category = "Программирование", color = 0,
                         hasSchedule = scene.intValue == 0, paused = scene.intValue == 1, completed = scene.intValue == 2,

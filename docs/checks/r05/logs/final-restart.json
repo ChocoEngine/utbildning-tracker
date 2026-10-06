@@ -1,0 +1,3234 @@
+{
+  "courses": [
+    {
+      "id": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "name": "R05Лекции и практика программирования на C",
+      "colorId": 0,
+      "createdAt": 1791279528663,
+      "updatedAt": 1791281941708,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "name": "C pointers arrays memory structured programming",
+      "colorId": 1,
+      "createdAt": 1791279529148,
+      "updatedAt": 1791279535553,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "name": "Практика C без тем",
+      "colorId": 2,
+      "createdAt": 1791279530124,
+      "updatedAt": 1791279530167,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "name": "C без расписания",
+      "colorId": 3,
+      "createdAt": 1791279530696,
+      "updatedAt": 1791279531742,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "name": "C на паузе",
+      "colorId": 4,
+      "createdAt": 1791279531799,
+      "updatedAt": 1791279532489,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 1,
+      "completedAt": null
+    },
+    {
+      "id": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "name": "C все темы пройдены",
+      "colorId": 5,
+      "createdAt": 1791279532705,
+      "updatedAt": 1791279534544,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "e6d791a0-8afa-499c-8faa-c7c3cf17c0ee",
+      "name": "C пустой курс",
+      "colorId": 6,
+      "createdAt": 1791279534571,
+      "updatedAt": 1791279534571,
+      "categoryId": null,
+      "isCompleted": 0,
+      "isPaused": 0,
+      "completedAt": null
+    },
+    {
+      "id": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "name": "C завершённый",
+      "colorId": null,
+      "createdAt": 1791279534591,
+      "updatedAt": 1791279534664,
+      "categoryId": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "isCompleted": 1,
+      "isPaused": 0,
+      "completedAt": 1791279534664
+    }
+  ],
+  "categories": [
+    {
+      "id": "685fd889-1982-49c0-866b-79f70cf4b36b",
+      "name": "C · Программирование"
+    },
+    {
+      "id": "edc6421d-16c1-4c30-8534-ed53d8c581b7",
+      "name": "Программирование и самостоятельная практика"
+    }
+  ],
+  "topics": [
+    {
+      "id": "8a7f9c6c-b887-4873-993e-b123d238e636",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "3300551b-a42a-425a-b5bc-5a18c0efb680",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "4f241d3b-5e83-452b-83f7-2490e074bc81",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "1a7929fd-e3dd-4d2e-a3be-2ec18b46fb51",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "75590a5a-3105-4d1f-8bd1-1a33e152de09",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8d4d8929-f6d4-4d10-a741-b482879dc26f",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2597861a-871d-4536-9a8b-534d33b6fe9a",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "bd4ce52b-3d4c-49bc-86af-ef61b8252914",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9c979fae-7290-48c4-8dd5-9b2018dd28d2",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d71a9fea-203d-4994-8d64-9de5dd4fc777",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "248d3c2f-43ba-4dfd-a3ef-04981c05c791",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "e085a3ef-9042-430e-8f4f-363e2210d76d",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "317799f6-5280-47c4-a9c5-d85d124d7064",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "7d1570b1-b684-4f4e-bd16-754735c6e95f",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "7afc3968-d9b6-4793-80d1-73e8ee631324",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "166580d2-e56a-483d-bff2-e26f3d5359c2",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "7564d2e7-9429-45c7-b29a-1e0d287428f0",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "af36d6fc-3bae-4f9b-b883-1e71759f4bbb",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9052eeef-a853-4964-aa15-785be10e9fb1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "881197b9-f15f-4aa2-bca4-562d8e66424b",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "cffb3cd4-606b-4ba3-9149-bb3b249c0a38",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3a252d37-0eba-412c-be40-dd1df042b3b4",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "e2b3e8e8-2f35-4ba3-8f11-3f0f642aeccd",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9cbfc11e-06ed-4104-a6a9-11546add62b3",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "b9d59f54-932e-420d-ad01-3f287bac28a7",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "5553323e-7132-4fd2-8a8e-d17d7ec0f1f8",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "f9e2d74e-4f6b-468f-8298-2e4255f17700",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3a6b187e-fd2a-4982-b549-48f331e421f7",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8abe08fe-5460-458a-bc70-15d22b230d22",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "0aff734f-93ed-48e4-9719-235dabc2f482",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "384241cc-47d1-4f46-b9e4-1fd81f339c3e",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9f9918b8-ed74-4f67-aade-59993c355781",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "5d9f35bc-1a25-45a7-8757-6dc6ddec3c2b",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d1d7f92f-5d22-46d9-ba4e-73cddf8ccda8",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "4098232e-3a1a-4a14-9ec8-e9b9731aeedb",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "6ae592b8-55f5-4cb8-b69b-7f41c76d645b",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3abd1162-e431-4e58-8391-97b1d1aca133",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "bc39760d-83e9-4a31-b123-72befa60766d",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9c23c55f-8d7b-44b2-aa2b-2145caf36b48",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3b96f353-4eb1-4113-b002-63fca91b88a8",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "0fac86c2-39d2-45c2-92cc-9ce880bcc374",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "6803be18-f5e4-4d02-bf0d-a7cd713d2bb5",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "ae7bc00e-74fc-4d74-a40e-0d6e4f2874d2",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2898e9ba-6c98-4492-bff8-2bed3c0c903a",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8d10b8aa-5da5-4425-9b6a-4ab5d062e522",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "61f22b66-9a4f-4d89-8ba6-b3970934d795",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3e4f7dc6-47b9-4072-b830-11156d7e7876",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9a913af8-f3d1-4e3f-8bc6-a054e0ac6da6",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9db30240-05bf-4ce8-b21b-205402233e28",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "b4d640d9-3227-4849-95c1-719dd354f9fe",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a7d2ea52-f52b-43af-868d-dc8c543f01fb",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "b639dfc1-5700-4713-a53f-239f19aae37e",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "63057200-df65-4493-8534-5706f2c67621",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "5727a9f2-2663-4b27-9f67-1526d58227af",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d4b18f89-6481-4b31-be16-0725efe83ac4",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "94a52dc6-2f85-47a2-82a5-3ae1b7523858",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "c3b0db5b-6d51-4d10-8fcc-8fd92bc321ff",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "877644e4-5b16-475b-9b40-711e66ba4789",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d1e35252-ae24-4a25-b4d7-8441a7ffacee",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a87b4397-ee94-4c76-9a82-2a6497312250",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "fcf5f0ec-1556-4a46-99fd-7fbdd20da3c9",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "4843fa33-194a-45ac-897f-45d0ec771407",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9605b899-1678-46f2-a548-c2c6c8359190",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "37bab8a6-32e9-4328-b61c-5ed479c0b54a",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "0ea904d0-c819-46a4-8fd6-eac73df00dd7",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "cd4542a8-7adc-4ed9-8749-3bc2ab1b8c0e",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8e3a174c-97be-4b3a-9a3a-b421b3ecb324",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "fd86736d-22e8-419a-a181-00c9c35470da",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "68513a5b-0301-40f9-843c-66afc9dd9969",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "95d62c18-e2f2-40c0-8eeb-fb69c3145d47",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8ee451fc-deb9-4ac9-a44d-7645b0e57078",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "84051ad0-8f3c-46d8-947d-f06cfe134594",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2f191bbd-3b66-4fc2-a69d-cf49088fe78b",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "506ed4e0-2417-46fc-a661-8e61e1795ee0",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3bd1eb9c-e55f-453f-b9a3-f0328348c1b6",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a286f71c-f821-4a3f-b358-c8f7fac520e6",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "01e2ddd3-5ba0-4cdd-b88d-c76a0a59536d",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "3ba8558f-e908-413e-ab01-ebadd6768af0",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "c8d06d9f-1ee4-4ad2-9249-a510a1f139b3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2f9650ef-a29f-4d43-a9f4-67e896fff6ac",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2b5b506f-174d-42ca-8727-acd65a826a76",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "058a7c81-50f7-41fe-a28b-d6a6cc5c67f3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "0f67d10d-7cca-4418-8749-ac3e20f5c684",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "0d9c5ff9-aeef-49d0-8c50-13604537fe29",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "319ebe38-00ec-491d-b976-bce663c00323",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9e072b3f-bb8e-4f92-8ca7-a288b9499228",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "47a4381d-08f3-4b7c-8e9a-903d8494ac20",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "590ef526-0232-4e7e-92fd-aa83604b1aa9",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "cbdc083c-d60d-46ea-842f-295e588da9c4",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "ff3f1b1f-1270-4461-9af6-144f70c53603",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "14029301-9d75-46d4-a9f8-e9c2efe1c62e",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "5f557afc-63ea-46a8-a165-58541e6baaa9",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "abd10788-ff29-4463-9c8d-a5595c5095b0",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "e43ac74d-bff2-4034-9a01-c5c824c4e038",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "39ea7f60-d80f-42f3-bd10-8db3d0d86314",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "3b5e1911-e15b-4abc-bf53-5b7026c6b6dd",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "6d13adf4-d21e-47ce-a869-2cf153f94dcf",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "9d420987-1169-4e05-a8c7-17859a40fe81",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "47ae432f-bdb5-476d-aed0-a84fbff5e709",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "90ea2ab2-68a1-4541-a9a9-128cb5f7e257",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a2d44d19-3e01-40e5-be82-3a9b5e89e076",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "987e8b0d-ef65-4ee5-be08-f8a830919a0e",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "124f9a24-5319-4079-9351-a98882a7456c",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "7b84d94d-1bb4-4531-af47-ca87124f1884",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "411b9af0-4fed-4a34-8efa-8ddcaaca093c",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a15da882-d341-40ba-8bb7-f781767df328",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "00177b78-664c-4d3c-8728-4c60f2e59fe0",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "fd883d83-bc03-4cba-9b52-160e9ed77b47",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "8e7cbf37-2c5c-4974-a9b3-7ef017f798c3",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "0528817a-1012-426c-ad62-9e10fcc5452b",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "32027082-0b3b-452b-8192-d8fdf9a621b7",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "bfc9581c-1e92-4009-bf84-503eb1587ef6",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "45a89f6a-ead2-4032-a204-41429614002c",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d825ef6e-95a8-421d-ba3e-93638e25a2b9",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "4a38bba2-16e5-4c6f-8b56-ce60874d574b",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "b62ba055-8741-4415-978b-aed63ad8fa7e",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "4a325d04-ff03-4ecd-944a-426dd93d0f8a",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "4e224736-e1b3-4b28-95ac-3e6808e279be",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "d8e5e914-f626-40f9-8ae9-7d29dec2706c",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "2dc2e2b5-6aaf-4940-a4c1-38c0fc6fb765",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 0,
+      "completionDate": null
+    },
+    {
+      "id": "a06c8784-0b5f-4625-990e-cd1ca3f64ee5",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "17815252-07b6-40b5-89e6-90e0f3a6a73d",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "651c8103-e5e8-4825-a3dc-ba4f0aa0d23e",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "5eaff8ef-ad55-4230-9d1f-113e0964ef60",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "dc0068e3-cc36-4900-9590-732e5fe0d9b2",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "1da081db-62f2-4b1a-b232-dc0606d507e3",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "01d83fab-d327-400f-94bd-51a17c6c7e50",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "39de0dd0-af95-42f9-862b-62a4b824dc25",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "57657fad-1a7d-4423-8e87-bbb503aee2c5",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "7accada9-d262-49cb-8add-4be5dda55f51",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "ffeb1b59-e7d9-4218-8919-38a3d27c4fa3",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "140073b2-788a-4bd4-8859-f108e4b2e708",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "2a190d07-92ce-4635-9353-8b75cfc211fc",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9c83a172-42be-471b-bec1-d4470a23586f",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9ee7f69f-8c90-4973-a020-4eb6be68a5f2",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "a20a18f2-3b5f-404b-95a8-c5cc3e6b668b",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "6f6bcd37-6c3f-4135-b489-dea8a912daac",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "ab1f8ce8-24fb-4959-a738-134229a3f1eb",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "607abbbe-586b-422c-b99d-9b8490bdc6ad",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "84aedc51-d791-4c5c-9de7-0eea3ec2ba6f",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "5abcac93-5011-488b-a5c1-bb982d7ca3ce",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "67ab0010-c650-4aa4-8b2f-adf4a001a387",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "b924e5dc-7492-4a2a-9479-c9a1ca9da4cb",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "43d94995-9d78-419a-b44b-080f72b50d8a",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "a098c34a-7f3d-431d-9864-fce397f93c7d",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "f9bb5813-86f6-45dc-9115-f04baf1d02d8",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "22b25926-3e82-43cf-b591-49a2d3a6e742",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "658901ab-7717-4b54-9d29-42c5f1758ec9",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "dc65af90-c261-4fb5-b252-2f09341b654e",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "708d9eaa-e74a-47a8-9d71-e8a623815d19",
+      "courseId": "4ff1a8ba-f316-45c3-b7d5-668bcd8c42ca",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "ad1a22ab-9ba3-43d9-a7bc-3577fdef7736",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 0,
+      "title": "Тема 1: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "a7ccbcd0-0b6d-4e9d-a6c3-b40dbfe04597",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 1,
+      "title": "Тема 2: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "2ee5539e-d312-4920-9453-f3129010fba8",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 2,
+      "title": "Тема 3: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "17e5c761-b170-4d5f-8ce6-1ac7359b2994",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 3,
+      "title": "Тема 4: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9190cd18-b5a8-46ae-84c7-a802f7027cae",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 4,
+      "title": "Тема 5: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "ab734515-8365-49e1-95b7-79216378c757",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 5,
+      "title": "Тема 6: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "1bdeef29-aecf-4e07-a0e6-8b595c75bead",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 6,
+      "title": "Тема 7: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "e2685504-ace0-4f93-ae75-0745bbdb14be",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 7,
+      "title": "Тема 8: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "434e5bf4-599b-42f5-8e02-efeb923811b7",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 8,
+      "title": "Тема 9: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "6e74ad73-71de-4635-8a3a-2db52ad2a400",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 9,
+      "title": "Тема 10: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "707e2c13-178f-4986-b700-eacedc271f62",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 10,
+      "title": "Тема 11: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "9ee33b8b-4840-4441-a723-09de47675d7c",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 11,
+      "title": "Тема 12: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "1252f559-a176-4495-87f5-9b60a75fd3cb",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 12,
+      "title": "Тема 13: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "df77bd8b-16eb-4fcc-b679-a21ae547f531",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 13,
+      "title": "Тема 14: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "585af26f-131c-4a1a-93c3-08ffad0de6d9",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 14,
+      "title": "Тема 15: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "4c66165a-45db-4d9a-b8d7-fd48f4249082",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 15,
+      "title": "Тема 16: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "ff4b8588-f385-4d70-a4ce-aee733682212",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 16,
+      "title": "Тема 17: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "dfa61fcf-8c2a-411b-9bf3-65ef6dc416f8",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 17,
+      "title": "Тема 18: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "234d0c26-e798-4716-8c77-747e054325af",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 18,
+      "title": "Тема 19: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "f2f86745-d81f-49ed-ae8b-13bb69ed03f0",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 19,
+      "title": "Тема 20: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "63a8f8c0-29ca-4e1d-9df9-07d4a4b41232",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 20,
+      "title": "Тема 21: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "a7eee20b-fc42-46a5-9976-f1c76073c91d",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 21,
+      "title": "Тема 22: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "c71b609d-5a2c-4c27-873d-7e9994439132",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 22,
+      "title": "Тема 23: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "75d9096c-fcb1-472c-a676-907727fe278a",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 23,
+      "title": "Тема 24: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "eb357af1-1feb-45e1-aa22-8a855bf668ad",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 24,
+      "title": "Тема 25: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "387793e5-a937-4e0c-a5fb-54ce6d9b2eae",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 25,
+      "title": "Тема 26: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "97a8fdc2-03e5-4a4c-b599-cd095d9ba11e",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 26,
+      "title": "Тема 27: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "0ff30e19-49e6-4690-9ac5-f94f3bdbe6cf",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 27,
+      "title": "Тема 28: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "2d0b3682-cf0a-4556-a44b-9cbfddffc832",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 28,
+      "title": "Тема 29: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    },
+    {
+      "id": "097a078b-8480-4eae-976f-e0aa35e65a81",
+      "courseId": "6dcabff7-ec38-48db-910d-eed28e78722e",
+      "position": 29,
+      "title": "Тема 30: указатели, массивы и управление памятью в C",
+      "isCompleted": 1,
+      "completionDate": null
+    }
+  ],
+  "schedules": [
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "startsOn": 20732,
+      "endsOn": 20777,
+      "generatedThrough": 20822
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "startsOn": 20732,
+      "endsOn": 20777,
+      "generatedThrough": 20822
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "startsOn": 20732,
+      "endsOn": 20777,
+      "generatedThrough": 20822
+    }
+  ],
+  "schedule_rules": [
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 1,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 2,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 3,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 4,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 5,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 6,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "dayOfWeek": 7,
+      "startMinute": 600,
+      "endMinute": 660
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 1,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 2,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 3,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 4,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 5,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 6,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "dayOfWeek": 7,
+      "startMinute": 690,
+      "endMinute": 60
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 1,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 2,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 3,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 4,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 5,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 6,
+      "startMinute": 780,
+      "endMinute": 840
+    },
+    {
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "dayOfWeek": 7,
+      "startMinute": 780,
+      "endMinute": 840
+    }
+  ],
+  "sessions": [
+    {
+      "id": "65baf1b0-d9da-4677-b168-456d3a30dd6d",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20733,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "6507da38-48bf-4e2b-8e31-094b16b7bcd1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20734,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "bb3c594b-b058-46c4-88dc-c2e4105d11f8",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20735,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "bc38f476-8c70-4868-ac1e-b551bc63ade5",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20736,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "346b4e58-9cc2-4886-8e82-a2168369b331",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20737,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "1164696f-c009-43bb-a025-098f8f0b4d02",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20738,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "dabbb670-ecba-4da4-a34e-bc76f7da9ba8",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20739,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "a5b45b96-a390-4209-8bf3-4417684b5097",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20740,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "825bf6d0-1601-44df-bd62-a7b7682dc537",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20741,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "004cee7e-4846-45cb-b098-bf4c369ee1a1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20742,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "9c34b41f-23ad-4e30-a4b9-cd35d8b254d1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20743,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "36d632b7-6adb-4169-8431-71038bb21972",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20744,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "82cd4bf2-b1e2-4734-a17e-01e1aec0d055",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20745,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "801c929c-e93b-41e4-8080-f822e042dfe1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20746,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "a85c400a-aea2-4a41-8804-b83a7e9beb77",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20747,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "d676f7a6-ed70-47cf-8ea5-e273f559bd2a",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20748,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "09de8d11-0e74-4f93-bb32-ad9d77dde170",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20749,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "7aa47b45-e8fc-4369-8695-6b64ae2f0a2d",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20750,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "9d87b37d-ba44-43db-9c01-23e39d4e2185",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20751,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "bdabf46a-85b2-48d5-818e-a65534d378a4",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20752,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "04e21a4c-1274-46d4-bcc4-524994260d25",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20753,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "d823591c-b91f-4cab-b8d2-e89ed52c00b7",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20754,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "2d6b04b6-d07c-4946-88eb-6615a2cdc3f7",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20755,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "cb7c7c25-6b87-4691-bc6a-a83079a72d15",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20756,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "c650a746-b362-4dfb-b2bf-8390fc999909",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20757,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "f360e424-c64f-41f7-b33d-97393fefcc68",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20758,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "efc060e2-93ff-4b48-aa35-13160f12b9b6",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20759,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "1e6e768c-1cf3-484d-89dd-c3c7799d5ade",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20760,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "954d28d8-d0cc-42c8-b06c-1eaf7f8c3225",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20761,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "79afdc43-3ae4-4638-848b-51d85dee85d5",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20762,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "72fc47e2-f875-4745-bb3d-da6ae15eeafd",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20763,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "15859a41-8676-41f3-9655-537853a04913",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20764,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "2d92e756-0981-4edd-8a4f-36b0baf459a8",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20765,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "bc5d1e54-0736-4780-942d-db23edbcc9f8",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20766,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "45f59005-4ebf-4bb9-a585-a8b36567aff1",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20767,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "d8ed6561-c1ab-48c8-a68f-257bce87d13f",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20768,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "75c6fb2a-bc33-4276-a17a-bc417b43e7d9",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20769,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "ad843275-7ac1-4e13-a9a1-972fe9fa96f3",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20770,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "52208fc4-ae4d-4c47-8d02-d060b6397710",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20771,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "9b145464-0d93-4d0a-8d33-6113d9dcf5b6",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20772,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "2abb5657-8d69-45d7-9782-c807b7055d1d",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20773,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "1d586133-ec5e-4b1e-8a7c-34457c85b428",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20774,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "9ac945de-c868-4c44-a9c8-33d1df63b88c",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20775,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "992460ae-2cf4-4ebb-96f8-fa99d72863fe",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20776,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "21699993-4206-4e9c-95d5-05db7868bb49",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20777,
+      "startMinute": 600,
+      "createdAt": 1791279528833,
+      "updatedAt": 1791279528833,
+      "endMinute": 660,
+      "result": "PENDING"
+    },
+    {
+      "id": "15a8b69d-66a7-4837-877b-dce1d4e357ce",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20733,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "4e58226d-9519-4fad-b910-fcf952dbd38e",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20734,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "5035c789-783c-4446-be09-f7cac26e6ec7",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20735,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "2d1dc196-fdaf-4212-97b1-31e3534d988d",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20736,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "77e1334a-f868-4b09-a865-7ea0c073fb6f",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20737,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "c183261e-225f-420c-8f5f-d3b99b8b56b9",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20738,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "060bd2cf-d419-439b-bbfe-78baddafc244",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20739,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "435b1f60-5da4-4331-a027-64dac006c5ca",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20740,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "53a9c2f1-6c7f-4ed2-bba9-5b0584719383",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20741,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "8acddd89-87f8-43e8-a18b-6755956652b6",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20742,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "5a2a46e7-13cf-4ab6-a360-71a06d9ad115",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20743,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "ed344a72-140c-4c6d-805e-980145867a7c",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20744,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "8ecd1fc7-002d-489e-ab37-f0a9f6ad10aa",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20745,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "692dd209-9b1d-478f-8478-f6e532fe4cdb",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20746,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "52710844-a21d-425a-93cf-4c1a9cfb0e34",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20747,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "9839e24d-2f21-4f71-bdaf-85f0978e7574",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20748,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "27ef4f89-5a79-4d71-9f5f-00b9e54fdf65",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20749,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "157e22f9-d5bc-4746-b5cf-c08f0e692999",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20750,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "6bbe4920-a2d7-4815-98fe-865f13071c64",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20751,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "a6ed7b45-4738-4851-acf0-3db473cba346",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20752,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "089050f0-3190-4df4-8a83-17b93149c197",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20753,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "a819a3cc-1f3f-4549-96e8-c6f93e9f2196",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20754,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "b17b2f53-55ad-497b-b8ea-b72bccbb0134",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20755,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "4d914b74-66a3-4a43-9499-88dccac5faeb",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20756,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "4cc255c9-ad9d-4f35-8189-cdf92124a65c",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20757,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "695f95fd-a5b0-43e6-99f5-c46a25dfbbb5",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20758,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "09749f4e-76b8-45af-9846-3fb97de0ed50",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20759,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "6c4e1916-1b1d-4716-9558-d4e7088a2b67",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20760,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "9db542a1-6ce1-4c25-b53f-4922579c3fbb",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20761,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "0eafcdbb-924a-4429-a522-920bda61bf0e",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20762,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "7cd8b6e1-392c-49ee-aacf-f8c34e87cb3c",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20763,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "cb312b9f-c827-475e-b128-bcb70704aa3a",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20764,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "55a1dbba-9485-4249-839f-4eb06c843754",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20765,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "41e26b84-4618-4fd1-b981-d052dd3cff61",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20766,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "6e2e81b0-7053-444f-8f8c-75bd3cb33dcd",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20767,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "004c8eec-e833-4b09-be07-53e54efc3af6",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20768,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "636ddcf5-d204-4cd8-b5e6-6759068b4047",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20769,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "d3de2d1a-d4f9-40bf-baf3-2edf7b1b3aa1",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20770,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "aecd1476-f2af-40e2-9e3d-a9621358385f",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20771,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "147df0bb-5ef1-4683-a37f-a088786e3b07",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20772,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "2e98d947-ed63-4683-a913-41e5b195d24d",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20773,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "f4f77683-1ed3-4dc6-9ee0-5fece89a48ac",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20774,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "cb4f811f-0585-4644-b0d2-d3a29d4563ee",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20775,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "a4c6ddce-c2ff-40fd-8856-5d4462cbc0b4",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20776,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "bade4fd7-5d38-4da4-8720-d5a279edeaff",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20777,
+      "startMinute": 690,
+      "createdAt": 1791279529369,
+      "updatedAt": 1791279529369,
+      "endMinute": 60,
+      "result": "PENDING"
+    },
+    {
+      "id": "b260639f-9ba2-4184-acbd-272116677b36",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20732,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "a856d301-72de-44eb-b446-d4e39b239bad",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20733,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "5b9e5872-68a1-4687-8bf2-799d4dcb4fce",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20734,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "bd59d640-2900-4173-a498-08c2cc1b6e0f",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20735,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "25ae1b73-15a0-4340-b406-01a25ff88d35",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20736,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "26a9ff8f-dc03-4deb-b350-1cab9cec46ac",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20737,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "ff491ac8-fd3c-4e28-91ed-22bc362b2b0f",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20738,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "adec7ce2-c09f-494c-8042-25b607441244",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20739,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "eb7541b6-4c2d-4fc9-9fea-2d94087afc96",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20740,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "bc797e35-8494-4b86-a424-040c1c9baa82",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20741,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "ed8773ba-f700-4e01-9322-0a7290f67287",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20742,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "6306579e-2c07-4b6d-af28-fd5413b0cb29",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20743,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "22602024-289a-4356-8828-f6b1e49e5290",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20744,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "62fd30eb-2f00-4f3d-8d14-bacbef7223b0",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20745,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "58531585-37ac-4b73-9d0a-e3108ce7286f",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20746,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "cc90e74b-af96-429f-a71d-ac899e73c4e3",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20747,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "4cccc9a6-e9a8-406e-a383-69a58184619a",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20748,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "3e3030de-50a2-4e01-8991-21634e214a58",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20749,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "b56920b1-1ef8-4d28-8c91-1227e849fa0a",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20750,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "07cf53b4-04dd-4312-ba2f-5922d5e5beae",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20751,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "fcb1e309-b8e1-496b-a5ae-0b49c3b6c7ea",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20752,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "015dd5f3-59b8-4661-8c7a-05a87383c330",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20753,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "a09ec381-3810-40bb-8299-3f20b061a392",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20754,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "573dea57-3631-407b-b6e0-4b7d625a0ca4",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20755,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "7bc8f2d9-c137-451a-a529-6a0b055dbb4c",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20756,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "4c89ef1e-cf64-4973-84c7-617b5d08db7a",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20757,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "a99d46a0-d6c3-45b2-befa-4ef18cff8f7d",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20758,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "25454315-a475-4d98-8979-c57b8a82c99c",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20759,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "7de08967-91a0-4b5d-82ff-5418125d47e4",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20760,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "df32abd2-eade-4568-8d67-38f775a1508d",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20761,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "2fac1a3e-6912-4293-9959-f26efe64e6b0",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20762,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "2347b876-1b45-4df2-bf08-844015a8464c",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20763,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "1c0f8bb6-d1f1-4d17-88e3-9a7450c52239",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20764,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "be77e6d7-2c0c-4e25-a195-268d30589bc0",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20765,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "a336b39f-66f5-4397-bc0f-ac5ec2895afd",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20766,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "2896c0a1-0b5e-4303-ae61-e7b5a705f3dd",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20767,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "86235de3-bfe1-4a3d-b4b9-05b91c63025f",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20768,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "e4024033-be01-4ad1-869a-c0c686ee2b1a",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20769,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "65cd88e6-3105-4e12-a769-47ded39b3897",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20770,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "b2cb4936-363d-4fe6-95fb-3fc6895e778e",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20771,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "4804795d-c4e4-40ae-9b47-f0291c0532b9",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20772,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "4c0a40f3-fb2f-4bb3-b17c-f8c62b04b579",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20773,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "ddf48b0a-13a8-4791-8b8a-6bf6ba8edc02",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20774,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "ff4e5b07-551a-4aef-8e2b-b5fe806b1f6f",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20775,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "809dd7a2-ed15-4f9b-9389-e65f549d1870",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20776,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "1c7b759f-963b-4874-ae1c-6092004069ef",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20777,
+      "startMinute": 780,
+      "createdAt": 1791279530167,
+      "updatedAt": 1791279530167,
+      "endMinute": 840,
+      "result": "PENDING"
+    },
+    {
+      "id": "r05_20732_0",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20732,
+      "startMinute": 600,
+      "createdAt": 1791279534794,
+      "updatedAt": 1791279535481,
+      "endMinute": null,
+      "result": "DONE"
+    },
+    {
+      "id": "r05_20732_1",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20732,
+      "startMinute": 690,
+      "createdAt": 1791279534835,
+      "updatedAt": 1791279535553,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20732_3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "date": 20732,
+      "startMinute": 870,
+      "createdAt": 1791279534889,
+      "updatedAt": 1791279534889,
+      "endMinute": null,
+      "result": "PENDING"
+    },
+    {
+      "id": "r05_20732_4",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "date": 20732,
+      "startMinute": 960,
+      "createdAt": 1791279534938,
+      "updatedAt": 1791279534938,
+      "endMinute": null,
+      "result": "PENDING"
+    },
+    {
+      "id": "r05_20731_0",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20731,
+      "startMinute": 600,
+      "createdAt": 1791279535141,
+      "updatedAt": 1791279535141,
+      "endMinute": null,
+      "result": "DONE"
+    },
+    {
+      "id": "r05_20731_1",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20731,
+      "startMinute": 690,
+      "createdAt": 1791279535169,
+      "updatedAt": 1791279535169,
+      "endMinute": null,
+      "result": "DONE"
+    },
+    {
+      "id": "r05_20731_2",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20731,
+      "startMinute": 780,
+      "createdAt": 1791279535183,
+      "updatedAt": 1791279535183,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20731_3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "date": 20731,
+      "startMinute": 870,
+      "createdAt": 1791279535204,
+      "updatedAt": 1791279535204,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20730_0",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20730,
+      "startMinute": 600,
+      "createdAt": 1791279535235,
+      "updatedAt": 1791279535235,
+      "endMinute": null,
+      "result": "DONE"
+    },
+    {
+      "id": "r05_20730_1",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20730,
+      "startMinute": 690,
+      "createdAt": 1791279535263,
+      "updatedAt": 1791279535263,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20730_2",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20730,
+      "startMinute": 780,
+      "createdAt": 1791279535279,
+      "updatedAt": 1791279535279,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20730_3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "date": 20730,
+      "startMinute": 870,
+      "createdAt": 1791279535302,
+      "updatedAt": 1791279535302,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20730_4",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "date": 20730,
+      "startMinute": 960,
+      "createdAt": 1791279535318,
+      "updatedAt": 1791279535318,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20729_0",
+      "courseId": "63032e09-8649-4dfd-9ce2-18c4909d19e2",
+      "date": 20729,
+      "startMinute": 600,
+      "createdAt": 1791279535352,
+      "updatedAt": 1791279535352,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20729_1",
+      "courseId": "792d38c2-9990-4d1b-a48d-596d115393c3",
+      "date": 20729,
+      "startMinute": 690,
+      "createdAt": 1791279535376,
+      "updatedAt": 1791279535376,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20729_2",
+      "courseId": "17d924e0-51ed-49a8-969f-52f9e5a73e3e",
+      "date": 20729,
+      "startMinute": 780,
+      "createdAt": 1791279535406,
+      "updatedAt": 1791279535406,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20729_3",
+      "courseId": "fd40008b-2d02-4521-89e0-74c8695d411b",
+      "date": 20729,
+      "startMinute": 870,
+      "createdAt": 1791279535426,
+      "updatedAt": 1791279535426,
+      "endMinute": null,
+      "result": "SKIPPED"
+    },
+    {
+      "id": "r05_20729_4",
+      "courseId": "0ee8756a-a8cb-47bb-b67a-f6eb4cdead14",
+      "date": 20729,
+      "startMinute": 960,
+      "createdAt": 1791279535452,
+      "updatedAt": 1791279535452,
+      "endMinute": null,
+      "result": "SKIPPED"
+    }
+  ]
+}

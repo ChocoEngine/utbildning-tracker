@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
@@ -57,9 +58,9 @@ class CourseListGeometryReviewTest {
         val names = listOf(spaced.take(50), "W".repeat(50), spaced.repeat(3), alternative.take(50))
         val longNames = mutableStateOf(false)
         compose.setContent {
-            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides config) {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides config, LocalResources provides localized.resources) {
                 TrackerTheme {
-                    Surface(Modifier.requiredWidth(320.dp).height(620.dp).testTag("geometry_canvas")) {
+                    Surface(Modifier.requiredWidth(320.dp).height(reviewHeight()).testTag("geometry_canvas")) {
                         val courses = percentages.mapIndexed { index, percent ->
                             CourseEntity("review-$percent", if (longNames.value) names[index] else "C $percent", index, 1, 1)
                         }

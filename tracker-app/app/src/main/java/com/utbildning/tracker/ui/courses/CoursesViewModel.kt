@@ -142,6 +142,10 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             after()
         }
     }
+    fun saveOnBackground() {
+        val snapshot = draft?.takeIf { it.id != null && !creating } ?: return
+        work { flush(snapshot) }
+    }
     fun openSchedule(after: (String) -> Unit) {
         val snapshot = draft ?: return
         work { if (snapshot.id != null) { flush(snapshot); after(snapshot.id) } }

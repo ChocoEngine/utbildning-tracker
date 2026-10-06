@@ -1,0 +1,29 @@
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:
+Error in backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:102)
+
+
+Time: 10.587
+There was 1 failure:
+1) backgroundSavesActiveFieldsWithoutApplyingTopicDraft(com.utbildning.tracker.ui.CourseDraftRecreationTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_title')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at com.utbildning.tracker.ui.CourseDraftRecreationTest.backgroundSavesActiveFieldsWithoutApplyingTopicDraft(CourseDraftRecreationTest.kt:102)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

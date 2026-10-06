@@ -1,0 +1,660 @@
+[
+  {
+    "file": "category-popup-before.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "creation-error-before-en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "creation-error-before-ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_category_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_creation_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_creation_name_error_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_editor.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_name_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_reopened.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/en_topics_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_category_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_creation_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_creation_name_error_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_editor.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_name_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_reopened.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "editor/ru_topics_keyboard.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "geometry/en_long_names_bottom.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "geometry/en_long_names_top.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "geometry/ru_long_names_bottom.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "geometry/ru_long_names_top.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-after-restart.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-calendar-en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-calendar-four-ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-calendar-ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-calendar-scrolled-en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-name-focused.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-schedule-saved.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-topics-after.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "main-topics-before.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_0.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_1.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_2.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_3.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_4.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_5.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/en_6.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_0.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_1.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_2.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_3.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_4.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_5.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "overlaps/ru_6.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/course_name_create_en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/course_name_create_ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/course_name_editor_en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/course_name_editor_ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_calendar_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_course_edit_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_course_list_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_course_new_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_details_0_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_details_0_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/en_details_1_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_details_1_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/en_details_2_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_details_3_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_details_3_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/en_guide_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_schedule_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_schedule_end_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_session_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_today_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/en_topic_editor_320dp.png",
+    "size": [
+      840,
+      971
+    ]
+  },
+  {
+    "file": "scenes/en_topic_editor_scrolled_320dp.png",
+    "size": [
+      840,
+      971
+    ]
+  },
+  {
+    "file": "scenes/ru_calendar_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_course_edit_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_course_list_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_course_new_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_details_0_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_details_0_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/ru_details_1_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_details_1_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/ru_details_2_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_details_3_collapsed.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_details_3_expanded.png",
+    "size": [
+      790,
+      673
+    ]
+  },
+  {
+    "file": "scenes/ru_guide_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_schedule_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_schedule_end_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_session_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_today_320dp.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/ru_topic_editor_320dp.png",
+    "size": [
+      840,
+      971
+    ]
+  },
+  {
+    "file": "scenes/ru_topic_editor_scrolled_320dp.png",
+    "size": [
+      840,
+      971
+    ]
+  },
+  {
+    "file": "scenes/today_en_current.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_en_empty.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_en_upcoming.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_en_yesterday.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_ru_current.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_ru_empty.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_ru_upcoming.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/today_ru_yesterday.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/topic_title_limit_en.png",
+    "size": [
+      840,
+      1418
+    ]
+  },
+  {
+    "file": "scenes/topic_title_limit_ru.png",
+    "size": [
+      840,
+      1418
+    ]
+  }
+]

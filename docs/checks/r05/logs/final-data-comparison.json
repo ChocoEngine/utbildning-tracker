@@ -1,0 +1,12 @@
+{
+  "exactTablesEqualAfterFinalApkInstall": true,
+  "tableCounts": {
+    "courses": 8,
+    "categories": 2,
+    "topics": 180,
+    "schedules": 3,
+    "schedule_rules": 21,
+    "sessions": 154
+  },
+  "differences": []
+}

@@ -276,6 +276,9 @@ class CoursesScreenTest {
         text("course_name", "Длинные темы"); click("course_continue")
         waitFor { courses().size == 1 }
         val course = courses().single()
+        lateinit var model: CoursesViewModel
+        compose.runOnIdle { model = ViewModelProvider(modelOwner)[CoursesViewModel::class.java] }
+        waitFor { model.draft?.id == course.id && !model.busy }
         val original = runBlocking { dao.getTopics(course.id) }
         click("topics_edit")
 

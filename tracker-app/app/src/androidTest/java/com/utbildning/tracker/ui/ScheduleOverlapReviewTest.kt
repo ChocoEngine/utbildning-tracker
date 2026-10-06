@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -43,7 +44,7 @@ class ScheduleOverlapReviewTest {
         val other = listOf(WeeklyRule(1, 1170, 1230), WeeklyRule(1, 1170, 1230),
             WeeklyRule(1, 1230), WeeklyRule(1, 1395, 1425), WeeklyRule(2, 30, 90), WeeklyRule(1, 1170, 1230), WeeklyRule(4, 1140))
         compose.setContent {
-            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides config) {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides config, LocalResources provides localized.resources) {
                 TrackerTheme { Surface(Modifier.requiredSize(320.dp, 540.dp).testTag("overlap_review")) {
                     key(scene.intValue) {
                         val schedules = mutableListOf(OccupiedSchedule("c", if (language == "ru") "Основы C" else "C basics", monday, null, listOf(other[scene.intValue])))

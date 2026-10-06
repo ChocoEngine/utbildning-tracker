@@ -1,0 +1,49 @@
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:..
+com.utbildning.tracker.ui.R05EditorReviewTest:
+Error in englishEditorAndKeyboard(com.utbildning.tracker.ui.R05EditorReviewTest):
+com.utbildning.tracker.data.RepositoryException: NAME_TOO_LONG
+	at com.utbildning.tracker.data.TrackerRepository.fail(TrackerRepository.kt:325)
+	at com.utbildning.tracker.data.TrackerRepository.checkedCourseName(TrackerRepository.kt:311)
+	at com.utbildning.tracker.data.TrackerRepository.access$checkedCourseName(TrackerRepository.kt:33)
+	at com.utbildning.tracker.data.TrackerRepository$createCourse$2.invokeSuspend(TrackerRepository.kt:232)
+	at com.utbildning.tracker.data.TrackerRepository$createCourse$2.invoke(Unknown Source:8)
+	at com.utbildning.tracker.data.TrackerRepository$createCourse$2.invoke(Unknown Source:2)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invokeSuspend(RoomDatabase.android.kt:2044)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(Unknown Source:8)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(Unknown Source:2)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invokeSuspend(RoomDatabase.android.kt:2058)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(Unknown Source:8)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(Unknown Source:4)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:42)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:164)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source:1)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1$1.invokeSuspend(RoomDatabase.android.kt:2087)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1.run(RoomDatabase.android.kt:2084)
+	at androidx.room.TransactionExecutor.execute$lambda$1$lambda$0(TransactionExecutor.android.kt:38)
+	at androidx.room.TransactionExecutor.$r8$lambda$FZWr2PGmP3sgXLCiri-DCcePXSs(Unknown Source:0)
+	at androidx.room.TransactionExecutor$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+	at java.lang.Thread.run(Thread.java:1119)
+.
+com.utbildning.tracker.ui.CoursesScreenTest:....
+Error in editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(com.utbildning.tracker.ui.CoursesScreenTest):
+java.lang.AssertionError: Failed to perform text input selection.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_name')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.TextActionsKt.getNodeAndFocus(TextActions.kt:124)
+	at androidx.compose.ui.test.TextActionsKt.performTextInputSelection-Sb-Bc2M(TextActions.kt:65)
+	at androidx.compose.ui.test.TextActionsKt.performTextInputSelection-Sb-Bc2M$default(TextActions.kt:61)
+	at com.utbildning.tracker.ui.CoursesScreenTest.editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError(CoursesScreenTest.kt:239)
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

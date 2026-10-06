@@ -82,7 +82,9 @@ class AppNavigationTest {
         val repository = AppContainer.repository(context)
         val name = "Schedule flow ${System.currentTimeMillis()}"
         compose.onNodeWithTag("nav_courses").performClick()
+        waitForTag("course_add")
         compose.onNodeWithTag("course_add").performClick()
+        waitForTag("course_name")
         compose.onNodeWithTag("course_name").performTextInput(name)
         compose.onNodeWithTag("course_continue").performClick()
         compose.waitUntil(10_000) { runBlocking { repository.observeCourses().first().any { it.name == name } } }
