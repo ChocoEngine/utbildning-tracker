@@ -1,5 +1,7 @@
 package com.utbildning.tracker.data.local
 
+import com.utbildning.tracker.data.CourseTopicCounts
+import com.utbildning.tracker.data.CourseDoneCount
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -61,6 +63,16 @@ interface TrackerDao {
 
     @Query("SELECT * FROM courses ORDER BY createdAt, id")
     suspend fun getCourses(): List<CourseEntity>
+
+    @Query("SELECT courseId, SUM(CASE WHEN isCompleted = 1 THEN 1 ELSE 0 END) AS completed, COUNT(*) AS total FROM topics GROUP BY courseId")
+    suspend fun getCourseTopicCounts(): List<CourseTopicCounts>
+
+    @Query("SELECT courseId, COUNT(*) AS done FROM sessions WHERE result = 'DONE' GROUP BY courseId")
+    suspend fun getCourseDoneCounts(): List<CourseDoneCount>
+
+    @Query("SELECT * FROM schedule_rules ORDER BY courseId, dayOfWeek")
+    suspend fun getAllScheduleRules(): List<ScheduleRuleEntity>
+
 
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getAllSessions(): List<SessionEntity>

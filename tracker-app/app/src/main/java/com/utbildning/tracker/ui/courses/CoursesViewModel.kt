@@ -41,32 +41,15 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     var creating by mutableStateOf(false); private set
     private val writes = Mutex()
     private var pendingWrites = 0
-    private var sessions: List<SessionEntity> = emptyList()
-    private var topicProgress = emptyMap<String, Pair<Int, Int>>()
     private var detailJob: Job? = null
-    private val progressJobs = mutableMapOf<String, Job>()
     init {
         viewModelScope.launch { repository.observeTopicPaces().collect { topicPaces = it } }
         viewModelScope.launch { repository.observeCategories().collect { categories = it } }
-        viewModelScope.launch { repository.observeSessions().collect { sessions = it; refreshProgress() } }
         viewModelScope.launch {
-            repository.observeCourses().collect { list ->
-                courses = list
-                progressJobs.keys.filter { id -> list.none { it.id == id } }.forEach { progressJobs.remove(it)?.cancel() }
-                list.forEach { course ->
-                    if (course.id !in progressJobs) progressJobs[course.id] = viewModelScope.launch {
-                        repository.observeCourseDetails(course.id).collect { details ->
-                            details?.let {
-                                // Complete the suspending read before reading shared state: other course
-                                // collectors can update the map while Room loads these rules.
-                                val rules = repository.getScheduleRules(course.id)
-                                scheduleRules = scheduleRules + (course.id to rules)
-                                topicProgress = topicProgress + (course.id to (it.topics.count { topic -> topic.isCompleted } to it.topics.size))
-                                refreshProgress()
-                            }
-                        }
-                    }
-                }
+            repository.observeCoursesSnapshot().collect { snapshot ->
+                courses = snapshot.courses
+                progress = snapshot.progress
+                scheduleRules = snapshot.scheduleRules
             }
         }
     }
@@ -193,11 +176,6 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             }
         }
         cancel()
-    }
-    private fun refreshProgress() {
-        progress = topicProgress.mapValues { (id, count) ->
-            if (count.second == 0) sessions.count { it.courseId == id && it.result == SessionResult.DONE } to 0 else count
-        }
     }
     fun applyTopics() {
         val current = draft ?: return

@@ -123,6 +123,22 @@ class TrackerRepository(
 
     fun observeCourses(): Flow<List<CourseEntity>> = dao.observeCourses()
 
+    fun observeCoursesSnapshot(): Flow<CoursesSnapshot> =
+        database.invalidationTracker.createFlow("courses", "topics", "schedule_rules", "sessions")
+            .map {
+                database.withTransaction {
+                    val courses = dao.getCourses()
+                    val topics = dao.getCourseTopicCounts().associateBy { it.courseId }
+                    val done = dao.getCourseDoneCounts().associateBy { it.courseId }
+                    val rules = dao.getAllScheduleRules().groupBy { it.courseId }
+                    CoursesSnapshot(courses, courses.associate { course ->
+                        val count = topics[course.id]
+                        course.id to if (count == null) (done[course.id]?.done ?: 0) to 0
+                            else count.completed to count.total
+                    }, rules)
+                }
+            }.distinctUntilChanged()
+
     fun observeReminderCourses(): Flow<List<CourseEntity>> = dao.observeReminderCourses()
 
     fun observeCategories(): Flow<List<CategoryEntity>> = dao.observeCategories()
