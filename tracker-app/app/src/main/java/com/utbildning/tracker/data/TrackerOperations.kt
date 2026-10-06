@@ -72,24 +72,29 @@ internal class TrackerOperations(
         val timestamp = now()
         val date = today(timestamp).toEpochDay()
         val through = maxOf(date + 90, throughDate ?: date)
-        dao.getCourses().forEach {
-            reconcileExhaustion(it.id)
-            generate(it.id, through, timestamp)
+        dao.getUnfinishedCourses().forEach { course ->
+            val exhausted = reconcileExhaustion(course, timestamp)
+            generate(course, through, timestamp, exhausted)
         }
-        val lastEditableDate = date - 1
-        dao.getAllSessions().filter { it.date < lastEditableDate && it.result == SessionResult.PENDING }.forEach {
-            dao.updateSession(it.copy(result = SessionResult.SKIPPED, updatedAt = timestamp))
-        }
+        dao.skipExpiredPendingSessions(date - 1, timestamp)
     }
 
-    private suspend fun generate(courseId: String, through: Long, timestamp: Long) {
-        val course = course(courseId)
-        if (course.isCompleted || course.isPaused || dao.hasExhaustedTopics(courseId)) return
+    private suspend fun generate(courseId: String, through: Long, timestamp: Long) =
+        generate(course(courseId), through, timestamp)
+
+    private suspend fun generate(
+        course: CourseEntity,
+        through: Long,
+        timestamp: Long,
+        exhausted: Boolean? = null,
+    ) {
+        val courseId = course.id
+        if (course.isCompleted || course.isPaused || (exhausted ?: dao.hasExhaustedTopics(courseId))) return
         val schedule = dao.getSchedule(courseId) ?: return
         val first = maxOf(today(timestamp).toEpochDay(), schedule.startsOn, schedule.generatedThrough?.plus(1) ?: schedule.startsOn)
         if (first > through) return
         val rules = dao.getScheduleRules(courseId).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
-        val existing = dao.getSessions(courseId).map { it.date }.toHashSet()
+        val existing = dao.getSessionDatesBetween(courseId, first, through).toHashSet()
         ScheduleGenerator.generate(LocalDate.ofEpochDay(schedule.startsOn), schedule.endsOn?.let(LocalDate::ofEpochDay),
             rules, LocalDate.ofEpochDay(first), LocalDate.ofEpochDay(through)).forEach { occurrence ->
             if (occurrence.startAt(zone()).toEpochMilli() >= timestamp &&
@@ -162,7 +167,17 @@ internal class TrackerOperations(
         val course = course(courseId)
         if (course.isCompleted) return
         val timestamp = now()
-        if (dao.hasExhaustedTopics(courseId)) {
+        val exhausted = reconcileExhaustion(course, timestamp)
+        if (generateIfAvailable) {
+            generate(course, today(timestamp).toEpochDay() + 90, timestamp, exhausted)
+        }
+    }
+
+    /** Returns exhaustion after repairing the generation cursor, without generating sessions. */
+    private suspend fun reconcileExhaustion(course: CourseEntity, timestamp: Long): Boolean {
+        val courseId = course.id
+        val exhausted = dao.hasExhaustedTopics(courseId)
+        if (exhausted) {
             removeFuturePending(courseId, timestamp)
             // Future sessions were removed: the old generation horizon is no longer valid.
             // Keep the cursor ready for resuming, even after a database reopen.
@@ -172,9 +187,8 @@ internal class TrackerOperations(
                     dao.updateSchedule(schedule.copy(generatedThrough = through))
                 }
             }
-        } else if (generateIfAvailable) {
-            generate(courseId, today(timestamp).toEpochDay() + 90, timestamp)
         }
+        return exhausted
     }
 
     private suspend fun removeFuturePending(courseId: String, timestamp: Long) {

@@ -64,6 +64,15 @@ interface TrackerDao {
     @Query("SELECT * FROM courses ORDER BY createdAt, id")
     suspend fun getCourses(): List<CourseEntity>
 
+    @Query("SELECT * FROM courses WHERE isCompleted = 0 ORDER BY createdAt, id")
+    suspend fun getUnfinishedCourses(): List<CourseEntity>
+
+    @Query("UPDATE sessions SET result = 'SKIPPED', updatedAt = :timestamp WHERE result = 'PENDING' AND date < :lastEditableDate")
+    suspend fun skipExpiredPendingSessions(lastEditableDate: Long, timestamp: Long)
+
+    @Query("SELECT date FROM sessions WHERE courseId = :courseId AND date BETWEEN :firstDate AND :lastDate")
+    suspend fun getSessionDatesBetween(courseId: String, firstDate: Long, lastDate: Long): List<Long>
+
     @Query("SELECT courseId, SUM(CASE WHEN isCompleted = 1 THEN 1 ELSE 0 END) AS completed, COUNT(*) AS total FROM topics GROUP BY courseId")
     suspend fun getCourseTopicCounts(): List<CourseTopicCounts>
 
