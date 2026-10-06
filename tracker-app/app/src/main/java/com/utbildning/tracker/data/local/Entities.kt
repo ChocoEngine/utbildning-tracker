@@ -150,6 +150,8 @@ data class ScheduleRuleEntity(
     ],
     indices = [
         Index(value = ["courseId", "date", "startMinute"], unique = true),
+        Index(value = ["date", "startMinute"]),
+        Index(value = ["result", "date"]),
         Index(value = ["id", "courseId"], unique = true),
     ],
 )

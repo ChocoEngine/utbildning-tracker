@@ -16,7 +16,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ScheduleRuleEntity::class,
         SessionRecord::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = true,
 )
 abstract class TrackerDatabase : RoomDatabase() {
@@ -143,9 +143,16 @@ abstract class TrackerDatabase : RoomDatabase() {
             }
         }
 
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_sessions_date_startMinute` ON `sessions` (`date`, `startMinute`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_sessions_result_date` ON `sessions` (`result`, `date`)")
+            }
+        }
+
         fun open(context: Context, name: String = "tracker.db"): TrackerDatabase =
             Room.databaseBuilder(context.applicationContext, TrackerDatabase::class.java, name)
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         // Room has no annotation for a partial index; its structural index

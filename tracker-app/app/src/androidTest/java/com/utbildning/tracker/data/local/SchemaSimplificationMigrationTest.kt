@@ -55,7 +55,7 @@ class SchemaSimplificationMigrationTest {
             val migrated = TrackerDatabase.open(context, name)
             try {
                 val dao = migrated.trackerDao()
-                assertEquals(6, migrated.openHelper.readableDatabase.version)
+                assertEquals(7, migrated.openHelper.readableDatabase.version)
                 assertEquals(3, dao.getCourses().size)
                 assertFalse(dao.hasExhaustedTopics("active"))
                 assertEquals(1L, dao.getCourse("active")!!.createdAt)
