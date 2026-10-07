@@ -138,6 +138,9 @@ interface TrackerDao {
     @Query("DELETE FROM sessions WHERE courseId = :courseId")
     suspend fun deleteSessions(courseId: String)
 
+    @Query("DELETE FROM sessions WHERE date < :cutoffDate")
+    suspend fun deleteSessionsBefore(cutoffDate: Long): Int
+
     @Query("SELECT * FROM courses WHERE id = :id")
     suspend fun getCourse(id: String): CourseEntity?
 

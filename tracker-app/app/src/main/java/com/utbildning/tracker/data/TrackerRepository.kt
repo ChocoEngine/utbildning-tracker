@@ -13,6 +13,7 @@ import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.data.local.SessionEntity
 import com.utbildning.tracker.backup.BackupSnapshot
 import com.utbildning.tracker.domain.SessionTime
+import com.utbildning.tracker.maintenance.RetentionPolicy
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.UUID
@@ -37,6 +38,7 @@ class TrackerRepository(
     private val now: () -> Long = System::currentTimeMillis,
     private val newId: () -> String = { UUID.randomUUID().toString() },
     private val zone: () -> ZoneId = { ZoneId.systemDefault() },
+    private val retentionPolicy: () -> RetentionPolicy = { RetentionPolicy.Default },
 ) {
     private val dao = database.trackerDao()
     private val operations = TrackerOperations(database, now, newId, zone)
@@ -164,6 +166,15 @@ class TrackerRepository(
     suspend fun pauseCourse(courseId: String) = operations.pauseCourse(courseId)
     suspend fun disableSchedule(courseId: String) = operations.disableSchedule(courseId)
     suspend fun deleteCourse(courseId: String) = operations.deleteCourse(courseId)
+
+    /** Reads the current policy and calculates its local-date boundary inside the write transaction. */
+    suspend fun cleanupOldSessions(): Int = database.withTransaction {
+        val policy = retentionPolicy()
+        val cutoff = policy.cutoffDate(
+            java.time.Instant.ofEpochMilli(now()).atZone(zone()).toLocalDate(),
+        ) ?: return@withTransaction 0
+        dao.deleteSessionsBefore(cutoff.toEpochDay())
+    }
 
     fun observeCourses(): Flow<List<CourseEntity>> = dao.observeCourses()
 
