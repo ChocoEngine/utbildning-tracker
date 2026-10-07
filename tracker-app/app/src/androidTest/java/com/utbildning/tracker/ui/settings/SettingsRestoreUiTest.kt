@@ -23,6 +23,7 @@ import com.utbildning.tracker.backup.BackupArchive
 import com.utbildning.tracker.backup.BackupImporter
 import com.utbildning.tracker.backup.BackupMetadata
 import com.utbildning.tracker.backup.BackupSnapshot
+import com.utbildning.tracker.backup.AutomaticBackupStatus
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.data.local.CategoryEntity
 import com.utbildning.tracker.data.local.CourseEntity
@@ -37,6 +38,7 @@ import java.io.File
 import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -126,6 +128,27 @@ class SettingsRestoreUiTest {
         assertEquals(true, base.createConfigurationContext(Configuration().apply {
             setLocales(LocaleList.forLanguageTags("ru"))
         }).getString(R.string.guide_backup).contains("полную замену"))
+    }
+
+    @Test
+    fun weeklyBackupShowsToggleDestinationSuccessAndError() {
+        var enabled = false
+        compose.setContent {
+            TrackerTheme {
+                SettingsContent(
+                    selectedLanguage = "en",
+                    onLanguageSelected = {},
+                    onBack = {},
+                    automaticBackup = AutomaticBackupStatus(enabled, android.net.Uri.parse("content://provider/tree/backups"), 1000L, 2000L),
+                    onAutomaticBackupChanged = { enabled = it },
+                )
+            }
+        }
+
+        compose.onNodeWithTag("automatic_backup_switch").performScrollTo().assertIsDisplayed().performClick()
+        compose.onNodeWithTag("automatic_backup_success").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("automatic_backup_error").performScrollTo().assertIsDisplayed()
+        assertTrue(enabled)
     }
 
     @Test

@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -52,10 +53,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.utbildning.tracker.R
+import com.utbildning.tracker.backup.AutomaticBackupManager
+import com.utbildning.tracker.backup.AutomaticBackupStatus
 import com.utbildning.tracker.ui.AppHeader
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.time.LocalDate
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlinx.coroutines.launch
 
 internal enum class BackupUiState { Idle, AwaitingDestination, Creating, Success, Cancelled, Error }
@@ -79,6 +86,9 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
     val scope = rememberCoroutineScope()
     val exporter = remember(context, repository) { repository?.let { BackupExporter(context.applicationContext, it) } }
     val importer = remember(context, repository) { repository?.let { BackupImporter(context.applicationContext, it) } }
+    val automaticBackupManager = remember(context) { AutomaticBackupManager(context.applicationContext) }
+    var automaticBackupStatus by remember { mutableStateOf(automaticBackupManager.status()) }
+    var enableAfterDestination by remember { mutableStateOf(false) }
     var backupState by remember { mutableStateOf(BackupUiState.Idle) }
     var restoreState by remember { mutableStateOf(RestoreUiState.Idle) }
     var validatedBackup by remember { mutableStateOf<ValidatedBackup?>(null) }
@@ -113,6 +123,18 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
             }
         }
     }
+    val chooseAutomaticDestination = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+        if (uri != null) {
+            try {
+                automaticBackupManager.selectDestination(uri)
+                if (enableAfterDestination) automaticBackupManager.enable()
+            } catch (_: Exception) {
+                automaticBackupManager.recordError()
+            }
+        }
+        enableAfterDestination = false
+        automaticBackupStatus = automaticBackupManager.status()
+    }
     // An override can change without changing the effective language or recreating the Activity.
     DisposableEffect(localeManager, lifecycleOwner, configuration) {
         selectedLanguage = localeManager.applicationLocales.toLanguageTags()
@@ -120,6 +142,7 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
             if (event == Lifecycle.Event.ON_RESUME) {
                 selectedLanguage = localeManager.applicationLocales.toLanguageTags()
                 remindersAllowed = ReminderScheduler.allowed(context)
+                automaticBackupStatus = automaticBackupManager.status()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -178,6 +201,23 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
             validatedBackup = null
             restoreState = RestoreUiState.Cancelled
         },
+        automaticBackup = automaticBackupStatus,
+        onAutomaticBackupChanged = { enabled ->
+            if (!enabled) {
+                automaticBackupManager.disable()
+                automaticBackupStatus = automaticBackupManager.status()
+            } else if (automaticBackupStatus.destination == null) {
+                enableAfterDestination = true
+                chooseAutomaticDestination.launch(null)
+            } else {
+                automaticBackupManager.enable()
+                automaticBackupStatus = automaticBackupManager.status()
+            }
+        },
+        onChooseAutomaticDestination = {
+            enableAfterDestination = automaticBackupStatus.enabled
+            chooseAutomaticDestination.launch(automaticBackupStatus.destination)
+        },
     )
 }
 
@@ -196,6 +236,9 @@ internal fun SettingsContent(
     onChooseBackup: (() -> Unit)? = null,
     onConfirmRestore: () -> Unit = {},
     onCancelRestore: () -> Unit = {},
+    automaticBackup: AutomaticBackupStatus = AutomaticBackupStatus(false, null, null, null),
+    onAutomaticBackupChanged: (Boolean) -> Unit = {},
+    onChooseAutomaticDestination: () -> Unit = {},
 ) {
     Column(Modifier.fillMaxSize().testTag("screen_settings")) {
         AppHeader(title = stringResource(R.string.settings), onBack = onBack)
@@ -251,6 +294,38 @@ internal fun SettingsContent(
                 BackupUiState.Error -> Text(stringResource(R.string.backup_error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("backup_error"))
                 else -> Unit
             }
+            Text(stringResource(R.string.automatic_backup_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 24.dp))
+            Text(stringResource(R.string.automatic_backup_explanation), style = MaterialTheme.typography.bodyMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag("automatic_backup_toggle"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    stringResource(if (automaticBackup.enabled) R.string.automatic_backup_enabled else R.string.automatic_backup_disabled),
+                    modifier = Modifier.weight(1f),
+                )
+                Switch(
+                    checked = automaticBackup.enabled,
+                    onCheckedChange = onAutomaticBackupChanged,
+                    modifier = Modifier.testTag("automatic_backup_switch"),
+                )
+            }
+            TextButton(onClick = onChooseAutomaticDestination, modifier = Modifier.testTag("automatic_backup_destination")) {
+                Text(stringResource(if (automaticBackup.destination == null) R.string.automatic_backup_choose_folder else R.string.automatic_backup_change_folder))
+            }
+            if (automaticBackup.destination != null) {
+                Text(stringResource(R.string.automatic_backup_folder_selected), style = MaterialTheme.typography.bodySmall)
+            }
+            automaticBackup.lastSuccessAt?.let {
+                Text(stringResource(R.string.automatic_backup_last_success, formatBackupTime(it)), modifier = Modifier.testTag("automatic_backup_success"))
+            }
+            automaticBackup.lastErrorAt?.let {
+                Text(
+                    stringResource(R.string.automatic_backup_last_error, formatBackupTime(it)),
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.testTag("automatic_backup_error"),
+                )
+            }
             Text(stringResource(R.string.restore_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 24.dp))
             Text(stringResource(R.string.restore_explanation), style = MaterialTheme.typography.bodyMedium)
             Button(
@@ -294,6 +369,17 @@ internal fun SettingsContent(
                 }
             },
         )
+    }
+}
+
+@Composable
+private fun formatBackupTime(timestamp: Long): String {
+    val locale = LocalConfiguration.current.locales[0]
+    return remember(timestamp, locale) {
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+            .withLocale(locale)
+            .withZone(ZoneId.systemDefault())
+            .format(Instant.ofEpochMilli(timestamp))
     }
 }
 

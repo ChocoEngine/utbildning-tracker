@@ -17,6 +17,15 @@
     <string name="backup_success">Копия создана</string>
     <string name="backup_cancelled">Создание копии отменено</string>
     <string name="backup_error">Не удалось создать копию</string>
+    <string name="automatic_backup_title">Еженедельная копия</string>
+    <string name="automatic_backup_explanation">Android создаёт новый файл примерно раз в неделю, когда позволяют фоновые условия. Точное время не гарантируется. Прежние успешные файлы сохраняются.</string>
+    <string name="automatic_backup_enabled">Еженедельная копия включена</string>
+    <string name="automatic_backup_disabled">Еженедельная копия выключена</string>
+    <string name="automatic_backup_choose_folder">Выбрать папку</string>
+    <string name="automatic_backup_change_folder">Сменить папку</string>
+    <string name="automatic_backup_folder_selected">Папка для копий выбрана</string>
+    <string name="automatic_backup_last_success">Последняя успешная копия: %1$s</string>
+    <string name="automatic_backup_last_error">Последняя попытка не удалась: %1$s. Проверьте доступ к выбранной папке или выберите другое хранилище.</string>
     <string name="restore_title">Восстановление</string>
     <string name="restore_explanation">Выберите файл копии. Восстановление полностью заменит текущие курсы, темы, расписания, историю и язык.</string>
     <string name="restore_choose">Выбрать копию</string>

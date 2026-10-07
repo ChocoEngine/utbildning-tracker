@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import com.utbildning.tracker.notifications.ReminderScheduler
 import com.utbildning.tracker.backup.BackupImporter
+import com.utbildning.tracker.backup.AutomaticBackupManager
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CancellationException
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) accept(intent)
         val repository = AppContainer.repository(applicationContext)
+        AutomaticBackupManager(applicationContext).reconcile()
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 BackupImporter(applicationContext, repository).recoverInterruptedRestore()

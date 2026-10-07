@@ -25,6 +25,24 @@ class BackupExporter(
     private val newId: () -> String = { UUID.randomUUID().toString() },
 ) {
     suspend fun export(destination: Uri) = exportMutex.withLock {
+        val resolver = context.contentResolver
+        exportLocked(
+            openOutput = { resolver.openOutputStream(destination, "w") ?: throw IOException("Destination is not writable") },
+            openInput = { resolver.openInputStream(destination) ?: throw IOException("Destination is not readable") },
+        )
+    }
+
+    internal suspend fun export(
+        openOutput: () -> OutputStream,
+        openInput: () -> InputStream,
+    ) = exportMutex.withLock {
+        exportLocked(openOutput, openInput)
+    }
+
+    private suspend fun exportLocked(
+        openOutput: () -> OutputStream,
+        openInput: () -> InputStream,
+    ) {
         withContext(Dispatchers.IO) {
             val archive = File.createTempFile("study-tracker-export-", BackupArchive.EXTENSION, context.cacheDir)
             val verification = File.createTempFile("study-tracker-verify-", BackupArchive.EXTENSION, context.cacheDir)
@@ -36,12 +54,11 @@ class BackupExporter(
                     archive,
                     BackupMetadata(newId(), Instant.ofEpochMilli(now()).toString(), app.longVersionCode, app.versionName.orEmpty()),
                 )
-                val resolver = context.contentResolver
                 copyAndValidate(
                     archive,
                     verification,
-                    openOutput = { resolver.openOutputStream(destination, "w") ?: throw IOException("Destination is not writable") },
-                    openInput = { resolver.openInputStream(destination) ?: throw IOException("Destination is not readable") },
+                    openOutput = openOutput,
+                    openInput = openInput,
                 )
             } finally {
                 archive.delete()

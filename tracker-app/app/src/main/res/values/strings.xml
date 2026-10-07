@@ -17,6 +17,15 @@
     <string name="backup_success">Backup created</string>
     <string name="backup_cancelled">Backup creation canceled</string>
     <string name="backup_error">Could not create backup</string>
+    <string name="automatic_backup_title">Weekly backup</string>
+    <string name="automatic_backup_explanation">Android creates a new backup about once a week when background conditions allow. The exact time is not guaranteed. Existing successful files are kept.</string>
+    <string name="automatic_backup_enabled">Weekly backup on</string>
+    <string name="automatic_backup_disabled">Weekly backup off</string>
+    <string name="automatic_backup_choose_folder">Choose folder</string>
+    <string name="automatic_backup_change_folder">Change folder</string>
+    <string name="automatic_backup_folder_selected">Backup folder selected</string>
+    <string name="automatic_backup_last_success">Last successful backup: %1$s</string>
+    <string name="automatic_backup_last_error">Last attempt failed: %1$s. Check access to the selected folder or try another storage provider.</string>
     <string name="restore_title">Restore backup</string>
     <string name="restore_explanation">Choose a backup file. Restoring replaces all current courses, topics, schedules, history, and language.</string>
     <string name="restore_choose">Choose backup</string>
