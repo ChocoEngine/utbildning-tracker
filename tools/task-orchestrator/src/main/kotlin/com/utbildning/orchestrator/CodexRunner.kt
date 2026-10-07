@@ -26,10 +26,7 @@ class CodexRunner(
         val command = buildCommand(task, schemaFile, resultFile)
 
         var threadId: String? = null
-        val process = ProcessBuilder(command)
-            .directory(options.projectRoot.toFile())
-            .redirectErrorStream(true)
-            .start()
+        val process = startProcess(command)
 
         Files.newBufferedWriter(logFile, StandardCharsets.UTF_8).use { writer ->
             process.inputStream.bufferedReader(StandardCharsets.UTF_8).useLines { lines ->
@@ -55,6 +52,15 @@ class CodexRunner(
             threadId = threadId,
             logFile = logFile,
         )
+    }
+
+    internal fun startProcess(command: List<String>): Process {
+        val process = ProcessBuilder(command)
+            .directory(options.projectRoot.toFile())
+            .redirectErrorStream(true)
+            .start()
+        process.outputStream.close()
+        return process
     }
 
     internal fun buildCommand(task: PlanTask, schemaFile: Path, resultFile: Path): List<String> =
