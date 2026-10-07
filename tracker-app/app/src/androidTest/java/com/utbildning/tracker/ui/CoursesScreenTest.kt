@@ -68,6 +68,112 @@ class CoursesScreenTest {
         database.close()
     }
 
+    @Test fun failedFieldWritesKeepDraftAndRetryWithoutPartialCategory() {
+        val course = seed(category = "Original")
+        show(); click("course_row_${course.id}")
+        lateinit var model: CoursesViewModel
+        compose.runOnIdle { model = ViewModelProvider(modelOwner)[CoursesViewModel::class.java] }
+        for (field in listOf("name", "category", "color")) {
+            val before = runBlocking { repository.getCourseDetails(course.id) }!!
+            database.openHelper.writableDatabase.execSQL(
+                "CREATE TRIGGER reject_course_update BEFORE UPDATE ON courses BEGIN SELECT RAISE(ABORT, 'test write failure'); END")
+            compose.runOnIdle {
+                when (field) {
+                    "name" -> { model.change { it.copy(name = "Retry name") }; model.commitName() }
+                    "category" -> model.selectCategory("Retry category")
+                    else -> model.selectColor(3)
+                }
+            }
+            waitFor { !model.busy && model.error == "STORAGE" }
+            compose.onNodeWithTag("course_error").assertExists()
+            assertEquals(before.course, runBlocking { repository.getCourse(course.id) })
+            if (field == "category") assertEquals(listOf("Original"), categories().map { it.name })
+            compose.runOnIdle {
+                assertNotNull(model.draft)
+                when (field) {
+                    "name" -> assertEquals("Retry name", model.draft!!.name)
+                    "category" -> assertEquals("Retry category", model.draft!!.category)
+                    else -> assertEquals(3, model.draft!!.color)
+                }
+            }
+            database.openHelper.writableDatabase.execSQL("DROP TRIGGER reject_course_update")
+            compose.runOnIdle {
+                when (field) {
+                    "name" -> model.commitName()
+                    "category" -> model.commitCategory()
+                    else -> model.selectColor(3)
+                }
+            }
+            waitFor { !model.busy && model.error == null }
+            val stored = runBlocking { repository.getCourseDetails(course.id) }!!
+            when (field) {
+                "name" -> assertEquals("Retry name", stored.course.name)
+                "category" -> assertEquals("Retry category", stored.category!!.name)
+                else -> assertEquals(3, stored.course.colorId)
+            }
+        }
+    }
+
+    @Test fun failedExitBackgroundAndScheduleKeepDraftUntilRetry() {
+        val course = seed()
+        show(); click("course_row_${course.id}")
+        lateinit var model: CoursesViewModel
+        compose.runOnIdle { model = ViewModelProvider(modelOwner)[CoursesViewModel::class.java] }
+        for (action in listOf("background", "schedule", "leave")) {
+            var navigated = false
+            database.openHelper.writableDatabase.execSQL(
+                "CREATE TRIGGER reject_course_update BEFORE UPDATE ON courses BEGIN SELECT RAISE(ABORT, 'test write failure'); END")
+            compose.runOnIdle {
+                model.change { it.copy(name = "Retry $action", category = "Category $action", editingText = "Unapplied topic") }
+                when (action) {
+                    "background" -> model.saveOnBackground()
+                    "schedule" -> model.openSchedule { navigated = true }
+                    else -> model.leave { navigated = true }
+                }
+            }
+            waitFor { !model.busy && model.error == "STORAGE" }
+            assertFalse(navigated)
+            compose.runOnIdle { assertEquals("Retry $action", model.draft!!.name) }
+            assertTrue(runBlocking { dao.getTopics(course.id) }.isEmpty())
+            database.openHelper.writableDatabase.execSQL("DROP TRIGGER reject_course_update")
+            compose.runOnIdle {
+                when (action) {
+                    "background" -> model.saveOnBackground()
+                    "schedule" -> model.openSchedule { navigated = true }
+                    else -> model.leave { navigated = true }
+                }
+            }
+            waitFor { !model.busy && model.error == null }
+            assertEquals("Retry $action", runBlocking { repository.getCourse(course.id) }!!.name)
+            assertTrue(runBlocking { dao.getTopics(course.id) }.isEmpty())
+            assertEquals(action != "background", navigated)
+        }
+        compose.runOnIdle { assertNull(model.draft) }
+    }
+
+    @Test fun queuedFieldWritesAndExitPreserveLatestValuesWithoutDuplicateCategories() {
+        val course = seed()
+        show(); click("course_row_${course.id}")
+        lateinit var model: CoursesViewModel
+        compose.runOnIdle { model = ViewModelProvider(modelOwner)[CoursesViewModel::class.java] }
+        compose.runOnIdle {
+            model.change { it.copy(name = "First") }; model.commitName()
+            model.selectCategory(" Shared ")
+            model.selectColor(2)
+            model.change { it.copy(name = "Latest", editingText = "Unapplied") }; model.commitName()
+            model.selectCategory("shared")
+            model.selectColor(4)
+            model.leave()
+        }
+        waitFor { !model.busy && model.draft == null }
+        val stored = runBlocking { repository.getCourseDetails(course.id) }!!
+        assertEquals("Latest", stored.course.name)
+        assertEquals(4, stored.course.colorId)
+        assertEquals("Shared", stored.category!!.name)
+        assertEquals(1, categories().size)
+        assertTrue(stored.topics.isEmpty())
+    }
+
     @Test fun allCourseSchedulesSurviveConcurrentLoadingAndRefresh() {
         val expected = (0..7).associate { index ->
             val course = seed(name = "Scheduled $index", color = index)

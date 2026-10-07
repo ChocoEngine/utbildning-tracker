@@ -1,0 +1,8 @@
+
+com.utbildning.tracker.ui.CoursesScreenTest:........................
+
+Time: 72.419
+
+OK (24 tests)
+
+

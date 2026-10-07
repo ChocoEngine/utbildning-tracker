@@ -1,0 +1,129 @@
+
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:..
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:...
+Error in pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_resume')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:60)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:104)
+...
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:......
+com.utbildning.tracker.ui.CourseListAppearanceTest:....
+com.utbildning.tracker.ui.CourseListGeometryReviewTest:..
+com.utbildning.tracker.ui.CourseTopicPaceTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:........................
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.LanguageSettingsTest:..
+Error in guideCanBeReadAndReopenedInBothLanguages(com.utbildning.tracker.ui.LanguageSettingsTest):
+org.junit.runners.model.TestTimedOutException: test timed out after 120000 milliseconds
+	at jdk.internal.misc.Unsafe.park(Native Method)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:221)
+	at java.util.concurrent.FutureTask.awaitDone(FutureTask.java:500)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:190)
+	at androidx.test.espresso.Espresso.onIdle(Espresso.java:12)
+	at androidx.test.espresso.Espresso.onIdle(Espresso.java:1)
+	at androidx.compose.ui.test.EspressoLink_androidKt.runEspressoOnIdle(EspressoLink.android.kt:88)
+	at androidx.compose.ui.test.EspressoLink.runUntilIdle(EspressoLink.android.kt:82)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.waitForNextChoreographerFrame(ComposeUiTest.android.kt:652)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.waitForIdle(ComposeUiTest.android.kt:635)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.access$waitForIdle(ComposeUiTest.android.kt:398)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidTestOwner.getRoots(ComposeUiTest.android.kt:874)
+	at androidx.compose.ui.test.TestOwnerKt.getAllSemanticsNodes(TestOwner.kt:105)
+	at androidx.compose.ui.test.TestOwnerKt.getAllSemanticsNodes$default(TestOwner.kt:98)
+	at androidx.compose.ui.test.SemanticsNodeInteractionCollection.fetchSemanticsNodes(SemanticsNodeInteraction.kt:249)
+	at androidx.compose.ui.test.SemanticsNodeInteractionCollection.fetchSemanticsNodes$default(SemanticsNodeInteraction.kt:245)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.awaitTitle$lambda$0(LanguageSettingsTest.kt:221)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.$r8$lambda$lVzxVYJhl1IF4l-1ydE9qAH7hwQ(Unknown Source:0)
+	at com.utbildning.tracker.ui.LanguageSettingsTest$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:801)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.awaitTitle(LanguageSettingsTest.kt:220)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.selectLanguage(LanguageSettingsTest.kt:215)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.guideCanBeReadAndReopenedInBothLanguages(LanguageSettingsTest.kt:155)
+....
+com.utbildning.tracker.ui.NavigationEntryFlowTest:.
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.ScheduleScreenTest:...........
+com.utbildning.tracker.ui.SessionScreenTest:.............
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.VisualReviewTest:..
+
+Time: 727.21
+There were 2 failures:
+1) pausedCourseCanResumeThroughScheduleWithoutLosingProgress(com.utbildning.tracker.ui.AppNavigationTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'course_resume')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:402)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:60)
+	at com.utbildning.tracker.ui.AppNavigationTest.pausedCourseCanResumeThroughScheduleWithoutLosingProgress(AppNavigationTest.kt:104)
+2) guideCanBeReadAndReopenedInBothLanguages(com.utbildning.tracker.ui.LanguageSettingsTest)
+org.junit.runners.model.TestTimedOutException: test timed out after 120000 milliseconds
+	at jdk.internal.misc.Unsafe.park(Native Method)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:221)
+	at java.util.concurrent.FutureTask.awaitDone(FutureTask.java:500)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:190)
+	at androidx.test.espresso.Espresso.onIdle(Espresso.java:12)
+	at androidx.test.espresso.Espresso.onIdle(Espresso.java:1)
+	at androidx.compose.ui.test.EspressoLink_androidKt.runEspressoOnIdle(EspressoLink.android.kt:88)
+	at androidx.compose.ui.test.EspressoLink.runUntilIdle(EspressoLink.android.kt:82)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.waitForNextChoreographerFrame(ComposeUiTest.android.kt:652)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.waitForIdle(ComposeUiTest.android.kt:635)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.access$waitForIdle(ComposeUiTest.android.kt:398)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidTestOwner.getRoots(ComposeUiTest.android.kt:874)
+	at androidx.compose.ui.test.TestOwnerKt.getAllSemanticsNodes(TestOwner.kt:105)
+	at androidx.compose.ui.test.TestOwnerKt.getAllSemanticsNodes$default(TestOwner.kt:98)
+	at androidx.compose.ui.test.SemanticsNodeInteractionCollection.fetchSemanticsNodes(SemanticsNodeInteraction.kt:249)
+	at androidx.compose.ui.test.SemanticsNodeInteractionCollection.fetchSemanticsNodes$default(SemanticsNodeInteraction.kt:245)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.awaitTitle$lambda$0(LanguageSettingsTest.kt:221)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.$r8$lambda$lVzxVYJhl1IF4l-1ydE9qAH7hwQ(Unknown Source:0)
+	at com.utbildning.tracker.ui.LanguageSettingsTest$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:801)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.awaitTitle(LanguageSettingsTest.kt:220)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.selectLanguage(LanguageSettingsTest.kt:215)
+	at com.utbildning.tracker.ui.LanguageSettingsTest.guideCanBeReadAndReopenedInBothLanguages(LanguageSettingsTest.kt:155)
+
+FAILURES!!!
+Tests run: 194,  Failures: 2
+
+

@@ -1,0 +1,105 @@
+
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:
+Error in realAlarmsUseSelectedLanguageAndPreserveCourseName(com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest):
+java.lang.AssertionError: Actual en AlarmManager delivery
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertNotNull(Assert.java:713)
+	at com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest$realAlarmsUseSelectedLanguageAndPreserveCourseName$1.invokeSuspend(LocalizedReminderDeliveryTest.kt:51)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:221)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:596)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest.realAlarmsUseSelectedLanguageAndPreserveCourseName(LocalizedReminderDeliveryTest.kt:21)
+
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:..
+com.utbildning.tracker.notifications.ReminderTest:...
+Error in endReminderAsksForResultAndRecordsBothEvents(com.utbildning.tracker.notifications.ReminderTest):
+java.lang.AssertionError: End reminder is posted
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.utbildning.tracker.notifications.ReminderTest.awaitCondition(ReminderTest.kt:55)
+	at com.utbildning.tracker.notifications.ReminderTest.access$awaitCondition(ReminderTest.kt:28)
+	at com.utbildning.tracker.notifications.ReminderTest$awaitCondition$1.invokeSuspend(Unknown Source:15)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:221)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched(CancellableContinuationImpl.kt:596)
+	at kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run(EventLoop.common.kt:497)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:95)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:69)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:47)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.utbildning.tracker.notifications.ReminderTest.endReminderAsksForResultAndRecordsBothEvents(ReminderTest.kt:217)
+
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:
+Process crashed while executing openingFarMonthGeneratesReadOnlyCalendarAndRejectsResultChanges(com.utbildning.tracker.ui.CalendarIntegrationTest):
+java.lang.ArrayIndexOutOfBoundsException: length=5120; index=-341
+	at androidx.compose.runtime.SlotWriter.moveSlotGapTo(SlotTable.kt:4351)
+	at androidx.compose.runtime.SlotWriter.removeSlots(SlotTable.kt:3029)
+	at androidx.compose.runtime.SlotWriter.removeGroup(SlotTable.kt:2037)
+	at androidx.compose.runtime.ComposerKt.removeCurrentGroup(Composer.kt:1411)
+	at androidx.compose.runtime.CompositionImpl.dispose(Composition.kt:882)
+	at androidx.compose.ui.platform.WrappedComposition.dispose(Wrapper.android.kt:156)
+	at androidx.compose.ui.platform.WrappedComposition.onStateChanged(Wrapper.android.kt:167)
+	at androidx.lifecycle.LifecycleRegistry$ObserverWithState.dispatchEvent(LifecycleRegistry.jvm.kt:313)
+	at androidx.lifecycle.LifecycleRegistry.backwardPass(LifecycleRegistry.jvm.kt:266)
+	at androidx.lifecycle.LifecycleRegistry.sync(LifecycleRegistry.jvm.kt:284)
+	at androidx.lifecycle.LifecycleRegistry.moveToState(LifecycleRegistry.jvm.kt:135)
+	at androidx.lifecycle.LifecycleRegistry.handleLifecycleEvent(LifecycleRegistry.jvm.kt:119)
+	at androidx.lifecycle.ReportFragment$Companion.dispatch$lifecycle_runtime_release(ReportFragment.android.kt:181)
+	at androidx.lifecycle.ReportFragment$LifecycleCallbacks.onActivityPreDestroyed(ReportFragment.android.kt:137)
+	at android.app.Activity.dispatchActivityPreDestroyed(Activity.java:1765)
+	at android.app.Activity.performDestroy(Activity.java:9455)
+	at android.app.Instrumentation.callActivityOnDestroy(Instrumentation.java:1556)
+	at androidx.test.runner.MonitoringInstrumentation.callActivityOnDestroy(MonitoringInstrumentation.java:753)
+	at android.app.ActivityThread.performDestroyActivity(ActivityThread.java:6256)
+	at android.app.ActivityThread.handleDestroyActivity(ActivityThread.java:6301)
+	at android.app.servertransaction.DestroyActivityItem.execute(DestroyActivityItem.java:52)
+	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:63)
+	at android.app.servertransaction.TransactionExecutor.executeLifecycleItem(TransactionExecutor.java:169)
+	at android.app.servertransaction.TransactionExecutor.executeTransactionItems(TransactionExecutor.java:101)
+	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:80)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2823)
+	at android.os.Handler.dispatchMessage(Handler.java:110)
+	at android.os.Looper.loopOnce(Looper.java:248)
+	at android.os.Looper.loop(Looper.java:338)
+	at android.app.ActivityThread.main(ActivityThread.java:9067)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

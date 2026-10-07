@@ -1,0 +1,230 @@
+
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:..
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:...
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:......
+com.utbildning.tracker.ui.CourseListAppearanceTest:....
+com.utbildning.tracker.ui.CourseListGeometryReviewTest:..
+com.utbildning.tracker.ui.CourseTopicPaceTest:..
+com.utbildning.tracker.ui.CoursesScreenTest:........................
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorDemoSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.EmulatorLongTitleSeedTest:
+com.utbildning.tracker.ui.LanguageSettingsTest:.......
+com.utbildning.tracker.ui.NavigationEntryFlowTest:.
+com.utbildning.tracker.ui.ScheduleOverlapReviewTest:..
+com.utbildning.tracker.ui.ScheduleScreenTest:...........
+com.utbildning.tracker.ui.SessionScreenTest:.........
+Error in todayStillOpensTopicSelectionForCourseWithTopics(com.utbildning.tracker.ui.SessionScreenTest):
+java.lang.IllegalStateException: The current thread must have a looper!
+	at android.view.Choreographer$1.initialValue(Choreographer.java:119)
+	at android.view.Choreographer$1.initialValue(Choreographer.java:114)
+	at java.lang.ThreadLocal.setInitialValue(ThreadLocal.java:195)
+	at java.lang.ThreadLocal.get(ThreadLocal.java:172)
+	at android.view.Choreographer.getInstance(Choreographer.java:370)
+	at androidx.compose.foundation.lazy.layout.AndroidPrefetchScheduler.<init>(PrefetchScheduler.android.kt:109)
+	at androidx.compose.foundation.lazy.layout.PrefetchScheduler_androidKt.rememberDefaultPrefetchScheduler(PrefetchScheduler.android.kt:45)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.LazyLayout$lambda$1(LazyLayout.kt:123)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.$r8$lambda$4bw9SAqGpoYe4DqrU44rDd6vLr0(Unknown Source:0)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:131)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:52)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.LazySaveableStateHolderProvider$lambda$1(LazySaveableStateHolder.kt:50)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.$r8$lambda$xOI62mDgJ0ynaxHiDqHsu0pE35Q(Unknown Source:0)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:122)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:52)
+	at androidx.compose.runtime.CompositionLocalKt.CompositionLocalProvider(CompositionLocal.kt:398)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.LazySaveableStateHolderProvider(LazySaveableStateHolder.kt:50)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.LazyLayout(LazyLayout.kt:115)
+	at androidx.compose.foundation.lazy.LazyListKt.LazyList(LazyList.kt:129)
+	at androidx.compose.foundation.lazy.LazyDslKt.LazyColumn(LazyDsl.kt:401)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.DaySessionsSection-seJ8HY0(TodayScreen.kt:149)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.TodayContent$lambda$6(TodayScreen.kt:82)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.$r8$lambda$s4FiwKBcetI1M09vZz3mdgT5lyY(Unknown Source:0)
+	at com.utbildning.tracker.ui.today.TodayScreenKt$$ExternalSyntheticLambda9.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:131)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke$lambda$0(ComposableLambda.kt:133)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.$r8$lambda$qz3voikrQeNn5XJEtUlXR2wfzBw(Unknown Source:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl$$ExternalSyntheticLambda16.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.RecomposeScopeImpl.compose(RecomposeScopeImpl.kt:201)
+	at androidx.compose.runtime.ComposerImpl.recomposeToGroupEnd(ComposerImpl.kt:1690)
+	at androidx.compose.runtime.ComposerImpl.skipCurrentGroup(ComposerImpl.kt:2026)
+	at androidx.compose.runtime.ComposerImpl.doCompose-aFTiNEg(ComposerImpl.kt:2659)
+	at androidx.compose.runtime.ComposerImpl.recompose-aFTiNEg$runtime(ComposerImpl.kt:2583)
+	at androidx.compose.runtime.CompositionImpl.recompose(Composition.kt:1080)
+	at androidx.compose.runtime.Recomposer.performRecompose(Recomposer.kt:1406)
+	at androidx.compose.runtime.Recomposer.access$performRecompose(Recomposer.kt:159)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend$lambda$2(Recomposer.kt:638)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.$r8$lambda$sdKIQuFT6MpOW8QdHT9yWSawFoM(Unknown Source:0)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame$lambda$0(TestMonotonicFrameClock.jvm.kt:151)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.$r8$lambda$fu8waJyGgBJHXAKiQd11d2HBpD8(Unknown Source:0)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor.runWithoutResumingCoroutines(FrameDeferringContinuationInterceptor.jvm.kt:59)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame(TestMonotonicFrameClock.jvm.kt:133)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.access$performFrame(TestMonotonicFrameClock.jvm.kt:55)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$2.invokeSuspend(TestMonotonicFrameClock.jvm.kt:111)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:359)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:26)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:358)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:124)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:52)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch$default(Builders.common.kt:43)
+	at kotlinx.coroutines.BuildersKt.launch$default(Unknown Source:1)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.withFrameNanos(TestMonotonicFrameClock.jvm.kt:109)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend(Recomposer.kt:609)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:52)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:165)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeWith(CancellableContinuationImpl.kt:359)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.invokeSuspend$lambda$0(Recomposer.kt:1163)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.$r8$lambda$jbKdzZo3bTCIHTxjeyZ3PmjzbnE(Unknown Source:0)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:2023)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:2037)
+	at androidx.compose.runtime.snapshots.SnapshotKt.access$advanceGlobalSnapshot(Snapshot.kt:1)
+	at androidx.compose.runtime.snapshots.Snapshot$Companion.sendApplyNotifications(Snapshot.kt:689)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:53)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:263)
+	at kotlinx.coroutines.DispatchedCoroutine.afterResume(Builders.common.kt:255)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:47)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+	at java.lang.Thread.run(Thread.java:1119)
+...
+com.utbildning.tracker.ui.TodayVisualReviewTest:..
+com.utbildning.tracker.ui.VisualReviewTest:..
+
+Time: 957.52
+There was 1 failure:
+1) todayStillOpensTopicSelectionForCourseWithTopics(com.utbildning.tracker.ui.SessionScreenTest)
+java.lang.IllegalStateException: The current thread must have a looper!
+	at android.view.Choreographer$1.initialValue(Choreographer.java:119)
+	at android.view.Choreographer$1.initialValue(Choreographer.java:114)
+	at java.lang.ThreadLocal.setInitialValue(ThreadLocal.java:195)
+	at java.lang.ThreadLocal.get(ThreadLocal.java:172)
+	at android.view.Choreographer.getInstance(Choreographer.java:370)
+	at androidx.compose.foundation.lazy.layout.AndroidPrefetchScheduler.<init>(PrefetchScheduler.android.kt:109)
+	at androidx.compose.foundation.lazy.layout.PrefetchScheduler_androidKt.rememberDefaultPrefetchScheduler(PrefetchScheduler.android.kt:45)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.LazyLayout$lambda$1(LazyLayout.kt:123)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.$r8$lambda$4bw9SAqGpoYe4DqrU44rDd6vLr0(Unknown Source:0)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:131)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:52)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.LazySaveableStateHolderProvider$lambda$1(LazySaveableStateHolder.kt:50)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.$r8$lambda$xOI62mDgJ0ynaxHiDqHsu0pE35Q(Unknown Source:0)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:122)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:52)
+	at androidx.compose.runtime.CompositionLocalKt.CompositionLocalProvider(CompositionLocal.kt:398)
+	at androidx.compose.foundation.lazy.layout.LazySaveableStateHolderKt.LazySaveableStateHolderProvider(LazySaveableStateHolder.kt:50)
+	at androidx.compose.foundation.lazy.layout.LazyLayoutKt.LazyLayout(LazyLayout.kt:115)
+	at androidx.compose.foundation.lazy.LazyListKt.LazyList(LazyList.kt:129)
+	at androidx.compose.foundation.lazy.LazyDslKt.LazyColumn(LazyDsl.kt:401)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.DaySessionsSection-seJ8HY0(TodayScreen.kt:149)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.TodayContent$lambda$6(TodayScreen.kt:82)
+	at com.utbildning.tracker.ui.today.TodayScreenKt.$r8$lambda$s4FiwKBcetI1M09vZz3mdgT5lyY(Unknown Source:0)
+	at com.utbildning.tracker.ui.today.TodayScreenKt$$ExternalSyntheticLambda9.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke(ComposableLambda.kt:131)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.invoke$lambda$0(ComposableLambda.kt:133)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl.$r8$lambda$qz3voikrQeNn5XJEtUlXR2wfzBw(Unknown Source:0)
+	at androidx.compose.runtime.internal.ComposableLambdaImpl$$ExternalSyntheticLambda16.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.RecomposeScopeImpl.compose(RecomposeScopeImpl.kt:201)
+	at androidx.compose.runtime.ComposerImpl.recomposeToGroupEnd(ComposerImpl.kt:1690)
+	at androidx.compose.runtime.ComposerImpl.skipCurrentGroup(ComposerImpl.kt:2026)
+	at androidx.compose.runtime.ComposerImpl.doCompose-aFTiNEg(ComposerImpl.kt:2659)
+	at androidx.compose.runtime.ComposerImpl.recompose-aFTiNEg$runtime(ComposerImpl.kt:2583)
+	at androidx.compose.runtime.CompositionImpl.recompose(Composition.kt:1080)
+	at androidx.compose.runtime.Recomposer.performRecompose(Recomposer.kt:1406)
+	at androidx.compose.runtime.Recomposer.access$performRecompose(Recomposer.kt:159)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend$lambda$2(Recomposer.kt:638)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.$r8$lambda$sdKIQuFT6MpOW8QdHT9yWSawFoM(Unknown Source:0)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame$lambda$0(TestMonotonicFrameClock.jvm.kt:151)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.$r8$lambda$fu8waJyGgBJHXAKiQd11d2HBpD8(Unknown Source:0)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor.runWithoutResumingCoroutines(FrameDeferringContinuationInterceptor.jvm.kt:59)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame(TestMonotonicFrameClock.jvm.kt:133)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.access$performFrame(TestMonotonicFrameClock.jvm.kt:55)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$2.invokeSuspend(TestMonotonicFrameClock.jvm.kt:111)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:359)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:26)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:358)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:124)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:52)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch$default(Builders.common.kt:43)
+	at kotlinx.coroutines.BuildersKt.launch$default(Unknown Source:1)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.withFrameNanos(TestMonotonicFrameClock.jvm.kt:109)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend(Recomposer.kt:609)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:52)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:165)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:154)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeWith(CancellableContinuationImpl.kt:359)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.invokeSuspend$lambda$0(Recomposer.kt:1163)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.$r8$lambda$jbKdzZo3bTCIHTxjeyZ3PmjzbnE(Unknown Source:0)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:2023)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:2037)
+	at androidx.compose.runtime.snapshots.SnapshotKt.access$advanceGlobalSnapshot(Snapshot.kt:1)
+	at androidx.compose.runtime.snapshots.Snapshot$Companion.sendApplyNotifications(Snapshot.kt:689)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:53)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:263)
+	at kotlinx.coroutines.DispatchedCoroutine.afterResume(Builders.common.kt:255)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:100)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:47)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+	at java.lang.Thread.run(Thread.java:1119)
+
+FAILURES!!!
+Tests run: 194,  Failures: 1
+
+

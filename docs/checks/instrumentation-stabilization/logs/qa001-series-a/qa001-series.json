@@ -1,0 +1,44 @@
+[
+  {
+    "run": 1,
+    "start_moscow": "2026-10-06T00:07:07.598493+03:00",
+    "end_moscow": "2026-10-06T00:18:34.598907+03:00",
+    "wall_seconds": 687.005,
+    "returncode": 0,
+    "success": true,
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "am",
+      "instrument",
+      "-w",
+      "-e",
+      "timeout_msec",
+      "120000",
+      "com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner"
+    ]
+  },
+  {
+    "run": 2,
+    "start_moscow": "2026-10-06T00:18:35.511946+03:00",
+    "end_moscow": "2026-10-06T00:30:48.408697+03:00",
+    "wall_seconds": 732.865,
+    "returncode": 0,
+    "success": false,
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "am",
+      "instrument",
+      "-w",
+      "-e",
+      "timeout_msec",
+      "120000",
+      "com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner"
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.LanguageSettingsTest:.......
+
+Time: 217.908
+
+OK (14 tests)
+
+

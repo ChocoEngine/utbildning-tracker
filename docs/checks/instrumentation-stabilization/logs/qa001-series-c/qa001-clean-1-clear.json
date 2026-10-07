@@ -1,0 +1,28 @@
+[
+  {
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm",
+      "clear",
+      "com.utbildning.tracker"
+    ],
+    "returncode": 0,
+    "output": "Success\n"
+  },
+  {
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "pm",
+      "clear",
+      "com.utbildning.tracker.test"
+    ],
+    "returncode": 0,
+    "output": "Success\n"
+  }
+]

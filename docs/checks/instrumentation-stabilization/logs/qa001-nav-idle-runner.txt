@@ -1,0 +1,23 @@
+
+com.utbildning.tracker.ui.AppNavigationTest:.
+Error in newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForDisplayedTag(AppNavigationTest.kt:234)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:72)
+.....
+
+Time: 114.474
+There was 1 failure:
+1) newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(com.utbildning.tracker.ui.AppNavigationTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 10000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:809)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:378)
+	at com.utbildning.tracker.ui.AppNavigationTest.waitForDisplayedTag(AppNavigationTest.kt:234)
+	at com.utbildning.tracker.ui.AppNavigationTest.newScheduledCourseCanBeConfiguredThroughCourseEditorAndCreatesCalendarSessions(AppNavigationTest.kt:72)
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

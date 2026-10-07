@@ -1,0 +1,12 @@
+
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+
+Time: 150.739
+
+OK (14 tests)
+
+

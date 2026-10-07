@@ -1,0 +1,8 @@
+
+com.utbildning.tracker.ui.AppNavigationTest:.
+
+Time: 3.029
+
+OK (1 test)
+
+

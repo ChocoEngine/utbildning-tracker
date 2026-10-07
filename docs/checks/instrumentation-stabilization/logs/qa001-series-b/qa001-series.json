@@ -1,0 +1,65 @@
+[
+  {
+    "run": 1,
+    "start_moscow": "2026-10-06T00:38:23.644608+03:00",
+    "end_moscow": "2026-10-06T00:52:44.704614+03:00",
+    "wall_seconds": 861.102,
+    "returncode": 0,
+    "success": true,
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "am",
+      "instrument",
+      "-w",
+      "-e",
+      "timeout_msec",
+      "120000",
+      "com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner"
+    ]
+  },
+  {
+    "run": 2,
+    "start_moscow": "2026-10-06T00:52:45.539197+03:00",
+    "end_moscow": "2026-10-06T01:07:54.039689+03:00",
+    "wall_seconds": 908.47,
+    "returncode": 0,
+    "success": true,
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "am",
+      "instrument",
+      "-w",
+      "-e",
+      "timeout_msec",
+      "120000",
+      "com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner"
+    ]
+  },
+  {
+    "run": 3,
+    "start_moscow": "2026-10-06T01:07:54.813398+03:00",
+    "end_moscow": "2026-10-06T01:13:52.428708+03:00",
+    "wall_seconds": 357.613,
+    "returncode": 0,
+    "success": false,
+    "command": [
+      "/Users/alxshvarts/Library/Android/sdk/platform-tools/adb",
+      "-s",
+      "emulator-5554",
+      "shell",
+      "am",
+      "instrument",
+      "-w",
+      "-e",
+      "timeout_msec",
+      "120000",
+      "com.utbildning.tracker.test/androidx.test.runner.AndroidJUnitRunner"
+    ]
+  }
+]

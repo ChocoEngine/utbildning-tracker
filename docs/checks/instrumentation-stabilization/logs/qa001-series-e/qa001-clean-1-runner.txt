@@ -1,0 +1,44 @@
+
+com.utbildning.tracker.data.CourseFormRepositoryTest:........
+com.utbildning.tracker.data.CourseLifecycleRepositoryTest:.......
+com.utbildning.tracker.data.ManualTopicCompletionTest:...
+com.utbildning.tracker.data.MvpScenarioTest:.
+com.utbildning.tracker.data.ScheduleRepositoryTest:..............
+com.utbildning.tracker.data.SessionResultRepositoryTest:...........
+com.utbildning.tracker.data.TopicListRepositoryTest:.............
+com.utbildning.tracker.data.TopicPaceRepositoryTest:.
+com.utbildning.tracker.data.TrackerRepositoryTest:............
+com.utbildning.tracker.data.local.ExhaustionMigrationTest:.
+com.utbildning.tracker.data.local.SchemaSimplificationMigrationTest:..
+com.utbildning.tracker.data.local.TrackerDatabaseTest:.........
+com.utbildning.tracker.data.local.TrackerMigrationTest:..
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.OvernightAlarmDeliveryTest:
+com.utbildning.tracker.notifications.RecoveryProbeTest:.
+com.utbildning.tracker.notifications.ReminderNavigationTest:..
+com.utbildning.tracker.notifications.ReminderTest:....
+com.utbildning.tracker.ui.AppHeaderTest:.
+com.utbildning.tracker.ui.AppNavigationTest:.......
+com.utbildning.tracker.ui.CalendarIntegrationTest:.
+com.utbildning.tracker.ui.CalendarTodayScreenTest:.......
+com.utbildning.tracker.ui.CourseDetailsReviewTest:..
+Error in russian(com.utbildning.tracker.ui.CourseDetailsReviewTest):
+java.lang.IllegalStateException: Failed to build unique file: /storage/emulated/0/Pictures/TrackerChecks/ru_details_0_collapsed.png bucket_display_name=TrackerChecks volume_name=external_primary date_modified=null date_expires=null _display_name=ru_details_0_collapsed.png mime_type=image/png _data=/storage/emulated/0/Pictures/TrackerChecks/ru_details_0_collapsed.png _size=null is_trashed=0 is_pending=0 bucket_id=859525539 relative_path=Pictures/TrackerChecks/
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3348)
+	at android.os.Parcel.createException(Parcel.java:3324)
+	at android.os.Parcel.readException(Parcel.java:3307)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:201)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:153)
+	at android.content.ContentProviderProxy.update(ContentProviderNative.java:685)
+	at android.content.ContentResolver.update(ContentResolver.java:2418)
+	at android.content.ContentResolver.update(ContentResolver.java:2380)
+	at com.utbildning.tracker.ui.CourseDetailsReviewTest.save(CourseDetailsReviewTest.kt:147)
+	at com.utbildning.tracker.ui.CourseDetailsReviewTest.capture(CourseDetailsReviewTest.kt:134)
+	at com.utbildning.tracker.ui.CourseDetailsReviewTest.review(CourseDetailsReviewTest.kt:107)
+	at com.utbildning.tracker.ui.CourseDetailsReviewTest.russian(CourseDetailsReviewTest.kt:76)
+
+com.utbildning.tracker.ui.CourseDraftRecreationTest:.
+com.utbildning.tracker.ui.CourseEditorLayoutTest:..
+com.utbildning.tracker.ui.CourseLifecycleScreenTest:....INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0
