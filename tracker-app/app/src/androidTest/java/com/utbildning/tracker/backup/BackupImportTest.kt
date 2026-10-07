@@ -1,6 +1,7 @@
 package com.utbildning.tracker.backup
 
 import android.content.Context
+import android.net.Uri
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -65,7 +66,8 @@ class BackupImportTest {
         val appliedLanguages = mutableListOf<String>()
         val importer = BackupImporter(context, repository) { appliedLanguages += it }
 
-        importer.restore(archive)
+        val validated = importer.validate(Uri.fromFile(archive))
+        importer.restore(validated)
 
         assertEquals(wanted.sorted(), repository.createBackupSnapshot("ru").sorted())
         assertEquals(listOf("ru"), appliedLanguages)

@@ -17,4 +17,17 @@
     <string name="backup_success">Копия создана</string>
     <string name="backup_cancelled">Создание копии отменено</string>
     <string name="backup_error">Не удалось создать копию</string>
+    <string name="restore_title">Восстановление</string>
+    <string name="restore_explanation">Выберите файл копии. Восстановление полностью заменит текущие курсы, темы, расписания, историю и язык.</string>
+    <string name="restore_choose">Выбрать копию</string>
+    <string name="restore_checking">Проверка копии…</string>
+    <string name="restore_restoring">Восстановление…</string>
+    <string name="restore_confirm_title">Заменить все данные трекера?</string>
+    <string name="restore_confirm_message">Копия прошла проверку. Текущие данные будут полностью заменены; объединить копии нельзя.</string>
+    <string name="restore_confirm">Заменить и восстановить</string>
+    <string name="restore_cancel">Отмена</string>
+    <string name="restore_success">Копия восстановлена</string>
+    <string name="restore_cancelled">Восстановление отменено. Текущие данные не изменены.</string>
+    <string name="restore_invalid">Файл копии повреждён или недоступен. Текущие данные не изменены.</string>
+    <string name="restore_error">Не удалось завершить восстановление. Текущие или восстановленные данные сохранены; при необходимости перезапустите приложение.</string>
 </resources>

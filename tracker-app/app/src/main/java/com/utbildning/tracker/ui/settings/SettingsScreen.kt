@@ -12,9 +12,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import com.utbildning.tracker.notifications.ReminderScheduler
 import com.utbildning.tracker.backup.BackupArchive
 import com.utbildning.tracker.backup.BackupExporter
+import com.utbildning.tracker.backup.BackupImporter
+import com.utbildning.tracker.backup.ValidatedBackup
 import com.utbildning.tracker.data.TrackerRepository
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,7 +58,8 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import kotlinx.coroutines.launch
 
-private enum class BackupUiState { Idle, AwaitingDestination, Creating, Success, Cancelled, Error }
+internal enum class BackupUiState { Idle, AwaitingDestination, Creating, Success, Cancelled, Error }
+internal enum class RestoreUiState { Idle, Selecting, Validating, AwaitingConfirmation, Restoring, Success, Cancelled, InvalidFile, Error }
 
 @Composable
 internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, onGuide: () -> Unit = {}) {
@@ -74,7 +78,10 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
     }
     val scope = rememberCoroutineScope()
     val exporter = remember(context, repository) { repository?.let { BackupExporter(context.applicationContext, it) } }
+    val importer = remember(context, repository) { repository?.let { BackupImporter(context.applicationContext, it) } }
     var backupState by remember { mutableStateOf(BackupUiState.Idle) }
+    var restoreState by remember { mutableStateOf(RestoreUiState.Idle) }
+    var validatedBackup by remember { mutableStateOf<ValidatedBackup?>(null) }
     val createBackup = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(BackupArchive.MIME)) { uri ->
         if (uri == null) {
             backupState = BackupUiState.Cancelled
@@ -86,6 +93,22 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
                     BackupUiState.Success
                 } catch (_: Exception) {
                     BackupUiState.Error
+                }
+            }
+        }
+    }
+    val openBackup = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) {
+            restoreState = RestoreUiState.Cancelled
+        } else if (importer != null) {
+            restoreState = RestoreUiState.Validating
+            scope.launch {
+                try {
+                    validatedBackup = importer.validate(uri)
+                    restoreState = RestoreUiState.AwaitingConfirmation
+                } catch (_: Exception) {
+                    validatedBackup = null
+                    restoreState = RestoreUiState.InvalidFile
                 }
             }
         }
@@ -128,11 +151,38 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
                 createBackup.launch("study-tracker-${LocalDate.now(ZoneOffset.UTC)}${BackupArchive.EXTENSION}")
             }
         },
+        restoreState = restoreState,
+        onChooseBackup = importer?.let {
+            {
+                validatedBackup = null
+                restoreState = RestoreUiState.Selecting
+                openBackup.launch(arrayOf(BackupArchive.MIME, "application/zip", "application/octet-stream"))
+            }
+        },
+        onConfirmRestore = {
+            val backup = validatedBackup
+            if (backup != null && importer != null) {
+                restoreState = RestoreUiState.Restoring
+                scope.launch {
+                    restoreState = try {
+                        importer.restore(backup)
+                        validatedBackup = null
+                        RestoreUiState.Success
+                    } catch (_: Exception) {
+                        RestoreUiState.Error
+                    }
+                }
+            }
+        },
+        onCancelRestore = {
+            validatedBackup = null
+            restoreState = RestoreUiState.Cancelled
+        },
     )
 }
 
 @Composable
-private fun SettingsContent(
+internal fun SettingsContent(
     selectedLanguage: String,
     onLanguageSelected: (String) -> Unit,
     onBack: () -> Unit,
@@ -142,6 +192,10 @@ private fun SettingsContent(
     onGuide: () -> Unit = {},
     backupState: BackupUiState = BackupUiState.Idle,
     onCreateBackup: (() -> Unit)? = null,
+    restoreState: RestoreUiState = RestoreUiState.Idle,
+    onChooseBackup: (() -> Unit)? = null,
+    onConfirmRestore: () -> Unit = {},
+    onCancelRestore: () -> Unit = {},
 ) {
     Column(Modifier.fillMaxSize().testTag("screen_settings")) {
         AppHeader(title = stringResource(R.string.settings), onBack = onBack)
@@ -197,7 +251,49 @@ private fun SettingsContent(
                 BackupUiState.Error -> Text(stringResource(R.string.backup_error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("backup_error"))
                 else -> Unit
             }
+            Text(stringResource(R.string.restore_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 24.dp))
+            Text(stringResource(R.string.restore_explanation), style = MaterialTheme.typography.bodyMedium)
+            Button(
+                onClick = { onChooseBackup?.invoke() },
+                enabled = onChooseBackup != null && restoreState !in setOf(
+                    RestoreUiState.Selecting,
+                    RestoreUiState.Validating,
+                    RestoreUiState.AwaitingConfirmation,
+                    RestoreUiState.Restoring,
+                ),
+                modifier = Modifier.padding(vertical = 8.dp).testTag("backup_restore"),
+            ) {
+                Text(stringResource(when (restoreState) {
+                    RestoreUiState.Validating -> R.string.restore_checking
+                    RestoreUiState.Restoring -> R.string.restore_restoring
+                    else -> R.string.restore_choose
+                }))
+            }
+            when (restoreState) {
+                RestoreUiState.Success -> Text(stringResource(R.string.restore_success), modifier = Modifier.testTag("restore_success"))
+                RestoreUiState.Cancelled -> Text(stringResource(R.string.restore_cancelled), modifier = Modifier.testTag("restore_cancelled"))
+                RestoreUiState.InvalidFile -> Text(stringResource(R.string.restore_invalid), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("restore_invalid"))
+                RestoreUiState.Error -> Text(stringResource(R.string.restore_error), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("restore_error"))
+                else -> Unit
+            }
         }
+    }
+    if (restoreState == RestoreUiState.AwaitingConfirmation) {
+        AlertDialog(
+            onDismissRequest = onCancelRestore,
+            title = { Text(stringResource(R.string.restore_confirm_title)) },
+            text = { Text(stringResource(R.string.restore_confirm_message)) },
+            confirmButton = {
+                Button(onClick = onConfirmRestore, modifier = Modifier.testTag("restore_confirm")) {
+                    Text(stringResource(R.string.restore_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onCancelRestore, modifier = Modifier.testTag("restore_cancel")) {
+                    Text(stringResource(R.string.restore_cancel))
+                }
+            },
+        )
     }
 }
 
@@ -207,7 +303,7 @@ private fun SettingsContent(
 private fun SettingsScreenPreview() {
     TrackerTheme {
         Surface {
-            SettingsContent(selectedLanguage = "", onLanguageSelected = {}, onBack = {}, onCreateBackup = {})
+            SettingsContent(selectedLanguage = "", onLanguageSelected = {}, onBack = {}, onCreateBackup = {}, onChooseBackup = {})
         }
     }
 }

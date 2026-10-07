@@ -17,4 +17,17 @@
     <string name="backup_success">Backup created</string>
     <string name="backup_cancelled">Backup creation canceled</string>
     <string name="backup_error">Could not create backup</string>
+    <string name="restore_title">Restore backup</string>
+    <string name="restore_explanation">Choose a backup file. Restoring replaces all current courses, topics, schedules, history, and language.</string>
+    <string name="restore_choose">Choose backup</string>
+    <string name="restore_checking">Checking backup…</string>
+    <string name="restore_restoring">Restoring…</string>
+    <string name="restore_confirm_title">Replace all tracker data?</string>
+    <string name="restore_confirm_message">The backup is valid. Current data will be fully replaced; copies cannot be merged.</string>
+    <string name="restore_confirm">Replace and restore</string>
+    <string name="restore_cancel">Cancel</string>
+    <string name="restore_success">Backup restored</string>
+    <string name="restore_cancelled">Restore canceled. Current data was not changed.</string>
+    <string name="restore_invalid">This backup file is invalid or cannot be read. Current data was not changed.</string>
+    <string name="restore_error">Could not finish restoring. Your current or restored data remains safe; restart the app to finish if needed.</string>
 </resources>

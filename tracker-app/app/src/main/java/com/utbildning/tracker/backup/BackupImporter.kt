@@ -3,10 +3,12 @@ package com.utbildning.tracker.backup
 import android.app.LocaleManager
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.LocaleList
 import com.utbildning.tracker.data.TrackerRepository
 import com.utbildning.tracker.notifications.ReminderScheduler
 import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -28,6 +30,29 @@ class BackupImporter(
 
     suspend fun validate(file: File): ValidatedBackup = withContext(Dispatchers.IO) {
         BackupArchive.validate(file)
+    }
+
+    /** Copies a picker URI into private storage so validation never depends on a long-lived URI grant. */
+    suspend fun validate(uri: Uri): ValidatedBackup = withContext(Dispatchers.IO) {
+        val staged = File.createTempFile("study-tracker-import-", BackupArchive.EXTENSION, app.cacheDir)
+        try {
+            app.contentResolver.openInputStream(uri)?.use { input ->
+                staged.outputStream().buffered().use { output ->
+                    val buffer = ByteArray(8192)
+                    var total = 0L
+                    while (true) {
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        total += count
+                        if (total > MAX_ARCHIVE_BYTES) throw IOException("Backup is too large")
+                        output.write(buffer, 0, count)
+                    }
+                }
+            } ?: throw IOException("Backup cannot be read")
+            BackupArchive.validate(staged)
+        } finally {
+            staged.delete()
+        }
     }
 
     /** Call only after validation and any caller-owned confirmation step. */
@@ -67,6 +92,7 @@ class BackupImporter(
     }
 
     companion object {
+        private const val MAX_ARCHIVE_BYTES = 50L * 1024 * 1024
         private val restoreMutex = Mutex()
     }
 }
