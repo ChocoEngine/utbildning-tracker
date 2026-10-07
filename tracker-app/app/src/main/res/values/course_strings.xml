@@ -53,4 +53,6 @@
     <string name="course_actions_label">Course actions</string>
     <string name="course_resume">Resume</string>
     <string name="course_color_label">Course color</string>
+    <string name="course_restart">Start again</string>
+    <string name="course_confirm_restart">Start this course again? Progress for every topic and all previous sessions will be permanently deleted. You will configure the schedule again.</string>
 </resources>

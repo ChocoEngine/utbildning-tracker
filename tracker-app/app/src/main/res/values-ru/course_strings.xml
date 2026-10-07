@@ -53,4 +53,6 @@
     <string name="course_actions_label">Действия с курсом</string>
     <string name="course_resume">Продолжить</string>
     <string name="course_color_label">Цвет курса</string>
+    <string name="course_restart">Начать заново</string>
+    <string name="course_confirm_restart">Начать этот курс заново? Прохождение всех тем и все старые занятия будут безвозвратно удалены. Расписание нужно будет настроить заново.</string>
 </resources>

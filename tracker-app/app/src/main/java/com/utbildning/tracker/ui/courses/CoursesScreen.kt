@@ -112,8 +112,8 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             dismissButton = { TextButton(onClick = model::cancel, modifier = Modifier.testTag("course_cancel")) { Text(stringResource(R.string.course_cancel)) } })
         model.lifecycleAction?.let { action ->
             AlertDialog(onDismissRequest = model::dismissLifecycle,
-                text = { Column { Text(stringResource(when(action) { "delete" -> R.string.course_confirm_delete; "pause" -> R.string.course_confirm_pause; "disable_schedule" -> R.string.course_confirm_disable_schedule; else -> R.string.course_confirm_complete })); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error) } } },
-                confirmButton = { TextButton(onClick = model::confirmLifecycle, enabled = !model.busy, modifier = Modifier.testTag("course_action_confirm")) { Text(stringResource(when(action) { "delete" -> R.string.course_delete; "pause" -> R.string.course_pause; "disable_schedule" -> R.string.course_disable_schedule; else -> R.string.course_complete })) } },
+                text = { Column { Text(stringResource(when(action) { "delete" -> R.string.course_confirm_delete; "pause" -> R.string.course_confirm_pause; "disable_schedule" -> R.string.course_confirm_disable_schedule; "restart" -> R.string.course_confirm_restart; else -> R.string.course_confirm_complete }), modifier = if (action == "restart") Modifier.testTag("course_restart_warning") else Modifier); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_action_error")) } } },
+                confirmButton = { TextButton(onClick = model::confirmLifecycle, enabled = !model.busy, modifier = Modifier.testTag("course_action_confirm")) { Text(stringResource(when(action) { "delete" -> R.string.course_delete; "pause" -> R.string.course_pause; "disable_schedule" -> R.string.course_disable_schedule; "restart" -> R.string.course_restart; else -> R.string.course_complete })) } },
                 dismissButton = { TextButton(onClick = model::dismissLifecycle, modifier = Modifier.testTag("course_action_cancel")) { Text(stringResource(R.string.course_cancel)) } })
         }
         model.deleteCategory?.let { category ->
@@ -399,6 +399,12 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
                         enabled = !busy,
                         modifier = Modifier.weight(1f).testTag("course_pause")) {
                         Text(stringResource(R.string.course_pause_short), maxLines = 1)
+                    }
+                } else {
+                    CourseActionButton(onClick = { focus.clearFocus(); onLifecycle("restart") },
+                        enabled = !busy && colors.isNotEmpty(),
+                        modifier = Modifier.weight(1f).testTag("course_restart")) {
+                        Text(stringResource(R.string.course_restart), maxLines = 1)
                     }
                 }
                 CourseActionButton(onClick = { focus.clearFocus(); onLifecycle("delete") },

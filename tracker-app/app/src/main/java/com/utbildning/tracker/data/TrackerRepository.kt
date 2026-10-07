@@ -26,7 +26,7 @@ import kotlinx.coroutines.delay
 enum class RepositoryError {
     EMPTY_NAME, NAME_TOO_LONG, INVALID_COLOR, TOPICS_REQUIRED, INVALID_TOPIC, COURSE_LIMIT,
     COLOR_UNAVAILABLE, COURSE_NOT_FOUND, CATEGORY_NOT_FOUND, CATEGORY_NAME_CONFLICT,
-    COURSE_COMPLETED, CATEGORY_IN_USE, INVALID_SCHEDULE, SCHEDULE_EXISTS, SESSION_NOT_FOUND, INVALID_SESSION_DATE,
+    COURSE_COMPLETED, COURSE_NOT_COMPLETED, CATEGORY_IN_USE, INVALID_SCHEDULE, SCHEDULE_EXISTS, SESSION_NOT_FOUND, INVALID_SESSION_DATE,
 }
 
 class RepositoryException(val error: RepositoryError) : IllegalArgumentException(error.name)
@@ -160,6 +160,7 @@ class TrackerRepository(
         return true
     }
     suspend fun completeCourse(courseId: String) = operations.completeCourse(courseId)
+    suspend fun restartCourse(courseId: String) = operations.restartCourse(courseId)
     suspend fun pauseCourse(courseId: String) = operations.pauseCourse(courseId)
     suspend fun disableSchedule(courseId: String) = operations.disableSchedule(courseId)
     suspend fun deleteCourse(courseId: String) = operations.deleteCourse(courseId)

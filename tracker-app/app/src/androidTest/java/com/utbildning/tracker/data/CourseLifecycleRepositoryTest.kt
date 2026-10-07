@@ -1,6 +1,7 @@
 package com.utbildning.tracker.data
 
 import android.content.Context
+import android.database.sqlite.SQLiteException
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -186,5 +187,88 @@ class CourseLifecycleRepositoryTest {
         assertTrue(dao.getTopics(scheduled.id).single().isCompleted)
         assertTrue(dao.getCourse(free.id)!!.isCompleted)
         assertTrue(dao.getTopics(free.id).isEmpty())
+    }
+
+    @Test fun restartCompletedCourseResetsOnlyItsProgressAndHistoryAndUsesFirstFreeColor() = runBlocking {
+        val category = CategoryEntity("category", "Programming")
+        dao.insertCategory(category)
+        val completed = CourseEntity("completed", "C from scratch", null, 1, 2, category.id,
+            isCompleted = true, isPaused = false, completedAt = 2)
+        dao.insertCourse(completed)
+        val topics = listOf(
+            TopicEntity("topic-2", completed.id, 1, "Pointers", isCompleted = true, completionDate = 20),
+            TopicEntity("topic-1", completed.id, 0, "Basics", isCompleted = true, completionDate = null),
+        )
+        topics.forEach { dao.insertTopic(it) }
+        dao.insertSchedule(ScheduleEntity(completed.id, 10, generatedThrough = 30))
+        dao.insertScheduleRule(ScheduleRuleEntity(completed.id, 1, 600))
+        dao.insertSession(SessionEntity("old", completed.id, 20, 600, completed.name, null, 1, 2,
+            result = SessionResult.DONE))
+        repo.createCourse("Uses color zero", 0)
+        val other = repo.createCourse("Other", 3, topics = listOf("Keep"))
+        val otherBefore = repo.getCourseDetails(other.id)
+
+        clock = 500
+        repo.restartCourse(completed.id)
+
+        assertEquals(completed.copy(colorId = 1, isCompleted = false, completedAt = null, updatedAt = clock),
+            dao.getCourse(completed.id))
+        assertEquals(listOf("topic-1", "topic-2"), dao.getTopics(completed.id).map { it.id })
+        assertTrue(dao.getTopics(completed.id).all { !it.isCompleted && it.completionDate == null })
+        assertNull(dao.getSchedule(completed.id))
+        assertTrue(dao.getScheduleRules(completed.id).isEmpty())
+        assertTrue(dao.getSessions(completed.id).isEmpty())
+        assertEquals(otherBefore, repo.getCourseDetails(other.id))
+        assertEquals(listOf(1, 2, 4, 5, 6, 7, 8, 9), repo.availableColors(completed.id))
+    }
+
+    @Test fun restartIsUnavailableAtLimitAndLeavesCompletedCourseUntouched() = runBlocking {
+        val completed = CourseEntity("completed", "Archived", null, 1, 2,
+            isCompleted = true, completedAt = 2)
+        dao.insertCourse(completed)
+        val topic = TopicEntity("topic", completed.id, 0, "Keep", isCompleted = true, completionDate = 10)
+        dao.insertTopic(topic)
+        dao.insertSession(SessionEntity("old", completed.id, 10, 600, completed.name, null, 1, 1,
+            result = SessionResult.DONE))
+        (0..9).forEach { repo.createCourse("Active $it", it) }
+
+        try {
+            repo.restartCourse(completed.id)
+            fail("Expected unfinished-course limit")
+        } catch (failure: RepositoryException) {
+            assertEquals(RepositoryError.COURSE_LIMIT, failure.error)
+        }
+
+        assertEquals(completed, dao.getCourse(completed.id))
+        assertEquals(topic, dao.getTopic(topic.id))
+        assertEquals(listOf("old"), dao.getSessions(completed.id).map { it.id })
+    }
+
+    @Test fun failureAfterDestructiveRestartStepsRollsBackEverything() = runBlocking {
+        val completed = CourseEntity("completed", "Atomic", null, 1, 2,
+            isCompleted = true, completedAt = 2)
+        dao.insertCourse(completed)
+        val topic = TopicEntity("topic", completed.id, 0, "Keep", isCompleted = true, completionDate = 10)
+        dao.insertTopic(topic)
+        val schedule = ScheduleEntity(completed.id, 10, generatedThrough = 30)
+        val rule = ScheduleRuleEntity(completed.id, 1, 600)
+        val session = SessionEntity("old", completed.id, 10, 600, completed.name, null, 1, 1,
+            result = SessionResult.DONE)
+        dao.insertSchedule(schedule)
+        dao.insertScheduleRule(rule)
+        dao.insertSession(session)
+        db.openHelper.writableDatabase.execSQL(
+            "CREATE TRIGGER fail_restart BEFORE UPDATE ON courses WHEN OLD.isCompleted = 1 AND NEW.isCompleted = 0 BEGIN SELECT RAISE(ABORT, 'injected restart failure'); END")
+
+        try {
+            repo.restartCourse(completed.id)
+            fail("Expected injected restart failure")
+        } catch (_: SQLiteException) { }
+
+        assertEquals(completed, dao.getCourse(completed.id))
+        assertEquals(topic, dao.getTopic(topic.id))
+        assertEquals(schedule, dao.getSchedule(completed.id))
+        assertEquals(listOf(rule), dao.getScheduleRules(completed.id))
+        assertEquals(session.copy(courseCompleted = true), dao.getSession(session.id))
     }
 }

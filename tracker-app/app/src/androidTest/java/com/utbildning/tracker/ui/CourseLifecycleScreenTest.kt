@@ -149,7 +149,80 @@ class CourseLifecycleScreenTest {
         compose.runOnIdle { modelJob = ViewModelProvider(owner)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
         compose.onNodeWithTag("course_title").performTouchInput { longClick() }
         for (tag in listOf("course_name", "course_category", "color_0", "topics_edit", "course_schedule", "course_complete")) compose.onNodeWithTag(tag).assertDoesNotExist()
+        compose.onNodeWithTag("course_restart").assertIsDisplayed().assertIsEnabled()
         assertNull(runBlocking { dao.getCourse(course.id) }!!.colorId)
+    }
+
+    @Test fun restartWarningCancelConfirmationAndReopenProduceCleanCourse() {
+        val course = seed()
+        runBlocking { repository.completeCourse(course.id) }
+        val completed = runBlocking { repository.getCourseDetails(course.id) }!!
+        showCompleted(course.id)
+
+        click("course_restart")
+        compose.onNodeWithTag("course_restart_warning")
+            .assertTextEquals(ApplicationProvider.getApplicationContext<Context>().getString(com.utbildning.tracker.R.string.course_confirm_restart))
+        clickDialog("course_action_cancel")
+        assertEquals(completed, runBlocking { repository.getCourseDetails(course.id) })
+        assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
+
+        click("course_restart")
+        clickDialog("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(course.id) }?.isCompleted == false }
+        val restarted = runBlocking { repository.getCourseDetails(course.id) }!!
+        assertEquals(completed.course.name, restarted.course.name)
+        assertEquals(completed.course.categoryId, restarted.course.categoryId)
+        assertEquals(0, restarted.course.colorId)
+        assertFalse(restarted.course.isPaused)
+        assertNull(restarted.course.completedAt)
+        assertEquals(completed.topics.map { it.id to it.title }, restarted.topics.map { it.id to it.title })
+        assertEquals(completed.topics.map { it.position }, restarted.topics.map { it.position })
+        assertTrue(restarted.topics.all { !it.isCompleted && it.completionDate == null })
+        assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
+        assertNull(runBlocking { dao.getSchedule(course.id) })
+        waitFor { compose.onAllNodesWithTag("course_restart").fetchSemanticsNodes().isEmpty() }
+        compose.onNodeWithTag("course_restart").assertDoesNotExist()
+        compose.onNodeWithTag("course_schedule").assertExists()
+
+        click("course_cancel")
+        click("course_row_${course.id}")
+        compose.onNodeWithTag("course_restart").assertDoesNotExist()
+        compose.onNodeWithTag("course_schedule").assertExists()
+        assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
+        assertTrue(runBlocking { dao.getTopics(course.id) }.all { !it.isCompleted })
+    }
+
+    @Test fun restartIsDisabledWhenEveryColorIsOccupied() {
+        val course = seed()
+        runBlocking {
+            repository.completeCourse(course.id)
+            (0..9).forEach { repository.createCourse("Active $it", it) }
+        }
+        showCompleted(course.id)
+        compose.onNodeWithTag("course_restart").assertIsDisplayed().assertIsNotEnabled()
+        assertTrue(runBlocking { dao.getCourse(course.id) }!!.isCompleted)
+        assertEquals(listOf("past"), runBlocking { dao.getSessions(course.id) }.map { it.id })
+    }
+
+    @Test fun restartStorageFailureKeepsDialogAndAllDataForRetry() {
+        val course = seed()
+        runBlocking { repository.completeCourse(course.id) }
+        val before = runBlocking { repository.getCourseDetails(course.id) }!!
+        val sessionsBefore = runBlocking { dao.getSessions(course.id) }
+        showCompleted(course.id)
+        database.openHelper.writableDatabase.execSQL(
+            "CREATE TRIGGER fail_restart_ui BEFORE UPDATE ON courses WHEN OLD.isCompleted = 1 AND NEW.isCompleted = 0 BEGIN SELECT RAISE(ABORT, 'injected restart failure'); END")
+
+        click("course_restart")
+        clickDialog("course_action_confirm")
+        waitFor { compose.onAllNodesWithTag("course_action_error").fetchSemanticsNodes().isNotEmpty() }
+        assertEquals(before, runBlocking { repository.getCourseDetails(course.id) })
+        assertEquals(sessionsBefore, runBlocking { dao.getSessions(course.id) })
+
+        database.openHelper.writableDatabase.execSQL("DROP TRIGGER fail_restart_ui")
+        clickDialog("course_action_confirm")
+        waitFor { runBlocking { dao.getCourse(course.id) }?.isCompleted == false }
+        assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
     }
 
     private fun seed(): CourseEntity = runBlocking {
@@ -165,6 +238,14 @@ class CourseLifecycleScreenTest {
         compose.setContent { CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
             TrackerTheme { CoursesScreen({}, repository) }
         } }
+        click("course_row_$id")
+        compose.runOnIdle { modelJob = ViewModelProvider(owner)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
+    }
+    private fun showCompleted(id: String) {
+        compose.setContent { CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
+            TrackerTheme { CoursesScreen({}, repository) }
+        } }
+        click("courses_filter")
         click("course_row_$id")
         compose.runOnIdle { modelJob = ViewModelProvider(owner)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
     }

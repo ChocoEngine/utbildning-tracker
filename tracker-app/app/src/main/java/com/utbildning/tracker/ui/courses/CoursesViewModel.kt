@@ -56,11 +56,15 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     fun change(transform: (CourseDraft) -> CourseDraft) { draft = draft?.let(transform); error = null }
     fun open(id: String? = null) = work {
         detailJob?.cancel()
-        colors = repository.availableColors(id)
-        if (id == null) { draft = CourseDraft(color = colors.firstOrNull() ?: 0); creating = true }
+        if (id == null) {
+            colors = repository.availableColors()
+            draft = CourseDraft(color = colors.firstOrNull() ?: 0)
+            creating = true
+        }
         else {
             creating = false
             val details = repository.getCourseDetails(id) ?: return@work
+            colors = if (details.course.isCompleted) repository.availableColors() else repository.availableColors(id)
             val topics = repository.getTopicEditorTopics(id)
             draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
                 details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics), paused = details.course.isPaused, rules = repository.getScheduleRules(id), endsOn = repository.getSchedule(id)?.endsOn)
@@ -82,7 +86,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
         draft = CourseDraft(id, details.course.name, details.category?.name.orEmpty(), details.course.colorId,
             details.hasSchedule, details.course.isCompleted, topics, TopicListEditor.editableText(topics),
             paused = details.course.isPaused, rules = repository.getScheduleRules(id), endsOn = repository.getSchedule(id)?.endsOn)
-        colors = repository.availableColors(id)
+        colors = if (details.course.isCompleted) repository.availableColors() else repository.availableColors(id)
         observeDetails(id)
     }
     private fun observeDetails(id: String) {
@@ -93,6 +97,7 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
                 val latest = current.topics.map { topic -> EditableTopic(topic.id, topic.title, topic.position, topic.isCompleted) }
                 val rules = repository.getScheduleRules(id)
                 val endsOn = repository.getSchedule(id)?.endsOn
+                colors = if (current.course.isCompleted) repository.availableColors() else repository.availableColors(id)
                 draft?.takeIf { it.id == id }?.let { old ->
                     draft = old.copy(rules = rules, endsOn = endsOn, hasSchedule = current.hasSchedule, topics = latest, completed = current.course.isCompleted, paused = current.course.isPaused,
                         text = TopicListEditor.editableText(latest))
@@ -170,6 +175,12 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
             "complete" -> {
                 draft?.let { flush(it) }
                 repository.completeCourse(id)
+                attach(id)
+                lifecycleAction = null
+                return@work
+            }
+            "restart" -> {
+                repository.restartCourse(id)
                 attach(id)
                 lifecycleAction = null
                 return@work

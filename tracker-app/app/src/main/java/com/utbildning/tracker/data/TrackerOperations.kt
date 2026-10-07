@@ -214,6 +214,30 @@ internal class TrackerOperations(
         }
     }
 
+    /** Restarts a completed course without retaining progress, calendar rows or a schedule. */
+    suspend fun restartCourse(courseId: String) = database.withTransaction {
+        val course = course(courseId)
+        if (!course.isCompleted) fail(RepositoryError.COURSE_NOT_COMPLETED)
+        val occupied = dao.getUnfinishedCourses().mapNotNull { it.colorId }.toSet()
+        val color = (0 until 10).firstOrNull { it !in occupied }
+            ?: fail(RepositoryError.COURSE_LIMIT)
+        val timestamp = now()
+        dao.getTopics(courseId).forEach {
+            if (it.isCompleted || it.completionDate != null) {
+                dao.updateTopic(it.copy(isCompleted = false, completionDate = null))
+            }
+        }
+        dao.deleteSessions(courseId)
+        dao.deleteSchedule(courseId)
+        dao.updateCourse(course.copy(
+            colorId = color,
+            isCompleted = false,
+            isPaused = false,
+            completedAt = null,
+            updatedAt = timestamp,
+        ))
+    }
+
     suspend fun pauseCourse(courseId: String) = database.withTransaction {
         synchronize()
         val course = course(courseId)
