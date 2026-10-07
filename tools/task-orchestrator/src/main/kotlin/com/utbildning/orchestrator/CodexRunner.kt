@@ -23,31 +23,12 @@ class CodexRunner(
         val schemaFile = Files.createTempFile(stateDir, "result-schema-", ".json")
         Files.writeString(schemaFile, OUTPUT_SCHEMA, StandardCharsets.UTF_8)
 
-        val command = buildList {
-            add(options.codexCommand)
-            add("exec")
-            add("--sandbox")
-            add("workspace-write")
-            if (options.approveForMe) add("--approve-for-me")
-            add("--json")
-            add("-C")
-            add(options.projectRoot.toString())
-            if (options.managedWorktree) add("--worktree")
-            options.model?.let {
-                add("--model")
-                add(it)
-            }
-            add("--output-schema")
-            add(schemaFile.toString())
-            add("--output-last-message")
-            add(resultFile.toString())
-            add(buildPrompt(task))
-        }
+        val command = buildCommand(task, schemaFile, resultFile)
 
         var threadId: String? = null
         val process = ProcessBuilder(command)
             .directory(options.projectRoot.toFile())
-            .redirectError(ProcessBuilder.Redirect.INHERIT)
+            .redirectErrorStream(true)
             .start()
 
         Files.newBufferedWriter(logFile, StandardCharsets.UTF_8).use { writer ->
@@ -55,6 +36,7 @@ class CodexRunner(
                 lines.forEach { line ->
                     writer.appendLine(line)
                     writer.flush()
+                    if (!line.trimStart().startsWith('{')) System.err.println(line)
                     threadRegex.find(line)?.groupValues?.get(1)?.let { threadId = it }
                 }
             }
@@ -74,6 +56,31 @@ class CodexRunner(
             logFile = logFile,
         )
     }
+
+    internal fun buildCommand(task: PlanTask, schemaFile: Path, resultFile: Path): List<String> =
+        buildList {
+            add(options.codexCommand)
+            add("exec")
+            if (options.approveForMe) {
+                add("--approve-for-me")
+            } else {
+                add("--sandbox")
+                add("workspace-write")
+            }
+            add("--json")
+            add("-C")
+            add(options.projectRoot.toString())
+            if (options.managedWorktree) add("--worktree")
+            options.model?.let {
+                add("--model")
+                add(it)
+            }
+            add("--output-schema")
+            add(schemaFile.toString())
+            add("--output-last-message")
+            add(resultFile.toString())
+            add(buildPrompt(task))
+        }
 
     private fun buildPrompt(task: PlanTask): String = """
         Work on exactly one task: ${task.id} — ${task.title}
