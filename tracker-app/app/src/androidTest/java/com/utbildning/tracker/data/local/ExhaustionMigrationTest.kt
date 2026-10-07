@@ -56,7 +56,7 @@ class ExhaustionMigrationTest {
             val db = TrackerDatabase.open(context, name)
             try {
                 val dao = db.trackerDao()
-                assertEquals(7, db.openHelper.readableDatabase.version)
+                assertEquals(8, db.openHelper.readableDatabase.version)
                 db.openHelper.readableDatabase.query("PRAGMA table_info(courses)").use { cursor ->
                     while (cursor.moveToNext()) assertNotEquals("exhaustedAt", cursor.getString(cursor.getColumnIndexOrThrow("name")))
                 }

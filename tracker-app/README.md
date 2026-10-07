@@ -7,11 +7,12 @@ namespace и applicationId — `com.utbildning.tracker`.
 и локальные напоминания. Выбор RU/EN сохраняет системный LocaleManager.
 Все Compose-экраны имеют автономные Preview в теме приложения.
 
-Room хранит данные локально; схема v7 и миграции 1→2→3→4→5→6→7 находятся в `app/schemas/`
+Room хранит данные локально; схема v8 и миграции 1→2→3→4→5→6→7→8 находятся в `app/schemas/`
 и `data/local/TrackerDatabase.kt`. Контракты: [данные](../docs/DATA_CONTRACT.md),
 [расписание](../docs/SCHEDULE_CONTRACT.md), [уведомления](../docs/NOTIFICATIONS.md).
-Текущий статус проверок и оставшиеся ограничения — [отчёт](../docs/checks/mvp/README.md)
-и [чек-лист MVP](../MVP_PLAN.md). Android 13 отложен пользователем.
+Текущий статус функционального расширения и оставшиеся ограничения —
+[отчёт F17](../docs/checks/f17/README.md) и [план](../FEATURE_PLAN.md).
+Android 13 отложен пользователем; приёмка S25 остаётся отдельной.
 
 ## Закреплённые инструменты
 

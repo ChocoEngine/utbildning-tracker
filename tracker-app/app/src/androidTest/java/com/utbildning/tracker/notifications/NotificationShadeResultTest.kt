@@ -31,7 +31,7 @@ class NotificationShadeResultTest {
     private fun shell(command: String) {
         ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(command)).use { it.readBytes() }
     }
-    private suspend fun clickSystemText(text: String) {
+    private suspend fun clickSystemText(text: String, reopenNotifications: Boolean = false) {
         val deadline = System.currentTimeMillis() + 10_000
         fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
             if (node == null) return null
@@ -50,6 +50,7 @@ class NotificationShadeResultTest {
             }
             automation.rootInActiveWindow?.findAccessibilityNodeInfosByViewId("android:id/expand_button")
                 ?.firstOrNull()?.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+            if (reopenNotifications) shell("cmd statusbar expand-notifications")
             delay(100)
         }
         fun tree(node: AccessibilityNodeInfo?): String = if (node == null) "null" else
@@ -82,9 +83,18 @@ class NotificationShadeResultTest {
                 while (context.resources.configuration.locales[0].language != language && System.currentTimeMillis() < deadline) delay(50)
                 assertEquals(language, context.resources.configuration.locales[0].language)
                 for (yesterday in listOf(false, true)) for (withTopics in listOf(false, true)) {
-                    val course = repo.createCourse("Shade $language $yesterday $withTopics", repo.availableColors().first(),
-                        topics = if (withTopics) listOf("First topic", "Second topic") else emptyList())
-                    try {
+                    for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
+                        // Opening the topic picker recreates app resources. Force a configuration
+                        // transition before the next independent matrix case instead of relying on
+                        // a previously cached application Context.
+                        locales.applicationLocales = LocaleList.getEmptyLocaleList()
+                        locales.applicationLocales = LocaleList.forLanguageTags(language)
+                        val resourceDeadline = System.currentTimeMillis() + 10_000
+                        while (context.resources.configuration.locales[0].language != language &&
+                            System.currentTimeMillis() < resourceDeadline) delay(50)
+                        val course = repo.createCourse("Shade $language $yesterday $withTopics $result", repo.availableColors().first(),
+                            topics = if (withTopics) listOf("First topic", "Second topic") else emptyList())
+                        try {
                         val now = ZonedDateTime.now().withSecond(0).withNano(0)
                         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(now.plusDays(2).dayOfWeek.value, 720)))
                         val date = now.toLocalDate().minusDays(if (yesterday) 1 else 0)
@@ -97,20 +107,16 @@ class NotificationShadeResultTest {
                         dao.insertSession(SessionEntity(id, course.id, date.toEpochDay(), start,
                             course.name, course.colorId, created, created, endMinute = minute))
                         val topics = dao.getTopics(course.id)
-                        for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
                             assertEquals("App language before $result ${course.name}", language, locales.applicationLocales[0].language)
                             assertEquals("Resource language before $result ${course.name}", language, context.resources.configuration.locales[0].language)
-                            // A fresh ID is required because delivery deduplication is durable.
-                            val actionId = if (result == SessionResult.DONE) id else "shade_${UUID.randomUUID()}"
-                            if (actionId != id) dao.insertSession(SessionEntity(actionId, course.id, date.toEpochDay(), start + if (yesterday) 1 else -1,
-                                course.name, course.colorId, created, created, endMinute = minute))
+                            val actionId = id
                             ReminderScheduler.receive(context, now.toInstant().toEpochMilli(), repo)
                             assertTrue(manager.activeNotifications.any { it.tag == actionId })
                             shell("cmd statusbar expand-notifications")
                             automation.waitForIdle(300, 5_000)
                             clickSystemText(if (language == "ru") {
                                 if (result == SessionResult.DONE) "Пройдено" else "Пропущено"
-                            } else if (result == SessionResult.DONE) "Done" else "Skipped")
+                            } else if (result == SessionResult.DONE) "Done" else "Skipped", reopenNotifications = true)
                             shell("cmd statusbar collapse")
                             if (result == SessionResult.DONE && withTopics) {
                                 assertEquals(SessionResult.PENDING, dao.getSession(actionId)!!.result)
@@ -125,17 +131,18 @@ class NotificationShadeResultTest {
                             while (manager.activeNotifications.any { it.tag == actionId } && System.currentTimeMillis() < cancelDeadline) delay(50)
                             assertTrue(manager.activeNotifications.none { it.tag == actionId })
                             if (withTopics) {
-                                assertTrue(dao.getTopics(course.id)[0].isCompleted)
-                                assertEquals(date.toEpochDay(), dao.getTopics(course.id)[0].completionDate)
+                                assertEquals(result == SessionResult.DONE, dao.getTopics(course.id)[0].isCompleted)
+                                assertEquals(if (result == SessionResult.DONE) date.toEpochDay() else null,
+                                    dao.getTopics(course.id)[0].completionDate)
                                 assertFalse(dao.getTopics(course.id)[1].isCompleted)
                             }
-                        }
-                    } finally {
-                        repo.deleteCourse(course.id)
-                        instrumentation.runOnMainSync {
-                            listOf(Stage.RESUMED, Stage.PAUSED, Stage.STOPPED).flatMap {
-                                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(it)
-                            }.distinct().forEach { it.finishAndRemoveTask() }
+                        } finally {
+                            repo.deleteCourse(course.id)
+                            instrumentation.runOnMainSync {
+                                listOf(Stage.RESUMED, Stage.PAUSED, Stage.STOPPED).flatMap {
+                                    ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(it)
+                                }.distinct().forEach { it.finishAndRemoveTask() }
+                            }
                         }
                     }
                 }
