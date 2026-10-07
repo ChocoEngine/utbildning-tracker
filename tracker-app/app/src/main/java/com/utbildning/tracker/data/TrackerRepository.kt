@@ -2,6 +2,7 @@ package com.utbildning.tracker.data
 
 import androidx.room.withTransaction
 import com.utbildning.tracker.data.local.CategoryEntity
+import com.utbildning.tracker.data.local.BackupStateEntity
 import com.utbildning.tracker.data.local.CourseEntity
 import com.utbildning.tracker.data.local.TopicEntity
 import com.utbildning.tracker.data.local.TrackerDatabase
@@ -52,6 +53,30 @@ class TrackerRepository(
             sessions = dao.getAllSessions().map { it.record() },
         )
     }
+
+    /**
+     * Replaces every portable row and records the restore identity in the same transaction.
+     * A failure at any point therefore leaves either the complete old snapshot or the complete
+     * new one, never a mixture.
+     */
+    suspend fun replaceBackup(snapshot: BackupSnapshot, backupId: String) = database.withTransaction {
+        dao.deleteAllSessions()
+        dao.deleteAllScheduleRules()
+        dao.deleteAllSchedules()
+        dao.deleteAllTopics()
+        dao.deleteAllCourses()
+        dao.deleteAllCategories()
+
+        snapshot.categories.forEach { dao.insertCategory(it) }
+        snapshot.courses.forEach { dao.insertCourse(it) }
+        snapshot.topics.forEach { dao.insertTopic(it) }
+        snapshot.schedules.forEach { dao.insertSchedule(it) }
+        snapshot.scheduleRules.forEach { dao.insertScheduleRule(it) }
+        snapshot.sessions.forEach { dao.insertSessionRecord(it) }
+        dao.putBackupState(BackupStateEntity(value = backupId))
+    }
+
+    suspend fun committedBackupId(): String? = dao.getCommittedBackupId()
 
     suspend fun saveInitialSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long? = null) =
         operations.saveInitialSchedule(courseId, rules, endsOn)

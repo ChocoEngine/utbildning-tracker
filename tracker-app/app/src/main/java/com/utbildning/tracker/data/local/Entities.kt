@@ -8,6 +8,18 @@ import androidx.room.PrimaryKey
 
 enum class SessionResult { PENDING, DONE, SKIPPED }
 
+/** Internal restore marker. It is deliberately excluded from portable backup data. */
+@Entity(tableName = "backup_state")
+data class BackupStateEntity(
+    @PrimaryKey val key: String = "committed_backup_id",
+    val value: String,
+) {
+    init {
+        require(key == "committed_backup_id")
+        validateId(value)
+    }
+}
+
 private fun validateId(id: String) = require(id.isNotBlank())
 private fun validateTime(start: Int, end: Int?) {
     require(start in 0..1439)

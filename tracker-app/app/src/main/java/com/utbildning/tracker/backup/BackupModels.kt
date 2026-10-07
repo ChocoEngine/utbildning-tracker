@@ -24,9 +24,10 @@ data class BackupMetadata(
     val versionName: String,
 )
 
-data class ValidatedBackup(
+class ValidatedBackup internal constructor(
     val metadata: BackupMetadata,
     val snapshot: BackupSnapshot,
+    val payloadSha256: String,
 )
 
 class BackupFormatException(message: String, cause: Throwable? = null) : Exception(message, cause)

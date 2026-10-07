@@ -30,6 +30,9 @@ interface TrackerDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSessionRecord(session: SessionRecord)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun putBackupState(state: BackupStateEntity)
+
     suspend fun insertSession(session: SessionEntity) = insertSessionRecord(session.record())
 
     @Update(onConflict = OnConflictStrategy.ABORT)
@@ -87,6 +90,27 @@ interface TrackerDao {
 
     @Query("SELECT * FROM schedules ORDER BY courseId")
     suspend fun getAllSchedules(): List<ScheduleEntity>
+
+    @Query("SELECT value FROM backup_state WHERE `key` = 'committed_backup_id'")
+    suspend fun getCommittedBackupId(): String?
+
+    @Query("DELETE FROM sessions")
+    suspend fun deleteAllSessions()
+
+    @Query("DELETE FROM schedule_rules")
+    suspend fun deleteAllScheduleRules()
+
+    @Query("DELETE FROM schedules")
+    suspend fun deleteAllSchedules()
+
+    @Query("DELETE FROM topics")
+    suspend fun deleteAllTopics()
+
+    @Query("DELETE FROM courses")
+    suspend fun deleteAllCourses()
+
+    @Query("DELETE FROM categories")
+    suspend fun deleteAllCategories()
 
 
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")

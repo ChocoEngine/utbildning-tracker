@@ -14,6 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import com.utbildning.tracker.notifications.ReminderScheduler
+import com.utbildning.tracker.backup.BackupImporter
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private var pendingSessionId by mutableStateOf<String?>(null)
@@ -22,7 +27,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) accept(intent)
         val repository = AppContainer.repository(applicationContext)
-        ReminderScheduler.startObserving(applicationContext, repository)
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                BackupImporter(applicationContext, repository).recoverInterruptedRestore()
+            } catch (cancel: CancellationException) {
+                throw cancel
+            } catch (error: Exception) {
+                android.util.Log.e("Tracker", "Restore recovery failed", error)
+            }
+            ReminderScheduler.startObserving(applicationContext, repository)
+        }
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),

@@ -57,12 +57,13 @@ class TrackerMigrationTest {
             try {
                 val dao = migrated.trackerDao()
                 val db = migrated.openHelper.readableDatabase
-                assertEquals(7, db.version)
+                assertEquals(8, db.version)
                 val migratedTables = mutableMapOf<String, Int>()
                 db.query("SELECT name, rootpage FROM sqlite_master WHERE type = 'table'").use { cursor ->
                     while (cursor.moveToNext()) migratedTables[cursor.getString(0)] = cursor.getInt(1)
                 }
-                assertEquals(tables, migratedTables)
+                assertEquals(tables, migratedTables.filterKeys { it != "backup_state" })
+                assertTrue(migratedTables.containsKey("backup_state"))
                 assertEquals(listOf(
                     CourseEntity("c", "Course", 3, 11, 22, "cat", isPaused = true),
                     CourseEntity("completed", "Finished", null, 33, 44, isCompleted = true, completedAt = 44),
@@ -81,19 +82,22 @@ class TrackerMigrationTest {
                 db.query("PRAGMA foreign_key_check").use { assertEquals(0, it.count) }
             } finally { migrated.close() }
             val reopened = TrackerDatabase.open(context, name)
-            try { assertEquals(7, reopened.openHelper.readableDatabase.version) } finally { reopened.close() }
+            try { assertEquals(8, reopened.openHelper.readableDatabase.version) } finally { reopened.close() }
         } finally { context.deleteDatabase(name) }
     }
 
-    @Test fun freshVersionSevenDatabaseHasSessionIndices() {
+    @Test fun freshVersionEightDatabaseHasSessionIndicesAndRestoreState() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val name = "fresh-7-test.db"
         context.deleteDatabase(name)
         try {
             val db = TrackerDatabase.open(context, name)
             try {
-                assertEquals(7, db.openHelper.readableDatabase.version)
+                assertEquals(8, db.openHelper.readableDatabase.version)
                 assertSessionIndices(db.openHelper.readableDatabase)
+                db.openHelper.readableDatabase.query("SELECT name FROM sqlite_master WHERE name = 'backup_state'").use {
+                    assertEquals(1, it.count)
+                }
             } finally { db.close() }
         } finally { context.deleteDatabase(name) }
     }
@@ -229,7 +233,7 @@ class TrackerMigrationTest {
                 dao.updateCourse(dao.getCourse("c")!!.copy(name = "New", colorId = 4))
                 assertEquals("New", dao.getSession("s")!!.courseName)
                 assertEquals(4, dao.getSession("s")!!.colorId)
-                assertEquals(7, migrated.openHelper.readableDatabase.version)
+                assertEquals(8, migrated.openHelper.readableDatabase.version)
             } finally { migrated.close() }
         } finally { context.deleteDatabase(name) }
     }

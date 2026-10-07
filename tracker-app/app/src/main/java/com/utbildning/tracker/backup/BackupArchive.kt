@@ -64,7 +64,7 @@ object BackupArchive {
                 if (manifest.payloadBytes != dataBytes.size.toLong() || manifest.payloadHash != sha256(dataBytes)) {
                     throw BackupFormatException("Backup payload checksum does not match")
                 }
-                return ValidatedBackup(manifest.metadata, parseData(dataBytes))
+                return ValidatedBackup(manifest.metadata, parseData(dataBytes), manifest.payloadHash)
             }
         } catch (error: BackupFormatException) {
             throw error
@@ -86,7 +86,7 @@ object BackupArchive {
         json.name("backupId").value(metadata.backupId)
         json.name("createdAt").value(metadata.createdAt)
         json.name("app").beginObject().name("versionCode").value(metadata.versionCode).name("versionName").value(metadata.versionName).endObject()
-        json.name("databaseSchemaVersion").value(7)
+        json.name("databaseSchemaVersion").value(8)
         json.name("requiredFeatures").beginArray().endArray()
         json.name("payload").beginObject()
             .name("path").value("data.json")

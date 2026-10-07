@@ -1,6 +1,7 @@
 package com.utbildning.tracker.notifications
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.*
 import android.content.pm.PackageManager
@@ -58,6 +59,19 @@ object ReminderScheduler {
 
     suspend fun reconcile(context: Context, repository: TrackerRepository) = mutex.withLock {
         reconcileLocked(context, repository)
+    }
+
+    /** Clears device-local reminder state, then rebuilds it from the restored database. */
+    @SuppressLint("UseKtx") // commit() must finish before restored reminders can be scheduled.
+    suspend fun resetAfterRestore(context: Context, repository: TrackerRepository) = mutex.withLock {
+        val app = context.applicationContext
+        app.getSystemService(AlarmManager::class.java).cancel(pending(app))
+        app.getSystemService(NotificationManager::class.java).cancelAll()
+        check(app.getSharedPreferences("reminders", Context.MODE_PRIVATE).edit().remove("delivered").commit()) {
+            "Cannot clear reminder delivery state"
+        }
+        repository.synchronize()
+        reconcileLocked(app, repository)
     }
 
     private suspend fun reconcileLocked(context: Context, repository: TrackerRepository) {
