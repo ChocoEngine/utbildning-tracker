@@ -27,3 +27,4 @@ google-services.json
 *.tmp
 *.swp
 *~
+.codex-orchestrator/
