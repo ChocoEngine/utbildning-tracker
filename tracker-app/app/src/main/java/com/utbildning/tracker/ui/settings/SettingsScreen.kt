@@ -20,6 +20,7 @@ import com.utbildning.tracker.backup.BackupImporter
 import com.utbildning.tracker.backup.ValidatedBackup
 import com.utbildning.tracker.data.TrackerRepository
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -55,6 +58,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.utbildning.tracker.R
 import com.utbildning.tracker.backup.AutomaticBackupManager
 import com.utbildning.tracker.backup.AutomaticBackupStatus
+import com.utbildning.tracker.maintenance.RetentionPolicy
+import com.utbildning.tracker.maintenance.RetentionPreferences
 import com.utbildning.tracker.ui.AppHeader
 import com.utbildning.tracker.ui.theme.TrackerTheme
 import java.time.LocalDate
@@ -87,6 +92,8 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
     val exporter = remember(context, repository) { repository?.let { BackupExporter(context.applicationContext, it) } }
     val importer = remember(context, repository) { repository?.let { BackupImporter(context.applicationContext, it) } }
     val automaticBackupManager = remember(context) { AutomaticBackupManager(context.applicationContext) }
+    val retentionPreferences = remember(context) { RetentionPreferences(context.applicationContext) }
+    var retentionPolicy by remember { mutableStateOf(retentionPreferences.policy()) }
     var automaticBackupStatus by remember { mutableStateOf(automaticBackupManager.status()) }
     var enableAfterDestination by remember { mutableStateOf(false) }
     var backupState by remember { mutableStateOf(BackupUiState.Idle) }
@@ -218,6 +225,11 @@ internal fun SettingsScreen(repository: TrackerRepository?, onBack: () -> Unit, 
             enableAfterDestination = automaticBackupStatus.enabled
             chooseAutomaticDestination.launch(automaticBackupStatus.destination)
         },
+        retentionPolicy = retentionPolicy,
+        onRetentionPolicyChanged = {
+            retentionPreferences.save(it)
+            retentionPolicy = it
+        },
     )
 }
 
@@ -239,7 +251,11 @@ internal fun SettingsContent(
     automaticBackup: AutomaticBackupStatus = AutomaticBackupStatus(false, null, null, null),
     onAutomaticBackupChanged: (Boolean) -> Unit = {},
     onChooseAutomaticDestination: () -> Unit = {},
+    retentionPolicy: RetentionPolicy = RetentionPolicy.Default,
+    onRetentionPolicyChanged: (RetentionPolicy) -> Unit = {},
 ) {
+    var editingRetention by remember { mutableStateOf(false) }
+    var proposedRetention by remember { mutableStateOf<RetentionPolicy?>(null) }
     Column(Modifier.fillMaxSize().testTag("screen_settings")) {
         AppHeader(title = stringResource(R.string.settings), onBack = onBack)
         Column(
@@ -274,6 +290,22 @@ internal fun SettingsContent(
                     )
                 }
             }
+            Text(
+                stringResource(R.string.retention_title),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 24.dp),
+            )
+            Text(stringResource(R.string.retention_explanation), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                if (retentionPolicy.days == null) stringResource(R.string.retention_disabled)
+                else stringResource(R.string.retention_current, retentionPolicy.days),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp).testTag("retention_current"),
+            )
+            TextButton(
+                onClick = { editingRetention = true },
+                modifier = Modifier.testTag("retention_configure"),
+            ) { Text(stringResource(R.string.retention_configure)) }
             Text(stringResource(R.string.reminder_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 24.dp))
             Text(stringResource(if (remindersAllowed) R.string.reminder_active else R.string.reminder_explanation), style = MaterialTheme.typography.bodyMedium)
             TextButton(onClick = onNotifications, modifier = Modifier.testTag("reminder_permission")) { Text(stringResource(R.string.reminder_enable)) }
@@ -370,6 +402,107 @@ internal fun SettingsContent(
             },
         )
     }
+    if (editingRetention) {
+        RetentionDialog(
+            current = retentionPolicy,
+            onDismiss = { editingRetention = false },
+            onSave = { candidate ->
+                editingRetention = false
+                val oldDays = retentionPolicy.days
+                if (candidate.days != null && (oldDays == null || candidate.days < oldDays)) {
+                    proposedRetention = candidate
+                } else {
+                    onRetentionPolicyChanged(candidate)
+                }
+            },
+        )
+    }
+    proposedRetention?.let { candidate ->
+        AlertDialog(
+            onDismissRequest = { proposedRetention = null },
+            title = { Text(stringResource(R.string.retention_warning_title)) },
+            text = { Text(stringResource(R.string.retention_warning_message, candidate.days!!)) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onRetentionPolicyChanged(candidate)
+                        proposedRetention = null
+                    },
+                    modifier = Modifier.testTag("retention_warning_confirm"),
+                ) { Text(stringResource(R.string.retention_warning_confirm)) }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { proposedRetention = null },
+                    modifier = Modifier.testTag("retention_warning_cancel"),
+                ) { Text(stringResource(R.string.retention_cancel)) }
+            },
+        )
+    }
+}
+
+@Composable
+private fun RetentionDialog(
+    current: RetentionPolicy,
+    onDismiss: () -> Unit,
+    onSave: (RetentionPolicy) -> Unit,
+) {
+    var enabled by remember(current) { mutableStateOf(current.days != null) }
+    var input by remember(current) { mutableStateOf((current.days ?: RetentionPolicy.DEFAULT_DAYS).toString()) }
+    val parsed = input.toIntOrNull()
+    val valid = !enabled || parsed in RetentionPolicy.MIN_DAYS..RetentionPolicy.MAX_DAYS
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.retention_dialog_title)) },
+        text = {
+            Column {
+                Text(stringResource(R.string.retention_dialog_explanation))
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(stringResource(R.string.retention_cleanup_enabled), modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = enabled,
+                        onCheckedChange = { enabled = it },
+                        modifier = Modifier.testTag("retention_enabled"),
+                    )
+                }
+                if (enabled) {
+                    OutlinedTextField(
+                        value = input,
+                        onValueChange = { input = it },
+                        label = { Text(stringResource(R.string.retention_days_label)) },
+                        supportingText = {
+                            Text(stringResource(if (valid) R.string.retention_range else R.string.retention_invalid))
+                        },
+                        isError = !valid,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("retention_days"),
+                    )
+                } else {
+                    Text(
+                        stringResource(R.string.retention_disabled_explanation),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { onSave(if (enabled) RetentionPolicy(parsed!!) else RetentionPolicy.Disabled) },
+                enabled = valid,
+                modifier = Modifier.testTag("retention_save"),
+            ) { Text(stringResource(R.string.retention_save)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, modifier = Modifier.testTag("retention_cancel")) {
+                Text(stringResource(R.string.retention_cancel))
+            }
+        },
+    )
 }
 
 @Composable

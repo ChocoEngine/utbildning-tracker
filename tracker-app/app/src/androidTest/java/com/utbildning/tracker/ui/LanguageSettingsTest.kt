@@ -164,7 +164,7 @@ class LanguageSettingsTest {
                 compose.onNodeWithText(localized.getString(R.string.guide_title)).assertIsDisplayed()
                 for (paragraph in listOf(R.string.guide_courses, R.string.guide_categories,
                     R.string.guide_topics, R.string.guide_gestures, R.string.guide_schedule,
-                    R.string.guide_results, R.string.guide_calendar, R.string.guide_lifecycle,
+                    R.string.guide_results, R.string.guide_calendar, R.string.guide_retention, R.string.guide_lifecycle,
                     R.string.guide_notifications)) {
                     compose.onNodeWithText(localized.getString(paragraph)).performScrollTo().assertIsDisplayed()
                 }
@@ -209,7 +209,7 @@ class LanguageSettingsTest {
     }
 
     private fun selectLanguage(language: String, title: String) {
-        compose.onNodeWithTag("language_$language").performClick()
+        compose.onNodeWithTag("language_$language").performScrollTo().performClick()
         compose.waitUntil(10_000) {
             localeManager.applicationLocales.toLanguageTags() == language
         }
