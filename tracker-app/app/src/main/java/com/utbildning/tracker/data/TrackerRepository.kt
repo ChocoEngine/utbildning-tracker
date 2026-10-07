@@ -10,6 +10,7 @@ import com.utbildning.tracker.domain.TopicListEditor
 import com.utbildning.tracker.domain.WeeklyRule
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.data.local.SessionEntity
+import com.utbildning.tracker.backup.BackupSnapshot
 import com.utbildning.tracker.domain.SessionTime
 import java.time.LocalDate
 import java.time.ZoneId
@@ -38,6 +39,19 @@ class TrackerRepository(
 ) {
     private val dao = database.trackerDao()
     private val operations = TrackerOperations(database, now, newId, zone)
+
+    /** All portable rows are read under one Room transaction. */
+    suspend fun createBackupSnapshot(languageTag: String): BackupSnapshot = database.withTransaction {
+        BackupSnapshot(
+            languageTag = languageTag,
+            categories = dao.getCategories(),
+            courses = dao.getCourses(),
+            topics = dao.getAllTopics(),
+            schedules = dao.getAllSchedules(),
+            scheduleRules = dao.getAllScheduleRules(),
+            sessions = dao.getAllSessions().map { it.record() },
+        )
+    }
 
     suspend fun saveInitialSchedule(courseId: String, rules: List<WeeklyRule>, endsOn: Long? = null) =
         operations.saveInitialSchedule(courseId, rules, endsOn)

@@ -82,6 +82,12 @@ interface TrackerDao {
     @Query("SELECT * FROM schedule_rules ORDER BY courseId, dayOfWeek")
     suspend fun getAllScheduleRules(): List<ScheduleRuleEntity>
 
+    @Query("SELECT * FROM topics ORDER BY id")
+    suspend fun getAllTopics(): List<TopicEntity>
+
+    @Query("SELECT * FROM schedules ORDER BY courseId")
+    suspend fun getAllSchedules(): List<ScheduleEntity>
+
 
     @Query("SELECT s.*, c.name AS courseName, c.colorId AS colorId, c.isCompleted AS courseCompleted FROM sessions s JOIN courses c ON c.id = s.courseId ORDER BY s.date, s.startMinute, s.id")
     suspend fun getAllSessions(): List<SessionEntity>

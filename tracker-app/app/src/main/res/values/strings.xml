@@ -10,4 +10,11 @@
     <string name="language_system">System default</string>
     <string name="language_russian">Русский</string>
     <string name="language_english">English</string>
+    <string name="backup_title">Backup</string>
+    <string name="backup_explanation">Save all courses, topics, history, schedules, and language in one file.</string>
+    <string name="backup_create">Create backup</string>
+    <string name="backup_creating">Creating backup…</string>
+    <string name="backup_success">Backup created</string>
+    <string name="backup_cancelled">Backup creation canceled</string>
+    <string name="backup_error">Could not create backup</string>
 </resources>

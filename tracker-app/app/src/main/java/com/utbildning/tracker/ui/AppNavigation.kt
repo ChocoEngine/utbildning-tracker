@@ -182,7 +182,7 @@ fun AppNavigation(
                 else AppHeader(stringResource(R.string.nav_courses), onSettings = openSettings)
             }
             composable("settings") {
-                SettingsScreen(onBack = { navController.popBackStack() }, onGuide = { navController.navigate("guide") })
+                SettingsScreen(repository, onBack = { navController.popBackStack() }, onGuide = { navController.navigate("guide") })
             }
             composable("schedule/{courseId}") { entry ->
                 if (repository != null) ScheduleScreen(repository, entry.arguments!!.getString("courseId")!!) { navController.popBackStack() }
