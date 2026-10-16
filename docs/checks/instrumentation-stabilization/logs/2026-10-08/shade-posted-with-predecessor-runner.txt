@@ -1,0 +1,9 @@
+
+com.utbildning.tracker.notifications.LocalizedReminderDeliveryTest:.
+com.utbildning.tracker.notifications.NotificationShadeResultTest:.
+
+Time: 139.757
+
+OK (2 tests)
+
+

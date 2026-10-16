@@ -1,12 +1,13 @@
 <div id="ink-calendar" aria-label="Макет календаря занятий">
  <div class="ic-phone">
-  <header><div class="ic-eyebrow">МОЙ УЧЕБНЫЙ РИТМ</div><h1>Календарь</h1><p>Маленькие шаги оставляют след.</p></header>
-  <div class="ic-month"><h2>Сентябрь <span>2026</span></h2><button type="button" class="ic-today" aria-label="Выбрать сегодня, 26 сентября">Сегодня</button></div>
+  <header><h1>Календарь</h1></header>
+<main class="ic-scroll">  <div class="ic-month"><h2>Сентябрь <span>2026</span></h2><button type="button" class="ic-today" aria-label="Выбрать сегодня, 26 сентября">Сегодня</button></div>
   <div class="ic-week" aria-hidden="true"><span>пн</span><span>вт</span><span>ср</span><span>чт</span><span>пт</span><span>сб</span><span>вс</span></div>
   <div class="ic-grid" role="group" aria-label="Дни сентября 2026"></div>
   <div class="ic-courses"><span><b class="ic-dot ic-c0"></b>Лекции</span><span><b class="ic-dot ic-c1"></b>Практика</span><span><b class="ic-dot ic-c2"></b>Шведский</span></div>
   <div class="ic-key"><span><b class="ic-sample ic-done"></b>Пройдено</span><span><b class="ic-sample ic-pending"></b>В плане</span><span><b class="ic-sample ic-skip">×</b>Пропущено</span></div>
   <section class="ic-detail" aria-live="polite"><div class="ic-detail-heading"><h2></h2><span></span></div><div class="ic-lessons"></div></section>
+</main>
   <footer aria-label="Разделы приложения"><span><i data-lucide="sun" aria-hidden="true"></i>Сегодня</span><span class="ic-nav-active" aria-current="page"><i data-lucide="calendar-days" aria-hidden="true"></i>Календарь</span><span><i data-lucide="book-open" aria-hidden="true"></i>Курсы</span></footer>
  </div>
 </div>
@@ -50,6 +51,8 @@
 #ink-calendar footer span{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 15px}
 #ink-calendar footer .ic-nav-active{background:var(--ic-panel);border-radius:16px;color:var(--ic-ink)}
 #ink-calendar footer svg{width:19px;height:19px}
+#ink-calendar .ic-phone{height:calc(100dvh - 24px);display:flex;flex-direction:column}#ink-calendar .ic-day{height:44px}#ink-calendar .ic-day svg{height:22px}#ink-calendar header{padding:12px 20px}#ink-calendar .ic-month{padding-bottom:8px}#ink-calendar .ic-courses,#ink-calendar .ic-key{margin:8px;padding-bottom:4px}#ink-calendar .ic-detail{padding:12px 20px}#ink-calendar .ic-status{display:block}#ink-calendar footer{padding:8px}
+#ink-calendar .ic-scroll{flex:1;min-height:0;overflow:auto}#ink-calendar .ic-day{height:52px}#ink-calendar .ic-courses{display:none}#ink-calendar header,#ink-calendar footer{flex-shrink:0}
 </style>
 <script>
 (()=>{
@@ -64,6 +67,7 @@ for(let d=1;d<=30;d++){
  if(ids.length)data[d]=ids.map((c,i)=>({c,status:d<26?((d===10&&i===0)||(d===17&&i===1)?'skip':'done'):'pending'}));
 }
 data[24]=[{c:0,status:'done'},{c:1,status:'skip'},{c:2,status:'done'}];
+data[25]=[{c:0,status:'pending'},{c:1,status:'skip'}];
 data[26]=[{c:0,status:'done'},{c:1,status:'pending'},{c:2,status:'pending'}];
 let selected=26;
 const design={shape:'ink',direction:'diagonal',pale:23};
@@ -80,18 +84,18 @@ function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({m
 function render(){
  const grid=root.querySelector('.ic-grid');
  grid.innerHTML='<span aria-hidden="true"></span>'+Array.from({length:30},(_,i)=>{
-  const d=i+1,items=data[d]||[];
+  const d=i+1,items=(data[d]||[]).map(x=>({...x,status:d<26&&x.status==='pending'?'skip':x.status}));
   const desc=items.map(x=>courses[x.c].name+': '+({done:'пройдено',skip:'пропущено',pending:'в плане'}[x.status])).join(', ');
   return '<button type="button" class="ic-day '+(d===26?'ic-is-today':'')+'" data-day="'+d+'" aria-pressed="'+(selected===d)+'" aria-label="'+d+' сентября. '+(desc||'Нет занятий')+'"><span class="ic-date">'+d+'</span>'+(items.length?mark(items,d):'')+'</button>';
  }).join('');
  root.querySelector('.ic-detail-heading h2').textContent=selected+' сентября';
  root.querySelector('.ic-detail-heading>span').textContent=selected===26?'Сегодня':new Date(2026,8,selected).toLocaleDateString('ru-RU',{weekday:'long'});
- const items=data[selected]||[];
- root.querySelector('.ic-lessons').innerHTML=items.length?items.map((x,i)=>'<div class="ic-lesson"><div class="ic-bar" style="background:'+courses[x.c].color+'"></div><div><div class="ic-sub">'+courses[x.c].time+' · '+courses[x.c].name+'</div><strong>'+courses[x.c].topic+'</strong></div><button type="button" class="ic-status" data-result="'+i+'" aria-label="Изменить результат: '+courses[x.c].name+'">'+({done:'✓ Пройдено',skip:'× Пропущено',pending:'В плане'}[x.status])+'</button></div>').join(''):'<div class="ic-empty">На этот день занятий нет</div>';
+ const items=(data[selected]||[]).map(x=>({...x,status:selected<26&&x.status==='pending'?'skip':x.status}));
+ root.querySelector('.ic-lessons').innerHTML=items.length?items.map((x,i)=>'<div class="ic-lesson"><div class="ic-bar" style="background:'+courses[x.c].color+'"></div><div><div class="ic-sub">'+courses[x.c].time+'</div><strong>'+courses[x.c].name+'</strong></div><span class="ic-status">'+({done:'✓ Пройдено',skip:'× Пропущено',pending:'В плане'}[x.status])+'</span></div>').join(''):'<div class="ic-empty">На этот день занятий нет</div>';
 }
 function restore(s){if(!s)return;const m=s.modelContent;if(m?.selectedDay>=1&&m.selectedDay<=30)selected=m.selectedDay;if(m?.design)Object.assign(design,m.design);if(s.privateContent?.data)Object.assign(data,s.privateContent.data);}
 restore(window.openai?.widgetState);render();
-root.addEventListener('click',e=>{const day=e.target.closest('[data-day]'),result=e.target.closest('[data-result]');if(day){selected=Number(day.dataset.day);render();save();}else if(result){const x=data[selected][Number(result.dataset.result)];x.status={pending:'done',done:'skip',skip:'pending'}[x.status];render();save();}else if(e.target.closest('.ic-today')){selected=26;render();save();}});
+root.addEventListener('click',e=>{const day=e.target.closest('[data-day]'),result=e.target.closest('[data-result]');if(day){selected=Number(day.dataset.day);render();save();}else if(e.target.closest('.ic-today')){selected=26;render();save();}});
 window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
 if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();save();}});t.addSelect(design,'shape',{label:'Форма пятнышка',options:[{label:'Клякса',value:'ink'},{label:'Мягкий овал',value:'round'}]});t.addSelect(design,'direction',{label:'Полосы',options:[{label:'Диагональные',value:'diagonal'},{label:'Вертикальные',value:'vertical'}]});t.addSlider(design,'pale',{label:'Яркость запланированных',min:15,max:40,unit:'%'});}
 })();

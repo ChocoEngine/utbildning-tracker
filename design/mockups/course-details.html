@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Course Details Source</title>
+<title>Course Details</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Course Details Source" data-srcdoc="&lt;!doctype html&gt;
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Course Details" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Course Details Source&lt;/title&gt;
+&lt;title&gt;Course Details&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(
@@ -94,7 +94,7 @@
     --color-ring-primary,
     light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
   );
-  --font-size-base: var(--font-text-md-size, 14px);
+  --font-size-base: var(--font-text-md-size, 16px);
   --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
   --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
   --green: light-dark(rgb(0 162 64), rgb(64 201 119));
@@ -109,7 +109,10 @@
   --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
 
   /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
   --font-mono:
     ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
     monospace;
@@ -119,18 +122,18 @@
   --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
   --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
   --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
   --icon-size: 16px;
   --line-height-normal: calc(var(--font-size-normal) * 1.5);
   --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
   --line-height-small: calc(var(--font-size-small) + 4px);
   --corner-shape: round;
-  --radius: var(--border-radius-lg, 10px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-2xl: calc(var(--radius) * 2);
   --radius-full: 9999px;
   --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
   --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
@@ -180,9 +183,10 @@ html &gt; body {
   color: var(--foreground);
   background: transparent !important;
   font-family: var(--font-sans) !important;
-  font-size: var(--font-size-normal);
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
 }
 
 .cursor-interaction {
@@ -192,9 +196,9 @@ html &gt; body {
 a {
   color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
   cursor: var(--cursor-interaction, pointer);
-  font-weight: var(--font-weight-medium, 500);
   text-decoration: none;
   text-underline-offset: 2px;
+  font-weight: inherit;
 }
 
 a:is(:hover, :focus-visible) {
@@ -212,32 +216,51 @@ h6,
 p {
   margin-block: 0;
 }
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
+p,
+h1,
+h2,
 h3,
 h4,
 h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
 }
 
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 b,
 strong,
 th {
-  font-weight: var(--font-weight-medium);
+  font-weight: 600;
 }
 
 code:not(pre code) {
@@ -253,6 +276,12 @@ code:not(pre code) {
   box-decoration-break: clone;
   word-break: break-word;
 }
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
 
 .table-responsive {
   width: 100%;
@@ -262,10 +291,14 @@ code:not(pre code) {
 
 .table {
   width: 100%;
-  border-collapse: collapse;
   color: var(--foreground);
   font: inherit;
   text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
 }
 
 .table :is(th, td) {
@@ -275,6 +308,10 @@ code:not(pre code) {
   border-bottom: 1px solid var(--border);
   text-align: start;
   vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
 }
 
 .table-responsive &gt; .table :is(th, td) {
@@ -289,17 +326,21 @@ code:not(pre code) {
   font-weight: 600;
 }
 
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
 }
 
 .table tbody tr:last-child :is(th, td) {
   border-bottom: 0;
 }
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
 
 .table.table-sm :is(th, td) {
-  padding-block: 6px;
+  padding-block: 8px;
 }
 
 .table.table-sm :is(th, td):not(:last-child) {
@@ -376,19 +417,29 @@ code:not(pre code) {
     var(--tooltip-available-height, calc(100vh - 10px)),
     calc(100vh - 10px)
   );
-  padding: 4px 8px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
   overflow-wrap: break-word;
   white-space: normal;
   pointer-events: none;
   user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
 }
 
 .viz-grid {
@@ -453,16 +504,21 @@ hr {
 }
 
 .viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
 }
 
 small,
-.text-small,
-.viz-badge {
+.text-small {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
 }
@@ -516,13 +572,22 @@ small,
   font: inherit;
 }
 
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
 .btn,
 .nav-link {
   appearance: button;
   display: inline-flex;
   inline-size: fit-content;
   max-inline-size: 100%;
-  min-height: 28px;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -530,16 +595,31 @@ small,
   padding: 0 8px;
   -webkit-app-region: no-drag;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
   cursor: var(--cursor-interaction, pointer);
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
 }
 
 .btn:is(.btn-block, .viz-tile) {
@@ -557,16 +637,22 @@ a.btn {
   text-decoration: none;
 }
 
-.btn:not(:disabled):hover,
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
 .nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 .btn-primary {
-  border-color: transparent;
+  border-color: var(--border);
   color: var(--primary-foreground);
   background: var(--foreground);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-primary .text-muted {
@@ -575,7 +661,7 @@ a.btn {
 
 .btn-primary:not(:disabled):hover {
   background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-ghost {
@@ -585,8 +671,11 @@ a.btn {
 }
 
 .btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .nav-pills .nav-link {
@@ -665,20 +754,22 @@ a.btn {
   user-select: none;
 }
 
+/* Keep authored mockup button styles out of the shared carousel chrome. */
 .viz-carousel-controls button,
 .viz-carousel-picker &gt; summary {
-  display: flex;
+  display: flex !important;
+  height: auto !important;
   min-height: 30px;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
   gap: 4px;
-  padding: 0 6px;
+  padding: 0 6px !important;
   -webkit-app-region: no-drag;
-  border: 0;
-  border-radius: 14px;
-  color: inherit;
-  background: transparent;
-  font: inherit;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -690,12 +781,12 @@ a.btn {
 
 .viz-carousel-controls &gt; button {
   --icon-size: 16px;
-  width: 30px;
-  padding: 0;
+  width: 30px !important;
+  padding: 0 !important;
 }
 
 .viz-carousel-picker &gt; summary {
-  padding-inline: 12px;
+  padding-inline: 12px !important;
 }
 
 .viz-carousel-controls .viz-carousel-caret {
@@ -777,11 +868,12 @@ a.btn {
 }
 
 .viz-carousel-options &gt; button {
-  width: 100%;
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
   min-height: 28px;
-  justify-content: flex-start;
-  padding: 4px 8px;
-  font-size: var(--font-size-small);
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
   text-align: start;
   white-space: normal;
   overflow-wrap: anywhere;
@@ -789,7 +881,7 @@ a.btn {
 
 .viz-carousel-options &gt; [aria-current=&quot;true&quot;],
 .viz-carousel-options &gt; button:hover {
-  background: var(--viz-carousel-hover);
+  background: var(--viz-carousel-hover) !important;
 }
 
 .btn:disabled,
@@ -812,14 +904,42 @@ a.btn {
 .form-control {
   display: block;
   width: 100%;
-  min-height: 28px;
   padding: 0 8px;
   outline: none;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
-  background: var(--secondary);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
 }
 
 .form-control::placeholder {
@@ -827,14 +947,12 @@ a.btn {
 }
 
 .form-control[type=&quot;file&quot;] {
-  padding: 0;
   overflow: hidden;
   cursor: var(--cursor-interaction, pointer);
+  padding: 0;
 }
 
 .form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
   padding: 0 8px;
   border: 0;
   border-right: 1px solid var(--input);
@@ -842,6 +960,9 @@ a.btn {
   background: var(--secondary);
   cursor: inherit;
   font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
 }
 
 .form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
@@ -850,7 +971,7 @@ a.btn {
 
 .form-control-color[type=&quot;color&quot;] {
   width: 40px;
-  height: 28px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
   padding: 3px;
   cursor: var(--cursor-interaction, pointer);
 }
@@ -867,58 +988,89 @@ a.btn {
 
 textarea.form-control {
   height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
   resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
 }
 
 .form-control:focus-visible {
   border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
 }
 
 .form-control:disabled,
 .form-select:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
 }
 
 .form-select {
   appearance: none;
   display: block;
   width: 100%;
-  min-height: 28px;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   margin: 0;
-  padding: 0 32px 0 8px;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
   outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
   background-color: var(--secondary);
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
   background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
   background-repeat: no-repeat;
-  background-size: 4px 4px;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
   cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
 }
 
 .form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
 }
 
 .form-check {
   display: flex;
-  min-height: 20px;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   align-items: center;
   gap: 6px;
 }
@@ -940,11 +1092,15 @@ textarea.form-control {
 }
 
 .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background-color: var(--secondary);
+  corner-shape: round;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 .form-check:not(.form-switch)
@@ -952,9 +1108,10 @@ textarea.form-control {
   background-color: var(--card);
 }
 
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
 }
 
 .form-check:not(.form-switch)
@@ -965,24 +1122,48 @@ textarea.form-control {
   background: var(--primary-foreground);
   content: &quot;&quot;;
   mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
 }
 
 .form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
   border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
 }
 
 .form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
 }
 
 .form-check:not(.form-switch) .form-check-input:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
 }
 
 .form-check:not(.form-switch) .form-check-input:disabled {
@@ -992,6 +1173,12 @@ textarea.form-control {
 
 .form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
   cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
 }
 
 .form-switch .form-check-input:disabled,
@@ -1025,15 +1212,16 @@ textarea.form-control {
   box-sizing: border-box;
   border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
   box-shadow: var(--shadow-sm);
   content: &quot;&quot;;
   transform: translate(2px, -50%);
   transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
 }
 
 .form-switch .form-check-input:checked {
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .form-switch .form-check-input:checked::before {
@@ -1042,49 +1230,54 @@ textarea.form-control {
 
 .form-switch .form-check-input:focus-visible {
   box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
 }
 
 .form-range {
   appearance: none;
   display: block;
   width: 100%;
-  height: 28px;
   flex: 1;
   margin: 0;
   padding: 0;
-  outline: none;
   border: 0;
   accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
 }
 
 .form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
   height: 20px;
-  margin-top: 4px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
 }
 
 .form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-moz-range-thumb {
@@ -1092,17 +1285,19 @@ textarea.form-control {
   height: 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
 .form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
 }
 
 .form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
+  opacity: 1;
+  cursor: default;
 }
 
 .btn:not(.btn-primary, .viz-tile):is(
@@ -1110,9 +1305,9 @@ textarea.form-control {
   [aria-selected=&quot;true&quot;],
   .is-selected
 ) {
-  border-color: var(--primary);
+  border-color: transparent;
   color: var(--primary-foreground);
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
@@ -1121,10 +1316,56 @@ textarea.form-control {
 }
 
 .btn:focus-visible,
-.nav-link:focus-visible,
-.viz-carousel-controls :is(button, summary):focus-visible {
-  outline: 2px solid var(--ring);
+.nav-link:focus-visible {
   outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
 }
 
 @media (pointer: coarse) {
@@ -1146,7 +1387,28 @@ textarea.form-control {
   /* Keep small-screen WebKit from zooming when a text field receives focus. */
   .form-control,
   .form-select {
-    font-size: max(16px, var(--font-size-normal));
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
   }
 
   .form-control[type=&quot;file&quot;]::file-selector-button {
@@ -1200,18 +1462,6 @@ textarea.form-control {
   .form-range {
     height: 44px;
     touch-action: pan-y;
-  }
-
-  .form-range::-webkit-slider-runnable-track {
-    height: 44px;
-  }
-
-  .form-range::-moz-range-track {
-    height: 44px;
-  }
-
-  .form-range::-webkit-slider-thumb {
-    margin-top: 12px;
   }
 }
 
@@ -1536,16 +1786,16 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;header&gt;
       &lt;div class=&quot;heading&quot;&gt;&lt;button class=&quot;icon back&quot; aria-label=&quot;Назад&quot;&gt;←&lt;/button&gt;&lt;h1&gt;Лекции и практика&lt;br&gt;по C&lt;/h1&gt;&lt;button class=&quot;icon color-toggle&quot; aria-label=&quot;Цвет курса&quot; aria-expanded=&quot;true&quot;&gt;&lt;span class=&quot;blot&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
       &lt;div class=&quot;status&quot;&gt;&lt;span class=&quot;status-icon&quot; aria-hidden=&quot;true&quot;&gt;Ⅱ&lt;/span&gt;&lt;span class=&quot;status-text&quot;&gt;На паузе&lt;/span&gt;&lt;/div&gt;
-      &lt;div class=&quot;palette&quot; aria-label=&quot;Цвет курса&quot;&gt;&lt;/div&gt;
+      &lt;dialog class=&quot;palette-dialog&quot;&gt;&lt;h2&gt;Цвет курса&lt;/h2&gt;&lt;div class=&quot;palette&quot; aria-label=&quot;Цвет курса&quot;&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;palette-close&quot;&gt;Закрыть&lt;/button&gt;&lt;/dialog&gt;
       &lt;button class=&quot;category-toggle&quot; aria-expanded=&quot;false&quot;&gt;&lt;span class=&quot;muted&quot;&gt;Категория:&lt;/span&gt; &lt;span class=&quot;category-value&quot;&gt;Программирование&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot;&gt;⌄&lt;/span&gt;&lt;/button&gt;
     &lt;/header&gt;
+    &lt;button class=&quot;schedule&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span&gt;Без расписания&lt;/span&gt;&lt;/button&gt;
     &lt;section class=&quot;topics&quot;&gt;
       &lt;div class=&quot;topics-heading&quot;&gt;&lt;h2&gt;Темы&lt;/h2&gt;&lt;button class=&quot;icon edit-topics&quot; aria-label=&quot;Редактировать темы&quot;&gt;&lt;i data-lucide=&quot;pencil&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;span class=&quot;count&quot;&gt;2 из 6 тем&lt;/span&gt;&lt;/div&gt;
       &lt;div class=&quot;progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройденные темы&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;6&quot; aria-valuenow=&quot;2&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
       &lt;div class=&quot;topic-list&quot;&gt;&lt;/div&gt;
     &lt;/section&gt;
     &lt;footer&gt;
-      &lt;button class=&quot;schedule&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;span&gt;Без расписания&lt;/span&gt;&lt;/button&gt;
       &lt;div class=&quot;action-label&quot;&gt;Действия с курсом&lt;/div&gt;
       &lt;div class=&quot;actions&quot;&gt;&lt;button class=&quot;course-button complete&quot;&gt;Завершить&lt;/button&gt;&lt;button class=&quot;course-button resume&quot;&gt;Продолжить&lt;/button&gt;&lt;button class=&quot;course-button pause&quot; hidden&gt;Пауза&lt;/button&gt;&lt;button class=&quot;course-button delete&quot;&gt;Удалить&lt;/button&gt;&lt;/div&gt;
     &lt;/footer&gt;
@@ -1567,47 +1817,54 @@ html&gt;body{padding:0}&lt;/style&gt;
 #course-details-v2 .palette{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 12px 8px 30px}#course-details-v2 .swatch{height:44px;width:44px;display:flex;align-items:center;justify-content:center;border-radius:12px}#course-details-v2 .swatch[aria-pressed=true]{background:var(--panel)}
 #course-details-v2 .category-toggle{display:flex;align-items:center;gap:5px;min-height:40px;font-size:14px;text-align:left;margin:6px 0 0 37px;max-width:calc(100% - 37px)}#course-details-v2 .category-value{overflow-wrap:anywhere}#course-details-v2 .category-toggle&gt;span:last-child{margin-left:5px;font-size:22px}#course-details-v2 .muted{color:var(--muted)}
 #course-details-v2 .topics{display:flex;flex-direction:column;flex:1;min-height:0;padding:12px 18px 0}#course-details-v2 .topics-heading{display:flex;align-items:center;gap:5px}#course-details-v2 h2{font-size:20px;font-weight:600;margin:0}#course-details-v2 .count{font-size:13px;color:var(--muted);margin-left:auto}#course-details-v2 svg{width:20px;height:20px;stroke-width:1.8}#course-details-v2 .progress{height:5px;background:color-mix(in srgb,var(--course) 20%,var(--paper));border-radius:6px;overflow:hidden;margin:10px 0 12px;flex-shrink:0}#course-details-v2 .progress&gt;div{height:100%;background:var(--course);width:33.333%;border-radius:6px}
-#course-details-v2 .topic-list{min-height:0;overflow-y:auto;flex:1;overscroll-behavior:contain;scrollbar-width:thin}#course-details-v2 .topic{display:grid;grid-template-columns:27px minmax(0,1fr) 24px;gap:10px;align-items:center;width:100%;min-height:52px;padding:13px 0;text-align:left;border-bottom:1px solid var(--line);font-size:15px;touch-action:pan-y;user-select:none}#course-details-v2 .topic .number{color:var(--muted);font-size:13px}#course-details-v2 .topic.done{color:#8A8881}#course-details-v2 .check{color:var(--course);font-size:25px}#course-details-v2 .topic-title{overflow-wrap:anywhere}
+#course-details-v2 .topic-list{min-height:0;overflow-y:auto;flex:1;overscroll-behavior:contain;scrollbar-width:thin}#course-details-v2 .topic{display:grid;grid-template-columns:24px minmax(0,1fr) 24px;gap:8px;align-items:center;width:100%;min-height:52px;padding:13px 0;text-align:left;border-bottom:1px solid var(--line);font-size:15px;touch-action:pan-y;user-select:none}#course-details-v2 .topic .number{color:var(--muted);font-size:15px}#course-details-v2 .topic.done{color:#8A8881}#course-details-v2 .check{color:var(--course);font-size:25px}#course-details-v2 .topic-title{overflow-wrap:anywhere}
 #course-details-v2 footer{padding:8px 16px 16px;border-top:1px solid var(--line)}#course-details-v2 .schedule{display:flex;gap:14px;align-items:center;width:100%;text-align:left;min-height:50px;font-size:15px;padding:4px 4px}#course-details-v2 .schedule svg{width:23px;height:23px;flex-shrink:0}#course-details-v2 .schedule span{white-space:pre-line}#course-details-v2 .action-label{font-size:12px;color:var(--muted);margin:16px 2px 9px}#course-details-v2 .actions{display:flex;gap:7px}#course-details-v2 .course-button{background:var(--button-fill);color:var(--button-text);border-radius:var(--button-radius);padding:10px 8px;min-height:40px;font-size:12px;font-weight:500}#course-details-v2 .actions&gt;.course-button{flex:1;min-width:0}
 #course-details-v2 .home-indicator{height:4px;background:#666;border-radius:4px;width:100px;margin:0 auto 9px;flex-shrink:0}#course-details-v2 .away{padding:20px;flex:1}#course-details-v2 .away h2{margin-bottom:20px}#course-details-v2 .course-row{display:block;text-align:left;width:100%;padding:20px 0;border-bottom:1px solid var(--line);margin-bottom:20px}#course-details-v2 .add{width:100%}
 #course-details-v2 dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px;max-width:min(360px,90vw);max-height:85vh;overflow:auto}#course-details-v2 dialog::backdrop{background:#29352e55}#course-details-v2 .dialog-title{font-size:19px;margin-bottom:16px}#course-details-v2 .dialog-content{font-size:14px}#course-details-v2 .dialog-content label{display:block;margin:10px 0}#course-details-v2 input,#course-details-v2 textarea,#course-details-v2 select{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink)}#course-details-v2 textarea{min-height:160px}#course-details-v2 .dialog-actions{display:flex;justify-content:flex-end;gap:18px;align-items:center;margin-top:20px}#course-details-v2 .category-option{display:block;width:100%;text-align:left;padding:12px 4px;border-bottom:1px solid var(--line)}
 @media(max-width:360px){#course-details-v2 header{padding-left:12px;padding-right:12px}#course-details-v2 h1{font-size:21px}#course-details-v2 .category-toggle{font-size:12px}#course-details-v2 .palette{margin-left:20px}#course-details-v2 .actions{gap:5px}}
+#course-details-v2 .phone{height:calc(100dvh - 24px)}#course-details-v2 .schedule{padding:4px 18px;flex-shrink:0}#course-details-v2 .status-text{font-weight:700}#course-details-v2 .palette-dialog .palette{margin:10px 0}#course-details-v2 h1{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#course-details-v2 .actions&gt;.course-button{font-size:11px;padding:8px 4px;white-space:nowrap}
 &lt;/style&gt;
 &lt;script&gt;
 (()=&gt;{
- const root=document.getElementById(&#x27;course-details-v2&#x27;),$=s=&gt;root.querySelector(s),dialog=$(&#x27;dialog&#x27;);
- const colors=[[&#x27;Зелёный&#x27;,&#x27;#7D9D89&#x27;],[&#x27;Сиреневый&#x27;,&#x27;#AA99B9&#x27;],[&#x27;Голубой&#x27;,&#x27;#6388AB&#x27;],[&#x27;Охристый&#x27;,&#x27;#C6A65E&#x27;],[&#x27;Пыльная роза&#x27;,&#x27;#BC858A&#x27;],[&#x27;Барвинковый&#x27;,&#x27;#8B97B4&#x27;],[&#x27;Оливковый&#x27;,&#x27;#9CA279&#x27;],[&#x27;Какао&#x27;,&#x27;#AA9E90&#x27;],[&#x27;Терракотовый&#x27;,&#x27;#BA7F69&#x27;],[&#x27;Бирюзовый&#x27;,&#x27;#4D7270&#x27;]];
+ const root=document.getElementById(&#x27;course-details-v2&#x27;),$=s=&gt;root.querySelector(s),dialog=$(&#x27;dialog:not(.palette-dialog)&#x27;);
+ const colors=[[&#x27;Зелёный&#x27;,&#x27;#78AC80&#x27;],[&#x27;Терракотовый&#x27;,&#x27;#DC9475&#x27;],[&#x27;Сиреневый&#x27;,&#x27;#9D95CC&#x27;],[&#x27;Голубой&#x27;,&#x27;#6B9DCC&#x27;],[&#x27;Охристый&#x27;,&#x27;#C7A558&#x27;],[&#x27;Пыльная роза&#x27;,&#x27;#C28D9A&#x27;],[&#x27;Бирюзовый&#x27;,&#x27;#397F79&#x27;],[&#x27;Барвинковый&#x27;,&#x27;#899AC0&#x27;],[&#x27;Оливковый&#x27;,&#x27;#A4AA73&#x27;],[&#x27;Какао&#x27;,&#x27;#B29885&#x27;]];
  const names=[&#x27;Введение в C&#x27;,&#x27;Переменные и типы&#x27;,&#x27;Условия&#x27;,&#x27;Циклы&#x27;,&#x27;Функции&#x27;,&#x27;Массивы&#x27;];
- const state={name:&#x27;Лекции и практика по C&#x27;,color:0,expanded:true,paused:true,completed:false,deleted:false,away:false,category:&#x27;Программирование&#x27;,schedule:null,topics:names.map((title,i)=&gt;({title,done:i&lt;2}))};
+ const state={name:&#x27;Лекции и практика по C&#x27;,color:0,expanded:false,paused:true,completed:false,deleted:false,away:false,category:&#x27;Программирование&#x27;,schedule:null,topics:names.map((title,i)=&gt;({title,done:i&lt;2}))};
  const esc=s=&gt;String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
  function icons(){globalThis.lucide?.createIcons({attrs:{width:20,height:20}});}
  function render(){
-  root.style.setProperty(&#x27;--course&#x27;,colors[state.color??0][1]);
+  root.style.setProperty(&#x27;--course&#x27;,state.completed?&#x27;#8B918A&#x27;:colors[state.color??0][1]);
   $(&#x27;h1&#x27;).textContent=state.name;$(&#x27;.status&#x27;).hidden=!state.paused&amp;&amp;!state.completed;$(&#x27;.status&#x27;).classList.toggle(&#x27;completed&#x27;,state.completed);$(&#x27;.status-text&#x27;).textContent=state.completed?&#x27;Завершён&#x27;:&#x27;На паузе&#x27;;$(&#x27;.status-icon&#x27;).textContent=state.completed?&#x27;✓&#x27;:&#x27;Ⅱ&#x27;;
   $(&#x27;.color-toggle&#x27;).hidden=state.completed;$(&#x27;.color-toggle&#x27;).setAttribute(&#x27;aria-expanded&#x27;,String(state.expanded));$(&#x27;.palette&#x27;).hidden=state.completed||(!state.expanded&amp;&amp;state.color!==null);
   $(&#x27;.palette&#x27;).innerHTML=colors.map(([name,color],i)=&gt;`&lt;button class=&quot;swatch&quot; aria-label=&quot;${name}&quot; aria-pressed=&quot;${state.color===i}&quot; data-color=&quot;${i}&quot;&gt;&lt;span class=&quot;blot&quot; style=&quot;background:${color}&quot;&gt;&lt;span&gt;${state.color===i?&#x27;✓&#x27;:&#x27;&#x27;}&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;`).join(&#x27;&#x27;);
   $(&#x27;.category-value&#x27;).textContent=state.category||&#x27;Добавить категорию&#x27;;$(&#x27;.category-toggle&#x27;).disabled=state.completed;$(&#x27;.category-toggle&gt;span:last-child&#x27;).hidden=state.completed;
   const done=state.topics.filter(t=&gt;t.done).length,total=state.topics.length;$(&#x27;.count&#x27;).textContent=`${done} из ${total} тем`;$(&#x27;.progress&#x27;).hidden=!total;$(&#x27;.progress&#x27;).setAttribute(&#x27;aria-valuemax&#x27;,total||1);$(&#x27;.progress&#x27;).setAttribute(&#x27;aria-valuenow&#x27;,done);$(&#x27;.progress&gt;div&#x27;).style.width=(total?100*done/total:0)+&#x27;%&#x27;;
   const scroll=$(&#x27;.topic-list&#x27;).scrollTop;$(&#x27;.topic-list&#x27;).innerHTML=state.topics.map((t,i)=&gt;`&lt;button class=&quot;topic ${t.done?&#x27;done&#x27;:&#x27;&#x27;}&quot; data-topic=&quot;${i}&quot; aria-pressed=&quot;${t.done}&quot; aria-label=&quot;${esc(t.title)}. Удерживайте для отметки&quot; ${state.completed?&#x27;disabled&#x27;:&#x27;&#x27;}&gt;&lt;span class=&quot;number&quot;&gt;${i+1}&lt;/span&gt;&lt;span class=&quot;topic-title&quot;&gt;${esc(t.title)}&lt;/span&gt;&lt;span class=&quot;check&quot;&gt;${t.done?&#x27;✓&#x27;:&#x27;&#x27;}&lt;/span&gt;&lt;/button&gt;`).join(&#x27;&#x27;);$(&#x27;.topic-list&#x27;).scrollTop=scroll;
-  $(&#x27;.edit-topics&#x27;).hidden=state.completed;$(&#x27;.schedule&#x27;).hidden=state.completed;$(&#x27;.schedule span&#x27;).textContent=state.schedule?`${state.schedule.days}  ${state.schedule.time}`:&#x27;Без расписания&#x27;;$(&#x27;.complete&#x27;).hidden=state.completed;$(&#x27;.resume&#x27;).hidden=!state.paused||state.completed;$(&#x27;.pause&#x27;).hidden=state.paused||state.completed||!state.schedule;
+  $(&#x27;.edit-topics&#x27;).hidden=state.completed;$(&#x27;.schedule&#x27;).hidden=state.completed||state.paused||state.away;$(&#x27;.schedule span&#x27;).textContent=state.schedule?`${state.schedule.days}  ${state.schedule.time}`:&#x27;Без расписания&#x27;;$(&#x27;.complete&#x27;).hidden=state.completed;$(&#x27;.resume&#x27;).hidden=!state.paused||state.completed;$(&#x27;.pause&#x27;).hidden=state.paused||state.completed;
   for(const selector of [&#x27;header&#x27;,&#x27;.topics&#x27;,&#x27;footer&#x27;])$(selector).hidden=state.away;$(&#x27;.away&#x27;).hidden=!state.away;$(&#x27;.course-row&#x27;).hidden=state.deleted;$(&#x27;.course-row&#x27;).textContent=state.name;icons();
  }
  let apply=null;
  function openDialog(title,content,fn,label=&#x27;Применить&#x27;){ $(&#x27;.dialog-title&#x27;).textContent=title;$(&#x27;.dialog-content&#x27;).innerHTML=content;$(&#x27;.dialog-actions [value=apply]&#x27;).textContent=label;apply=fn;dialog.returnValue=&#x27;&#x27;;dialog.showModal();icons(); }
- dialog.addEventListener(&#x27;close&#x27;,()=&gt;{$(&#x27;.category-toggle&#x27;).setAttribute(&#x27;aria-expanded&#x27;,&#x27;false&#x27;);if(dialog.returnValue===&#x27;apply&#x27;&amp;&amp;apply)apply();apply=null;render();});
- $(&#x27;.color-toggle&#x27;).onclick=()=&gt;{state.expanded=!state.expanded;render();};$(&#x27;.palette&#x27;).onclick=e=&gt;{const b=e.target.closest(&#x27;[data-color]&#x27;);if(!b)return;state.color=Number(b.dataset.color);state.expanded=false;render();};
+ dialog.addEventListener(&#x27;close&#x27;,()=&gt;{$(&#x27;.category-toggle&#x27;).setAttribute(&#x27;aria-expanded&#x27;,&#x27;false&#x27;);if((dialog.returnValue===&#x27;apply&#x27;||[&#x27;Категория&#x27;,&#x27;Название курса&#x27;].includes($(&#x27;.dialog-title&#x27;).textContent))&amp;&amp;apply)apply();apply=null;render();});
+ $(&#x27;.color-toggle&#x27;).onclick=()=&gt;{state.expanded=true;render();$(&#x27;.palette-dialog&#x27;).showModal();};$(&#x27;.palette-close&#x27;).onclick=()=&gt;$(&#x27;.palette-dialog&#x27;).close();$(&#x27;.palette&#x27;).onclick=e=&gt;{const b=e.target.closest(&#x27;[data-color]&#x27;);if(!b)return;state.color=Number(b.dataset.color);state.expanded=false;$(&#x27;.palette-dialog&#x27;).close();render();};
  $(&#x27;.category-toggle&#x27;).onclick=()=&gt;{ $(&#x27;.category-toggle&#x27;).setAttribute(&#x27;aria-expanded&#x27;,&#x27;true&#x27;);openDialog(&#x27;Категория&#x27;,`&lt;input aria-label=&quot;Найти или добавить категорию&quot; placeholder=&quot;Найти или добавить&quot; value=&quot;${esc(state.category)}&quot;&gt;&lt;div class=&quot;category-options&quot;&gt;&lt;/div&gt;`,()=&gt;{state.category=$(&#x27;.dialog-content input&#x27;).value.trim();});const input=$(&#x27;.dialog-content input&#x27;);function options(){const q=input.value.trim().toLocaleLowerCase(&#x27;ru&#x27;);$(&#x27;.category-options&#x27;).innerHTML=[&#x27;Программирование&#x27;,&#x27;Языки&#x27;,&#x27;Рисование&#x27;,&#x27;&#x27;].filter(n=&gt;!q||n.toLocaleLowerCase(&#x27;ru&#x27;).includes(q)||n===&#x27;&#x27;).map(n=&gt;`&lt;button type=&quot;button&quot; class=&quot;category-option&quot; data-category=&quot;${esc(n)}&quot;&gt;${n||&#x27;Без категории&#x27;}&lt;/button&gt;`).join(&#x27;&#x27;);}input.oninput=options;$(&#x27;.category-options&#x27;).onclick=e=&gt;{const b=e.target.closest(&#x27;[data-category]&#x27;);if(b){input.value=b.dataset.category;dialog.close(&#x27;apply&#x27;);}};options();input.select();};
  $(&#x27;.resume&#x27;).onclick=()=&gt;{state.paused=false;render();};
  $(&#x27;.pause&#x27;).onclick=()=&gt;openDialog(&#x27;Приостановить курс?&#x27;,&#x27;Расписание будет удалено. Темы и прогресс сохранятся.&#x27;,()=&gt;{state.paused=true;state.schedule=null;},&#x27;Пауза&#x27;);
  $(&#x27;.complete&#x27;).onclick=()=&gt;openDialog(&#x27;Завершить курс?&#x27;,&#x27;Все темы будут отмечены пройденными. Расписание будет удалено.&#x27;,()=&gt;{state.completed=true;state.paused=false;state.schedule=null;state.color=null;state.topics.forEach(t=&gt;t.done=true);},&#x27;Завершить&#x27;);
  $(&#x27;.delete&#x27;).onclick=()=&gt;openDialog(&#x27;Удалить курс?&#x27;,&#x27;Курс будет удалён только из этого демонстрационного макета.&#x27;,()=&gt;{state.deleted=true;state.away=true;},&#x27;Удалить&#x27;);
  $(&#x27;.back&#x27;).onclick=()=&gt;{state.away=true;render();};$(&#x27;.course-row&#x27;).onclick=()=&gt;{state.away=false;render();};
- $(&#x27;.add&#x27;).onclick=()=&gt;openDialog(&#x27;Добавить курс&#x27;,&#x27;&lt;label&gt;Название&lt;input maxlength=&quot;50&quot; value=&quot;Новый курс&quot;&gt;&lt;/label&gt;&#x27;,()=&gt;{state.name=$(&#x27;.dialog-content input&#x27;).value.trim()||&#x27;Новый курс&#x27;;Object.assign(state,{deleted:false,away:false,completed:false,paused:false,color:null,expanded:true,category:&#x27;&#x27;,schedule:null,topics:[]});},&#x27;Добавить&#x27;);
+ $(&#x27;.add&#x27;).onclick=()=&gt;openDialog(&#x27;Добавить курс&#x27;,&#x27;&lt;label&gt;Название&lt;input value=&quot;Новый курс&quot;&gt;&lt;/label&gt;&lt;label&gt;Категория&lt;input aria-label=&quot;Категория нового курса&quot; placeholder=&quot;Без категории&quot;&gt;&lt;/label&gt;&#x27;,()=&gt;{state.name=$(&#x27;.dialog-content input&#x27;).value.trim()||&#x27;Новый курс&#x27;;Object.assign(state,{deleted:false,away:false,completed:false,paused:false,color:0,expanded:false,category:$(&#x27;.dialog-content input[aria-label]&#x27;).value.trim(),schedule:null,topics:[]});},&#x27;Добавить&#x27;);
  $(&#x27;.schedule&#x27;).onclick=()=&gt;openDialog(&#x27;Расписание&#x27;,`&lt;label&gt;Дни&lt;select aria-label=&quot;Дни занятий&quot;&gt;&lt;option value=&quot;&quot;&gt;Без расписания&lt;/option&gt;&lt;option&gt;Вт, Сб&lt;/option&gt;&lt;option&gt;Пн, Ср, Пт&lt;/option&gt;&lt;option&gt;Ежедневно&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label&gt;Время&lt;input type=&quot;time&quot; value=&quot;${state.schedule?.time||&#x27;19:00&#x27;}&quot;&gt;&lt;/label&gt;`,()=&gt;{const days=$(&#x27;.dialog-content select&#x27;).value;state.schedule=days?{days,time:$(&#x27;.dialog-content input&#x27;).value||&#x27;19:00&#x27;}:null;state.paused=false;});
- $(&#x27;.edit-topics&#x27;).onclick=()=&gt;openDialog(&#x27;Редактировать темы&#x27;,`&lt;label&gt;Непройденные темы&lt;textarea&gt;${esc(state.topics.filter(t=&gt;!t.done).map(t=&gt;t.title).join(&#x27;\n&#x27;))}&lt;/textarea&gt;&lt;/label&gt;`,()=&gt;{const values=$(&#x27;.dialog-content textarea&#x27;).value.split(/\r?\n/).map(s=&gt;s.trim()).filter(Boolean),completed=new Set(state.topics.filter(t=&gt;t.done).map(t=&gt;t.title.toLocaleLowerCase(&#x27;ru&#x27;)));const pending=values.filter(t=&gt;!completed.has(t.toLocaleLowerCase(&#x27;ru&#x27;)));let i=0;state.topics=state.topics.flatMap(t=&gt;t.done?[t]:i&lt;pending.length?[{title:pending[i++],done:false}]:[]);while(i&lt;pending.length)state.topics.push({title:pending[i++],done:false});});
+ $(&#x27;.edit-topics&#x27;).onclick=()=&gt;openDialog(&#x27;Редактировать темы&#x27;,`&lt;label&gt;Непройденные темы&lt;textarea&gt;${esc(state.topics.filter(t=&gt;!t.done).map(t=&gt;t.title).join(&#x27;\n&#x27;))}&lt;/textarea&gt;&lt;/label&gt;`,()=&gt;{const values=$(&#x27;.dialog-content textarea&#x27;).value.split(/\r?\n/).map(s=&gt;Array.from(s.trim()).slice(0,100).join(&#x27;&#x27;)).filter(Boolean),completed=new Set(state.topics.filter(t=&gt;t.done).map(t=&gt;t.title.toLocaleLowerCase(&#x27;ru&#x27;)));const pending=values;let i=0;state.topics=state.topics.flatMap(t=&gt;t.done?[t]:i&lt;pending.length?[{title:pending[i++],done:false}]:[]);while(i&lt;pending.length)state.topics.push({title:pending[i++],done:false});});
+ let nameTimer;const title=$(&#x27;h1&#x27;);title.setAttribute(&#x27;role&#x27;,&#x27;button&#x27;);title.setAttribute(&#x27;aria-label&#x27;,&#x27;Название курса, удерживайте для редактирования&#x27;);title.onpointerdown=e=&gt;{if(!state.completed)nameTimer=setTimeout(()=&gt;openDialog(&#x27;Название курса&#x27;,&#x27;&lt;input aria-label=&quot;Название курса&quot; value=&quot;&#x27;+esc(state.name)+&#x27;&quot;&gt;&#x27;,()=&gt;{const name=$(&#x27;.dialog-content input&#x27;).value.trim();if(name&amp;&amp;Array.from(name).length&lt;=50)state.name=name;}),600);};[&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;,&#x27;pointerleave&#x27;].forEach(type=&gt;title.addEventListener(type,()=&gt;clearTimeout(nameTimer)));
  let hold=null,start=null;const list=$(&#x27;.topic-list&#x27;);const cancel=()=&gt;{clearTimeout(hold);hold=null;};list.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{const b=e.target.closest(&#x27;[data-topic]&#x27;);if(!b||state.completed)return;start=[e.clientX,e.clientY];hold=setTimeout(()=&gt;{const t=state.topics[Number(b.dataset.topic)];t.done=!t.done;render();},550);});list.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(start&amp;&amp;Math.hypot(e.clientX-start[0],e.clientY-start[1])&gt;8)cancel();});[&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;,&#x27;pointerleave&#x27;,&#x27;scroll&#x27;].forEach(type=&gt;list.addEventListener(type,cancel));list.addEventListener(&#x27;keydown&#x27;,e=&gt;{const b=e.target.closest(&#x27;[data-topic]&#x27;);if(b&amp;&amp;!state.completed&amp;&amp;[&#x27;Enter&#x27;,&#x27; &#x27;].includes(e.key)){e.preventDefault();state.topics[Number(b.dataset.topic)].done=!state.topics[Number(b.dataset.topic)].done;render();}});
+ // The standalone sandbox disallows native form submission. Dialog actions stay local.
+document.getElementById(&#x27;course-details-v2&#x27;).addEventListener(&#x27;click&#x27;,event=&gt;{const button=event.target.closest(&#x27;dialog button[value]&#x27;);if(button){event.preventDefault();const title=root.querySelector(&#x27;.dialog-title&#x27;)?.textContent;if(button.value===&#x27;apply&#x27;&amp;&amp;[&#x27;Добавить курс&#x27;,&#x27;Название курса&#x27;].includes(title)){const input=root.querySelector(&#x27;.dialog-content input&#x27;),name=input.value.trim();if(!name||Array.from(name).length&gt;50){let error=root.querySelector(&#x27;.name-error&#x27;);if(!error){error=document.createElement(&#x27;p&#x27;);error.className=&#x27;name-error&#x27;;error.setAttribute(&#x27;role&#x27;,&#x27;alert&#x27;);input.after(error);}error.textContent=!name?&#x27;Введите название курса&#x27;:&#x27;Не более 50 символов&#x27;;return;}}if(button.value===&#x27;apply&#x27;&amp;&amp;title===&#x27;Редактировать темы&#x27;){const input=root.querySelector(&#x27;.dialog-content textarea&#x27;),done=new Set(state.topics.filter(t=&gt;t.done).map(t=&gt;t.title.trim().toLocaleLowerCase(&#x27;ru&#x27;)));const conflicts=input.value.split(/\r?\n/).map(t=&gt;Array.from(t.trim()).slice(0,100).join(&#x27;&#x27;)).some(t=&gt;done.has(t.toLocaleLowerCase(&#x27;ru&#x27;)));if(conflicts){let error=root.querySelector(&#x27;.topic-error&#x27;);if(!error){error=document.createElement(&#x27;p&#x27;);error.className=&#x27;topic-error&#x27;;error.setAttribute(&#x27;role&#x27;,&#x27;alert&#x27;);input.after(error);}error.textContent=&#x27;Список содержит пройденную тему. Исправьте текст.&#x27;;return;}}button.closest(&#x27;dialog&#x27;).close(button.value);}});
  render();
 })();
+
+
 &lt;/script&gt;
 
 &lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
@@ -2041,6 +2298,24 @@ html&gt;body{padding:0}&lt;/style&gt;
       next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
 
       let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
       const choices = panels.map((panel, index) =&gt; {
         const choice = document.createElement(&quot;button&quot;);
         choice.type = &quot;button&quot;;
@@ -2049,6 +2324,16 @@ html&gt;body{padding:0}&lt;/style&gt;
         choice.addEventListener(&quot;click&quot;, () =&gt; {
           select(index);
           summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
         });
         options.appendChild(choice);
         return choice;
@@ -2067,6 +2352,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         count.textContent = `${active + 1} / ${panels.length}`;
         name.textContent = panels[active].dataset.variant;
         picker.open = false;
+        mousePointerId = null;
         if (changed) {
           status.textContent = `${count.textContent}: ${name.textContent}`;
         }
@@ -2081,13 +2367,46 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
           event.preventDefault();
           picker.open = false;
+          mousePointerId = null;
           summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
         }
       });
       const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
         if (!picker.contains(event.target)) {
           picker.open = false;
         }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
       };
       const sizePicker = () =&gt; {
         root.style.setProperty(
@@ -2098,10 +2417,16 @@ html&gt;body{padding:0}&lt;/style&gt;
       picker.addEventListener(&quot;toggle&quot;, sizePicker);
       window.addEventListener(&quot;resize&quot;, sizePicker);
       document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
       window.addEventListener(
         &quot;pagehide&quot;,
         () =&gt; {
           document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
           window.removeEventListener(&quot;resize&quot;, sizePicker);
         },
         { once: true },

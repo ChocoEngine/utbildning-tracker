@@ -11,7 +11,8 @@ Room хранит данные локально; схема v7 и миграци
 и `data/local/TrackerDatabase.kt`. Контракты: [данные](../docs/DATA_CONTRACT.md),
 [расписание](../docs/SCHEDULE_CONTRACT.md), [уведомления](../docs/NOTIFICATIONS.md).
 Текущий статус проверок и оставшиеся ограничения — [отчёт](../docs/checks/mvp/README.md)
-и [чек-лист MVP](../MVP_PLAN.md). Android 13 отложен пользователем.
+и [чек-лист MVP](../MVP_PLAN.md). Android 13/API 33 проверен отдельным полным
+instrumentation-прогоном 186/186 и системными сценариями alarm/reboot/permissions.
 
 ## Закреплённые инструменты
 
@@ -98,7 +99,8 @@ Preview компилируются; рендер в Android Studio отдель�
 Предыдущие контрольные точки: [S02](../docs/checks/s02/README.md),
 [S03](../docs/checks/s03/README.md), [S04](../docs/checks/s04/README.md),
 [S05](../docs/checks/s05/README.md), [S06](../docs/checks/s06/README.md).
-Проверка S01 на Android 13 остаётся отложенной; API 36 её не заменяет.
+S01/S20 на Android 13/API 33 закрыты отдельной проверкой; ночной RTC-сценарий
+и result-кнопка шторки отдельно на API 33 не повторялись.
 
 ## Демо-данные на эмуляторе
 

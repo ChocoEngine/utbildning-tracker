@@ -1,0 +1,23 @@
+{
+  "browser": "154.0.8037.98",
+  "checks": [
+    "courses: only rows scroll; no metrics for course without topics; pause/completed",
+    "courses: cancel creation; create without mode; fields save independently",
+    "editor: separate palette and category; immediate save",
+    "editor: long press name, focus save; short vs long press topic; stable numbering",
+    "editor: topic cancel, conflict, Unicode truncation and apply",
+    "editor: pause stays open; resume without schedule; pause again",
+    "details: separate palette; resume; pause without schedule; apply/cancel topics",
+    "today: yesterday PENDING, two results, toggle selected; topic save",
+    "calendar: day selection and past pending display; no write action",
+    "schedule: add-end cancel/apply, overnight, remove, date-only and disable",
+    "overlaps: all presets, non-blocking save; default end cancel/apply/remove",
+    "session: ordinary topic selection, preserved number, both results and read-only scenes"
+  ],
+  "errors": [],
+  "viewports": [
+    "320x540",
+    "411x914"
+  ],
+  "language": "RU; EN absent"
+}

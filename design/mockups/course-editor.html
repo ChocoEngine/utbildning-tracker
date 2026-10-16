@@ -94,7 +94,7 @@
     --color-ring-primary,
     light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
   );
-  --font-size-base: var(--font-text-md-size, 14px);
+  --font-size-base: var(--font-text-md-size, 16px);
   --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
   --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
   --green: light-dark(rgb(0 162 64), rgb(64 201 119));
@@ -109,7 +109,10 @@
   --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
 
   /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
   --font-mono:
     ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
     monospace;
@@ -119,18 +122,18 @@
   --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
   --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
   --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
   --icon-size: 16px;
   --line-height-normal: calc(var(--font-size-normal) * 1.5);
   --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
   --line-height-small: calc(var(--font-size-small) + 4px);
   --corner-shape: round;
-  --radius: var(--border-radius-lg, 10px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-2xl: calc(var(--radius) * 2);
   --radius-full: 9999px;
   --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
   --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
@@ -180,9 +183,10 @@ html &gt; body {
   color: var(--foreground);
   background: transparent !important;
   font-family: var(--font-sans) !important;
-  font-size: var(--font-size-normal);
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
 }
 
 .cursor-interaction {
@@ -192,9 +196,9 @@ html &gt; body {
 a {
   color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
   cursor: var(--cursor-interaction, pointer);
-  font-weight: var(--font-weight-medium, 500);
   text-decoration: none;
   text-underline-offset: 2px;
+  font-weight: inherit;
 }
 
 a:is(:hover, :focus-visible) {
@@ -212,32 +216,51 @@ h6,
 p {
   margin-block: 0;
 }
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
+p,
+h1,
+h2,
 h3,
 h4,
 h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
 }
 
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 b,
 strong,
 th {
-  font-weight: var(--font-weight-medium);
+  font-weight: 600;
 }
 
 code:not(pre code) {
@@ -253,6 +276,12 @@ code:not(pre code) {
   box-decoration-break: clone;
   word-break: break-word;
 }
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
 
 .table-responsive {
   width: 100%;
@@ -262,10 +291,14 @@ code:not(pre code) {
 
 .table {
   width: 100%;
-  border-collapse: collapse;
   color: var(--foreground);
   font: inherit;
   text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
 }
 
 .table :is(th, td) {
@@ -275,6 +308,10 @@ code:not(pre code) {
   border-bottom: 1px solid var(--border);
   text-align: start;
   vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
 }
 
 .table-responsive &gt; .table :is(th, td) {
@@ -289,17 +326,21 @@ code:not(pre code) {
   font-weight: 600;
 }
 
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
 }
 
 .table tbody tr:last-child :is(th, td) {
   border-bottom: 0;
 }
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
 
 .table.table-sm :is(th, td) {
-  padding-block: 6px;
+  padding-block: 8px;
 }
 
 .table.table-sm :is(th, td):not(:last-child) {
@@ -339,7 +380,18 @@ code:not(pre code) {
   background: var(--card);
 }
 
-#widget &gt; :not(.card, .progress) {
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -365,19 +417,29 @@ code:not(pre code) {
     var(--tooltip-available-height, calc(100vh - 10px)),
     calc(100vh - 10px)
   );
-  padding: 4px 8px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
   overflow-wrap: break-word;
   white-space: normal;
   pointer-events: none;
   user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
 }
 
 .viz-grid {
@@ -442,16 +504,21 @@ hr {
 }
 
 .viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
 }
 
 small,
-.text-small,
-.viz-badge {
+.text-small {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
 }
@@ -505,13 +572,22 @@ small,
   font: inherit;
 }
 
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
 .btn,
 .nav-link {
   appearance: button;
   display: inline-flex;
   inline-size: fit-content;
   max-inline-size: 100%;
-  min-height: 28px;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -519,16 +595,31 @@ small,
   padding: 0 8px;
   -webkit-app-region: no-drag;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
   cursor: var(--cursor-interaction, pointer);
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
 }
 
 .btn:is(.btn-block, .viz-tile) {
@@ -546,16 +637,22 @@ a.btn {
   text-decoration: none;
 }
 
-.btn:not(:disabled):hover,
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
 .nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 .btn-primary {
-  border-color: transparent;
+  border-color: var(--border);
   color: var(--primary-foreground);
   background: var(--foreground);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-primary .text-muted {
@@ -564,7 +661,7 @@ a.btn {
 
 .btn-primary:not(:disabled):hover {
   background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-ghost {
@@ -574,8 +671,11 @@ a.btn {
 }
 
 .btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .nav-pills .nav-link {
@@ -594,6 +694,194 @@ a.btn {
 .nav-pills .nav-link.active {
   color: var(--foreground);
   background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
 }
 
 .btn:disabled,
@@ -616,14 +904,42 @@ a.btn {
 .form-control {
   display: block;
   width: 100%;
-  min-height: 28px;
   padding: 0 8px;
   outline: none;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
-  background: var(--secondary);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
 }
 
 .form-control::placeholder {
@@ -631,14 +947,12 @@ a.btn {
 }
 
 .form-control[type=&quot;file&quot;] {
-  padding: 0;
   overflow: hidden;
   cursor: var(--cursor-interaction, pointer);
+  padding: 0;
 }
 
 .form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
   padding: 0 8px;
   border: 0;
   border-right: 1px solid var(--input);
@@ -646,6 +960,9 @@ a.btn {
   background: var(--secondary);
   cursor: inherit;
   font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
 }
 
 .form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
@@ -654,7 +971,7 @@ a.btn {
 
 .form-control-color[type=&quot;color&quot;] {
   width: 40px;
-  height: 28px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
   padding: 3px;
   cursor: var(--cursor-interaction, pointer);
 }
@@ -671,58 +988,89 @@ a.btn {
 
 textarea.form-control {
   height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
   resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
 }
 
 .form-control:focus-visible {
   border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
 }
 
 .form-control:disabled,
 .form-select:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
 }
 
 .form-select {
   appearance: none;
   display: block;
   width: 100%;
-  min-height: 28px;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   margin: 0;
-  padding: 0 32px 0 8px;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
   outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
   background-color: var(--secondary);
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
   background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
   background-repeat: no-repeat;
-  background-size: 4px 4px;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
   cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
 }
 
 .form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
 }
 
 .form-check {
   display: flex;
-  min-height: 20px;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   align-items: center;
   gap: 6px;
 }
@@ -744,11 +1092,15 @@ textarea.form-control {
 }
 
 .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background-color: var(--secondary);
+  corner-shape: round;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 .form-check:not(.form-switch)
@@ -756,9 +1108,10 @@ textarea.form-control {
   background-color: var(--card);
 }
 
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
 }
 
 .form-check:not(.form-switch)
@@ -769,24 +1122,48 @@ textarea.form-control {
   background: var(--primary-foreground);
   content: &quot;&quot;;
   mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
 }
 
 .form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
   border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
 }
 
 .form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
 }
 
 .form-check:not(.form-switch) .form-check-input:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
 }
 
 .form-check:not(.form-switch) .form-check-input:disabled {
@@ -796,6 +1173,12 @@ textarea.form-control {
 
 .form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
   cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
 }
 
 .form-switch .form-check-input:disabled,
@@ -829,15 +1212,16 @@ textarea.form-control {
   box-sizing: border-box;
   border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
   box-shadow: var(--shadow-sm);
   content: &quot;&quot;;
   transform: translate(2px, -50%);
   transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
 }
 
 .form-switch .form-check-input:checked {
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .form-switch .form-check-input:checked::before {
@@ -846,49 +1230,54 @@ textarea.form-control {
 
 .form-switch .form-check-input:focus-visible {
   box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
 }
 
 .form-range {
   appearance: none;
   display: block;
   width: 100%;
-  height: 28px;
   flex: 1;
   margin: 0;
   padding: 0;
-  outline: none;
   border: 0;
   accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
 }
 
 .form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
   height: 20px;
-  margin-top: 4px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
 }
 
 .form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-moz-range-thumb {
@@ -896,17 +1285,19 @@ textarea.form-control {
   height: 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
 .form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
 }
 
 .form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
+  opacity: 1;
+  cursor: default;
 }
 
 .btn:not(.btn-primary, .viz-tile):is(
@@ -914,9 +1305,9 @@ textarea.form-control {
   [aria-selected=&quot;true&quot;],
   .is-selected
 ) {
-  border-color: var(--primary);
+  border-color: transparent;
   color: var(--primary-foreground);
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
@@ -926,13 +1317,67 @@ textarea.form-control {
 
 .btn:focus-visible,
 .nav-link:focus-visible {
-  outline: 2px solid var(--ring);
   outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
 }
 
 @media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
   .btn,
   .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
   .form-control,
   .form-select {
     min-width: 44px;
@@ -942,7 +1387,28 @@ textarea.form-control {
   /* Keep small-screen WebKit from zooming when a text field receives focus. */
   .form-control,
   .form-select {
-    font-size: max(16px, var(--font-size-normal));
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
   }
 
   .form-control[type=&quot;file&quot;]::file-selector-button {
@@ -996,18 +1462,6 @@ textarea.form-control {
   .form-range {
     height: 44px;
     touch-action: pan-y;
-  }
-
-  .form-range::-webkit-slider-runnable-track {
-    height: 44px;
-  }
-
-  .form-range::-moz-range-track {
-    height: 44px;
-  }
-
-  .form-range::-webkit-slider-thumb {
-    margin-top: 12px;
   }
 }
 
@@ -1328,15 +1782,17 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;div id=&quot;course-editor&quot; aria-label=&quot;Макет редактора курса&quot;&gt;
  &lt;div class=&quot;ce-phone&quot;&gt;
-  &lt;header&gt;&lt;div class=&quot;ce-heading&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-back cursor-interaction&quot; aria-label=&quot;Назад к курсам&quot;&gt;&lt;i data-lucide=&quot;arrow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;h1&gt;&lt;button type=&quot;button&quot; class=&quot;ce-title cursor-interaction&quot; aria-label=&quot;Название курса, удерживайте для редактирования&quot;&gt;Лекции и семинары по C++&lt;/button&gt;&lt;/h1&gt;&lt;input class=&quot;ce-name&quot; value=&quot;Лекции и семинары по C++&quot; maxlength=&quot;50&quot; required aria-label=&quot;Название курса&quot; hidden&gt;&lt;/div&gt;&lt;div class=&quot;ce-name-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/div&gt;&lt;/header&gt;
+  &lt;header&gt;&lt;div class=&quot;ce-heading&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-back cursor-interaction&quot; aria-label=&quot;Назад к курсам&quot;&gt;&lt;i data-lucide=&quot;arrow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;h1&gt;&lt;button type=&quot;button&quot; class=&quot;ce-title cursor-interaction&quot; aria-label=&quot;Название курса, удерживайте для редактирования&quot;&gt;Лекции и семинары по C++&lt;/button&gt;&lt;/h1&gt;&lt;input class=&quot;ce-name&quot; value=&quot;Лекции и семинары по C++&quot; required aria-label=&quot;Название курса&quot; hidden&gt;&lt;button type=&quot;button&quot; class=&quot;ce-palette-open&quot; aria-label=&quot;Цвет курса&quot;&gt;&lt;span class=&quot;ce-color-swatch&quot; style=&quot;background:var(--ce-color)&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;span class=&quot;ce-course-status&quot; hidden&gt;&lt;/span&gt;&lt;div class=&quot;ce-name-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/div&gt;&lt;/header&gt;
   &lt;div class=&quot;ce-content&quot;&gt;
-   &lt;div class=&quot;ce-category-wrap&quot;&gt;&lt;label class=&quot;ce-field&quot;&gt;Категория&lt;div class=&quot;ce-category-control&quot;&gt;&lt;input class=&quot;ce-category&quot; value=&quot;Программирование&quot; placeholder=&quot;Без категории&quot; role=&quot;combobox&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;ce-category-menu&quot; autocomplete=&quot;off&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-category-toggle cursor-interaction&quot; aria-label=&quot;Выбрать категорию&quot;&gt;&lt;i data-lucide=&quot;chevron-down&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&lt;/label&gt;&lt;div id=&quot;ce-category-menu&quot; class=&quot;ce-category-menu&quot; hidden&gt;&lt;/div&gt;&lt;/div&gt;
-   &lt;div class=&quot;ce-label&quot;&gt;Цвет в календаре&lt;/div&gt;&lt;div class=&quot;ce-colors&quot; role=&quot;group&quot; aria-label=&quot;Свободные цвета курса&quot;&gt;&lt;/div&gt;&lt;div class=&quot;ce-color-info ce-muted&quot; hidden&gt;&lt;/div&gt;
-   &lt;section class=&quot;ce-schedule&quot;&gt;&lt;div class=&quot;ce-schedule-title&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;strong&gt;По расписанию&lt;/strong&gt;&lt;button type=&quot;button&quot; class=&quot;ce-configure cursor-interaction&quot;&gt;Настроить&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;ce-schedule-days&quot;&gt;&lt;span&gt;Вт &lt;b&gt;19:00&lt;/b&gt;&lt;/span&gt;&lt;span&gt;Сб &lt;b&gt;11:00&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ce-muted&quot;&gt;Без даты окончания&lt;/div&gt;&lt;/section&gt;
+   &lt;button type=&quot;button&quot; class=&quot;ce-category-open&quot;&gt;Категория: &lt;span&gt;Программирование&lt;/span&gt; ⌄&lt;/button&gt;
+&lt;dialog class=&quot;ce-category-dialog&quot;&gt;   &lt;div class=&quot;ce-category-wrap&quot;&gt;&lt;label class=&quot;ce-field&quot;&gt;Категория&lt;div class=&quot;ce-category-control&quot;&gt;&lt;input class=&quot;ce-category&quot; value=&quot;Программирование&quot; placeholder=&quot;Без категории&quot; role=&quot;combobox&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;ce-category-menu&quot; autocomplete=&quot;off&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-category-toggle cursor-interaction&quot; aria-label=&quot;Выбрать категорию&quot;&gt;&lt;i data-lucide=&quot;chevron-down&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&lt;/label&gt;&lt;div id=&quot;ce-category-menu&quot; class=&quot;ce-category-menu&quot; hidden&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; class=&quot;ce-category-close&quot;&gt;Применить&lt;/button&gt;&lt;/dialog&gt;
+   &lt;dialog class=&quot;ce-palette-dialog&quot;&gt;&lt;h2&gt;Цвет курса&lt;/h2&gt;&lt;div class=&quot;ce-colors&quot; role=&quot;group&quot; aria-label=&quot;Свободные цвета курса&quot;&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;ce-palette-close&quot;&gt;Закрыть&lt;/button&gt;&lt;/dialog&gt;
+   &lt;section class=&quot;ce-schedule&quot;&gt;&lt;div class=&quot;ce-schedule-title&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-configure&quot; aria-label=&quot;Настроить расписание&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;strong hidden&gt;Без расписания&lt;/strong&gt;&lt;div class=&quot;ce-schedule-days&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ce-muted&quot;&gt;&lt;/div&gt;&lt;/section&gt;
    &lt;section class=&quot;ce-schedule-editor&quot; hidden&gt;&lt;h2&gt;Расписание&lt;/h2&gt;&lt;div class=&quot;ce-week-editor&quot;&gt;&lt;/div&gt;&lt;label class=&quot;ce-field&quot;&gt;Дата окончания&lt;div class=&quot;ce-date-control&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-date-open cursor-interaction&quot; aria-label=&quot;Выбрать дату окончания&quot;&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;input type=&quot;date&quot; class=&quot;ce-end-date&quot; aria-label=&quot;Дата окончания&quot; hidden&gt;&lt;button type=&quot;button&quot; class=&quot;ce-date-clear cursor-interaction&quot; aria-label=&quot;Убрать дату окончания&quot; hidden&gt;&lt;i data-lucide=&quot;x&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/div&gt;&lt;/label&gt;&lt;p class=&quot;ce-schedule-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;div class=&quot;ce-topic-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-apply cursor-interaction&quot;&gt;Сохранить расписание&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-schedule-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;
-   &lt;section class=&quot;ce-topics&quot;&gt;&lt;div class=&quot;ce-section-head&quot;&gt;&lt;h2&gt;Темы&lt;/h2&gt;&lt;span class=&quot;ce-total&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ce-track&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройденные темы&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ce-rows&quot; role=&quot;region&quot; aria-label=&quot;Список тем, прокручивается&quot;&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;ce-edit-list cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;list&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Редактировать список&lt;/button&gt;&lt;/section&gt;
+   &lt;section class=&quot;ce-topics&quot;&gt;&lt;div class=&quot;ce-section-head&quot;&gt;&lt;h2&gt;Темы&lt;/h2&gt;&lt;button type=&quot;button&quot; class=&quot;ce-edit-list&quot; aria-label=&quot;Редактировать список&quot;&gt;&lt;i data-lucide=&quot;pencil&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;span class=&quot;ce-total&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;ce-track&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройденные темы&quot;&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ce-rows&quot; role=&quot;region&quot; aria-label=&quot;Список тем, прокручивается&quot;&gt;&lt;/div&gt;&lt;/section&gt;
    &lt;section class=&quot;ce-topic-editor&quot; hidden&gt;&lt;div class=&quot;ce-section-head&quot;&gt;&lt;h2&gt;Редактировать список&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;ce-bulk-help&quot;&gt;Одна строка — одна тема. Можно вставить весь список, изменить порядок или удалить строки.&lt;/p&gt;&lt;details class=&quot;ce-completed&quot;&gt;&lt;summary&gt;&lt;/summary&gt;&lt;div&gt;&lt;/div&gt;&lt;/details&gt;&lt;label class=&quot;ce-field&quot;&gt;Непройденные темы&lt;textarea class=&quot;ce-topic-text&quot; rows=&quot;12&quot; aria-describedby=&quot;ce-bulk-count ce-bulk-error&quot; placeholder=&quot;Лекция - Введение в C++&amp;#10;Семинар - Устройство памяти&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;p id=&quot;ce-bulk-count&quot; class=&quot;ce-bulk-count ce-muted&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;p id=&quot;ce-bulk-error&quot; class=&quot;ce-bulk-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;div class=&quot;ce-topic-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-apply cursor-interaction&quot;&gt;Применить список&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;
-   &lt;div class=&quot;ce-finish&quot;&gt;&lt;span class=&quot;ce-course-status&quot; hidden&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;ce-finish-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;check&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Завершить курс&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-pause-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;pause&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Поставить на паузу&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-delete-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;trash-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Удалить курс&lt;/button&gt;&lt;/div&gt;
+   &lt;div class=&quot;ce-finish&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;ce-finish-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;check&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Завершить&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-resume-button cursor-interaction&quot; hidden&gt;Продолжить&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-pause-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;pause&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Пауза&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-delete-button cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;trash-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Удалить&lt;/button&gt;&lt;/div&gt;
    &lt;div class=&quot;ce-confirm&quot; hidden&gt;&lt;strong&gt;Завершить курс?&lt;/strong&gt;&lt;p&gt;Все темы будут отмечены пройденными. Напоминания отключатся, цвет освободится.&lt;/p&gt;&lt;div&gt;&lt;button type=&quot;button&quot; class=&quot;ce-confirm-yes cursor-interaction&quot;&gt;Завершить&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;ce-confirm-no cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
    &lt;div class=&quot;ce-feedback&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
@@ -1435,6 +1891,10 @@ html&gt;body{padding:0}&lt;/style&gt;
 #course-editor .ce-confirm-yes{background:var(--ce-ink);color:var(--ce-paper)}
 #course-editor .ce-feedback{font-size:12px;color:var(--ce-muted);margin-top:8px;min-height:18px}
 #course-editor .ce-bottom-line{width:90px;height:4px;border-radius:3px;background:var(--ce-line);margin:6px auto 12px}
+#course-editor .ce-phone{height:calc(100dvh - 24px);display:flex;flex-direction:column}#course-editor .ce-content{flex:1;min-height:0;display:flex;flex-direction:column}#course-editor .ce-topics{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:10px}#course-editor .ce-rows{flex:1;min-height:0;max-height:none}#course-editor .ce-finish{display:flex;flex-wrap:wrap;gap:5px;padding-top:10px}#course-editor .ce-finish button{flex:1;background:#718376;color:#FCFAF6;border-radius:13px;padding:8px 5px}#course-editor .ce-course-status{flex-basis:100%;font-weight:700}#course-editor .ce-category-open{background:none;text-align:left;padding:8px 0}#course-editor .ce-schedule{padding:8px 0}#course-editor .ce-configure{font-size:0}#course-editor .ce-configure:after{content:&quot;▦&quot;;font-size:22px}#course-editor .ce-edit-list{min-height:32px}#course-editor dialog{background:var(--ce-paper);color:var(--ce-ink);border:1px solid var(--ce-line);border-radius:20px;max-width:90vw;max-height:85dvh;overflow:auto}#course-editor .ce-category-dialog{width:340px}#course-editor .ce-topic-editor,#course-editor .ce-schedule-editor,#course-editor .ce-confirm{position:absolute;inset:12px;z-index:6;background:var(--ce-paper);padding:16px;overflow:auto;border:1px solid var(--ce-line);border-radius:20px}#course-editor .ce-phone{position:relative}#course-editor .ce-number{font-size:13px}#course-editor .ce-palette-open{background:none;padding:5px}#course-editor .ce-title{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#course-editor header{padding:12px 16px}#course-editor .ce-title{font:400 20px/1.2 Georgia,serif}#course-editor .ce-content{padding:0 16px 10px}#course-editor .ce-finish{flex-wrap:nowrap;margin-top:8px;padding-top:8px;flex-shrink:0}#course-editor .ce-finish&gt;button{width:0;min-width:0;font-size:11px;gap:3px;padding:8px 4px}#course-editor .ce-finish svg{display:none}#course-editor .ce-finish-button{font-size:11px}#course-editor .ce-section-head{margin-bottom:6px}#course-editor .ce-schedule-days{margin:6px 0}#course-editor .ce-schedule .ce-muted:empty{display:none}#course-editor .ce-course-status{position:absolute;top:72px;left:56px}#course-editor .ce-schedule-title strong{display:none}#course-editor .ce-configure{padding:4px;min-height:32px}#course-editor .ce-schedule-title{min-height:32px}#course-editor .ce-topic-text{min-height:130px}#course-editor .ce-confirm{inset:auto 12px 12px}
+#course-editor .ce-configure:after{content:none}#course-editor .ce-configure{margin:0;flex-shrink:0;background:none}#course-editor .ce-configure svg{width:23px;height:23px}#course-editor .ce-schedule-days{margin:0;flex:1}#course-editor .ce-schedule-days span{padding:6px;font-size:12px}#course-editor .ce-section-head .ce-edit-list{width:32px;margin:0;background:none;min-height:32px;padding:4px}#course-editor .ce-section-head .ce-total{margin-left:auto}#course-editor .ce-feedback:empty{display:none}#course-editor .ce-track{flex-shrink:0}#course-editor .ce-finish .ce-course-status{position:static;flex-basis:auto}#course-editor .ce-section-head{flex-shrink:0}
+#course-editor header&gt;.ce-course-status{position:static;display:block;font-size:14px;font-weight:700;margin:8px 0 0 48px;color:#746D66}
 &lt;/style&gt;
 &lt;script&gt;
 (()=&gt;{
@@ -1453,30 +1913,30 @@ function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState
 function render(){
  const occupied=occupiedColors();if(!state.finished&amp;&amp;!state.deleted&amp;&amp;occupied.includes(state.color))state.color=0;
  $(&#x27;.ce-content&#x27;).hidden=state.deleted||returned;$(&#x27;.ce-deleted&#x27;).hidden=!state.deleted;$(&#x27;.ce-return&#x27;).hidden=!returned;$(&#x27;.ce-title&#x27;).textContent=state.name;$(&#x27;.ce-title&#x27;).parentElement.hidden=nameEditing;$(&#x27;.ce-name&#x27;).hidden=!nameEditing;$(&#x27;.ce-category-toggle&#x27;).hidden=categories.length===0;
- $(&#x27;.ce-color-info&#x27;).textContent=state.finished?&#x27;Цвет освобождён для других курсов&#x27;:(9-design.otherCourses)+&#x27; свободных из 10&#x27;;
- root.style.setProperty(&#x27;--ce-color&#x27;,colors[state.color][1]);root.style.setProperty(&#x27;--ce-spacing&#x27;,design.spacing+&#x27;px&#x27;);
+ $(&#x27;.ce-palette-open&#x27;).hidden=state.finished;$(&#x27;.ce-category-open span&#x27;).textContent=state.category||&#x27;Без категории&#x27;;$(&#x27;.ce-category-open&#x27;).disabled=state.finished;$(&#x27;.ce-title&#x27;).disabled=state.finished;$(&#x27;.ce-schedule&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-resume-button&#x27;).hidden=!state.paused||state.finished;
+ root.style.setProperty(&#x27;--ce-color&#x27;,state.finished?&#x27;#8B918A&#x27;:colors[state.color][1]);root.style.setProperty(&#x27;--ce-spacing&#x27;,design.spacing+&#x27;px&#x27;);
  $(&#x27;.ce-colors&#x27;).innerHTML=colors.map((c,i)=&gt;({c,i})).filter(({i})=&gt;state.finished?i===state.color:!occupied.includes(i)).map(({c,i})=&gt;&#x27;&lt;button type=&quot;button&quot; class=&quot;ce-color-button cursor-interaction&quot; data-color=&quot;&#x27;+i+&#x27;&quot; &#x27;+(state.finished?&#x27;disabled&#x27;:&#x27;&#x27;)+&#x27; aria-label=&quot;&#x27;+c[0]+&#x27;&quot; aria-pressed=&quot;&#x27;+(state.color===i)+&#x27;&quot;&gt;&lt;span class=&quot;ce-color-swatch&quot; style=&quot;background:&#x27;+c[1]+&#x27;&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(state.color===i?&#x27;✓&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);
- const done=state.topics.filter(t=&gt;t.done).length,total=state.topics.length;
+ const done=state.topics.filter(t=&gt;t.done).length,total=state.topics.length;$(&#x27;.ce-track&#x27;).hidden=!total;$(&#x27;.ce-total&#x27;).hidden=!total;
  $(&#x27;.ce-total&#x27;).textContent=done+&#x27; из &#x27;+total+&#x27; пройдено&#x27;;const track=$(&#x27;.ce-track&#x27;);track.setAttribute(&#x27;aria-valuenow&#x27;,done);track.setAttribute(&#x27;aria-valuemin&#x27;,0);track.setAttribute(&#x27;aria-valuemax&#x27;,Math.max(total,1));track.firstElementChild.style.width=(total?done/total*100:0)+&#x27;%&#x27;;
  const scroll=$(&#x27;.ce-rows&#x27;).scrollTop;
  $(&#x27;.ce-rows&#x27;).innerHTML=state.topics.map((t,i)=&gt;&#x27;&lt;button type=&quot;button&quot; data-topic=&quot;&#x27;+t.id+&#x27;&quot; class=&quot;ce-row cursor-interaction &#x27;+(t.done?&#x27;ce-complete&#x27;:&#x27;&#x27;)+&#x27;&quot; aria-pressed=&quot;&#x27;+t.done+&#x27;&quot; aria-label=&quot;&#x27;+esc(t.name)+(t.done?&#x27;. Пройдена.&#x27;:&#x27;. Не пройдена.&#x27;)+&#x27; Удерживайте для изменения отметки.&quot;&gt;&lt;span class=&quot;ce-number&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(i+1)+&#x27;&lt;/span&gt;&lt;span&gt;&#x27;+esc(t.name)+&#x27;&lt;/span&gt;&lt;span aria-hidden=&quot;true&quot;&gt;&#x27;+(t.done?&#x27;✓&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;);
  $(&#x27;.ce-rows&#x27;).scrollTop=scroll;
- $(&#x27;.ce-course-status&#x27;).textContent=state.finished?&#x27;Курс пройден&#x27;:state.paused?&#x27;Курс на паузе&#x27;:&#x27;&#x27;;$(&#x27;.ce-course-status&#x27;).hidden=!state.finished&amp;&amp;!state.paused;$(&#x27;.ce-finish-button&#x27;).hidden=state.finished;
+ $(&#x27;.ce-course-status&#x27;).textContent=state.finished?&#x27;Завершён&#x27;:state.paused?&#x27;На паузе&#x27;:&#x27;&#x27;;$(&#x27;.ce-course-status&#x27;).hidden=!state.finished&amp;&amp;!state.paused;$(&#x27;.ce-finish-button&#x27;).hidden=state.finished;
  $(&#x27;.ce-pause-button&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-edit-list&#x27;).hidden=state.finished;
- $(&#x27;.ce-topics&#x27;).hidden=editing;$(&#x27;.ce-topic-editor&#x27;).hidden=!editing;$(&#x27;.ce-finish&#x27;).hidden=editing;
- $(&#x27;.ce-schedule-title strong&#x27;).textContent=state.finished?&#x27;Курс пройден&#x27;:state.paused?&#x27;Без расписания · пауза&#x27;:&#x27;По расписанию&#x27;;
- $(&#x27;.ce-schedule-days&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-schedule .ce-muted&#x27;).textContent=state.finished?&#x27;Напоминания отключены&#x27;:state.paused?&#x27;Прогресс сохранён. Напоминания отключены.&#x27;:&#x27;Без даты окончания&#x27;;
- $(&#x27;.ce-schedule-days&#x27;).innerHTML=state.schedule.map(s=&gt;&#x27;&lt;span&gt;&#x27;+weekdays[s.day]+&#x27; &lt;b&gt;&#x27;+esc(s.start)+(s.end?&#x27;–&#x27;+esc(s.end):&#x27;&#x27;)+&#x27;&lt;/b&gt;&lt;/span&gt;&#x27;).join(&#x27;&#x27;);
+ $(&#x27;.ce-topics&#x27;).hidden=false;$(&#x27;.ce-topic-editor&#x27;).hidden=!editing;$(&#x27;.ce-finish&#x27;).hidden=editing;
+ $(&#x27;.ce-schedule-title strong&#x27;).textContent=state.finished?&#x27;Курс пройден&#x27;:state.schedule.length?&#x27;Расписание&#x27;:&#x27;Без расписания&#x27;;
+ $(&#x27;.ce-schedule-days&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-schedule .ce-muted&#x27;).textContent=&#x27;&#x27;;
+ $(&#x27;.ce-schedule-days&#x27;).innerHTML=state.schedule.length?state.schedule.map(s=&gt;&#x27;&lt;span&gt;&#x27;+weekdays[s.day]+&#x27; &lt;b&gt;&#x27;+esc(s.start)+(s.end?&#x27;–&#x27;+esc(s.end):&#x27;&#x27;)+&#x27;&lt;/b&gt;&lt;/span&gt;&#x27;).join(&#x27;&#x27;):&#x27;Без расписания&#x27;;
  if(!state.finished&amp;&amp;!state.paused&amp;&amp;state.endDate)$(&#x27;.ce-schedule .ce-muted&#x27;).textContent=&#x27;До &#x27;+state.endDate.split(&#x27;-&#x27;).reverse().join(&#x27;.&#x27;);
- $(&#x27;.ce-configure&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-configure&#x27;).textContent=state.paused?&#x27;Задать&#x27;:&#x27;Настроить&#x27;;
+ $(&#x27;.ce-configure&#x27;).hidden=state.finished||state.paused;$(&#x27;.ce-configure&#x27;).innerHTML=&#x27;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&#x27;;$(&#x27;.ce-configure&#x27;).setAttribute(&#x27;aria-label&#x27;,&#x27;Настроить расписание&#x27;);
  $(&#x27;.ce-schedule-editor&#x27;).hidden=!scheduleEditing;
  icons();
 }
-function lines(){return $(&#x27;.ce-topic-text&#x27;).value.split(/\r\n|\n|\r/).map(s=&gt;s.trim()).filter(Boolean);}
+function lines(){return $(&#x27;.ce-topic-text&#x27;).value.split(/\r\n|\n|\r/).map(s=&gt;Array.from(s.trim()).slice(0,100).join(&#x27;&#x27;)).filter(Boolean);}
 const normalized=s=&gt;s.trim().normalize(&#x27;NFC&#x27;).toLocaleLowerCase(&#x27;ru&#x27;);
 function validateList(){
  const done=new Set(state.topics.filter(t=&gt;t.done).map(t=&gt;normalized(t.name))),conflicts=[];
- $(&#x27;.ce-topic-text&#x27;).value.split(/\r\n|\n|\r/).forEach((name,i)=&gt;{if(name.trim()&amp;&amp;done.has(normalized(name)))conflicts.push(i+1);});
+ $(&#x27;.ce-topic-text&#x27;).value.split(/\r\n|\n|\r/).forEach((name,i)=&gt;{if(name.trim()&amp;&amp;done.has(normalized(Array.from(name.trim()).slice(0,100).join(&#x27;&#x27;))))conflicts.push(i+1);});
  $(&#x27;.ce-bulk-error&#x27;).textContent=conflicts.length?&#x27;В строках &#x27;+conflicts.join(&#x27;, &#x27;)+&#x27; указаны уже пройденные темы. Удалите их из списка — отметки сохранятся.&#x27;:&#x27;&#x27;;
  $(&#x27;.ce-topic-text&#x27;).setAttribute(&#x27;aria-invalid&#x27;,String(conflicts.length&gt;0));return conflicts.length===0;
 }
@@ -1495,9 +1955,7 @@ function toggleTopic(id){
  const topic=state.topics.find(t=&gt;t.id===id);if(!topic||state.deleted)return;
  if(state.finished){$(&#x27;.ce-feedback&#x27;).textContent=&#x27;Курс уже завершён. Возврат в незавершённые с проверкой свободного цвета будет отдельным действием.&#x27;;return;}
  topic.done=!topic.done;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;&#x27;;
- if(state.topics.length&amp;&amp;state.topics.every(t=&gt;t.done)){
- action=&#x27;finish&#x27;;$(&#x27;.ce-confirm strong&#x27;).textContent=&#x27;Все темы пройдены&#x27;;$(&#x27;.ce-confirm p&#x27;).textContent=&#x27;Завершить курс и освободить цвет?&#x27;;$(&#x27;.ce-confirm-yes&#x27;).textContent=&#x27;Завершить&#x27;;$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Оставить активным&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;
- }else $(&#x27;.ce-confirm&#x27;).hidden=true;
+ $(&#x27;.ce-feedback&#x27;).textContent=state.topics.length&amp;&amp;state.topics.every(t=&gt;t.done)?&#x27;Все темы пройдены&#x27;:&#x27;&#x27;;
 }
 function openSchedule(){
  scheduleEditing=true;$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;&#x27;;$(&#x27;.ce-end-date&#x27;).value=state.endDate;$(&#x27;.ce-end-date&#x27;).hidden=!state.endDate;$(&#x27;.ce-date-clear&#x27;).hidden=!state.endDate;
@@ -1505,7 +1963,7 @@ function openSchedule(){
 }
 function applySchedule(){
  const rules=Array.from(root.querySelectorAll(&#x27;.ce-week-row&#x27;)).filter(row=&gt;row.querySelector(&#x27;.ce-day-enabled&#x27;).checked).map(row=&gt;({day:Number(row.dataset.day),start:row.querySelector(&#x27;.ce-start&#x27;).value,end:row.querySelector(&#x27;.ce-end&#x27;).value}));
- if(!rules.length||rules.some(s=&gt;!s.start||(s.end&amp;&amp;s.end&lt;=s.start))){$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;Выберите хотя бы один день. Укажите начало, а окончание — позже начала.&#x27;;return false;}
+ if(rules.some(s=&gt;!s.start)){$(&#x27;.ce-schedule-error&#x27;).textContent=&#x27;Укажите время начала.&#x27;;return false;}
  state.schedule=rules;state.endDate=$(&#x27;.ce-end-date&#x27;).value;state.paused=false;scheduleEditing=false;render();persist();return true;
 }
 function restore(s){const v=s?.privateContent?.editor;if(v&amp;&amp;Array.isArray(v.topics)&amp;&amp;Number.isInteger(v.color)&amp;&amp;colors[v.color])Object.assign(state,v);if(Array.isArray(s?.privateContent?.categories))categories=s.privateContent.categories.filter(c=&gt;typeof c.name===&#x27;string&#x27;);if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);design.otherCourses=Math.max(0,Math.min(9,Math.round(design.otherCourses)));if(state.finished)state.topics.forEach(t=&gt;t.done=true);$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-category&#x27;).value=state.category;}
@@ -1520,7 +1978,12 @@ root.addEventListener(&#x27;pointerup&#x27;,cancelHold);root.addEventListener(&#
 $(&#x27;.ce-rows&#x27;).addEventListener(&#x27;scroll&#x27;,cancelHold);root.addEventListener(&#x27;contextmenu&#x27;,e=&gt;{if(e.target.closest(&#x27;[data-topic],.ce-title&#x27;))e.preventDefault();});
 root.addEventListener(&#x27;click&#x27;,e=&gt;{
  const color=e.target.closest(&#x27;[data-color]&#x27;);
- if(color){if(!commitName())return;commitCategory();state.color=Number(color.dataset.color);render();persist();}
+ if(e.target.closest(&#x27;.ce-palette-open&#x27;)){$(&#x27;.ce-palette-dialog&#x27;).showModal();}
+ else if(e.target.closest(&#x27;.ce-palette-close&#x27;))$(&#x27;.ce-palette-dialog&#x27;).close();
+ else if(e.target.closest(&#x27;.ce-category-open&#x27;)){$(&#x27;.ce-category-dialog&#x27;).showModal();}
+ else if(e.target.closest(&#x27;.ce-category-close&#x27;)){commitCategory();$(&#x27;.ce-category-dialog&#x27;).close();render();}
+ else if(e.target.closest(&#x27;.ce-resume-button&#x27;)){state.paused=false;render();persist();}
+ else if(color){if(!commitName())return;commitCategory();state.color=Number(color.dataset.color);$(&#x27;.ce-palette-dialog&#x27;).close();render();persist();}
  else if(e.target.closest(&#x27;.ce-configure&#x27;)){if(commitName()){commitCategory();openSchedule();}}
  else if(e.target.closest(&#x27;.ce-date-open&#x27;)){$(&#x27;.ce-end-date&#x27;).hidden=false;$(&#x27;.ce-date-clear&#x27;).hidden=false;$(&#x27;.ce-end-date&#x27;).focus();if($(&#x27;.ce-end-date&#x27;).showPicker)try{$(&#x27;.ce-end-date&#x27;).showPicker();}catch{}}
  else if(e.target.closest(&#x27;.ce-date-clear&#x27;)){$(&#x27;.ce-end-date&#x27;).value=&#x27;&#x27;;$(&#x27;.ce-end-date&#x27;).hidden=true;$(&#x27;.ce-date-clear&#x27;).hidden=true;}
@@ -1538,10 +2001,10 @@ root.addEventListener(&#x27;click&#x27;,e=&gt;{
  $(&#x27;.ce-confirm strong&#x27;).textContent=copy[0];$(&#x27;.ce-confirm p&#x27;).textContent=copy[1];$(&#x27;.ce-confirm-yes&#x27;).textContent=copy[2];$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Отмена&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;
  }
  else if(e.target.closest(&#x27;.ce-confirm-no&#x27;))$(&#x27;.ce-confirm&#x27;).hidden=true;
- else if(e.target.closest(&#x27;.ce-confirm-yes&#x27;)){if(action===&#x27;finish&#x27;){state.finished=true;state.paused=false;state.topics.forEach(t=&gt;t.done=true);}else if(action===&#x27;pause&#x27;){state.paused=true;state.schedule=[];}else if(action===&#x27;delete&#x27;){state.deleted=true;state.topics=[];state.schedule=[];}else if(action?.startsWith(&#x27;category:&#x27;)){deleteCategory(action.slice(9));}scheduleEditing=false;$(&#x27;.ce-confirm&#x27;).hidden=true;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;&#x27;;action=null;}
+ else if(e.target.closest(&#x27;.ce-confirm-yes&#x27;)){if(action===&#x27;finish&#x27;){state.finished=true;state.paused=false;state.schedule=[];state.endDate=&#x27;&#x27;;state.topics.forEach(t=&gt;t.done=true);}else if(action===&#x27;pause&#x27;){state.paused=true;state.schedule=[];state.endDate=&#x27;&#x27;;}else if(action===&#x27;delete&#x27;){state.deleted=true;state.topics=[];state.schedule=[];}else if(action?.startsWith(&#x27;category:&#x27;)){deleteCategory(action.slice(9));}scheduleEditing=false;$(&#x27;.ce-confirm&#x27;).hidden=true;render();persist();$(&#x27;.ce-feedback&#x27;).textContent=&#x27;&#x27;;action=null;}
 });
 root.addEventListener(&#x27;change&#x27;,e=&gt;{if(e.target.classList.contains(&#x27;ce-day-enabled&#x27;))e.target.closest(&#x27;.ce-week-row&#x27;).querySelector(&#x27;.ce-times&#x27;).hidden=!e.target.checked;});
-function editName(){nameEditing=true;$(&#x27;.ce-title&#x27;).parentElement.hidden=true;$(&#x27;.ce-name&#x27;).hidden=false;$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-name&#x27;).focus();$(&#x27;.ce-name&#x27;).select();}
+function editName(){if(state.finished)return;nameEditing=true;$(&#x27;.ce-title&#x27;).parentElement.hidden=true;$(&#x27;.ce-name&#x27;).hidden=false;$(&#x27;.ce-name&#x27;).value=state.name;$(&#x27;.ce-name&#x27;).focus();$(&#x27;.ce-name&#x27;).select();}
 function commitName(){
  if(!nameEditing)return true;const name=$(&#x27;.ce-name&#x27;).value.trim();
  if(!name||Array.from(name).length&gt;50){$(&#x27;.ce-name-error&#x27;).textContent=!name?&#x27;Введите название курса&#x27;:&#x27;Не более 50 символов&#x27;;$(&#x27;.ce-name-error&#x27;).hidden=false;return false;}
@@ -1553,7 +2016,7 @@ function commitCategory(){
  const value=$(&#x27;.ce-category&#x27;).value.trim(),existing=categories.find(c=&gt;normalized(c.name)===normalized(value));
  state.category=existing?.name||value;
  if(value&amp;&amp;!existing)categories.push({name:value,courses:0});
- $(&#x27;.ce-category&#x27;).value=state.category;categoryOpen=false;renderCategories();persist();
+ $(&#x27;.ce-category&#x27;).value=state.category;categoryOpen=false;$(&#x27;.ce-category-open span&#x27;).textContent=state.category||&#x27;Без категории&#x27;;renderCategories();persist();
 }
 function renderCategories(){
  const value=$(&#x27;.ce-category&#x27;).value;const matches=categories.filter(c=&gt;value===state.category||normalized(c.name).includes(normalized(value)));
@@ -1562,14 +2025,14 @@ function renderCategories(){
 }
 function deleteCategory(name){categories=categories.filter(c=&gt;c.name!==name);if(normalized(state.category)===normalized(name)){state.category=&#x27;&#x27;;$(&#x27;.ce-category&#x27;).value=&#x27;&#x27;;}renderCategories();persist();}
 $(&#x27;.ce-category&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{categoryOpen=true;renderCategories();});
-$(&#x27;.ce-category&#x27;).addEventListener(&#x27;blur&#x27;,()=&gt;{commitCategory();});
+$(&#x27;.ce-category&#x27;).addEventListener(&#x27;blur&#x27;,()=&gt;{commitCategory();});$(&#x27;.ce-category-dialog&#x27;).addEventListener(&#x27;close&#x27;,()=&gt;{commitCategory();render();});
 $(&#x27;.ce-category-menu&#x27;).addEventListener(&#x27;pointerdown&#x27;,e=&gt;e.preventDefault());
 $(&#x27;.ce-category-toggle&#x27;).addEventListener(&#x27;pointerdown&#x27;,e=&gt;e.preventDefault());
 $(&#x27;.ce-category-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{categoryOpen=!categoryOpen;renderCategories();});
 $(&#x27;.ce-category-menu&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{
  const pick=e.target.closest(&#x27;[data-category]&#x27;),remove=e.target.closest(&#x27;[data-category-delete]&#x27;);
- if(pick){$(&#x27;.ce-category&#x27;).value=pick.dataset.category;commitCategory();}
- if(remove){const name=remove.dataset.categoryDelete,c=categories.find(c=&gt;c.name===name);categoryOpen=false;renderCategories();
+ if(pick){$(&#x27;.ce-category&#x27;).value=pick.dataset.category;commitCategory();$(&#x27;.ce-category-dialog&#x27;).close();render();}
+ if(remove){$(&#x27;.ce-category-dialog&#x27;).close();const name=remove.dataset.categoryDelete,c=categories.find(c=&gt;c.name===name);categoryOpen=false;renderCategories();
  if(c.courses&gt;0||normalized(state.category)===normalized(name)){action=&#x27;category:&#x27;+name;$(&#x27;.ce-confirm strong&#x27;).textContent=&#x27;Удалить категорию «&#x27;+name+&#x27;»?&#x27;;$(&#x27;.ce-confirm p&#x27;).textContent=&#x27;Курсы останутся без категории.&#x27;;$(&#x27;.ce-confirm-yes&#x27;).textContent=&#x27;Удалить&#x27;;$(&#x27;.ce-confirm-no&#x27;).textContent=&#x27;Отмена&#x27;;$(&#x27;.ce-confirm&#x27;).hidden=false;}else deleteCategory(name);}
 });
 $(&#x27;.ce-topic-text&#x27;).addEventListener(&#x27;input&#x27;,updateCount);
@@ -1950,6 +2413,202 @@ if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=&gt;{render()
     document.removeEventListener(&quot;keydown&quot;, interact);
   }, { once: true });
 })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
 &lt;/script&gt;
 &lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
