@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["completed", "partial", "blocked", "failed"]
+    },
+    "summary": { "type": "string" },
+    "commit_message": { "type": "string" }
+  },
+  "required": ["status", "summary", "commit_message"]
+}
