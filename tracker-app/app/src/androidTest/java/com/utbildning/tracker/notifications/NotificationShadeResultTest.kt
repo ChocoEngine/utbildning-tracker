@@ -31,7 +31,7 @@ class NotificationShadeResultTest {
     private fun shell(command: String) {
         ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(command)).use { it.readBytes() }
     }
-    private suspend fun clickSystemText(text: String, reopenNotifications: Boolean = false) {
+    private suspend fun clickSystemText(text: String, reopenNotifications: Boolean = false, notificationTitle: String? = null) {
         val deadline = System.currentTimeMillis() + 10_000
         fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
             if (node == null) return null
@@ -39,13 +39,27 @@ class NotificationShadeResultTest {
             for (index in 0 until node.childCount) find(node.getChild(index))?.let { return it }
             return null
         }
+        fun containsTitle(node: AccessibilityNodeInfo): Boolean =
+            node.text?.toString() == notificationTitle ||
+                (0 until node.childCount).any { index -> node.getChild(index)?.let(::containsTitle) == true }
+        fun notificationRow(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
+            if (node == null) return null
+            if (node.viewIdResourceName == "com.android.systemui:id/expandableNotificationRow" && containsTitle(node)) return node
+            for (index in 0 until node.childCount) notificationRow(node.getChild(index))?.let { return it }
+            return null
+        }
         while (System.currentTimeMillis() < deadline) {
-            find(automation.rootInActiveWindow)?.let { node ->
+            val root = automation.rootInActiveWindow
+            val searchRoot = if (notificationTitle == null) root else notificationRow(root)
+            find(searchRoot)?.let { node ->
                 val bounds = android.graphics.Rect()
                 node.getBoundsInScreen(bounds)
                 if (!bounds.isEmpty && node.isVisibleToUser) {
-                    shell("input tap ${bounds.centerX()} ${bounds.centerY()}")
-                    return
+                    var target: AccessibilityNodeInfo? = node
+                    while (target != null && !target.isClickable) target = target.parent
+                    // SystemUI may replace the action node while expanding or updating.
+                    // Retry only a rejected click; never dispatch a second accepted action.
+                    if (target?.performAction(AccessibilityNodeInfo.ACTION_CLICK) == true) return
                 }
             }
             automation.rootInActiveWindow?.findAccessibilityNodeInfosByViewId("android:id/expand_button")
@@ -57,6 +71,25 @@ class NotificationShadeResultTest {
             "${node.viewIdResourceName}:${node.text}:${node.contentDescription}\n" +
                 (0 until node.childCount).joinToString("") { tree(node.getChild(it)) }
         fail("System UI text not clickable: $text\n${tree(automation.rootInActiveWindow)}")
+    }
+
+    private suspend fun waitForCheckedTopic(title: String) {
+        fun containsTitle(node: AccessibilityNodeInfo?): Boolean {
+            if (node == null) return false
+            if (node.text?.toString() == title || node.contentDescription?.toString() == title) return true
+            return (0 until node.childCount).any { containsTitle(node.getChild(it)) }
+        }
+        fun checked(node: AccessibilityNodeInfo?): Boolean {
+            if (node == null) return false
+            if (node.isCheckable && node.isChecked && containsTitle(node)) return true
+            return (0 until node.childCount).any { checked(node.getChild(it)) }
+        }
+        val deadline = System.currentTimeMillis() + 10_000
+        while (!checked(automation.rootInActiveWindow) && System.currentTimeMillis() < deadline) delay(50)
+        fun tree(node: AccessibilityNodeInfo?): String = if (node == null) "null" else
+            "${node.text}:${node.contentDescription}:checkable=${node.isCheckable}:checked=${node.isChecked}\n" +
+                (0 until node.childCount).joinToString("") { tree(node.getChild(it)) }
+        assertTrue("Topic must be visibly selected before saving: $title\n${tree(automation.rootInActiveWindow)}", checked(automation.rootInActiveWindow))
     }
 
     @Test fun bothShadeActionsForTodayAndYesterdayWithAndWithoutTopicsInRussianAndEnglish() = runBlocking {
@@ -95,33 +128,34 @@ class NotificationShadeResultTest {
                         val course = repo.createCourse("Shade $language $yesterday $withTopics $result", repo.availableColors().first(),
                             topics = if (withTopics) listOf("First topic", "Second topic") else emptyList())
                         try {
-                        val now = ZonedDateTime.now().withSecond(0).withNano(0)
-                        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(now.plusDays(2).dayOfWeek.value, 720)))
-                        val date = now.toLocalDate().minusDays(if (yesterday) 1 else 0)
-                        val minute = now.hour * 60 + now.minute
-                        val id = "shade_${UUID.randomUUID()}"
-                        // Yesterday's question uses an overnight end; today's starts one minute earlier.
-                        val start = if (yesterday) minute + 1 else minute - 1
-                        assertTrue("Run away from midnight", minute in 2..1437)
-                        val created = System.currentTimeMillis()
-                        dao.insertSession(SessionEntity(id, course.id, date.toEpochDay(), start,
-                            course.name, course.colorId, created, created, endMinute = minute))
-                        val topics = dao.getTopics(course.id)
+                            val now = ZonedDateTime.now().withSecond(0).withNano(0)
+                            repo.saveInitialSchedule(course.id, listOf(WeeklyRule(now.plusDays(2).dayOfWeek.value, 720)))
+                            val date = now.toLocalDate().minusDays(if (yesterday) 1 else 0)
+                            val minute = now.hour * 60 + now.minute
+                            val id = "shade_${UUID.randomUUID()}"
+                            // Yesterday's question uses an overnight end; today's starts one minute earlier.
+                            val start = if (yesterday) minute + 1 else minute - 1
+                            assertTrue("Run away from midnight", minute in 2..1437)
+                            val created = System.currentTimeMillis()
+                            dao.insertSession(SessionEntity(id, course.id, date.toEpochDay(), start,
+                                course.name, course.colorId, created, created, endMinute = minute))
                             assertEquals("App language before $result ${course.name}", language, locales.applicationLocales[0].language)
                             assertEquals("Resource language before $result ${course.name}", language, context.resources.configuration.locales[0].language)
                             val actionId = id
                             ReminderScheduler.receive(context, now.toInstant().toEpochMilli(), repo)
-                            assertTrue(manager.activeNotifications.any { it.tag == actionId })
+                            val postedDeadline = System.currentTimeMillis() + 10_000
+                            while (manager.activeNotifications.none { it.tag == actionId } && System.currentTimeMillis() < postedDeadline) delay(50)
+                            assertTrue("Notification posted: ${course.name} $actionId", manager.activeNotifications.any { it.tag == actionId })
                             shell("cmd statusbar expand-notifications")
                             automation.waitForIdle(300, 5_000)
                             clickSystemText(if (language == "ru") {
                                 if (result == SessionResult.DONE) "Пройдено" else "Пропущено"
-                            } else if (result == SessionResult.DONE) "Done" else "Skipped", reopenNotifications = true)
+                            } else if (result == SessionResult.DONE) "Done" else "Skipped", reopenNotifications = true, notificationTitle = course.name)
                             shell("cmd statusbar collapse")
                             if (result == SessionResult.DONE && withTopics) {
                                 assertEquals(SessionResult.PENDING, dao.getSession(actionId)!!.result)
                                 clickSystemText("First topic")
-                                automation.waitForIdle(300, 5_000)
+                                waitForCheckedTopic("First topic")
                                 clickSystemText(if (language == "ru") "Пройдено" else "Done")
                             }
                             val resultDeadline = System.currentTimeMillis() + 10_000
@@ -131,7 +165,7 @@ class NotificationShadeResultTest {
                             while (manager.activeNotifications.any { it.tag == actionId } && System.currentTimeMillis() < cancelDeadline) delay(50)
                             assertTrue(manager.activeNotifications.none { it.tag == actionId })
                             if (withTopics) {
-                                assertEquals(result == SessionResult.DONE, dao.getTopics(course.id)[0].isCompleted)
+                                assertEquals("${course.name}: selected topic after $result", result == SessionResult.DONE, dao.getTopics(course.id)[0].isCompleted)
                                 assertEquals(if (result == SessionResult.DONE) date.toEpochDay() else null,
                                     dao.getTopics(course.id)[0].completionDate)
                                 assertFalse(dao.getTopics(course.id)[1].isCompleted)

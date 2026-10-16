@@ -6,7 +6,7 @@
    <div class="ss-times"></div>
    <section class="ss-duration"><div class="ss-date-row"><h2>Дата окончания</h2><div class="ss-date-controls"><button type="button" class="ss-pick-date cursor-interaction" aria-label="Выбрать последний день занятий" aria-expanded="false"><i data-lucide="calendar-days" aria-hidden="true"></i><span class="ss-date-value" hidden></span></button><button type="button" class="ss-clear-date cursor-interaction" aria-label="Удалить конечную дату" hidden><i data-lucide="x" aria-hidden="true"></i></button></div></div><div class="ss-picker" hidden><div class="ss-picker-head"><button type="button" class="ss-prev cursor-interaction" aria-label="Предыдущий месяц">‹</button><span class="ss-month" aria-live="polite"></span><button type="button" class="ss-next cursor-interaction" aria-label="Следующий месяц">›</button></div><div class="ss-month-days" role="group" aria-label="Выбор последнего дня занятий"></div><button type="button" class="ss-picker-cancel cursor-interaction">Отмена</button></div></section>
    <p class="ss-error" role="alert" hidden></p>
-   <button type="submit" class="ss-save cursor-interaction">Сохранить расписание</button>
+   <button type="button" class="ss-save cursor-interaction">Сохранить расписание</button>
    <div class="ss-saved" role="status" aria-live="polite"></div>
   </form>
   <div class="ss-bottom" aria-hidden="true"></div>
@@ -57,6 +57,7 @@
 #study-schedule .ss-saved{font-size:12px;line-height:1.5;color:var(--ss-muted);margin:10px 0;min-height:18px}
 #study-schedule .ss-empty{font-size:13px;line-height:1.5;color:var(--ss-muted);padding:14px 0 22px}
 #study-schedule .ss-bottom{height:4px;width:90px;background:var(--ss-line);border-radius:4px;margin:0 auto 12px}
+#study-schedule .ss-phone{height:calc(100dvh - 24px);display:flex;flex-direction:column}#study-schedule .ss-form{flex:1;min-height:0;overflow:auto}#study-schedule dialog{background:var(--ss-paper);color:var(--ss-ink);border:1px solid var(--ss-line);border-radius:16px;max-width:90vw}#study-schedule .ss-remove-end{font-size:18px;text-decoration:none}
 </style>
 <script>
 (()=>{
@@ -71,7 +72,7 @@ function clearFeedback(){$('.ss-error').hidden=true;$('.ss-saved').textContent='
 function render(){
  root.style.setProperty('--ss-gap',design.gap+'px');
  $('.ss-days').innerHTML=short.map((name,day)=>'<button type="button" class="ss-day cursor-interaction" data-day="'+day+'" aria-label="'+full[day]+'" aria-pressed="'+state.days.includes(day)+'">'+name+'</button>').join('');
- $('.ss-times').innerHTML=state.days.length?state.days.map(day=>{const t=state.times[day];return '<section class="ss-time-row"><h3>'+full[day]+'</h3><div class="ss-time-fields"><label>Начало<input type="time" data-time="start" data-index="'+day+'" value="'+esc(t.start)+'" aria-label="'+full[day]+': начало"></label>'+(t.hasEnd?'<div><div class="ss-end-title"><span style="font-size:11px;color:var(--ss-muted)">Окончание</span><button type="button" class="ss-remove-end cursor-interaction" data-remove="'+day+'" aria-label="Убрать окончание: '+full[day]+'">Убрать</button></div><input style="margin-top:7px" type="time" data-time="end" data-index="'+day+'" value="'+esc(t.end)+'" aria-label="'+full[day]+': окончание"></div>':'<button type="button" class="ss-add-end cursor-interaction" data-add="'+day+'">+ Окончание</button>')+'</div></section>';}).join(''):'<div class="ss-empty">Выберите дни занятий</div>';
+ $('.ss-times').innerHTML=state.days.length?state.days.map(day=>{const t=state.times[day];return '<section class="ss-time-row"><h3>'+full[day]+'</h3><div class="ss-time-fields"><label>Начало<input type="time" data-time="start" data-index="'+day+'" value="'+esc(t.start)+'" aria-label="'+full[day]+': начало"></label>'+(t.hasEnd?'<div><div class="ss-end-title"><span style="font-size:11px;color:var(--ss-muted)">Окончание</span><button type="button" class="ss-remove-end cursor-interaction" data-remove="'+day+'" aria-label="Убрать окончание: '+full[day]+'">×</button></div><input style="margin-top:7px" type="time" data-time="end" data-index="'+day+'" value="'+esc(t.end)+'" aria-label="'+full[day]+': окончание"></div>':'<button type="button" class="ss-add-end cursor-interaction" data-add="'+day+'">Добавить конец</button>')+'</div></section>';}).join(''):'<div class="ss-empty">Выберите дни занятий</div>';
  $('.ss-date-value').hidden=!state.hasDate;$('.ss-date-value').textContent=state.hasDate?state.date.split('-').reverse().join('.'):'';$('.ss-clear-date').hidden=!state.hasDate;
  $('.ss-picker').hidden=!pickerOpen;$('.ss-pick-date').setAttribute('aria-expanded',String(pickerOpen));
  if(pickerOpen){
@@ -83,7 +84,7 @@ function render(){
 }
 function restore(s){const v=s?.privateContent?.schedule;if(v&&Array.isArray(v.days)&&v.days.every(d=>Number.isInteger(d)&&d>=0&&d<7)&&v.times){Object.assign(state,v);state.days=[...new Set(state.days)].sort((a,b)=>a-b);state.days.forEach(d=>state.times[d]??={start:'19:00',end:'',hasEnd:false});}if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);}
 restore(window.openai?.widgetState);render();
-root.addEventListener('click',e=>{const day=e.target.closest('[data-day]'),add=e.target.closest('[data-add]'),remove=e.target.closest('[data-remove]');if(day){const d=Number(day.dataset.day);state.days=state.days.includes(d)?state.days.filter(x=>x!==d):[...state.days,d].sort((a,b)=>a-b);state.times[d]??={start:'19:00',end:'',hasEnd:false};}else if(add)state.times[Number(add.dataset.add)].hasEnd=true;else if(remove)state.times[Number(remove.dataset.remove)].hasEnd=false;else return;clearFeedback();render();persist();});
+root.addEventListener('click',e=>{const day=e.target.closest('[data-day]'),add=e.target.closest('[data-add]'),remove=e.target.closest('[data-remove]');if(day){const d=Number(day.dataset.day);state.days=state.days.includes(d)?state.days.filter(x=>x!==d):[...state.days,d].sort((a,b)=>a-b);state.times[d]??={start:'19:00',end:'',hasEnd:false};}else if(add){const d=Number(add.dataset.add),t=state.times[d],parts=t.start.split(':').map(Number),end=Math.min(parts[0]*60+parts[1]+60,1440)%1440;const picker=document.createElement('dialog');picker.innerHTML='<form method="dialog"><h2>Конец</h2><input type="time" value="'+String(Math.floor(end/60)).padStart(2,'0')+':'+String(end%60).padStart(2,'0')+'"><button value="cancel">Отмена</button><button value="apply">Применить</button></form>';root.append(picker);picker.addEventListener('close',()=>{if(picker.returnValue==='apply'&&picker.querySelector('input').value){t.end=picker.querySelector('input').value;t.hasEnd=true;render();persist();}picker.remove();});picker.showModal();return;}else if(remove)state.times[Number(remove.dataset.remove)].hasEnd=false;else return;clearFeedback();render();persist();});
 root.addEventListener('input',e=>{const input=e.target;if(input.dataset.time){state.times[Number(input.dataset.index)][input.dataset.time]=input.value;clearFeedback();persist();}});
 root.addEventListener('click',e=>{
  const date=e.target.closest('[data-date]');
@@ -95,8 +96,11 @@ root.addEventListener('click',e=>{
  else if(e.target.closest('.ss-picker-cancel'))pickerOpen=false;
  else return;render();
 });
-$('.ss-form').addEventListener('submit',e=>{e.preventDefault();clearFeedback();let error='';if(!state.days.length)error='Выберите хотя бы один день занятий.';else{for(const day of state.days){const t=state.times[day];if(!t.start){error=full[day]+': укажите время начала.';break;}if(t.hasEnd&&(!t.end||t.end<=t.start)){error=full[day]+': укажите окончание позже начала.';break;}}}if(!error&&state.hasDate&&!state.date)error='Выберите последний день занятий.';if(error){$('.ss-error').textContent=error;$('.ss-error').hidden=false;return;}persist();$('.ss-saved').textContent='Сохранено: '+state.days.map(d=>short[d]+' '+state.times[d].start+(state.times[d].hasEnd?'–'+state.times[d].end:'')).join(', ')+(state.hasDate?' · до '+state.date.split('-').reverse().join('.'):'');});
+$('.ss-save').addEventListener('click',e=>{e.preventDefault();clearFeedback();let error='';{for(const day of state.days){const t=state.times[day];if(!t.start){error=full[day]+': укажите время начала.';break;}if(t.hasEnd&&!t.end){error=full[day]+': укажите окончание.';break;}}}if(!error&&state.hasDate&&!state.date)error='Выберите последний день занятий.';if(error){$('.ss-error').textContent=error;$('.ss-error').hidden=false;return;}persist();$('.ss-saved').textContent=(state.days.length?'Сохранено: ':state.hasDate?'Дата сохранена: ':'Расписание отключено. ')+state.days.map(d=>short[d]+' '+state.times[d].start+(state.times[d].hasEnd?'–'+state.times[d].end+(state.times[d].end<state.times[d].start?' (следующий день)':''):'')).join(', ')+(state.hasDate?' · до '+state.date.split('-').reverse().join('.'):'');});
 window.addEventListener('openai:set_globals',e=>{restore(e.detail?.globals?.widgetState);render();});
 if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();persist();}});t.addSlider(design,'gap',{label:'Отступы между разделами',min:14,max:28,unit:'px'});}
 })();
+
+// The standalone sandbox disallows native form submission. Dialog actions stay local.
+document.getElementById('study-schedule').addEventListener('click',event=>{const button=event.target.closest('dialog button[value]');if(button){event.preventDefault();button.closest('dialog').close(button.value);}});
 </script>

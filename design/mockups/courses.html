@@ -94,7 +94,7 @@
     --color-ring-primary,
     light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
   );
-  --font-size-base: var(--font-text-md-size, 14px);
+  --font-size-base: var(--font-text-md-size, 16px);
   --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
   --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
   --green: light-dark(rgb(0 162 64), rgb(64 201 119));
@@ -109,7 +109,10 @@
   --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
 
   /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
   --font-mono:
     ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
     monospace;
@@ -119,18 +122,18 @@
   --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
   --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
   --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
+  --font-weight-normal: 400;
   --font-weight-medium: 500;
   --icon-size: 16px;
   --line-height-normal: calc(var(--font-size-normal) * 1.5);
   --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
   --line-height-small: calc(var(--font-size-small) + 4px);
   --corner-shape: round;
-  --radius: var(--border-radius-lg, 10px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-2xl: calc(var(--radius) * 2);
   --radius-full: 9999px;
   --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
   --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
@@ -180,9 +183,10 @@ html &gt; body {
   color: var(--foreground);
   background: transparent !important;
   font-family: var(--font-sans) !important;
-  font-size: var(--font-size-normal);
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
 }
 
 .cursor-interaction {
@@ -192,9 +196,9 @@ html &gt; body {
 a {
   color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
   cursor: var(--cursor-interaction, pointer);
-  font-weight: var(--font-weight-medium, 500);
   text-decoration: none;
   text-underline-offset: 2px;
+  font-weight: inherit;
 }
 
 a:is(:hover, :focus-visible) {
@@ -212,32 +216,51 @@ h6,
 p {
   margin-block: 0;
 }
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
+p,
+h1,
+h2,
 h3,
 h4,
 h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
 }
 
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 b,
 strong,
 th {
-  font-weight: var(--font-weight-medium);
+  font-weight: 600;
 }
 
 code:not(pre code) {
@@ -253,6 +276,12 @@ code:not(pre code) {
   box-decoration-break: clone;
   word-break: break-word;
 }
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
 
 .table-responsive {
   width: 100%;
@@ -262,10 +291,14 @@ code:not(pre code) {
 
 .table {
   width: 100%;
-  border-collapse: collapse;
   color: var(--foreground);
   font: inherit;
   text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
 }
 
 .table :is(th, td) {
@@ -275,6 +308,10 @@ code:not(pre code) {
   border-bottom: 1px solid var(--border);
   text-align: start;
   vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
 }
 
 .table-responsive &gt; .table :is(th, td) {
@@ -289,17 +326,21 @@ code:not(pre code) {
   font-weight: 600;
 }
 
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
 }
 
 .table tbody tr:last-child :is(th, td) {
   border-bottom: 0;
 }
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
 
 .table.table-sm :is(th, td) {
-  padding-block: 6px;
+  padding-block: 8px;
 }
 
 .table.table-sm :is(th, td):not(:last-child) {
@@ -339,7 +380,18 @@ code:not(pre code) {
   background: var(--card);
 }
 
-#widget &gt; :not(.card, .progress) {
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -365,19 +417,29 @@ code:not(pre code) {
     var(--tooltip-available-height, calc(100vh - 10px)),
     calc(100vh - 10px)
   );
-  padding: 4px 8px;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
   overflow-wrap: break-word;
   white-space: normal;
   pointer-events: none;
   user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
 }
 
 .viz-grid {
@@ -442,16 +504,21 @@ hr {
 }
 
 .viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
 }
 
 small,
-.text-small,
-.viz-badge {
+.text-small {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
 }
@@ -505,13 +572,22 @@ small,
   font: inherit;
 }
 
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
 .btn,
 .nav-link {
   appearance: button;
   display: inline-flex;
   inline-size: fit-content;
   max-inline-size: 100%;
-  min-height: 28px;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -519,16 +595,31 @@ small,
   padding: 0 8px;
   -webkit-app-region: no-drag;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
   cursor: var(--cursor-interaction, pointer);
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
 }
 
 .btn:is(.btn-block, .viz-tile) {
@@ -546,16 +637,22 @@ a.btn {
   text-decoration: none;
 }
 
-.btn:not(:disabled):hover,
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
 .nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 .btn-primary {
-  border-color: transparent;
+  border-color: var(--border);
   color: var(--primary-foreground);
   background: var(--foreground);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-primary .text-muted {
@@ -564,7 +661,7 @@ a.btn {
 
 .btn-primary:not(:disabled):hover {
   background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
+  background-clip: border-box;
 }
 
 .btn-ghost {
@@ -574,8 +671,11 @@ a.btn {
 }
 
 .btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .nav-pills .nav-link {
@@ -594,6 +694,194 @@ a.btn {
 .nav-pills .nav-link.active {
   color: var(--foreground);
   background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
 }
 
 .btn:disabled,
@@ -616,14 +904,42 @@ a.btn {
 .form-control {
   display: block;
   width: 100%;
-  min-height: 28px;
   padding: 0 8px;
   outline: none;
   border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
-  background: var(--secondary);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
 }
 
 .form-control::placeholder {
@@ -631,14 +947,12 @@ a.btn {
 }
 
 .form-control[type=&quot;file&quot;] {
-  padding: 0;
   overflow: hidden;
   cursor: var(--cursor-interaction, pointer);
+  padding: 0;
 }
 
 .form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
   padding: 0 8px;
   border: 0;
   border-right: 1px solid var(--input);
@@ -646,6 +960,9 @@ a.btn {
   background: var(--secondary);
   cursor: inherit;
   font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
 }
 
 .form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
@@ -654,7 +971,7 @@ a.btn {
 
 .form-control-color[type=&quot;color&quot;] {
   width: 40px;
-  height: 28px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
   padding: 3px;
   cursor: var(--cursor-interaction, pointer);
 }
@@ -671,58 +988,89 @@ a.btn {
 
 textarea.form-control {
   height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
   resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
 }
 
 .form-control:focus-visible {
   border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
 }
 
 .form-control:disabled,
 .form-select:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
 }
 
 .form-select {
   appearance: none;
   display: block;
   width: 100%;
-  min-height: 28px;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   margin: 0;
-  padding: 0 32px 0 8px;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
   outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
   corner-shape: var(--corner-shape);
   color: var(--foreground);
   background-color: var(--secondary);
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
   background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
   background-repeat: no-repeat;
-  background-size: 4px 4px;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
   cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
 }
 
 .form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
 }
 
 .form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
 }
 
 .form-check {
   display: flex;
-  min-height: 20px;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
   align-items: center;
   gap: 6px;
 }
@@ -744,11 +1092,15 @@ textarea.form-control {
 }
 
 .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background-color: var(--secondary);
+  corner-shape: round;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 .form-check:not(.form-switch)
@@ -756,9 +1108,10 @@ textarea.form-control {
   background-color: var(--card);
 }
 
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
 }
 
 .form-check:not(.form-switch)
@@ -769,24 +1122,48 @@ textarea.form-control {
   background: var(--primary-foreground);
   content: &quot;&quot;;
   mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
 }
 
 .form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
   border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
 }
 
 .form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
 }
 
 .form-check:not(.form-switch) .form-check-input:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
 }
 
 .form-check:not(.form-switch) .form-check-input:disabled {
@@ -796,6 +1173,12 @@ textarea.form-control {
 
 .form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
   cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
 }
 
 .form-switch .form-check-input:disabled,
@@ -829,15 +1212,16 @@ textarea.form-control {
   box-sizing: border-box;
   border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
   box-shadow: var(--shadow-sm);
   content: &quot;&quot;;
   transform: translate(2px, -50%);
   transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
 }
 
 .form-switch .form-check-input:checked {
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .form-switch .form-check-input:checked::before {
@@ -846,49 +1230,54 @@ textarea.form-control {
 
 .form-switch .form-check-input:focus-visible {
   box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
 }
 
 .form-range {
   appearance: none;
   display: block;
   width: 100%;
-  height: 28px;
   flex: 1;
   margin: 0;
   padding: 0;
-  outline: none;
   border: 0;
   accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
 }
 
 .form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
   height: 20px;
-  margin-top: 4px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
 }
 
 .form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
 }
 
 .form-range::-moz-range-thumb {
@@ -896,17 +1285,19 @@ textarea.form-control {
   height: 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
 }
 
 .form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
 }
 
 .form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
+  opacity: 1;
+  cursor: default;
 }
 
 .btn:not(.btn-primary, .viz-tile):is(
@@ -914,9 +1305,9 @@ textarea.form-control {
   [aria-selected=&quot;true&quot;],
   .is-selected
 ) {
-  border-color: var(--primary);
+  border-color: transparent;
   color: var(--primary-foreground);
-  background: var(--primary);
+  background: var(--blue);
 }
 
 .btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
@@ -926,13 +1317,67 @@ textarea.form-control {
 
 .btn:focus-visible,
 .nav-link:focus-visible {
-  outline: 2px solid var(--ring);
   outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
 }
 
 @media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
   .btn,
   .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
   .form-control,
   .form-select {
     min-width: 44px;
@@ -942,7 +1387,28 @@ textarea.form-control {
   /* Keep small-screen WebKit from zooming when a text field receives focus. */
   .form-control,
   .form-select {
-    font-size: max(16px, var(--font-size-normal));
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
   }
 
   .form-control[type=&quot;file&quot;]::file-selector-button {
@@ -996,18 +1462,6 @@ textarea.form-control {
   .form-range {
     height: 44px;
     touch-action: pan-y;
-  }
-
-  .form-range::-webkit-slider-runnable-track {
-    height: 44px;
-  }
-
-  .form-range::-moz-range-track {
-    height: 44px;
-  }
-
-  .form-range::-webkit-slider-thumb {
-    margin-top: 12px;
   }
 }
 
@@ -1329,22 +1783,22 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;div id=&quot;ink-courses&quot; aria-label=&quot;Макет списка курсов&quot;&gt;
  &lt;div class=&quot;uc-phone&quot;&gt;
   &lt;section class=&quot;uc-list-page&quot;&gt;
-   &lt;header&gt;&lt;div class=&quot;uc-eyebrow&quot;&gt;МОЙ УЧЕБНЫЙ РИТМ&lt;/div&gt;&lt;h1&gt;Курсы&lt;/h1&gt;&lt;p class=&quot;uc-subtitle&quot;&gt;В своём темпе, шаг за шагом.&lt;/p&gt;&lt;/header&gt;
+   &lt;header&gt;&lt;h1&gt;Курсы&lt;/h1&gt;&lt;/header&gt;
    &lt;div class=&quot;uc-add-wrap&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;uc-add cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;plus&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Добавить курс&lt;/button&gt;&lt;/div&gt;
    &lt;div class=&quot;uc-list&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
    &lt;div class=&quot;uc-summary&quot;&gt;&lt;span&gt;Всего завершённых &lt;b class=&quot;uc-count&quot;&gt;2&lt;/b&gt;&lt;/span&gt;&lt;button class=&quot;uc-toggle cursor-interaction&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Показать все&lt;/button&gt;&lt;/div&gt;
   &lt;/section&gt;
   &lt;section class=&quot;uc-edit-page&quot; hidden&gt;
    &lt;header&gt;&lt;button type=&quot;button&quot; class=&quot;uc-back cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;arrow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;К курсам&lt;/button&gt;&lt;h1&gt;Редактирование&lt;/h1&gt;&lt;p class=&quot;uc-edit-subtitle&quot;&gt;&lt;/p&gt;&lt;/header&gt;
-   &lt;form class=&quot;uc-form&quot;&gt;&lt;label&gt;Название курса&lt;input class=&quot;uc-name&quot; name=&quot;name&quot; required maxlength=&quot;90&quot;&gt;&lt;/label&gt;&lt;label&gt;Категория&lt;input class=&quot;uc-category&quot; name=&quot;category&quot; required maxlength=&quot;50&quot;&gt;&lt;/label&gt;&lt;div class=&quot;uc-preview-progress&quot;&gt;&lt;/div&gt;&lt;div class=&quot;uc-edit-meta&quot;&gt;&lt;/div&gt;&lt;button type=&quot;submit&quot; class=&quot;uc-save cursor-interaction&quot;&gt;Сохранить&lt;/button&gt;&lt;/form&gt;
+   &lt;form class=&quot;uc-form&quot;&gt;&lt;label&gt;Название курса&lt;input class=&quot;uc-name&quot; name=&quot;name&quot; required&gt;&lt;/label&gt;&lt;label&gt;Категория&lt;input class=&quot;uc-category&quot; name=&quot;category&quot;&gt;&lt;/label&gt;&lt;div class=&quot;uc-preview-progress&quot;&gt;&lt;/div&gt;&lt;div class=&quot;uc-edit-meta&quot;&gt;&lt;/div&gt;&lt;p class=&quot;uc-edit-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;button type=&quot;button&quot; class=&quot;uc-schedule-open&quot;&gt;Настроить расписание&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;uc-topics-open&quot;&gt;Редактировать темы&lt;/button&gt;&lt;/form&gt;
   &lt;/section&gt;
-  &lt;section class=&quot;uc-new-page&quot; hidden&gt;&lt;header&gt;&lt;button type=&quot;button&quot; class=&quot;uc-new-back uc-back cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;arrow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;К курсам&lt;/button&gt;&lt;h1 class=&quot;uc-new-title&quot;&gt;&lt;/h1&gt;&lt;p class=&quot;uc-new-category&quot;&gt;&lt;/p&gt;&lt;/header&gt;&lt;div class=&quot;uc-new-body&quot;&gt;&lt;div class=&quot;uc-mode&quot;&gt;&lt;button type=&quot;button&quot; data-mode=&quot;scheduled&quot; class=&quot;cursor-interaction&quot;&gt;По расписанию&lt;/button&gt;&lt;button type=&quot;button&quot; data-mode=&quot;unscheduled&quot; class=&quot;cursor-interaction&quot;&gt;Без расписания&lt;/button&gt;&lt;/div&gt;&lt;label class=&quot;uc-new-topics&quot; hidden&gt;Темы&lt;textarea rows=&quot;5&quot; placeholder=&quot;Одна строка — одна тема&quot;&gt;&lt;/textarea&gt;&lt;button type=&quot;button&quot; class=&quot;uc-new-apply cursor-interaction&quot;&gt;Применить список&lt;/button&gt;&lt;/label&gt;&lt;p class=&quot;uc-new-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/p&gt;&lt;/div&gt;&lt;/section&gt;
-  &lt;dialog class=&quot;uc-create-dialog&quot; aria-labelledby=&quot;uc-create-title&quot;&gt;&lt;form class=&quot;uc-create-form&quot;&gt;&lt;h2 id=&quot;uc-create-title&quot;&gt;Новый курс&lt;/h2&gt;&lt;label&gt;Название&lt;input class=&quot;uc-create-name&quot; maxlength=&quot;50&quot; required autocomplete=&quot;off&quot;&gt;&lt;/label&gt;&lt;label&gt;Категория&lt;input class=&quot;uc-create-category&quot; list=&quot;uc-category-options&quot; placeholder=&quot;Без категории&quot; autocomplete=&quot;off&quot;&gt;&lt;/label&gt;&lt;datalist id=&quot;uc-category-options&quot;&gt;&lt;/datalist&gt;&lt;p class=&quot;uc-create-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/p&gt;&lt;div class=&quot;uc-dialog-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;uc-create-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;button type=&quot;submit&quot; class=&quot;uc-create-next cursor-interaction&quot;&gt;Далее&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;/dialog&gt;
+  &lt;dialog class=&quot;uc-component-dialog&quot;&gt;&lt;h2&gt;&lt;/h2&gt;&lt;div class=&quot;uc-component-content&quot;&gt;&lt;/div&gt;&lt;p class=&quot;uc-component-error&quot; role=&quot;alert&quot;&gt;&lt;/p&gt;&lt;button type=&quot;button&quot; class=&quot;uc-component-cancel&quot;&gt;Отмена&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;uc-component-apply&quot;&gt;Применить&lt;/button&gt;&lt;/dialog&gt;
+  &lt;dialog class=&quot;uc-create-dialog&quot; aria-labelledby=&quot;uc-create-title&quot;&gt;&lt;form class=&quot;uc-create-form&quot;&gt;&lt;h2 id=&quot;uc-create-title&quot;&gt;Новый курс&lt;/h2&gt;&lt;label&gt;Название&lt;input class=&quot;uc-create-name&quot; required autocomplete=&quot;off&quot;&gt;&lt;/label&gt;&lt;label&gt;Категория&lt;input class=&quot;uc-create-category&quot; list=&quot;uc-category-options&quot; placeholder=&quot;Без категории&quot; autocomplete=&quot;off&quot;&gt;&lt;/label&gt;&lt;datalist id=&quot;uc-category-options&quot;&gt;&lt;/datalist&gt;&lt;p class=&quot;uc-create-error&quot; role=&quot;alert&quot; hidden&gt;&lt;/p&gt;&lt;div class=&quot;uc-dialog-actions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;uc-create-cancel cursor-interaction&quot;&gt;Отмена&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;uc-create-next cursor-interaction&quot;&gt;Далее&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;/dialog&gt;
   &lt;footer aria-label=&quot;Разделы приложения&quot;&gt;&lt;span&gt;&lt;i data-lucide=&quot;sun&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Сегодня&lt;/span&gt;&lt;span&gt;&lt;i data-lucide=&quot;calendar-days&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Календарь&lt;/span&gt;&lt;span class=&quot;uc-nav-active&quot; aria-current=&quot;page&quot;&gt;&lt;i data-lucide=&quot;book-open&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;Курсы&lt;/span&gt;&lt;/footer&gt;
  &lt;/div&gt;
 &lt;/div&gt;
 &lt;style&gt;
-#ink-courses{--uc-paper:light-dark(#fcfaf6,#222522);--uc-ink:light-dark(#29352e,#eef0e8);--uc-muted:light-dark(#697367,#aab5a8);--uc-panel:light-dark(#f1efe7,#2e342e);--uc-line:light-dark(#e5e5d9,#40483e);--uc-a:light-dark(#78ac80,#80bd91);--uc-b:light-dark(#dc9475,#e6a382);--uc-c:light-dark(#9d95cc,#b0a2e2);--uc-d:light-dark(#81a9b5,#8fb6c2);--uc-e:light-dark(#c7a558,#d9bc75);--uc-space:16px;color:var(--uc-ink);font-family:ui-rounded,&quot;SF Pro Rounded&quot;,system-ui,sans-serif;padding:12px 0}
+#ink-courses{--uc-paper:light-dark(#fcfaf6,#222522);--uc-ink:light-dark(#29352e,#eef0e8);--uc-muted:light-dark(#697367,#aab5a8);--uc-panel:light-dark(#f1efe7,#2e342e);--uc-line:light-dark(#e5e5d9,#40483e);--uc-a:light-dark(#78ac80,#80bd91);--uc-b:light-dark(#dc9475,#e6a382);--uc-c:light-dark(#9d95cc,#b0a2e2);--uc-d:light-dark(#6b9dcc,#8cb5db);--uc-e:light-dark(#c7a558,#d9bc75);--uc-space:16px;color:var(--uc-ink);font-family:ui-rounded,&quot;SF Pro Rounded&quot;,system-ui,sans-serif;padding:12px 0}
 #ink-courses *{box-sizing:border-box}#ink-courses [hidden]{display:none!important}
 #ink-courses .uc-phone{max-width:414px;margin:auto;background:var(--uc-paper);border-radius:30px;overflow:hidden;border:1px solid var(--uc-line)}
 #ink-courses header{padding:28px 24px 24px}
@@ -1400,6 +1854,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 #ink-courses .uc-form input{width:100%;min-width:0;background:var(--uc-panel);border:1px solid var(--uc-line);border-radius:12px;padding:12px;font-size:16px;color:var(--uc-ink)}
 #ink-courses .uc-edit-meta{font-size:13px;color:var(--uc-muted)}
 #ink-courses .uc-save{background:var(--uc-ink);color:var(--uc-paper);border:0;border-radius:14px;min-height:46px;font-size:14px}
+#ink-courses .uc-phone{height:calc(100dvh - 24px);display:flex;flex-direction:column}#ink-courses .uc-list-page{flex:1;min-height:0;display:flex;flex-direction:column}#ink-courses .uc-list{flex:1;min-height:0;overflow:auto}#ink-courses header{padding:16px 24px}#ink-courses .uc-summary{margin-bottom:10px}#ink-courses .uc-add{background:#718376;color:#FCFAF6;border-radius:13px}#ink-courses .uc-edit-page{flex:1;overflow:auto}
+#ink-courses .uc-component-dialog{background:var(--uc-paper);color:var(--uc-ink);border:1px solid var(--uc-line);border-radius:20px;max-width:90vw;max-height:85dvh;overflow:auto;padding:16px}#ink-courses .uc-component-dialog label{display:block;margin:10px 0}#ink-courses .uc-component-dialog input{max-width:100%}#ink-courses .uc-component-dialog textarea{min-height:140px}
+#ink-courses .uc-finished .uc-blot{background:none;transform:none;opacity:1}#ink-courses .uc-paused .uc-blot,#ink-courses .uc-paused .uc-progress{opacity:.45}#ink-courses .uc-paused .uc-title{color:var(--uc-muted)}#ink-courses .uc-paused .uc-meta:nth-child(3){display:none}
 &lt;/style&gt;
 &lt;script&gt;
 (()=&gt;{
@@ -1410,49 +1867,50 @@ const courses=[
 {id:3,name:&#x27;Указатели и память&#x27;,category:&#x27;Программирование&#x27;,color:&#x27;var(--uc-d)&#x27;,done:3,total:10,finished:false,mode:&#x27;Без расписания&#x27;},
 {id:4,name:&#x27;Основы C&#x27;,category:&#x27;Программирование&#x27;,color:&#x27;var(--uc-e)&#x27;,done:18,total:18,finished:true,mode:&#x27;Без расписания&#x27;},
 {id:5,name:&#x27;Шведский · A2&#x27;,category:&#x27;Языки&#x27;,color:&#x27;var(--uc-c)&#x27;,done:14,total:20,finished:false,mode:&#x27;Пн, пт · 20:30&#x27;},
-{id:6,name:&#x27;Шведская грамматика&#x27;,category:&#x27;Языки&#x27;,color:&#x27;var(--uc-e)&#x27;,done:2,total:12,finished:false,mode:&#x27;Без расписания&#x27;},
+{id:6,name:&#x27;Шведская грамматика&#x27;,category:&#x27;Языки&#x27;,color:&#x27;var(--uc-e)&#x27;,done:2,total:12,finished:false,paused:true,mode:&#x27;Без расписания&#x27;},
 {id:7,name:&#x27;Шведский · A1&#x27;,category:&#x27;Языки&#x27;,color:&#x27;var(--uc-c)&#x27;,done:16,total:16,finished:true,mode:&#x27;Без расписания&#x27;}
 ];
-let showAll=false,editing=null,newDraft=null;
+let showAll=false,editing=null;
 const palette=[&#x27;var(--uc-a)&#x27;,&#x27;var(--uc-b)&#x27;,&#x27;var(--uc-c)&#x27;,&#x27;var(--uc-d)&#x27;,&#x27;var(--uc-e)&#x27;,&#x27;light-dark(#c28d9a,#d4a2ad)&#x27;,&#x27;light-dark(#397f79,#75b3a9)&#x27;,&#x27;light-dark(#899ac0,#a2b1d5)&#x27;,&#x27;light-dark(#a4aa73,#bdc18e)&#x27;,&#x27;light-dark(#b29885,#cbb19b)&#x27;];
 const design={spacing:16,brush:true};
 const esc=s=&gt;String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
-function progress(c){if(c.finished)return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;✓ Курс завершён&lt;/span&gt;&#x27;;if(c.total===null)return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;&lt;span&gt;&#x27;+esc(c.mode)+&#x27;&lt;/span&gt;&lt;/span&gt;&#x27;;const percent=c.total?Math.round(c.done/c.total*100):0;return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;&lt;span&gt;&#x27;+c.done+&#x27; из &#x27;+c.total+&#x27; тем&#x27;+(c.mode===&#x27;Без расписания&#x27;?&#x27; · Без расписания&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;span class=&quot;uc-percent&quot;&gt;&#x27;+percent+&#x27;%&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;uc-progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройдено тем&quot; aria-valuenow=&quot;&#x27;+c.done+&#x27;&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;&#x27;+Math.max(1,c.total)+&#x27;&quot;&gt;&lt;span class=&quot;uc-progress-fill&quot; style=&quot;width:&#x27;+percent+&#x27;%&quot;&gt;&lt;/span&gt;&lt;/span&gt;&#x27;;}
+function progress(c){
+ if(c.finished)return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;Курс завершён&lt;/span&gt;&#x27;;
+ const status=c.paused?&#x27;На паузе&#x27;:c.mode;
+ if(c.total===null||c.total===0)return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;&#x27;+esc(status)+&#x27;&lt;/span&gt;&#x27;;
+ const percent=Math.round(c.done/c.total*100),suffix=c.paused||c.mode===&#x27;Без расписания&#x27;?&#x27; · &#x27;+esc(status):&#x27;&#x27;;
+ return &#x27;&lt;span class=&quot;uc-meta&quot;&gt;&lt;span&gt;&#x27;+c.done+&#x27; из &#x27;+c.total+&#x27; тем&#x27;+suffix+&#x27;&lt;/span&gt;&lt;span class=&quot;uc-percent&quot;&gt;&#x27;+percent+&#x27;%&lt;/span&gt;&lt;/span&gt;&#x27;+
+ (!c.paused&amp;&amp;c.mode!==&#x27;Без расписания&#x27;?&#x27;&lt;span class=&quot;uc-meta&quot;&gt;&#x27;+esc(c.mode)+&#x27;&lt;/span&gt;&#x27;:&#x27;&#x27;)+
+ &#x27;&lt;span class=&quot;uc-progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Пройдено тем&quot; aria-valuenow=&quot;&#x27;+c.done+&#x27;&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;&#x27;+c.total+&#x27;&quot;&gt;&lt;span class=&quot;uc-progress-fill&quot; style=&quot;width:&#x27;+percent+&#x27;%&quot;&gt;&lt;/span&gt;&lt;/span&gt;&#x27;;
+}
 
 function icons(){if(globalThis.lucide)globalThis.lucide.createIcons({attrs:{width:16,height:16}});}
 function save(){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{showAll,selectedCourse:editing===null?null:courses.find(c=&gt;c.id===editing)?.name,design},privateContent:{courses,editing}}).catch(()=&gt;{});}
 function render(){
  root.style.setProperty(&#x27;--uc-space&#x27;,design.spacing+&#x27;px&#x27;);root.dataset.brush=String(design.brush);
- root.querySelector(&#x27;.uc-list-page&#x27;).hidden=editing!==null||newDraft!==null;root.querySelector(&#x27;.uc-edit-page&#x27;).hidden=editing===null||newDraft!==null;root.querySelector(&#x27;.uc-new-page&#x27;).hidden=newDraft===null;root.querySelector(&#x27;.uc-add-wrap&#x27;).hidden=courses.filter(c=&gt;!c.finished).length&gt;=10;
- if(newDraft){root.querySelector(&#x27;.uc-new-title&#x27;).textContent=newDraft.name;root.querySelector(&#x27;.uc-new-category&#x27;).textContent=newDraft.category||&#x27;Без категории&#x27;;root.querySelector(&#x27;.uc-new-topics&#x27;).hidden=newDraft.mode!==&#x27;unscheduled&#x27;;root.querySelectorAll(&#x27;[data-mode]&#x27;).forEach(b=&gt;b.setAttribute(&#x27;aria-pressed&#x27;,String(newDraft.mode===b.dataset.mode)));}
+ root.querySelector(&#x27;.uc-list-page&#x27;).hidden=editing!==null;root.querySelector(&#x27;.uc-edit-page&#x27;).hidden=editing===null;root.querySelector(&#x27;.uc-add-wrap&#x27;).hidden=courses.filter(c=&gt;!c.finished).length&gt;=10;
  const visible=courses.filter(c=&gt;showAll||!c.finished),groups=[...new Set(visible.map(c=&gt;c.category))];
- root.querySelector(&#x27;.uc-list&#x27;).innerHTML=groups.map(g=&gt;&#x27;&lt;section class=&quot;uc-group&quot;&gt;&lt;h2 class=&quot;uc-group-heading&quot;&gt;&#x27;+esc(g)+&#x27;&lt;/h2&gt;&#x27;+visible.filter(c=&gt;c.category===g).sort((a,b)=&gt;Number(a.finished)-Number(b.finished)).map(c=&gt;&#x27;&lt;button type=&quot;button&quot; class=&quot;uc-row cursor-interaction &#x27;+(c.finished?&#x27;uc-finished&#x27;:&#x27;&#x27;)+&#x27;&quot; data-course=&quot;&#x27;+c.id+&#x27;&quot; style=&quot;--course-color:&#x27;+c.color+&#x27;&quot; aria-label=&quot;Редактировать &#x27;+esc(c.name)+&#x27;&quot;&gt;&lt;span class=&quot;uc-blot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;uc-body&quot;&gt;&lt;span class=&quot;uc-title&quot;&gt;&#x27;+esc(c.name)+&#x27;&lt;/span&gt;&#x27;+progress(c)+&#x27;&lt;/span&gt;&lt;i class=&quot;uc-arrow&quot; data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/section&gt;&#x27;).join(&#x27;&#x27;);
+ root.querySelector(&#x27;.uc-list&#x27;).innerHTML=groups.map(g=&gt;&#x27;&lt;section class=&quot;uc-group&quot;&gt;&lt;h2 class=&quot;uc-group-heading&quot;&gt;&#x27;+esc(g)+&#x27;&lt;/h2&gt;&#x27;+visible.filter(c=&gt;c.category===g).sort((a,b)=&gt;Number(a.finished)-Number(b.finished)).map(c=&gt;&#x27;&lt;button type=&quot;button&quot; class=&quot;uc-row cursor-interaction &#x27;+(c.finished?&#x27;uc-finished&#x27;:c.paused?&#x27;uc-paused&#x27;:&#x27;&#x27;)+&#x27;&quot; data-course=&quot;&#x27;+c.id+&#x27;&quot; style=&quot;--course-color:&#x27;+c.color+&#x27;&quot; aria-label=&quot;Редактировать &#x27;+esc(c.name)+&#x27;&quot;&gt;&lt;span class=&quot;uc-blot&quot; aria-hidden=&quot;true&quot;&gt;&#x27;+(c.finished?&#x27;✓&#x27;:&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;span class=&quot;uc-body&quot;&gt;&lt;span class=&quot;uc-title&quot;&gt;&#x27;+esc(c.name)+&#x27;&lt;/span&gt;&#x27;+progress(c)+&#x27;&lt;/span&gt;&lt;i class=&quot;uc-arrow&quot; data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/section&gt;&#x27;).join(&#x27;&#x27;);
  root.querySelector(&#x27;.uc-count&#x27;).textContent=courses.filter(c=&gt;c.finished).length;
  const toggle=root.querySelector(&#x27;.uc-toggle&#x27;);toggle.hidden=!courses.some(c=&gt;c.finished);toggle.textContent=showAll?&#x27;Показать незавершённые&#x27;:&#x27;Показать все&#x27;;toggle.setAttribute(&#x27;aria-pressed&#x27;,String(showAll));
- if(editing!==null){const c=courses.find(c=&gt;c.id===editing);root.querySelector(&#x27;.uc-name&#x27;).value=c.name;root.querySelector(&#x27;.uc-category&#x27;).value=c.category;root.querySelector(&#x27;.uc-edit-subtitle&#x27;).textContent=c.finished?&#x27;Завершённый курс&#x27;:&#x27;Незавершённый курс&#x27;;const p=root.querySelector(&#x27;.uc-preview-progress&#x27;);p.style.setProperty(&#x27;--course-color&#x27;,c.color);p.innerHTML=progress(c);root.querySelector(&#x27;.uc-edit-meta&#x27;).textContent=c.mode;}
+ if(editing!==null){const c=courses.find(c=&gt;c.id===editing);root.querySelector(&#x27;.uc-name&#x27;).disabled=c.finished;root.querySelector(&#x27;.uc-category&#x27;).disabled=c.finished;root.querySelector(&#x27;.uc-topics-open&#x27;).hidden=c.finished;root.querySelector(&#x27;.uc-schedule-open&#x27;).hidden=c.finished||c.paused;root.querySelector(&#x27;.uc-name&#x27;).value=c.name;root.querySelector(&#x27;.uc-category&#x27;).value=c.category;root.querySelector(&#x27;.uc-edit-subtitle&#x27;).textContent=c.finished?&#x27;Завершённый курс&#x27;:&#x27;Незавершённый курс&#x27;;const p=root.querySelector(&#x27;.uc-preview-progress&#x27;);p.style.setProperty(&#x27;--course-color&#x27;,c.color);p.innerHTML=progress(c);root.querySelector(&#x27;.uc-edit-meta&#x27;).textContent=c.mode;}
  icons();
 }
 function restore(s){if(!s)return;if(typeof s.modelContent?.showAll===&#x27;boolean&#x27;)showAll=s.modelContent.showAll;if(s.modelContent?.design)Object.assign(design,s.modelContent.design);if(Array.isArray(s.privateContent?.courses)){s.privateContent.courses.forEach(c=&gt;{const old=courses.find(x=&gt;x.id===c.id);if(old){old.name=c.name;old.category=c.category;}else if(Number.isInteger(c.id)&amp;&amp;typeof c.name===&#x27;string&#x27;&amp;&amp;(c.total===null||(Number.isInteger(c.total)&amp;&amp;c.total&gt;0))&amp;&amp;palette.includes(c.color)&amp;&amp;courses.filter(x=&gt;!x.finished).length&lt;10)courses.push(c);});}if(s.privateContent?.editing&amp;&amp;courses.some(c=&gt;c.id===s.privateContent.editing))editing=s.privateContent.editing;}
 restore(window.openai?.widgetState);render();
 const dialog=root.querySelector(&#x27;.uc-create-dialog&#x27;);
 function openCreate(){if(courses.filter(c=&gt;!c.finished).length&gt;=10)return;root.querySelector(&#x27;.uc-create-form&#x27;).reset();root.querySelector(&#x27;.uc-create-error&#x27;).hidden=true;root.querySelector(&#x27;#uc-category-options&#x27;).innerHTML=[...new Set(courses.map(c=&gt;c.category).filter(Boolean))].map(c=&gt;&#x27;&lt;option value=&quot;&#x27;+esc(c)+&#x27;&quot;&gt;&lt;/option&gt;&#x27;).join(&#x27;&#x27;);dialog.showModal();root.querySelector(&#x27;.uc-create-name&#x27;).focus();}
-function finishCreation(mode){
- if(!newDraft)return;const color=palette.find(color=&gt;!courses.some(c=&gt;!c.finished&amp;&amp;c.color===color));
- if(!color||courses.filter(c=&gt;!c.finished).length&gt;=10){root.querySelector(&#x27;.uc-new-error&#x27;).textContent=&#x27;Достигнут лимит 10 незавершённых курсов&#x27;;root.querySelector(&#x27;.uc-new-error&#x27;).hidden=false;return;}
- const topics=root.querySelector(&#x27;.uc-new-topics textarea&#x27;).value.split(/\r?\n/).map(t=&gt;t.trim()).filter(Boolean);
- if(mode===&#x27;unscheduled&#x27;&amp;&amp;!topics.length){root.querySelector(&#x27;.uc-new-error&#x27;).textContent=&#x27;Добавьте хотя бы одну тему&#x27;;root.querySelector(&#x27;.uc-new-error&#x27;).hidden=false;return;}
- const category=courses.find(c=&gt;c.category.trim().toLocaleLowerCase(&#x27;ru&#x27;)===newDraft.category.toLocaleLowerCase(&#x27;ru&#x27;))?.category||newDraft.category;
- courses.push({id:Math.max(...courses.map(c=&gt;c.id))+1,name:newDraft.name,category,color,done:0,total:mode===&#x27;unscheduled&#x27;?topics.length:null,finished:false,mode:mode===&#x27;unscheduled&#x27;?&#x27;Без расписания&#x27;:&#x27;Расписание не задано&#x27;});
- newDraft=null;editing=null;render();save();
-}
+root.querySelector(&#x27;.uc-create-form&#x27;).onsubmit=e=&gt;e.preventDefault();root.querySelector(&#x27;.uc-create-form&#x27;).onkeydown=e=&gt;{if(e.key===&#x27;Enter&#x27;){e.preventDefault();root.querySelector(&#x27;.uc-create-next&#x27;).click();}};
 root.querySelector(&#x27;.uc-add&#x27;).addEventListener(&#x27;click&#x27;,openCreate);
 root.querySelector(&#x27;.uc-create-cancel&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;dialog.close());
-root.querySelector(&#x27;.uc-create-form&#x27;).addEventListener(&#x27;submit&#x27;,e=&gt;{e.preventDefault();const name=root.querySelector(&#x27;.uc-create-name&#x27;).value.trim();if(!name||Array.from(name).length&gt;50){root.querySelector(&#x27;.uc-create-error&#x27;).hidden=false;root.querySelector(&#x27;.uc-create-error&#x27;).textContent=&#x27;Введите название до 50 символов&#x27;;return;}newDraft={name,category:root.querySelector(&#x27;.uc-create-category&#x27;).value.trim(),mode:null};root.querySelector(&#x27;.uc-new-topics textarea&#x27;).value=&#x27;&#x27;;root.querySelector(&#x27;.uc-new-error&#x27;).hidden=true;dialog.close();render();});
-root.querySelector(&#x27;.uc-new-back&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{newDraft=null;render();});
-root.querySelectorAll(&#x27;[data-mode]&#x27;).forEach(b=&gt;b.addEventListener(&#x27;click&#x27;,()=&gt;{newDraft.mode=b.dataset.mode;if(newDraft.mode===&#x27;scheduled&#x27;)finishCreation(&#x27;scheduled&#x27;);else render();}));
-root.querySelector(&#x27;.uc-new-apply&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;finishCreation(newDraft.mode));
-root.addEventListener(&#x27;click&#x27;,e=&gt;{const c=e.target.closest(&#x27;[data-course]&#x27;);if(c){editing=Number(c.dataset.course);render();save();}else if(e.target.closest(&#x27;.uc-back&#x27;)){editing=null;render();save();}else if(e.target.closest(&#x27;.uc-toggle&#x27;)){showAll=!showAll;render();save();}});
-root.querySelector(&#x27;form&#x27;).addEventListener(&#x27;submit&#x27;,e=&gt;{e.preventDefault();const name=root.querySelector(&#x27;.uc-name&#x27;).value.trim(),category=root.querySelector(&#x27;.uc-category&#x27;).value.trim();if(!name||!category)return;const c=courses.find(c=&gt;c.id===editing);c.name=name;c.category=category;editing=null;render();save();});
+root.querySelector(&#x27;.uc-create-next&#x27;).addEventListener(&#x27;click&#x27;,e=&gt;{e.preventDefault();const name=root.querySelector(&#x27;.uc-create-name&#x27;).value.trim();if(!name||Array.from(name).length&gt;50){root.querySelector(&#x27;.uc-create-error&#x27;).hidden=false;root.querySelector(&#x27;.uc-create-error&#x27;).textContent=&#x27;Введите название до 50 символов&#x27;;return;}const color=palette.find(v=&gt;!courses.some(c=&gt;!c.finished&amp;&amp;c.color===v));if(!color)return;const c={id:Math.max(...courses.map(c=&gt;c.id))+1,name,category:root.querySelector(&#x27;.uc-create-category&#x27;).value.trim(),color,done:0,total:null,topics:[],finished:false,mode:&#x27;Без расписания&#x27;};courses.push(c);editing=c.id;dialog.close();render();save();});
+root.addEventListener(&#x27;click&#x27;,e=&gt;{const c=e.target.closest(&#x27;[data-course]&#x27;);if(c){editing=Number(c.dataset.course);render();save();}else if(e.target.closest(&#x27;.uc-back&#x27;)){if(!commitField())return;editing=null;render();save();}else if(e.target.closest(&#x27;.uc-toggle&#x27;)){showAll=!showAll;render();save();}});
+function commitField(){if(editing===null)return true;const c=courses.find(c=&gt;c.id===editing),name=root.querySelector(&#x27;.uc-name&#x27;).value.trim();c.category=root.querySelector(&#x27;.uc-category&#x27;).value.trim();save();if(!name||Array.from(name).length&gt;50){root.querySelector(&#x27;.uc-edit-error&#x27;).textContent=!name?&#x27;Введите название курса&#x27;:&#x27;Не более 50 символов&#x27;;return false;}root.querySelector(&#x27;.uc-edit-error&#x27;).textContent=&#x27;&#x27;;c.name=name;save();return true;}
+root.querySelector(&#x27;.uc-name&#x27;).addEventListener(&#x27;blur&#x27;,commitField);root.querySelector(&#x27;.uc-category&#x27;).addEventListener(&#x27;blur&#x27;,commitField);root.querySelector(&#x27;.uc-form&#x27;).onsubmit=e=&gt;{e.preventDefault();commitField();};
+let component=null;const componentDialog=root.querySelector(&#x27;.uc-component-dialog&#x27;);
+function openComponent(kind){if(!commitField())return;component=kind;const c=courses.find(c=&gt;c.id===editing);root.querySelector(&#x27;.uc-component-error&#x27;).textContent=&#x27;&#x27;;componentDialog.querySelector(&#x27;h2&#x27;).textContent=kind===&#x27;topics&#x27;?&#x27;Редактировать темы&#x27;:&#x27;Расписание&#x27;;componentDialog.querySelector(&#x27;.uc-component-content&#x27;).innerHTML=kind===&#x27;topics&#x27;?&#x27;&lt;textarea aria-label=&quot;Непройденные темы&quot;&gt;&#x27;+esc((c.topics||[]).join(&#x27;\n&#x27;))+&#x27;&lt;/textarea&gt;&#x27;:&#x27;&lt;label&gt;День&lt;select aria-label=&quot;День&quot;&gt;&lt;option value=&quot;&quot;&gt;Без расписания&lt;/option&gt;&lt;option&gt;Пн&lt;/option&gt;&lt;option&gt;Вт&lt;/option&gt;&lt;option&gt;Сб&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label&gt;Начало&lt;input type=&quot;time&quot; value=&quot;19:00&quot;&gt;&lt;/label&gt;&lt;label&gt;Конец · необязательно&lt;input type=&quot;time&quot;&gt;&lt;/label&gt;&#x27;;componentDialog.showModal();}
+root.querySelector(&#x27;.uc-topics-open&#x27;).onclick=()=&gt;openComponent(&#x27;topics&#x27;);root.querySelector(&#x27;.uc-schedule-open&#x27;).onclick=()=&gt;openComponent(&#x27;schedule&#x27;);root.querySelector(&#x27;.uc-component-cancel&#x27;).onclick=()=&gt;componentDialog.close();
+root.querySelector(&#x27;.uc-component-apply&#x27;).onclick=()=&gt;{const c=courses.find(c=&gt;c.id===editing);if(component===&#x27;topics&#x27;){c.topics=componentDialog.querySelector(&#x27;textarea&#x27;).value.split(/\r?\n/).map(t=&gt;Array.from(t.trim()).slice(0,100).join(&#x27;&#x27;)).filter(Boolean);c.total=(c.done+c.topics.length)||null;}else{const day=componentDialog.querySelector(&#x27;select&#x27;).value,[start,end]=[...componentDialog.querySelectorAll(&#x27;input&#x27;)].map(i=&gt;i.value);if(day&amp;&amp;!start){root.querySelector(&#x27;.uc-component-error&#x27;).textContent=&#x27;Укажите начало&#x27;;return;}c.mode=day?day+&#x27; · &#x27;+start+(end?&#x27;–&#x27;+end+(end&lt;start?&#x27; (следующий день)&#x27;:&#x27;&#x27;):&#x27;&#x27;):&#x27;Без расписания&#x27;;}componentDialog.close();render();save();};
 window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{restore(e.detail?.globals?.widgetState);render();});
 if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=&gt;{render();save();}});t.addSlider(design,&#x27;spacing&#x27;,{min:10,max:22,unit:&#x27;px&#x27;,label:&#x27;Плотность списка&#x27;});t.addToggle(design,&#x27;brush&#x27;,{label:&#x27;Мягкие края полосы прогресса&#x27;});}
 })();
@@ -1830,6 +2288,202 @@ if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=&gt;{render()
     document.removeEventListener(&quot;keydown&quot;, interact);
   }, { once: true });
 })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
 &lt;/script&gt;
 &lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;

@@ -1,14 +1,16 @@
 <div id="course-editor" aria-label="Макет редактора курса">
  <div class="ce-phone">
-  <header><div class="ce-heading"><button type="button" class="ce-back cursor-interaction" aria-label="Назад к курсам"><i data-lucide="arrow-left" aria-hidden="true"></i></button><h1><button type="button" class="ce-title cursor-interaction" aria-label="Название курса, удерживайте для редактирования">Лекции и семинары по C++</button></h1><input class="ce-name" value="Лекции и семинары по C++" maxlength="50" required aria-label="Название курса" hidden></div><div class="ce-name-error" role="alert" hidden></div></header>
+  <header><div class="ce-heading"><button type="button" class="ce-back cursor-interaction" aria-label="Назад к курсам"><i data-lucide="arrow-left" aria-hidden="true"></i></button><h1><button type="button" class="ce-title cursor-interaction" aria-label="Название курса, удерживайте для редактирования">Лекции и семинары по C++</button></h1><input class="ce-name" value="Лекции и семинары по C++" required aria-label="Название курса" hidden><button type="button" class="ce-palette-open" aria-label="Цвет курса"><span class="ce-color-swatch" style="background:var(--ce-color)"></span></button></div><span class="ce-course-status" hidden></span><div class="ce-name-error" role="alert" hidden></div></header>
   <div class="ce-content">
-   <div class="ce-category-wrap"><label class="ce-field">Категория<div class="ce-category-control"><input class="ce-category" value="Программирование" placeholder="Без категории" role="combobox" aria-expanded="false" aria-controls="ce-category-menu" autocomplete="off"><button type="button" class="ce-category-toggle cursor-interaction" aria-label="Выбрать категорию"><i data-lucide="chevron-down" aria-hidden="true"></i></button></div></label><div id="ce-category-menu" class="ce-category-menu" hidden></div></div>
-   <div class="ce-label">Цвет в календаре</div><div class="ce-colors" role="group" aria-label="Свободные цвета курса"></div><div class="ce-color-info ce-muted" hidden></div>
-   <section class="ce-schedule"><div class="ce-schedule-title"><i data-lucide="calendar-days" aria-hidden="true"></i><strong>По расписанию</strong><button type="button" class="ce-configure cursor-interaction">Настроить</button></div><div class="ce-schedule-days"><span>Вт <b>19:00</b></span><span>Сб <b>11:00</b></span></div><div class="ce-muted">Без даты окончания</div></section>
+   <button type="button" class="ce-category-open">Категория: <span>Программирование</span> ⌄</button>
+<dialog class="ce-category-dialog">   <div class="ce-category-wrap"><label class="ce-field">Категория<div class="ce-category-control"><input class="ce-category" value="Программирование" placeholder="Без категории" role="combobox" aria-expanded="false" aria-controls="ce-category-menu" autocomplete="off"><button type="button" class="ce-category-toggle cursor-interaction" aria-label="Выбрать категорию"><i data-lucide="chevron-down" aria-hidden="true"></i></button></div></label><div id="ce-category-menu" class="ce-category-menu" hidden></div></div>
+<button type="button" class="ce-category-close">Применить</button></dialog>
+   <dialog class="ce-palette-dialog"><h2>Цвет курса</h2><div class="ce-colors" role="group" aria-label="Свободные цвета курса"></div><button type="button" class="ce-palette-close">Закрыть</button></dialog>
+   <section class="ce-schedule"><div class="ce-schedule-title"><button type="button" class="ce-configure" aria-label="Настроить расписание"><i data-lucide="calendar-days" aria-hidden="true"></i></button><strong hidden>Без расписания</strong><div class="ce-schedule-days"></div></div><div class="ce-muted"></div></section>
    <section class="ce-schedule-editor" hidden><h2>Расписание</h2><div class="ce-week-editor"></div><label class="ce-field">Дата окончания<div class="ce-date-control"><button type="button" class="ce-date-open cursor-interaction" aria-label="Выбрать дату окончания"><i data-lucide="calendar-days" aria-hidden="true"></i></button><input type="date" class="ce-end-date" aria-label="Дата окончания" hidden><button type="button" class="ce-date-clear cursor-interaction" aria-label="Убрать дату окончания" hidden><i data-lucide="x" aria-hidden="true"></i></button></div></label><p class="ce-schedule-error" role="alert"></p><div class="ce-topic-actions"><button type="button" class="ce-schedule-apply cursor-interaction">Сохранить расписание</button><button type="button" class="ce-schedule-cancel cursor-interaction">Отмена</button></div></section>
-   <section class="ce-topics"><div class="ce-section-head"><h2>Темы</h2><span class="ce-total"></span></div><div class="ce-track" role="progressbar" aria-label="Пройденные темы"><div></div></div><div class="ce-rows" role="region" aria-label="Список тем, прокручивается"></div><button type="button" class="ce-edit-list cursor-interaction"><i data-lucide="list" aria-hidden="true"></i>Редактировать список</button></section>
+   <section class="ce-topics"><div class="ce-section-head"><h2>Темы</h2><button type="button" class="ce-edit-list" aria-label="Редактировать список"><i data-lucide="pencil" aria-hidden="true"></i></button><span class="ce-total"></span></div><div class="ce-track" role="progressbar" aria-label="Пройденные темы"><div></div></div><div class="ce-rows" role="region" aria-label="Список тем, прокручивается"></div></section>
    <section class="ce-topic-editor" hidden><div class="ce-section-head"><h2>Редактировать список</h2></div><p class="ce-bulk-help">Одна строка — одна тема. Можно вставить весь список, изменить порядок или удалить строки.</p><details class="ce-completed"><summary></summary><div></div></details><label class="ce-field">Непройденные темы<textarea class="ce-topic-text" rows="12" aria-describedby="ce-bulk-count ce-bulk-error" placeholder="Лекция - Введение в C++&#10;Семинар - Устройство памяти"></textarea></label><p id="ce-bulk-count" class="ce-bulk-count ce-muted" aria-live="polite"></p><p id="ce-bulk-error" class="ce-bulk-error" role="alert"></p><div class="ce-topic-actions"><button type="button" class="ce-apply cursor-interaction">Применить список</button><button type="button" class="ce-cancel cursor-interaction">Отмена</button></div></section>
-   <div class="ce-finish"><span class="ce-course-status" hidden></span><button type="button" class="ce-finish-button cursor-interaction"><i data-lucide="check" aria-hidden="true"></i>Завершить курс</button><button type="button" class="ce-pause-button cursor-interaction"><i data-lucide="pause" aria-hidden="true"></i>Поставить на паузу</button><button type="button" class="ce-delete-button cursor-interaction"><i data-lucide="trash-2" aria-hidden="true"></i>Удалить курс</button></div>
+   <div class="ce-finish"><button type="button" class="ce-finish-button cursor-interaction"><i data-lucide="check" aria-hidden="true"></i>Завершить</button><button type="button" class="ce-resume-button cursor-interaction" hidden>Продолжить</button><button type="button" class="ce-pause-button cursor-interaction"><i data-lucide="pause" aria-hidden="true"></i>Пауза</button><button type="button" class="ce-delete-button cursor-interaction"><i data-lucide="trash-2" aria-hidden="true"></i>Удалить</button></div>
    <div class="ce-confirm" hidden><strong>Завершить курс?</strong><p>Все темы будут отмечены пройденными. Напоминания отключатся, цвет освободится.</p><div><button type="button" class="ce-confirm-yes cursor-interaction">Завершить</button><button type="button" class="ce-confirm-no cursor-interaction">Отмена</button></div></div>
    <div class="ce-feedback" role="status" aria-live="polite"></div>
   </div>
@@ -107,6 +109,10 @@
 #course-editor .ce-confirm-yes{background:var(--ce-ink);color:var(--ce-paper)}
 #course-editor .ce-feedback{font-size:12px;color:var(--ce-muted);margin-top:8px;min-height:18px}
 #course-editor .ce-bottom-line{width:90px;height:4px;border-radius:3px;background:var(--ce-line);margin:6px auto 12px}
+#course-editor .ce-phone{height:calc(100dvh - 24px);display:flex;flex-direction:column}#course-editor .ce-content{flex:1;min-height:0;display:flex;flex-direction:column}#course-editor .ce-topics{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:10px}#course-editor .ce-rows{flex:1;min-height:0;max-height:none}#course-editor .ce-finish{display:flex;flex-wrap:wrap;gap:5px;padding-top:10px}#course-editor .ce-finish button{flex:1;background:#718376;color:#FCFAF6;border-radius:13px;padding:8px 5px}#course-editor .ce-course-status{flex-basis:100%;font-weight:700}#course-editor .ce-category-open{background:none;text-align:left;padding:8px 0}#course-editor .ce-schedule{padding:8px 0}#course-editor .ce-configure{font-size:0}#course-editor .ce-configure:after{content:"▦";font-size:22px}#course-editor .ce-edit-list{min-height:32px}#course-editor dialog{background:var(--ce-paper);color:var(--ce-ink);border:1px solid var(--ce-line);border-radius:20px;max-width:90vw;max-height:85dvh;overflow:auto}#course-editor .ce-category-dialog{width:340px}#course-editor .ce-topic-editor,#course-editor .ce-schedule-editor,#course-editor .ce-confirm{position:absolute;inset:12px;z-index:6;background:var(--ce-paper);padding:16px;overflow:auto;border:1px solid var(--ce-line);border-radius:20px}#course-editor .ce-phone{position:relative}#course-editor .ce-number{font-size:13px}#course-editor .ce-palette-open{background:none;padding:5px}#course-editor .ce-title{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#course-editor header{padding:12px 16px}#course-editor .ce-title{font:400 20px/1.2 Georgia,serif}#course-editor .ce-content{padding:0 16px 10px}#course-editor .ce-finish{flex-wrap:nowrap;margin-top:8px;padding-top:8px;flex-shrink:0}#course-editor .ce-finish>button{width:0;min-width:0;font-size:11px;gap:3px;padding:8px 4px}#course-editor .ce-finish svg{display:none}#course-editor .ce-finish-button{font-size:11px}#course-editor .ce-section-head{margin-bottom:6px}#course-editor .ce-schedule-days{margin:6px 0}#course-editor .ce-schedule .ce-muted:empty{display:none}#course-editor .ce-course-status{position:absolute;top:72px;left:56px}#course-editor .ce-schedule-title strong{display:none}#course-editor .ce-configure{padding:4px;min-height:32px}#course-editor .ce-schedule-title{min-height:32px}#course-editor .ce-topic-text{min-height:130px}#course-editor .ce-confirm{inset:auto 12px 12px}
+#course-editor .ce-configure:after{content:none}#course-editor .ce-configure{margin:0;flex-shrink:0;background:none}#course-editor .ce-configure svg{width:23px;height:23px}#course-editor .ce-schedule-days{margin:0;flex:1}#course-editor .ce-schedule-days span{padding:6px;font-size:12px}#course-editor .ce-section-head .ce-edit-list{width:32px;margin:0;background:none;min-height:32px;padding:4px}#course-editor .ce-section-head .ce-total{margin-left:auto}#course-editor .ce-feedback:empty{display:none}#course-editor .ce-track{flex-shrink:0}#course-editor .ce-finish .ce-course-status{position:static;flex-basis:auto}#course-editor .ce-section-head{flex-shrink:0}
+#course-editor header>.ce-course-status{position:static;display:block;font-size:14px;font-weight:700;margin:8px 0 0 48px;color:#746D66}
 </style>
 <script>
 (()=>{
@@ -125,30 +131,30 @@ function persist(){if(window.openai?.setWidgetState)window.openai.setWidgetState
 function render(){
  const occupied=occupiedColors();if(!state.finished&&!state.deleted&&occupied.includes(state.color))state.color=0;
  $('.ce-content').hidden=state.deleted||returned;$('.ce-deleted').hidden=!state.deleted;$('.ce-return').hidden=!returned;$('.ce-title').textContent=state.name;$('.ce-title').parentElement.hidden=nameEditing;$('.ce-name').hidden=!nameEditing;$('.ce-category-toggle').hidden=categories.length===0;
- $('.ce-color-info').textContent=state.finished?'Цвет освобождён для других курсов':(9-design.otherCourses)+' свободных из 10';
- root.style.setProperty('--ce-color',colors[state.color][1]);root.style.setProperty('--ce-spacing',design.spacing+'px');
+ $('.ce-palette-open').hidden=state.finished;$('.ce-category-open span').textContent=state.category||'Без категории';$('.ce-category-open').disabled=state.finished;$('.ce-title').disabled=state.finished;$('.ce-schedule').hidden=state.finished||state.paused;$('.ce-resume-button').hidden=!state.paused||state.finished;
+ root.style.setProperty('--ce-color',state.finished?'#8B918A':colors[state.color][1]);root.style.setProperty('--ce-spacing',design.spacing+'px');
  $('.ce-colors').innerHTML=colors.map((c,i)=>({c,i})).filter(({i})=>state.finished?i===state.color:!occupied.includes(i)).map(({c,i})=>'<button type="button" class="ce-color-button cursor-interaction" data-color="'+i+'" '+(state.finished?'disabled':'')+' aria-label="'+c[0]+'" aria-pressed="'+(state.color===i)+'"><span class="ce-color-swatch" style="background:'+c[1]+'" aria-hidden="true">'+(state.color===i?'✓':'')+'</span></button>').join('');
- const done=state.topics.filter(t=>t.done).length,total=state.topics.length;
+ const done=state.topics.filter(t=>t.done).length,total=state.topics.length;$('.ce-track').hidden=!total;$('.ce-total').hidden=!total;
  $('.ce-total').textContent=done+' из '+total+' пройдено';const track=$('.ce-track');track.setAttribute('aria-valuenow',done);track.setAttribute('aria-valuemin',0);track.setAttribute('aria-valuemax',Math.max(total,1));track.firstElementChild.style.width=(total?done/total*100:0)+'%';
  const scroll=$('.ce-rows').scrollTop;
  $('.ce-rows').innerHTML=state.topics.map((t,i)=>'<button type="button" data-topic="'+t.id+'" class="ce-row cursor-interaction '+(t.done?'ce-complete':'')+'" aria-pressed="'+t.done+'" aria-label="'+esc(t.name)+(t.done?'. Пройдена.':'. Не пройдена.')+' Удерживайте для изменения отметки."><span class="ce-number" aria-hidden="true">'+(i+1)+'</span><span>'+esc(t.name)+'</span><span aria-hidden="true">'+(t.done?'✓':'')+'</span></button>').join('');
  $('.ce-rows').scrollTop=scroll;
- $('.ce-course-status').textContent=state.finished?'Курс пройден':state.paused?'Курс на паузе':'';$('.ce-course-status').hidden=!state.finished&&!state.paused;$('.ce-finish-button').hidden=state.finished;
+ $('.ce-course-status').textContent=state.finished?'Завершён':state.paused?'На паузе':'';$('.ce-course-status').hidden=!state.finished&&!state.paused;$('.ce-finish-button').hidden=state.finished;
  $('.ce-pause-button').hidden=state.finished||state.paused;$('.ce-edit-list').hidden=state.finished;
- $('.ce-topics').hidden=editing;$('.ce-topic-editor').hidden=!editing;$('.ce-finish').hidden=editing;
- $('.ce-schedule-title strong').textContent=state.finished?'Курс пройден':state.paused?'Без расписания · пауза':'По расписанию';
- $('.ce-schedule-days').hidden=state.finished||state.paused;$('.ce-schedule .ce-muted').textContent=state.finished?'Напоминания отключены':state.paused?'Прогресс сохранён. Напоминания отключены.':'Без даты окончания';
- $('.ce-schedule-days').innerHTML=state.schedule.map(s=>'<span>'+weekdays[s.day]+' <b>'+esc(s.start)+(s.end?'–'+esc(s.end):'')+'</b></span>').join('');
+ $('.ce-topics').hidden=false;$('.ce-topic-editor').hidden=!editing;$('.ce-finish').hidden=editing;
+ $('.ce-schedule-title strong').textContent=state.finished?'Курс пройден':state.schedule.length?'Расписание':'Без расписания';
+ $('.ce-schedule-days').hidden=state.finished||state.paused;$('.ce-schedule .ce-muted').textContent='';
+ $('.ce-schedule-days').innerHTML=state.schedule.length?state.schedule.map(s=>'<span>'+weekdays[s.day]+' <b>'+esc(s.start)+(s.end?'–'+esc(s.end):'')+'</b></span>').join(''):'Без расписания';
  if(!state.finished&&!state.paused&&state.endDate)$('.ce-schedule .ce-muted').textContent='До '+state.endDate.split('-').reverse().join('.');
- $('.ce-configure').hidden=state.finished||state.paused;$('.ce-configure').textContent=state.paused?'Задать':'Настроить';
+ $('.ce-configure').hidden=state.finished||state.paused;$('.ce-configure').innerHTML='<i data-lucide="calendar-days" aria-hidden="true"></i>';$('.ce-configure').setAttribute('aria-label','Настроить расписание');
  $('.ce-schedule-editor').hidden=!scheduleEditing;
  icons();
 }
-function lines(){return $('.ce-topic-text').value.split(/\r\n|\n|\r/).map(s=>s.trim()).filter(Boolean);}
+function lines(){return $('.ce-topic-text').value.split(/\r\n|\n|\r/).map(s=>Array.from(s.trim()).slice(0,100).join('')).filter(Boolean);}
 const normalized=s=>s.trim().normalize('NFC').toLocaleLowerCase('ru');
 function validateList(){
  const done=new Set(state.topics.filter(t=>t.done).map(t=>normalized(t.name))),conflicts=[];
- $('.ce-topic-text').value.split(/\r\n|\n|\r/).forEach((name,i)=>{if(name.trim()&&done.has(normalized(name)))conflicts.push(i+1);});
+ $('.ce-topic-text').value.split(/\r\n|\n|\r/).forEach((name,i)=>{if(name.trim()&&done.has(normalized(Array.from(name.trim()).slice(0,100).join(''))))conflicts.push(i+1);});
  $('.ce-bulk-error').textContent=conflicts.length?'В строках '+conflicts.join(', ')+' указаны уже пройденные темы. Удалите их из списка — отметки сохранятся.':'';
  $('.ce-topic-text').setAttribute('aria-invalid',String(conflicts.length>0));return conflicts.length===0;
 }
@@ -167,9 +173,7 @@ function toggleTopic(id){
  const topic=state.topics.find(t=>t.id===id);if(!topic||state.deleted)return;
  if(state.finished){$('.ce-feedback').textContent='Курс уже завершён. Возврат в незавершённые с проверкой свободного цвета будет отдельным действием.';return;}
  topic.done=!topic.done;render();persist();$('.ce-feedback').textContent='';
- if(state.topics.length&&state.topics.every(t=>t.done)){
- action='finish';$('.ce-confirm strong').textContent='Все темы пройдены';$('.ce-confirm p').textContent='Завершить курс и освободить цвет?';$('.ce-confirm-yes').textContent='Завершить';$('.ce-confirm-no').textContent='Оставить активным';$('.ce-confirm').hidden=false;
- }else $('.ce-confirm').hidden=true;
+ $('.ce-feedback').textContent=state.topics.length&&state.topics.every(t=>t.done)?'Все темы пройдены':'';
 }
 function openSchedule(){
  scheduleEditing=true;$('.ce-schedule-error').textContent='';$('.ce-end-date').value=state.endDate;$('.ce-end-date').hidden=!state.endDate;$('.ce-date-clear').hidden=!state.endDate;
@@ -177,7 +181,7 @@ function openSchedule(){
 }
 function applySchedule(){
  const rules=Array.from(root.querySelectorAll('.ce-week-row')).filter(row=>row.querySelector('.ce-day-enabled').checked).map(row=>({day:Number(row.dataset.day),start:row.querySelector('.ce-start').value,end:row.querySelector('.ce-end').value}));
- if(!rules.length||rules.some(s=>!s.start||(s.end&&s.end<=s.start))){$('.ce-schedule-error').textContent='Выберите хотя бы один день. Укажите начало, а окончание — позже начала.';return false;}
+ if(rules.some(s=>!s.start)){$('.ce-schedule-error').textContent='Укажите время начала.';return false;}
  state.schedule=rules;state.endDate=$('.ce-end-date').value;state.paused=false;scheduleEditing=false;render();persist();return true;
 }
 function restore(s){const v=s?.privateContent?.editor;if(v&&Array.isArray(v.topics)&&Number.isInteger(v.color)&&colors[v.color])Object.assign(state,v);if(Array.isArray(s?.privateContent?.categories))categories=s.privateContent.categories.filter(c=>typeof c.name==='string');if(s?.modelContent?.design)Object.assign(design,s.modelContent.design);design.otherCourses=Math.max(0,Math.min(9,Math.round(design.otherCourses)));if(state.finished)state.topics.forEach(t=>t.done=true);$('.ce-name').value=state.name;$('.ce-category').value=state.category;}
@@ -192,7 +196,12 @@ root.addEventListener('pointerup',cancelHold);root.addEventListener('pointercanc
 $('.ce-rows').addEventListener('scroll',cancelHold);root.addEventListener('contextmenu',e=>{if(e.target.closest('[data-topic],.ce-title'))e.preventDefault();});
 root.addEventListener('click',e=>{
  const color=e.target.closest('[data-color]');
- if(color){if(!commitName())return;commitCategory();state.color=Number(color.dataset.color);render();persist();}
+ if(e.target.closest('.ce-palette-open')){$('.ce-palette-dialog').showModal();}
+ else if(e.target.closest('.ce-palette-close'))$('.ce-palette-dialog').close();
+ else if(e.target.closest('.ce-category-open')){$('.ce-category-dialog').showModal();}
+ else if(e.target.closest('.ce-category-close')){commitCategory();$('.ce-category-dialog').close();render();}
+ else if(e.target.closest('.ce-resume-button')){state.paused=false;render();persist();}
+ else if(color){if(!commitName())return;commitCategory();state.color=Number(color.dataset.color);$('.ce-palette-dialog').close();render();persist();}
  else if(e.target.closest('.ce-configure')){if(commitName()){commitCategory();openSchedule();}}
  else if(e.target.closest('.ce-date-open')){$('.ce-end-date').hidden=false;$('.ce-date-clear').hidden=false;$('.ce-end-date').focus();if($('.ce-end-date').showPicker)try{$('.ce-end-date').showPicker();}catch{}}
  else if(e.target.closest('.ce-date-clear')){$('.ce-end-date').value='';$('.ce-end-date').hidden=true;$('.ce-date-clear').hidden=true;}
@@ -210,10 +219,10 @@ root.addEventListener('click',e=>{
  $('.ce-confirm strong').textContent=copy[0];$('.ce-confirm p').textContent=copy[1];$('.ce-confirm-yes').textContent=copy[2];$('.ce-confirm-no').textContent='Отмена';$('.ce-confirm').hidden=false;
  }
  else if(e.target.closest('.ce-confirm-no'))$('.ce-confirm').hidden=true;
- else if(e.target.closest('.ce-confirm-yes')){if(action==='finish'){state.finished=true;state.paused=false;state.topics.forEach(t=>t.done=true);}else if(action==='pause'){state.paused=true;state.schedule=[];}else if(action==='delete'){state.deleted=true;state.topics=[];state.schedule=[];}else if(action?.startsWith('category:')){deleteCategory(action.slice(9));}scheduleEditing=false;$('.ce-confirm').hidden=true;render();persist();$('.ce-feedback').textContent='';action=null;}
+ else if(e.target.closest('.ce-confirm-yes')){if(action==='finish'){state.finished=true;state.paused=false;state.schedule=[];state.endDate='';state.topics.forEach(t=>t.done=true);}else if(action==='pause'){state.paused=true;state.schedule=[];state.endDate='';}else if(action==='delete'){state.deleted=true;state.topics=[];state.schedule=[];}else if(action?.startsWith('category:')){deleteCategory(action.slice(9));}scheduleEditing=false;$('.ce-confirm').hidden=true;render();persist();$('.ce-feedback').textContent='';action=null;}
 });
 root.addEventListener('change',e=>{if(e.target.classList.contains('ce-day-enabled'))e.target.closest('.ce-week-row').querySelector('.ce-times').hidden=!e.target.checked;});
-function editName(){nameEditing=true;$('.ce-title').parentElement.hidden=true;$('.ce-name').hidden=false;$('.ce-name').value=state.name;$('.ce-name').focus();$('.ce-name').select();}
+function editName(){if(state.finished)return;nameEditing=true;$('.ce-title').parentElement.hidden=true;$('.ce-name').hidden=false;$('.ce-name').value=state.name;$('.ce-name').focus();$('.ce-name').select();}
 function commitName(){
  if(!nameEditing)return true;const name=$('.ce-name').value.trim();
  if(!name||Array.from(name).length>50){$('.ce-name-error').textContent=!name?'Введите название курса':'Не более 50 символов';$('.ce-name-error').hidden=false;return false;}
@@ -225,7 +234,7 @@ function commitCategory(){
  const value=$('.ce-category').value.trim(),existing=categories.find(c=>normalized(c.name)===normalized(value));
  state.category=existing?.name||value;
  if(value&&!existing)categories.push({name:value,courses:0});
- $('.ce-category').value=state.category;categoryOpen=false;renderCategories();persist();
+ $('.ce-category').value=state.category;categoryOpen=false;$('.ce-category-open span').textContent=state.category||'Без категории';renderCategories();persist();
 }
 function renderCategories(){
  const value=$('.ce-category').value;const matches=categories.filter(c=>value===state.category||normalized(c.name).includes(normalized(value)));
@@ -234,14 +243,14 @@ function renderCategories(){
 }
 function deleteCategory(name){categories=categories.filter(c=>c.name!==name);if(normalized(state.category)===normalized(name)){state.category='';$('.ce-category').value='';}renderCategories();persist();}
 $('.ce-category').addEventListener('input',()=>{categoryOpen=true;renderCategories();});
-$('.ce-category').addEventListener('blur',()=>{commitCategory();});
+$('.ce-category').addEventListener('blur',()=>{commitCategory();});$('.ce-category-dialog').addEventListener('close',()=>{commitCategory();render();});
 $('.ce-category-menu').addEventListener('pointerdown',e=>e.preventDefault());
 $('.ce-category-toggle').addEventListener('pointerdown',e=>e.preventDefault());
 $('.ce-category-toggle').addEventListener('click',()=>{categoryOpen=!categoryOpen;renderCategories();});
 $('.ce-category-menu').addEventListener('click',e=>{
  const pick=e.target.closest('[data-category]'),remove=e.target.closest('[data-category-delete]');
- if(pick){$('.ce-category').value=pick.dataset.category;commitCategory();}
- if(remove){const name=remove.dataset.categoryDelete,c=categories.find(c=>c.name===name);categoryOpen=false;renderCategories();
+ if(pick){$('.ce-category').value=pick.dataset.category;commitCategory();$('.ce-category-dialog').close();render();}
+ if(remove){$('.ce-category-dialog').close();const name=remove.dataset.categoryDelete,c=categories.find(c=>c.name===name);categoryOpen=false;renderCategories();
  if(c.courses>0||normalized(state.category)===normalized(name)){action='category:'+name;$('.ce-confirm strong').textContent='Удалить категорию «'+name+'»?';$('.ce-confirm p').textContent='Курсы останутся без категории.';$('.ce-confirm-yes').textContent='Удалить';$('.ce-confirm-no').textContent='Отмена';$('.ce-confirm').hidden=false;}else deleteCategory(name);}
 });
 $('.ce-topic-text').addEventListener('input',updateCount);
