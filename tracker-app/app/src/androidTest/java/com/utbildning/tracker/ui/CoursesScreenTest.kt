@@ -3,11 +3,8 @@ package com.utbildning.tracker.ui
 import android.content.Context
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.ContentValues
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.os.SystemClock
-import android.provider.MediaStore
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
@@ -199,7 +196,7 @@ class CoursesScreenTest {
         }
     }
 
-    @Test fun creationDialogValidatesNameAndCreatesCourseWithoutMode() {
+    @Test fun creationDialogValidatesNameAndCreatesCourse() {
         show("ru")
         click("course_add")
         click("course_continue")
@@ -258,7 +255,7 @@ class CoursesScreenTest {
         rename("On blur")
         click("course_category_open")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "On blur" }
-        applyCategory()
+        click("category_cancel")
         rename("On exit")
         click("course_cancel")
         waitFor { runBlocking { dao.getCourse(course.id) }?.name == "On exit" }
@@ -322,6 +319,18 @@ class CoursesScreenTest {
         assertInputText("C".repeat(49) + "😀")
         assertSelection(TextRange(0, 1))
         assertEquals("C".repeat(49) + "😀", runBlocking { dao.getCourse(course.id) }?.name)
+    }
+
+    @Test fun creationCategoryAcceptsTwentyCodePointsAndRejectsTheNextInput() {
+        val twentyEmoji = "😀".repeat(20)
+        show("ru"); click("course_add")
+        text("course_name", "C")
+        text("course_category", twentyEmoji)
+        compose.onNodeWithTag("course_category").performTextInput("X")
+        compose.onNodeWithTag("course_category").assertTextContains(twentyEmoji)
+        click("course_continue")
+        waitFor { categories().singleOrNull()?.name == twentyEmoji }
+        assertEquals(twentyEmoji, categories().single().name)
     }
 
     @Test fun editorNameRejectsPasteWithoutChangingDatabaseAndClearsLocalizedError() {
@@ -396,16 +405,9 @@ class CoursesScreenTest {
                 .config[SemanticsProperties.EditableText].text == pasted
         }
         assertInputText("topics_input", pasted)
-        click("topics_cancel")
+        // Cancellation has its own UI regression. Here one clipboard edit must stay
+        // unrestricted and leave storage untouched until the explicit Apply action.
         assertEquals(original, runBlocking { dao.getTopics(course.id) })
-
-        click("topics_edit"); text("topics_input", "x")
-        compose.onNodeWithTag("topics_input").performTextInputSelection(TextRange(0, 1))
-        pasteInto("topics_input", pasted)
-        waitFor {
-            compose.onNodeWithTag("topics_input").fetchSemanticsNode()
-                .config[SemanticsProperties.EditableText].text == pasted
-        }
         click("topics_apply")
         waitFor { runBlocking { dao.getTopics(course.id) }.map { it.title } == expected.lines() }
         click("topics_edit")
@@ -425,7 +427,7 @@ class CoursesScreenTest {
         captureScreenshot("topic_title_limit_en.png")
     }
 
-    @Test fun categorySuggestionsKeepFocusAndDoNotSavePartialInput() {
+    @Test fun editorAddsCategoryExplicitlyAndRejectsInputLongerThanTwentyCodePoints() {
         val course = seed()
         runBlocking { dao.insertCategory(CategoryEntity("existing", "Programming")) }
         show(); click("course_row_${course.id}")
@@ -433,28 +435,38 @@ class CoursesScreenTest {
         val field = compose.onNodeWithTag("course_category")
         field.performClick()
         field.assertIsFocused()
-        for (letter in "Programming new") {
+        for (letter in "Programming practice") {
             field.performTextInput(letter.toString())
             field.assertIsFocused()
             assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
             assertEquals(listOf("Programming"), categories().map { it.name })
         }
-        field.assertTextContains("Programming new")
-        compose.onNodeWithTag("category_menu").assertDoesNotExist()
-        applyCategory()
+        field.assertTextContains("Programming practice")
+        field.performTextInput("X")
+        field.assertTextContains("Programming practice")
+        click("category_add")
+        waitFor { categories().any { it.name == "Programming practice" } }
+        assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
+        val added = categories().single { it.name == "Programming practice" }
+        compose.onNodeWithTag("category_option_${added.id}").assertExists().assertIsNotSelected()
+        compose.selectCategoryOption("category_option_${added.id}")
         click("course_color_toggle")
         click("color_3")
-        waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "Programming new" }
+        waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "Programming practice" }
     }
 
     @Test fun categoryAndColorSaveIndependentlyWithoutLosingRapidChanges() {
         val course = seed()
         runBlocking { dao.insertCategory(CategoryEntity("existing", "Existing")) }
         show(); click("course_row_${course.id}")
-        click("course_category_open"); click("course_category"); click("category_option_existing")
+        click("course_category_open"); compose.selectCategoryOption("category_option_existing")
         waitFor { runBlocking { dao.getCourse(course.id) }?.categoryId == "existing" }
         click("course_category_open"); text("course_category", "New category")
-        applyCategory()
+        click("category_add")
+        waitFor { categories().any { it.name == "New category" } }
+        val added = categories().single { it.name == "New category" }
+        assertEquals("existing", runBlocking { dao.getCourse(course.id) }?.categoryId)
+        compose.selectCategoryOption("category_option_${added.id}")
         click("course_color_toggle"); click("color_3")
         click("course_color_toggle"); click("color_6")
         waitFor { runBlocking { dao.getCourse(course.id) }?.colorId == 6 }
@@ -462,8 +474,7 @@ class CoursesScreenTest {
         click("course_cancel"); click("course_row_${course.id}")
         click("course_color_toggle")
         compose.onNodeWithTag("color_6").assertIsSelected()
-        click("course_category_open")
-        compose.onNodeWithTag("course_category").assertTextContains("New category")
+        compose.onNodeWithTag("course_category_value").assertTextContains("New category")
     }
 
     @Test fun completedTopicConflictDisablesApplyWithoutChangingProgress() {
@@ -478,19 +489,36 @@ class CoursesScreenTest {
         assertNotNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
     }
 
-    @Test fun categoryDeletionDoesNotRecreateItOnExit() {
+    @Test fun categoryPickerHighlightsSelectionAndDeletesCategoryAfterConfirmation() {
         val course = seed(category = "Shared", topics = listOf("Pointers"))
-        show(); click("course_row_${course.id}"); click("course_category_open"); click("course_category")
-        click("category_delete_${course.categoryId}"); click("category_delete_cancel")
+        show(); click("course_row_${course.id}"); click("course_category_open")
+        compose.onNodeWithTag("category_option_${course.categoryId}").assertIsSelected()
+        compose.onNodeWithContentDescription("Delete category Shared").assertExists()
         assertEquals(1, categories().size)
-        compose.onNodeWithTag("course_category").performClick()
-        click("category_delete_${course.categoryId}"); click("category_delete_confirm")
+        click("category_delete_${course.categoryId}")
+        compose.onNodeWithText("Delete category “Shared”? Courses will have no category.").assertExists()
+        click("category_delete_confirm")
         waitFor { categories().isEmpty() }
-        applyCategory()
+        compose.onNodeWithTag("category_option_none").assertIsSelected()
         click("course_cancel")
         waitFor { compose.onAllNodesWithTag("course_row_${course.id}").fetchSemanticsNodes().isNotEmpty() }
         assertTrue(categories().isEmpty())
         assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
+    }
+
+    @Test fun categoryDeleteWarningMentionsCoursesOnlyForCategoryInUse() {
+        val course = seed(category = "Used")
+        runBlocking { dao.insertCategory(CategoryEntity("unused", "Unused")) }
+        show(); click("course_row_${course.id}"); click("course_category_open")
+
+        click("category_delete_unused")
+        compose.onNodeWithText("Delete category “Unused”?").assertExists()
+        compose.onNodeWithText("Delete category “Unused”? Courses will have no category.").assertDoesNotExist()
+        click("category_delete_cancel")
+
+        click("category_delete_${course.categoryId}")
+        compose.onNodeWithText("Delete category “Used”? Courses will have no category.").assertExists()
+        click("category_delete_cancel")
     }
 
     @Test fun emptyCategoriesDoNotOpenMenuAndFilterRequiresCompletedCourses() {
@@ -517,28 +545,25 @@ class CoursesScreenTest {
         assertEquals(11, courses().size)
     }
 
-    @Test fun topicOrderAndNumbersStayFixedAfterLongPressInBothModes() {
-        val scheduled = seed(topics = (1..20).map { "C topic $it" })
-        val unscheduled = seed(name = "Practice", color = 1, topics = (1..20).map { "Practice topic $it" })
+    @Test fun topicOrderAndNumbersStayFixedAfterLongPress() {
+        val course = seed(topics = (1..20).map { "C topic $it" })
         show()
-        for (course in listOf(scheduled, unscheduled)) {
-            click("course_row_${course.id}")
-            val topics = runBlocking { dao.getTopics(course.id) }
-            val topic = topics[1]
-            val tag = "topic_${topic.id}"
-            click(tag)
-            assertNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
-            compose.onNodeWithTag(tag).performTouchInput { swipeUp() }
-            assertNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
-            scrollTo(tag); compose.onNodeWithTag(tag).performTouchInput { longClick() }
-            waitFor { runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } } != null }
-            compose.onNodeWithTag("topic_number_${topic.id}", useUnmergedTree = true).assertTextEquals("2.")
-            compose.onNodeWithTag("topic_number_${topics[2].id}", useUnmergedTree = true).assertTextEquals("3.")
-            compose.onNodeWithTag(tag).performTouchInput { longClick() }
-            waitFor { runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } } == null }
-            assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
-            click("course_cancel")
-        }
+        click("course_row_${course.id}")
+        val topics = runBlocking { dao.getTopics(course.id) }
+        val topic = topics[1]
+        val tag = "topic_${topic.id}"
+        click(tag)
+        assertNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
+        compose.onNodeWithTag(tag).performTouchInput { swipeUp() }
+        assertNull(runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } })
+        scrollTo(tag); compose.onNodeWithTag(tag).performTouchInput { longClick() }
+        waitFor { runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } } != null }
+        compose.onNodeWithTag("topic_number_${topic.id}", useUnmergedTree = true).assertTextEquals("2.")
+        compose.onNodeWithTag("topic_number_${topics[2].id}", useUnmergedTree = true).assertTextEquals("3.")
+        compose.onNodeWithTag(tag).performTouchInput { longClick() }
+        waitFor { runBlocking { dao.getTopic(topic.id)?.takeIf { it.isCompleted } } == null }
+        assertTrue(runBlocking { dao.getSessions(course.id) }.isEmpty())
+        click("course_cancel")
     }
 
     @Test fun entireProgressBlockOpensCourse() {
@@ -642,18 +667,7 @@ class CoursesScreenTest {
     private fun captureScreenshot(name: String) {
         compose.waitForIdle()
         val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-        val resolver = context.contentResolver
-        val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
-        checkNotNull(resolver.openOutputStream(uri)).use { stream ->
-            check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream))
-        }
-        resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
+        saveTestScreenshot(context, bitmap, name)
     }
 
     private fun show(language: String = "en") {
@@ -679,9 +693,6 @@ class CoursesScreenTest {
 
     private fun courses() = runBlocking { repository.observeCourses().first() }
     private fun categories() = runBlocking { repository.observeCategories().first() }
-    private fun applyCategory() {
-        compose.onNode(hasText("Apply list") or hasText("Применить список")).performClick()
-    }
     private fun waitFor(condition: () -> Boolean) = compose.waitUntil(5_000, condition)
     private fun waitForTag(tag: String) = waitFor {
         compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()

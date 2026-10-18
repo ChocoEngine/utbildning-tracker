@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.delay
 
 enum class RepositoryError {
-    EMPTY_NAME, NAME_TOO_LONG, INVALID_COLOR, TOPICS_REQUIRED, INVALID_TOPIC, COURSE_LIMIT,
+    EMPTY_NAME, NAME_TOO_LONG, CATEGORY_NAME_TOO_LONG, INVALID_COLOR, TOPICS_REQUIRED, INVALID_TOPIC, COURSE_LIMIT,
     COLOR_UNAVAILABLE, COURSE_NOT_FOUND, CATEGORY_NOT_FOUND, CATEGORY_NAME_CONFLICT,
     COURSE_COMPLETED, COURSE_NOT_COMPLETED, CATEGORY_IN_USE, INVALID_SCHEDULE, SCHEDULE_EXISTS, SESSION_NOT_FOUND, INVALID_SESSION_DATE,
 }
@@ -235,6 +235,12 @@ class TrackerRepository(
             dao.deleteCategory(categoryId)
         }
 
+    suspend fun addCategory(name: String): CategoryEntity = database.withTransaction {
+        val title = checkedCategoryName(name)
+        dao.getCategories().find { sameCategoryName(it.name, title) }
+            ?: CategoryEntity(newId(), title).also { dao.insertCategory(it) }
+    }
+
     /** Returns the new completion state; no calendar row is created or rewritten. */
     suspend fun toggleTopicCompletion(courseId: String, topicId: String): Boolean =
         database.withTransaction {
@@ -346,7 +352,7 @@ class TrackerRepository(
     /** Explicit shared-category rename, distinct from editing a course's category field. */
     suspend fun renameCategory(categoryId: String, name: String): CategoryEntity =
         database.withTransaction {
-            val title = checkedName(name)
+            val title = checkedCategoryName(name)
             val categories = dao.getCategories()
             val existing = categories.find { it.id == categoryId }
                 ?: fail(RepositoryError.CATEGORY_NOT_FOUND)
@@ -371,10 +377,11 @@ class TrackerRepository(
         }
 
     private suspend fun resolveCategory(name: String): String? {
-        val title = name.trim()
-        if (title.isEmpty()) return null
-        return dao.getCategories().find { sameCategoryName(it.name, title) }?.id
-            ?: CategoryEntity(newId(), title).also { dao.insertCategory(it) }.id
+        if (name.isBlank()) return null
+        val title = checkedCategoryName(name)
+        val existing = dao.getCategories().find { sameCategoryName(it.name, title) }
+        if (existing != null) return existing.id
+        return CategoryEntity(newId(), title).also { dao.insertCategory(it) }.id
     }
 
     private suspend fun requireAvailableColor(colorId: Int?, courseId: String? = null) {
@@ -385,6 +392,12 @@ class TrackerRepository(
 
     private fun checkedCourseName(name: String): String = checkedName(name).also {
         if (it.codePointCount(0, it.length) > 50) fail(RepositoryError.NAME_TOO_LONG)
+    }
+
+    private fun checkedCategoryName(name: String): String = checkedName(name).also {
+        if (it.codePointCount(0, it.length) > CATEGORY_NAME_MAX_LENGTH) {
+            fail(RepositoryError.CATEGORY_NAME_TOO_LONG)
+        }
     }
 
     private fun checkedName(name: String): String = name.trim().also {
@@ -402,5 +415,6 @@ class TrackerRepository(
 
     private companion object {
         const val COLOR_COUNT = 10
+        const val CATEGORY_NAME_MAX_LENGTH = 20
     }
 }

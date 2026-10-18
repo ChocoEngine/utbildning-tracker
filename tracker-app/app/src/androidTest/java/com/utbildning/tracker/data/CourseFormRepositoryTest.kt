@@ -26,7 +26,7 @@ class CourseFormRepositoryTest {
     }
     @After fun close() = db.close()
 
-    @Test fun formCreatesBothModesAndParsesBlankLines() = runBlocking {
+    @Test fun formCreatesCoursesWithAndWithoutTopicsAndParsesBlankLines() = runBlocking {
         val course = repository.saveCourseForm(name = " C ", colorId = 0,
             categoryName = "Учёба", topicText = " Массивы \n\n Указатели ")
         val details = repository.observeCourseDetails(course.id).first()!!

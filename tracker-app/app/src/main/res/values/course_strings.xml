@@ -19,8 +19,13 @@
     <string name="course_delete">Delete</string>
     <string name="course_name">Name</string>
     <string name="course_category">Category</string>
+    <string name="category_choose">Choose category</string>
+    <string name="category_edit">Change category</string>
+    <string name="category_add">Add</string>
+    <string name="category_name_too_long">Category name must contain no more than 20 characters</string>
     <string name="category_delete_accessibility">Delete category %1$s</string>
-    <string name="category_delete_question">Delete category “%1$s”? Courses will have no category.</string>
+    <string name="category_delete_question">Delete category “%1$s”?</string>
+    <string name="category_delete_question_in_use">Delete category “%1$s”? Courses will have no category.</string>
     <string name="course_color">Color</string>
     <string name="course_color_number">Color %1$d</string>
     <string name="course_scheduled">Scheduled</string>

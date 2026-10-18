@@ -30,7 +30,7 @@ import org.junit.runner.RunWith
 
 /** F17 acceptance: one data set crosses every destructive feature and two restore points. */
 @RunWith(AndroidJUnit4::class)
-class FunctionalAcceptanceTest {
+class BackupLifecycleIntegrationTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val zone = ZoneId.of("UTC")
     private val firstDay = LocalDate.parse("2026-10-05")

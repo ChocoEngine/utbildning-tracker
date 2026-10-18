@@ -1,11 +1,7 @@
 package com.utbildning.tracker.ui
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import android.view.Choreographer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material3.Surface
@@ -24,7 +20,6 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.data.local.CourseEntity
 import com.utbildning.tracker.ui.courses.CourseListContent
 import com.utbildning.tracker.ui.theme.TrackerTheme
@@ -33,8 +28,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Locale
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 /** Narrow-screen review of the existing layout; no database or app-service mutations. */
 @RunWith(AndroidJUnit4::class)
@@ -97,25 +90,8 @@ class CourseListGeometryReviewTest {
     }
 
     private fun capture(context: Context, name: String) {
-        compose.mainClock.advanceTimeBy(1_000)
-        compose.waitForIdle()
-        val frames = CountDownLatch(1)
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            Choreographer.getInstance().postFrameCallback {
-                Choreographer.getInstance().postFrameCallback { frames.countDown() }
-            }
-        }
-        check(frames.await(3, TimeUnit.SECONDS))
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        compose.awaitReviewDraw()
         val bitmap = compose.onNodeWithTag("geometry_canvas").captureToImage().asAndroidBitmap()
-        val resolver = context.contentResolver
-        val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerListGeometry")
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }))
-        checkNotNull(resolver.openOutputStream(uri)).use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
-        resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
+        saveTestScreenshot(context, bitmap, name, "Pictures/TrackerListGeometry")
     }
 }

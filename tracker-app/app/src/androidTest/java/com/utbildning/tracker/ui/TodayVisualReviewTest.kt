@@ -1,11 +1,7 @@
 package com.utbildning.tracker.ui
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import android.view.Choreographer
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Surface
@@ -18,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,8 +25,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -84,33 +77,11 @@ class TodayVisualReviewTest {
     }
 
     private fun capture(context: Context, name: String) {
-        compose.mainClock.advanceTimeBy(1_000)
-        compose.waitForIdle()
-        // Compose idleness alone can precede the platform draw of a newly keyed scene.
-        val frames = CountDownLatch(1)
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            Choreographer.getInstance().postFrameCallback {
-                Choreographer.getInstance().postFrameCallback { frames.countDown() }
-            }
-        }
-        check(frames.await(3, TimeUnit.SECONDS)) { "Review scene did not receive two display frames" }
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        compose.awaitReviewDraw()
         // Capture the displayed window: layer capture can omit newly drawn header glyphs.
         android.os.SystemClock.sleep(250)
         val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
-        save(context, bitmap, name)
+        saveTestScreenshot(context, bitmap, name)
     }
 
-    private fun save(context: Context, bitmap: Bitmap, name: String) {
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-        val resolver = context.contentResolver
-        val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
-        checkNotNull(resolver.openOutputStream(uri)).use { stream -> check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)) }
-        resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
-    }
 }

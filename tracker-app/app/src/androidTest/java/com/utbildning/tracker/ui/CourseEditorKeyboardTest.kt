@@ -27,7 +27,7 @@ import org.junit.*
 import org.junit.Assert.*
 
 /** Real windows and IME, saved pixels are reviewed separately from semantics assertions. */
-class R05EditorReviewTest {
+class CourseEditorKeyboardTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private lateinit var db: TrackerDatabase
     private lateinit var repo: TrackerRepository
@@ -44,10 +44,39 @@ class R05EditorReviewTest {
     }
     @Test fun russianEditorAndKeyboard() = review("ru")
     @Test fun englishEditorAndKeyboard() = review("en")
+    @Test fun russianTwentyCharacterCategoryOnNarrowScreen() = reviewCategoryLimit("ru", "Ш".repeat(20))
+    @Test fun englishTwentyCharacterCategoryOnNarrowScreen() = reviewCategoryLimit("en", "W".repeat(20))
+
+    private fun reviewCategoryLimit(language: String, category: String) {
+        assertEquals(20, category.codePointCount(0, category.length))
+        val course = runBlocking { repo.createCourse("C", 0, category) }
+        val configuration = Configuration(compose.activity.resources.configuration).apply { setLocale(Locale.forLanguageTag(language)) }
+        val localized = compose.activity.createConfigurationContext(configuration)
+        compose.setContent {
+            CompositionLocalProvider(LocalContext provides localized, LocalConfiguration provides configuration,
+                LocalResources provides localized.resources) { TrackerTheme { CoursesScreen({}, repo) } }
+        }
+        compose.runOnIdle { job = ViewModelProvider(compose.activity)[CoursesViewModel::class.java].viewModelScope.coroutineContext[Job] }
+        click("course_row_${course.id}")
+        waitTag("course_category_value")
+        compose.onNodeWithTag("course_category_value").assertTextEquals(category).assertIsDisplayed()
+        capture(language, "category_20_editor")
+
+        click("course_category_open")
+        waitTag("category_list")
+        compose.onNodeWithTag("category_option_${course.categoryId}").assertTextContains(category).assertIsDisplayed()
+        capture(language, "category_20_list")
+
+        click("course_category")
+        compose.onNodeWithTag("course_category").assertIsFocused().performTextInput(category)
+        compose.onNodeWithTag("course_category").assertTextContains(category)
+        capture(language, "category_20_keyboard")
+        assertAboveKeyboard(localized.getString(com.utbildning.tracker.R.string.category_add))
+    }
 
     private fun review(language: String) {
         val name = if (language == "ru") "Лекции и практика программирования на C" else "C pointers arrays memory structured programming"
-        val category = if (language == "ru") "Программирование и самостоятельная практика" else "Programming and independent practice"
+        val category = if (language == "ru") "Программирование" else "Programming"
         val course = runBlocking { repo.createCourse(name, 0, category, (1..30).map { "C topic $it: pointers arrays memory" }) }
         val configuration = Configuration(compose.activity.resources.configuration).apply { setLocale(Locale.forLanguageTag(language)) }
         val localized = compose.activity.createConfigurationContext(configuration)
@@ -78,11 +107,42 @@ class R05EditorReviewTest {
         assertEquals(30, runBlocking { db.trackerDao().getTopics(course.id) }.size)
         click("course_category_open")
         waitTag("course_category")
-        compose.onNodeWithTag("course_category").performTextReplacement("")
+        val newCategory = if (language == "ru") "Новая категория" else "New category"
+        compose.onNodeWithTag("course_category").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithTag("course_category").assertIsFocused().performTextInput(newCategory)
+        compose.onNodeWithTag("course_category").assertTextContains(newCategory)
         capture(language, "category_keyboard")
-        assertAboveKeyboard(localized.getString(com.utbildning.tracker.R.string.topics_apply))
-        tapActualButton(localized.getString(com.utbildning.tracker.R.string.topics_apply))
+        assertAboveKeyboard(localized.getString(com.utbildning.tracker.R.string.category_add))
+        tapActualButton(localized.getString(com.utbildning.tracker.R.string.category_add))
+        compose.waitUntil(5_000) {
+            runBlocking { repo.observeCategories().first() }.any { it.name == newCategory }
+        }
+        val addedCategory = runBlocking { repo.observeCategories().first() }.single { it.name == newCategory }
+        compose.waitUntil(5_000) { runBlocking { repo.getCourseDetails(course.id)?.category?.name == category } }
+        compose.onNodeWithTag("category_option_${course.categoryId}").assertIsSelected()
+        compose.onNodeWithTag("category_option_${addedCategory.id}").assertIsNotSelected()
+        capture(language, "category_added_not_selected")
+        compose.selectCategoryOption("category_option_${addedCategory.id}")
+        compose.waitUntil(5_000) { runBlocking { repo.getCourseDetails(course.id)?.category?.name == newCategory } }
+        click("course_category_open")
+        compose.onNodeWithTag("category_option_${addedCategory.id}").assertIsSelected()
+        capture(language, "category_selected")
+        click("category_delete_${addedCategory.id}")
+        capture(language, "category_delete_confirmation")
+        click("category_delete_confirm")
+        compose.waitUntil(5_000) {
+            runBlocking { repo.observeCategories().first() }.none { it.id == addedCategory.id }
+        }
         compose.waitUntil(5_000) { runBlocking { repo.getCourseDetails(course.id)?.category == null } }
+        compose.onNodeWithTag("category_option_none").assertIsSelected()
+        capture(language, "category_deleted")
+        click("category_delete_${course.categoryId}")
+        compose.onNodeWithText(localized.getString(
+            com.utbildning.tracker.R.string.category_delete_question, category)).assertExists()
+        capture(language, "category_delete_unused_confirmation")
+        click("category_delete_cancel")
+        click("category_cancel")
         click("course_cancel")
         click("course_row_${course.id}")
         waitTag("course_title")
@@ -115,7 +175,7 @@ class R05EditorReviewTest {
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         // Wait for IME/window animations using the platform, not Compose's virtual clock.
         android.os.SystemClock.sleep(400)
-        val directory = File(compose.activity.getExternalFilesDir(null), "r05-editor").apply { mkdirs() }
+        val directory = File(compose.activity.getExternalFilesDir(null), "course-editor-keyboard").apply { mkdirs() }
         val bitmap = checkNotNull(InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot())
         File(directory, "${language}_$state.png").outputStream().use { check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
     }
@@ -127,19 +187,35 @@ class R05EditorReviewTest {
         val windows = automation.windows
         val keyboard = windows.firstOrNull { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD }
         assertNotNull("System keyboard must be visible", keyboard)
-        val ime = android.graphics.Rect().also { keyboard!!.getBoundsInScreen(it) }
+        val keyboardWindow = requireNotNull(keyboard)
+        val imeWindow = android.graphics.Rect().also { keyboardWindow.getBoundsInScreen(it) }
         fun nodes(node: android.view.accessibility.AccessibilityNodeInfo): List<android.view.accessibility.AccessibilityNodeInfo> =
             listOf(node) + (0 until node.childCount).flatMap { index -> node.getChild(index)?.let { nodes(it) }.orEmpty() }
+        val imeLeaves = keyboardWindow.root?.let { root -> nodes(root) }.orEmpty()
+            .filter { it.childCount == 0 && it.isVisibleToUser }
+            .map { node -> android.graphics.Rect().also { node.getBoundsInScreen(it) } }
+            .filterNot { it.isEmpty }
+        val ime = if (imeLeaves.isEmpty()) imeWindow else android.graphics.Rect(
+            imeLeaves.minOf { it.left }, imeLeaves.minOf { it.top },
+            imeLeaves.maxOf { it.right }, imeLeaves.maxOf { it.bottom },
+        )
         val candidates = windows.filter { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_APPLICATION }
             .flatMap { it.root?.let { root -> nodes(root) }.orEmpty() }
             .filter { it.text?.toString() == label }
         assertTrue("Button missing from actual system windows: $label", candidates.isNotEmpty())
         val visible = candidates.map { node ->
             val bounds = android.graphics.Rect().also { node.getBoundsInScreen(it) }
-            println("R05_WINDOW button=$label bounds=$bounds ime=$ime")
+            println("EDITOR_WINDOW button=$label bounds=$bounds imeWindow=$imeWindow imeContent=$ime")
             bounds
-        }.firstOrNull { !it.isEmpty && it.top >= 0 && it.bottom <= ime.top }
-        assertNotNull("Button covered by keyboard: $label, IME=$ime", visible)
+        }.firstOrNull { bounds ->
+            if (bounds.isEmpty || bounds.top < 0) false
+            else if (imeLeaves.isEmpty()) !android.graphics.Rect.intersects(bounds, imeWindow)
+            else imeLeaves.sumOf { leaf ->
+                val overlap = android.graphics.Rect(bounds)
+                if (overlap.intersect(leaf)) overlap.width().toLong() * overlap.height() else 0L
+            } * 2 < bounds.width().toLong() * bounds.height()
+        }
+        assertNotNull("Button covered by keyboard: $label, IME content=$ime, window=$imeWindow", visible)
         return visible!!
     }
     private fun tapActualButton(label: String) {

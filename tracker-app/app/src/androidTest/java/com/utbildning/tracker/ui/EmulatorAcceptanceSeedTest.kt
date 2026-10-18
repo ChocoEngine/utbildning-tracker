@@ -11,15 +11,16 @@ import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 /** Opt-in, idempotent fixture for the dedicated acceptance emulator. */
-class R05EmulatorSeedTest {
+class EmulatorAcceptanceSeedTest {
     @Test fun seedAcceptanceCourses() = runBlocking {
-        assumeTrue(InstrumentationRegistry.getArguments().getString("seedR05") == "true")
+        assumeTrue(InstrumentationRegistry.getArguments().getString("seedAcceptance") == "true")
         check(Build.HARDWARE in listOf("ranchu", "goldfish"))
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val db = TrackerDatabase.open(context)
         try {
             val repo = TrackerRepository(db)
             val dao = db.trackerDao()
+            // Keep the existing fixture namespace so repeated seeding preserves course IDs.
             val prefs = context.getSharedPreferences("r05_fixture", 0)
             val names = listOf("Лекции и практика программирования на C", "C pointers arrays memory structured programming",
                 "Практика C без тем", "C без расписания", "C на паузе", "C все темы пройдены", "C пустой курс", "C завершённый")
@@ -30,7 +31,7 @@ class R05EmulatorSeedTest {
                         "Тема $it: указатели, массивы и управление памятью в C"
                     }
                     val course = repo.createCourse(name, repo.availableColors().first(),
-                        if (index == 6) "" else "Программирование и самостоятельная практика", topics)
+                        if (index == 6) "" else "Программирование", topics)
                     if (index in listOf(0, 1, 2, 4)) repo.saveInitialSchedule(course.id,
                         (1..7).map { WeeklyRule(it, 600 + index * 90, if (index == 1) 60 else 660 + index * 90) },
                         LocalDate.now().plusDays(45).toEpochDay())
@@ -65,7 +66,7 @@ class R05EmulatorSeedTest {
                 }
                 check(prefs.edit().putBoolean("results_$today", true).commit())
             }
-            println("R05_SEED courses=${ids.size}; calendar=4/5 courses; date=$today")
+            println("ACCEPTANCE_SEED courses=${ids.size}; calendar=4/5 courses; date=$today")
         } finally { db.close() }
     }
 }

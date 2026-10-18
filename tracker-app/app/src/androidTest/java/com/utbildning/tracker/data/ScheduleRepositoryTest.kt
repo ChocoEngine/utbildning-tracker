@@ -71,7 +71,7 @@ class ScheduleRepositoryTest {
         assertNull(reloaded.getSchedule(course.id))
     }
 
-    @Test fun switchingModesKeepsHistoryAndProgressAndCanGenerateAgain() = runBlocking {
+    @Test fun disablingAndEnablingScheduleKeepsHistoryAndProgressWithoutDuplicates() = runBlocking {
         val course = repo.createCourse("C", 0, topics = listOf("One", "Two", "Three"))
         val topics = dao.getTopics(course.id)
         repo.toggleTopicCompletion(course.id, topics[0].id)
@@ -79,7 +79,7 @@ class ScheduleRepositoryTest {
         assertNotNull(dao.getCourse(course.id))
         val sessions = dao.getSessions(course.id)
         repo.setSessionResult(sessions[0].id, SessionResult.DONE, setOf(topics[1].id))
-        // Legacy recorded results remain preserved when switching modes.
+        // Legacy recorded results remain preserved when disabling the schedule.
         dao.updateSession(sessions[1].copy(result = SessionResult.SKIPPED))
         clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
         val completions = dao.getTopics(course.id).filter { it.isCompleted }
@@ -98,6 +98,25 @@ class ScheduleRepositoryTest {
         assertEquals(completions, dao.getTopics(course.id).filter { it.isCompleted })
         repo.synchronize()
         assertEquals(regenerated, dao.getSessions(course.id))
+    }
+
+    @Test fun disablingScheduleResumesPausedCourseAndPreservesProgressAndColor() = runBlocking {
+        val course = repo.createCourse("C", 0, topics = listOf("One", "Two"))
+        repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 1200)))
+        repo.toggleTopicCompletion(course.id, dao.getTopics(course.id).first().id)
+        repo.pauseCourse(course.id)
+        val before = repo.getCourseDetails(course.id)!!
+
+        repo.disableSchedule(course.id)
+        val resumed = repo.getCourseDetails(course.id)!!
+        assertFalse(resumed.course.isPaused)
+        assertFalse(resumed.hasSchedule)
+        assertEquals(before.course.colorId, resumed.course.colorId)
+        assertEquals(before.topics, resumed.topics)
+
+        repo.pauseCourse(course.id)
+        assertTrue(repo.getCourseDetails(course.id)!!.course.isPaused)
+        assertEquals(before.topics, dao.getTopics(course.id))
     }
 
     @Test fun generationDoesNotAddSecondSessionOnAnExistingDate() = runBlocking {
@@ -122,7 +141,7 @@ class ScheduleRepositoryTest {
         assertNotNull(repo.getSchedule(course.id))
     }
 
-    @Test fun failedEnablingAndCompletedCourseKeepTheirMode() = runBlocking {
+    @Test fun invalidScheduleAndCompletedCourseRejectEnabling() = runBlocking {
         val course = repo.createCourse("C", 0, topics = listOf("One"))
         try { repo.saveInitialSchedule(course.id, emptyList()); fail("Expected INVALID_SCHEDULE") }
         catch (error: RepositoryException) { assertEquals(RepositoryError.INVALID_SCHEDULE, error.error) }
@@ -180,7 +199,6 @@ class ScheduleRepositoryTest {
         val today = LocalDate.parse("2027-03-29").toEpochDay()
         val missedBeyondOldHorizon = dao.getSessions(course.id).filter { it.date > monday + 90 && it.date < today }
         assertTrue(missedBeyondOldHorizon.isEmpty())
-        assertTrue(missedBeyondOldHorizon.all { it.result == SessionResult.SKIPPED })
         assertEquals(SessionResult.PENDING, dao.getSessions(course.id).single { it.date == today }.result)
     }
 
@@ -201,7 +219,7 @@ class ScheduleRepositoryTest {
         assertFalse(dao.getCourse(course.id)!!.isPaused)
     }
 
-    @Test fun renamingAndRecoloringOnlyRefreshFutureUnmarkedSnapshots() = runBlocking {
+    @Test fun renamingAndRecoloringAppearInAllSessionProjections() = runBlocking {
         val course = repo.createCourse("C", 0)
         repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 720)))
         val sessions = dao.getSessions(course.id)
@@ -209,10 +227,10 @@ class ScheduleRepositoryTest {
         clock = Instant.parse("2026-09-28T13:00:00Z").toEpochMilli()
         repo.updateCourse(course.id, "New", 1)
         val updated = dao.getSessions(course.id)
-        assertEquals("New", updated[0].courseName)
-        assertEquals("New", updated[1].courseName)
-        assertEquals("New", updated[2].courseName)
-        assertEquals(1, updated[2].colorId)
+        assertEquals(sessions.mapIndexed { index, session ->
+            session.copy(courseName = "New", colorId = 1,
+                result = if (index == 1) SessionResult.DONE else session.result)
+        }, updated)
     }
 
     @Test fun editingSchedulePreservesHistoryProgressAndRecordedFutureResults() = runBlocking {

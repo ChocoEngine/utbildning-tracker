@@ -19,8 +19,13 @@
     <string name="course_delete">Удалить</string>
     <string name="course_name">Название</string>
     <string name="course_category">Категория</string>
+    <string name="category_choose">Выберите категорию</string>
+    <string name="category_edit">Изменить категорию</string>
+    <string name="category_add">Добавить</string>
+    <string name="category_name_too_long">Название категории должно содержать не более 20 символов</string>
     <string name="category_delete_accessibility">Удалить категорию %1$s</string>
-    <string name="category_delete_question">Удалить категорию «%1$s»? Курсы останутся без категории.</string>
+    <string name="category_delete_question">Удалить категорию «%1$s»?</string>
+    <string name="category_delete_question_in_use">Удалить категорию «%1$s»? Курсы останутся без категории.</string>
     <string name="course_color">Цвет</string>
     <string name="course_color_number">Цвет %1$d</string>
     <string name="course_scheduled">По расписанию</string>

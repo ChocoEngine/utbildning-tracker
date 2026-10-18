@@ -28,7 +28,7 @@ class CourseEditorLayoutTest {
             TrackerTheme { Surface {
                 CourseEditorContent(draft, emptyList(), listOf(0, 1), false, null,
                     onChange = { draft = it(draft) }, onSave = {}, onCancel = {}, onApply = {},
-                    onDeleteCategory = {}, onToggle = {
+                    onToggle = {
                         val topic = draft.topics.single()
                         draft = draft.copy(topics = listOf(topic.copy(isCompleted = !topic.isCompleted)),
                             text = if (!topic.isCompleted) "" else topic.title)
@@ -52,7 +52,7 @@ class CourseEditorLayoutTest {
         compose.setContent {
             TrackerTheme { Surface(Modifier.width(320.dp).fillMaxHeight()) {
                 CourseEditorContent(draft, emptyList(), (0..9).toList(), false, null,
-                    onChange = {}, onSave = {}, onCancel = {}, onApply = {}, onDeleteCategory = {}, onToggle = {})
+                    onChange = {}, onSave = {}, onCancel = {}, onApply = {}, onToggle = {})
             } }
         }
         val title = compose.onNodeWithTag("course_title").fetchSemanticsNode().boundsInRoot

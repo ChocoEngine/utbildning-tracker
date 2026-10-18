@@ -30,8 +30,8 @@ import org.junit.Test
 
 class ScheduleOverlapReviewTest {
     @get:Rule val compose = createComposeRule()
-    @Test fun russian() = review("ru")
-    @Test fun english() = review("en")
+    @Test fun russianOverlapWarningsKeepTimeControlsOnOneRow() = review("ru")
+    @Test fun englishOverlapWarningsKeepTimeControlsOnOneRow() = review("en")
 
     private fun review(language: String) {
         val context = ApplicationProvider.getApplicationContext<Context>()
@@ -88,15 +88,7 @@ class ScheduleOverlapReviewTest {
                 org.junit.Assert.assertEquals("Time controls share a row on 320 dp", startBounds.center.y, endBounds.center.y, 1f)
                 compose.onNodeWithTag("schedule_remove_end_$day").assertIsDisplayed()
             }
-            compose.waitForIdle()
-            val frames = java.util.concurrent.CountDownLatch(1)
-            androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().runOnMainSync {
-                android.view.Choreographer.getInstance().postFrameCallback {
-                    android.view.Choreographer.getInstance().postFrameCallback { frames.countDown() }
-                }
-            }
-            check(frames.await(3, java.util.concurrent.TimeUnit.SECONDS))
-            androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+            compose.awaitReviewDraw()
             val bitmap = compose.onNodeWithTag("overlap_review").captureToImage().asAndroidBitmap()
             File(directory, "${language}_$index.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }

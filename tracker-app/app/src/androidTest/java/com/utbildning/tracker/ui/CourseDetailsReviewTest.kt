@@ -1,11 +1,7 @@
 package com.utbildning.tracker.ui
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.provider.MediaStore
-import android.view.Choreographer
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Surface
@@ -22,30 +18,16 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.utbildning.tracker.data.local.*
 import com.utbildning.tracker.domain.EditableTopic
-import com.utbildning.tracker.domain.WeeklyRule
-import com.utbildning.tracker.ui.calendar.CalendarContent
 import com.utbildning.tracker.ui.courses.CourseDraft
 import com.utbildning.tracker.ui.courses.CourseEditorContent
-import com.utbildning.tracker.ui.courses.CourseListContent
-import com.utbildning.tracker.ui.guide.GuideScreen
-import com.utbildning.tracker.ui.schedule.ScheduleContent
-import com.utbildning.tracker.ui.session.SessionContent
-import com.utbildning.tracker.ui.today.TodayContent
 import com.utbildning.tracker.ui.theme.TrackerTheme
-import java.time.Instant
 import java.time.LocalDate
-import java.time.YearMonth
-import java.time.ZoneId
 import java.util.Locale
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,29 +35,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CourseDetailsReviewTest {
     @get:Rule val compose = createComposeRule()
-    @Test fun resumePreservesProgressWithoutSchedule() = kotlinx.coroutines.runBlocking {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val db = androidx.room.Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
-        try {
-            val repo = com.utbildning.tracker.data.TrackerRepository(db)
-            val course = repo.saveCourseForm(name = "C", colorId = 0, categoryName = "", topicText = "One\nTwo")
-            repo.saveInitialSchedule(course.id, listOf(WeeklyRule(1, 1200)), null)
-            repo.toggleTopicCompletion(course.id, repo.getCourseDetails(course.id)!!.topics.first().id)
-            repo.pauseCourse(course.id)
-            val before = repo.getCourseDetails(course.id)!!
-            repo.disableSchedule(course.id)
-            val after = repo.getCourseDetails(course.id)!!
-            org.junit.Assert.assertFalse(after.course.isPaused)
-            org.junit.Assert.assertFalse(after.hasSchedule)
-            org.junit.Assert.assertEquals(before.course.colorId, after.course.colorId)
-            org.junit.Assert.assertEquals(before.topics, after.topics)
-            repo.pauseCourse(course.id)
-            org.junit.Assert.assertTrue(repo.getCourseDetails(course.id)!!.course.isPaused)
-            org.junit.Assert.assertEquals(before.topics, repo.getCourseDetails(course.id)!!.topics)
-        } finally { db.close() }
-    }
-    @Test fun russian() = review("ru")
-    @Test fun english() = review("en")
+    @Test fun russianEditorStatesKeepActionsAndTopicChecksAligned() = review("ru")
+    @Test fun englishEditorStatesKeepActionsAndTopicChecksAligned() = review("en")
     private fun review(language: String) {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val configuration = Configuration(context.resources.configuration).apply { setLocale(Locale.forLanguageTag(language)) }
@@ -120,31 +81,9 @@ class CourseDetailsReviewTest {
         }
     }
     private fun capture(context: Context, name: String) {
-        compose.mainClock.advanceTimeBy(1_000)
-        compose.waitForIdle()
-        // Compose idleness alone can precede the platform draw of a newly keyed scene.
-        val frames = CountDownLatch(1)
-        InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            Choreographer.getInstance().postFrameCallback {
-                Choreographer.getInstance().postFrameCallback { frames.countDown() }
-            }
-        }
-        check(frames.await(3, TimeUnit.SECONDS)) { "Review scene did not receive two display frames" }
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        compose.awaitReviewDraw()
         val bitmap = compose.onNodeWithTag(if (name.contains("expanded")) "course_palette_dialog" else "review_canvas").captureToImage().asAndroidBitmap()
-        save(context, bitmap, name)
+        saveTestScreenshot(context, bitmap, name)
     }
 
-    private fun save(context: Context, bitmap: Bitmap, name: String) {
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, uniqueTestScreenshotName(name))
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/TrackerChecks")
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-        val resolver = context.contentResolver
-        val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
-        checkNotNull(resolver.openOutputStream(uri)).use { stream -> check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)) }
-        resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
-    }
 }

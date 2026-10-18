@@ -88,6 +88,9 @@ Lint: `app/build/reports/lint-results-debug.html`.
 
 ## Проверки
 
+Состав, специальные условия, текущие имена и результат ревизии —
+[тесты проекта](../docs/TESTING.md).
+
 С запущенным эмулятором из `tracker-app/`:
 
 ```sh
@@ -96,7 +99,7 @@ Lint: `app/build/reports/lint-results-debug.html`.
 
 JVM-тесты находятся в `app/src/test/`, проверки Room, репозитория, UI и
 напоминаний — в `app/src/androidTest/`. Для UI используется Android 16 / API 36.
-Результат текущей проверки: [отчёт](../docs/checks/mvp/README.md).
+Ревизия тестов и текущий результат: [отчёт](../docs/checks/test-cleanup/README.md).
 Preview компилируются; рендер в Android Studio отдельно не проверялся.
 
 Предыдущие контрольные точки: [S02](../docs/checks/s02/README.md),

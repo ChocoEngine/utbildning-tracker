@@ -23,22 +23,20 @@ class ManualTopicCompletionTest {
     }
     @After fun close() = db.close()
 
-    @Test fun eitherModeCanToggleOutOfOrderWithoutCalendarRows() = runBlocking {
-        (0..1).forEach { index ->
-            val course = repository.createCourse("C", index, topics = listOf("Массивы", "Указатели"))
-            val topics = dao.getTopics(course.id)
-            assertTrue(repository.toggleTopicCompletion(course.id, topics.last().id))
-            assertNull(dao.getTopic(topics.first().id)?.takeIf { it.isCompleted })
-            assertNull(dao.getTopic(topics.last().id)?.takeIf { it.isCompleted }?.completionDate)
-            assertNull(dao.getTopic(topics.last().id)?.completionDate)
-            assertFalse(repository.toggleTopicCompletion(course.id, topics.last().id))
-            assertNull(dao.getTopic(topics.last().id)?.takeIf { it.isCompleted })
-            assertTrue(dao.getSessions(course.id).isEmpty())
-            assertNull(dao.getSchedule(course.id))
-        }
+    @Test fun manualCompletionCanToggleOutOfOrderWithoutCalendarRows() = runBlocking {
+        val course = repository.createCourse("C", 0, topics = listOf("Массивы", "Указатели"))
+        val topics = dao.getTopics(course.id)
+        assertTrue(repository.toggleTopicCompletion(course.id, topics.last().id))
+        assertNull(dao.getTopic(topics.first().id)?.takeIf { it.isCompleted })
+        assertTrue(dao.getTopic(topics.last().id)!!.isCompleted)
+        assertNull(dao.getTopic(topics.last().id)?.completionDate)
+        assertFalse(repository.toggleTopicCompletion(course.id, topics.last().id))
+        assertNull(dao.getTopic(topics.last().id)?.takeIf { it.isCompleted })
+        assertTrue(dao.getSessions(course.id).isEmpty())
+        assertNull(dao.getSchedule(course.id))
     }
 
-    @Test fun removingSessionCompletionKeepsHistoryAndSessionResult() = runBlocking {
+    @Test fun removingDatedCompletionKeepsSessionResultAndRemarkIsManual() = runBlocking {
         val course = repository.createCourse("C", 0, topics = listOf("Массивы"))
         val topic = dao.getTopics(course.id).single()
         val session = SessionEntity("session", course.id, 1, 600, "C", 0, 1, 1, result = SessionResult.DONE)
@@ -48,8 +46,8 @@ class ManualTopicCompletionTest {
         assertNull(dao.getTopic(topic.id)?.takeIf { it.isCompleted })
         assertEquals(session, dao.getSession(session.id))
         assertTrue(repository.toggleTopicCompletion(course.id, topic.id))
-        assertNull(dao.getTopic(topic.id)?.takeIf { it.isCompleted }?.completionDate)
-        assertNull(dao.getTopic(topic.id)?.takeIf { it.isCompleted }?.completionDate)
+        assertTrue(dao.getTopic(topic.id)!!.isCompleted)
+        assertNull(dao.getTopic(topic.id)!!.completionDate)
     }
 
     @Test fun invalidAndCompletedTopicsRejectWithoutMutatingProgress() = runBlocking {

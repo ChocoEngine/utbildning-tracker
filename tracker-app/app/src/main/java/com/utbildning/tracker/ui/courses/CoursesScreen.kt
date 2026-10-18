@@ -41,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -94,9 +96,10 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
             CourseListContent(model.courses, model.categories, model.progress, model.showAll,
                 { model.showAll = !model.showAll }, { model.open(it) }, model.scheduleRules, model.topicPaces)
         } else CourseEditorContent(draft, model.categories, model.colors, model.busy, model.error,
-            model::change, model::commitName, { model.leave() }, model::applyTopics, { model.removeCategory(it) }, model::toggle,
+            model::change, model::commitName, { model.leave() }, model::applyTopics, model::toggle,
             { model.openSchedule(onSchedule) }, model::requestLifecycle,
-            model::commitCategory, model::selectCategory, model::selectColor)
+            model::selectCategory, model::addCategory, model::removeCategory, model::selectColor,
+            model.courses.mapNotNull { it.categoryId }.toSet())
         if (model.creating && draft != null) AlertDialog(onDismissRequest = model::cancel,
             modifier = Modifier.imePadding().systemBarsPadding(),
             properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
@@ -105,7 +108,7 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
                 CourseNameField(draft.name, { value -> model.change { it.copy(name = value) } },
                     Modifier.fillMaxWidth().testTag("course_name"))
                 CategoryField(draft.category, model.categories, { value -> model.change { it.copy(category = value) } },
-                    { value -> model.change { it.copy(category = value) } }, {}, { model.removeCategory(it) })
+                    { value -> model.change { it.copy(category = value) } }, {})
                 model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_error")) }
             } },
             confirmButton = { Button(onClick = model::continueCreation, enabled = !model.busy, modifier = Modifier.testTag("course_continue")) { Text(stringResource(R.string.course_continue)) } },
@@ -115,12 +118,6 @@ internal fun CoursesScreen(onSettings: () -> Unit, repository: TrackerRepository
                 text = { Column { Text(stringResource(when(action) { "delete" -> R.string.course_confirm_delete; "pause" -> R.string.course_confirm_pause; "disable_schedule" -> R.string.course_confirm_disable_schedule; "restart" -> R.string.course_confirm_restart; else -> R.string.course_confirm_complete }), modifier = if (action == "restart") Modifier.testTag("course_restart_warning") else Modifier); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("course_action_error")) } } },
                 confirmButton = { TextButton(onClick = model::confirmLifecycle, enabled = !model.busy, modifier = Modifier.testTag("course_action_confirm")) { Text(stringResource(when(action) { "delete" -> R.string.course_delete; "pause" -> R.string.course_pause; "disable_schedule" -> R.string.course_disable_schedule; "restart" -> R.string.course_restart; else -> R.string.course_complete })) } },
                 dismissButton = { TextButton(onClick = model::dismissLifecycle, modifier = Modifier.testTag("course_action_cancel")) { Text(stringResource(R.string.course_cancel)) } })
-        }
-        model.deleteCategory?.let { category ->
-            AlertDialog(onDismissRequest = model::dismissCategoryDelete,
-                text = { Column { Text(stringResource(R.string.category_delete_question, category.name)); model.error?.let { Text(errorText(it), color = MaterialTheme.colorScheme.error) } } },
-                confirmButton = { TextButton(onClick = { model.removeCategory(category, true) }, modifier = Modifier.testTag("category_delete_confirm")) { Text(stringResource(R.string.course_delete)) } },
-                dismissButton = { TextButton(onClick = model::dismissCategoryDelete, modifier = Modifier.testTag("category_delete_cancel")) { Text(stringResource(R.string.course_cancel)) } })
         }
     }
 }
@@ -252,9 +249,11 @@ private fun CourseProgress(progress: Float, colorId: Int?, modifier: Modifier) {
 @Composable
 internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEntity>, colors: List<Int>, busy: Boolean, error: String?,
     onChange: ((CourseDraft) -> CourseDraft) -> Unit, onSave: () -> Unit, onCancel: () -> Unit, onApply: () -> Unit,
-    onDeleteCategory: (CategoryEntity) -> Unit, onToggle: (String) -> Unit, onSchedule: (String) -> Unit = {}, onLifecycle: (String) -> Unit = {},
-    onCategoryCommit: () -> Unit = {}, onCategorySelected: (String) -> Unit = {},
-    onColorSelected: (Int) -> Unit = { value -> onChange { it.copy(color = value) } }) {
+    onToggle: (String) -> Unit, onSchedule: (String) -> Unit = {}, onLifecycle: (String) -> Unit = {},
+    onCategorySelected: (String) -> Unit = {},
+    onCategoryAdded: (String) -> Unit = {}, onCategoryDeleted: (CategoryEntity) -> Unit = {},
+    onColorSelected: (Int) -> Unit = { value -> onChange { it.copy(color = value) } },
+    usedCategoryIds: Set<String> = emptySet()) {
     var paletteExpanded by rememberSaveable(draft.id) { mutableStateOf(draft.color == null) }
     var categoryOpen by rememberSaveable(draft.id) { mutableStateOf(false) }
     var editingName by rememberSaveable(draft.id) { mutableStateOf(false) }
@@ -310,14 +309,23 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             }
         } },
             confirmButton = { TextButton(onClick = { paletteExpanded = false }) { Text(stringResource(R.string.course_cancel)) } })
-        TextButton(onClick = { categoryOpen = true }, enabled = !draft.completed, modifier = Modifier.testTag("course_category_open")) {
-            Text(if (draft.category.isBlank()) stringResource(R.string.course_add_category) else "${stringResource(R.string.course_category)}: ${draft.category} ⌄")
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(if (draft.category.isBlank()) stringResource(R.string.course_no_category) else draft.category,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f, fill = false).testTag("course_category_value"))
+            if (!draft.completed) IconButton(onClick = { categoryOpen = true }, modifier = Modifier.testTag("course_category_open")) {
+                Icon(painterResource(R.drawable.ic_edit), stringResource(R.string.category_edit), Modifier.size(20.dp))
+            }
         }
-        if (categoryOpen) AlertDialog(onDismissRequest = { focus.clearFocus(); onCategoryCommit(); categoryOpen = false },
-            modifier = Modifier.imePadding().systemBarsPadding(),
-            properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
-            text = { CategoryField(draft.category, categories, { value -> onChange { it.copy(category = value) } }, { value -> onCategorySelected(value); categoryOpen = false }, onCategoryCommit, onDeleteCategory) },
-            confirmButton = { TextButton(onClick = { focus.clearFocus(); onCategoryCommit(); categoryOpen = false }) { Text(stringResource(R.string.topics_apply)) } })
+        if (categoryOpen) CategoryPickerDialog(
+            current = draft.category,
+            categories = categories,
+            onDismiss = { focus.clearFocus(); categoryOpen = false },
+            onSelect = { value -> focus.clearFocus(); onCategorySelected(value); categoryOpen = false },
+            onAdd = onCategoryAdded,
+            onDelete = onCategoryDeleted,
+            usedCategoryIds = usedCategoryIds,
+        )
         if (!draft.completed && !draft.paused) {
             val locale = LocalConfiguration.current.locales[0]
             CourseSectionDivider()
@@ -465,6 +473,7 @@ private fun CourseNameField(value: String, onAccepted: (String) -> Unit, modifie
             }
         },
         label = { Text(stringResource(R.string.course_name)) },
+        textStyle = MaterialTheme.typography.bodyLarge,
         singleLine = true,
         isError = tooLong,
         supportingText = {
@@ -481,7 +490,7 @@ private fun CourseNameField(value: String, onAccepted: (String) -> Unit, modifie
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CategoryField(value: String, categories: List<CategoryEntity>, onChange: (String) -> Unit,
-    onSelect: (String) -> Unit, onCommit: () -> Unit, onDelete: (CategoryEntity) -> Unit) {
+    onSelect: (String) -> Unit, onCommit: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var focused by remember { mutableStateOf(false) }
     val categoryLabel = stringResource(R.string.course_category)
@@ -493,8 +502,14 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
         Text(stringResource(R.string.course_category), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
         Box {
-            TextField(value, { onChange(it); expanded = it.isNotBlank() }, singleLine = true,
+            TextField(value, { candidate ->
+                    if (candidate.codePointCount(0, candidate.length) <= CATEGORY_NAME_MAX_LENGTH) {
+                        onChange(candidate)
+                        expanded = candidate.isNotBlank()
+                    }
+                }, singleLine = true,
                 placeholder = { Text(stringResource(R.string.course_no_category)) },
+                textStyle = MaterialTheme.typography.bodyLarge,
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -530,22 +545,126 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
                 matches.forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category.name, style = MaterialTheme.typography.bodyMedium) },
-                        contentPadding = PaddingValues(start = 12.dp, end = 4.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp),
                         onClick = { onSelect(category.name); expanded = false },
-                        modifier = Modifier.testTag("category_option_${category.id}"),
-                        trailingIcon = {
-                            IconButton(onClick = { expanded = false; onDelete(category) },
-                                modifier = Modifier.testTag("category_delete_${category.id}")) {
-                                Icon(painterResource(R.drawable.ic_delete),
-                                    stringResource(R.string.category_delete_accessibility, category.name),
-                                    Modifier.size(18.dp))
-                            }
-                        })
+                        modifier = Modifier.testTag("category_option_${category.id}"))
                 }
             }
         }
     }
 }
+
+@Composable
+private fun CategoryPickerDialog(current: String, categories: List<CategoryEntity>, onDismiss: () -> Unit,
+    onSelect: (String) -> Unit, onAdd: (String) -> Unit, onDelete: (CategoryEntity) -> Unit,
+    usedCategoryIds: Set<String>) {
+    var newCategory by rememberSaveable { mutableStateOf("") }
+    var pendingDelete by remember { mutableStateOf<CategoryEntity?>(null) }
+    val imeVisible = WindowInsets.ime.getBottom(androidx.compose.ui.platform.LocalDensity.current) > 0
+    val focus = LocalFocusManager.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.imePadding().systemBarsPadding().testTag("category_dialog"),
+        properties = androidx.compose.ui.window.DialogProperties(decorFitsSystemWindows = false),
+        title = { if (!imeVisible) Text(stringResource(R.string.category_choose)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(Modifier.fillMaxWidth()
+                    .then(if (imeVisible) Modifier.height(0.dp) else Modifier.heightIn(max = 220.dp))
+                    .clipToBounds().verticalScroll(rememberScrollState()).testTag("category_list")) {
+                    val currentCategory = categories.firstOrNull { current.trim().equals(it.name.trim(), true) }
+                    if (current.isBlank()) CategoryOption(stringResource(R.string.course_no_category), true,
+                        "category_option_none", onClick = { onSelect("") })
+                    currentCategory?.let { category ->
+                        CategoryOption(category.name, true, "category_option_${category.id}",
+                            { onSelect(category.name) }) { pendingDelete = category }
+                    }
+                    categories.filter { it.id != currentCategory?.id }.forEach { category ->
+                        CategoryOption(category.name, current.trim().equals(category.name.trim(), true),
+                            "category_option_${category.id}", { onSelect(category.name) }) { pendingDelete = category }
+                    }
+                    if (current.isNotBlank()) CategoryOption(stringResource(R.string.course_no_category), false,
+                        "category_option_none", onClick = { onSelect("") })
+                }
+                if (!imeVisible) {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                }
+                OutlinedTextField(
+                    value = newCategory,
+                    onValueChange = { candidate ->
+                        if (candidate.codePointCount(0, candidate.length) <= CATEGORY_NAME_MAX_LENGTH) {
+                            newCategory = candidate
+                        }
+                    },
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.course_add_category)) },
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.fillMaxWidth().testTag("course_category"),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                    val value = newCategory
+                    focus.clearFocus()
+                    newCategory = ""
+                    onAdd(value)
+                }, enabled = newCategory.isNotBlank(),
+                modifier = Modifier.testTag("category_add")) {
+                Text(stringResource(R.string.category_add))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, modifier = Modifier.testTag("category_cancel")) {
+                Text(stringResource(R.string.course_cancel))
+            }
+        },
+    )
+    pendingDelete?.let { category ->
+        AlertDialog(
+            onDismissRequest = { pendingDelete = null },
+            text = { Text(stringResource(
+                if (category.id in usedCategoryIds) R.string.category_delete_question_in_use
+                else R.string.category_delete_question,
+                category.name,
+            )) },
+            confirmButton = {
+                TextButton(onClick = { pendingDelete = null; onDelete(category) },
+                    modifier = Modifier.testTag("category_delete_confirm")) {
+                    Text(stringResource(R.string.course_delete))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingDelete = null }, modifier = Modifier.testTag("category_delete_cancel")) {
+                    Text(stringResource(R.string.course_cancel))
+                }
+            },
+        )
+    }
+}
+
+@Composable
+private fun CategoryOption(name: String, selected: Boolean, tag: String, onClick: () -> Unit,
+    onDelete: (() -> Unit)? = null) {
+    val buttonBackground = MaterialTheme.colorScheme.secondaryContainer
+    val selectedBackground = MaterialTheme.colorScheme.primary.copy(alpha = .24f).compositeOver(buttonBackground)
+    Surface(onClick = onClick, color = if (selected) selectedBackground else androidx.compose.ui.graphics.Color.Transparent,
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+            .semantics { this.selected = selected; role = Role.RadioButton }.testTag(tag)) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            if (onDelete != null) IconButton(onClick = onDelete,
+                modifier = Modifier.size(40.dp).testTag("category_delete_${tag.removePrefix("category_option_")}")) {
+                Icon(painterResource(R.drawable.ic_delete),
+                    stringResource(R.string.category_delete_accessibility, name), Modifier.size(18.dp))
+            }
+        }
+    }
+}
+
+private const val CATEGORY_NAME_MAX_LENGTH = 20
 
 @Composable
 private fun CourseSectionDivider() {
@@ -557,6 +676,7 @@ private fun CourseSectionDivider() {
 private fun errorText(error: String): String = when {
     error.startsWith("lines:") -> stringResource(R.string.topics_conflict, error.removePrefix("lines:"))
     error == "NAME_TOO_LONG" -> stringResource(R.string.course_name_too_long)
+    error == "CATEGORY_NAME_TOO_LONG" -> stringResource(R.string.category_name_too_long)
     error == "EMPTY_NAME" -> stringResource(R.string.course_name_required)
     error == "TOPICS_REQUIRED" -> stringResource(R.string.course_topics_required)
     error == "COURSE_LIMIT" -> stringResource(R.string.course_limit)
@@ -579,4 +699,4 @@ private fun CourseTopicPacePreview() {
 
 @Preview(locale = "ru", showBackground = true)
 @Composable
-private fun CourseEditorPreview() { TrackerTheme { Surface { CourseEditorContent(CourseDraft(name = "Лекции по C", text = "Введение\nУказатели"), emptyList(), (0..9).toList(), false, null, {}, {}, {}, {}, {}, {}) } } }
+private fun CourseEditorPreview() { TrackerTheme { Surface { CourseEditorContent(CourseDraft(name = "Лекции по C", text = "Введение\nУказатели"), emptyList(), (0..9).toList(), false, null, {}, {}, {}, {}, {}) } } }

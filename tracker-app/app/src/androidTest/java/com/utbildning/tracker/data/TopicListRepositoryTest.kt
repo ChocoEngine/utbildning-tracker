@@ -96,7 +96,7 @@ class TopicListRepositoryTest {
         assertEquals(course, dao.getCourse(course.id))
     }
 
-    @Test fun completedTopicsStayUntouchedAndRemovingHistoricalTopicArchivesIt() = runBlocking {
+    @Test fun completedTopicsStayUntouchedAndRemovedTopicsAreDeleted() = runBlocking {
         val course = repository.createCourse("C", 0, topics = listOf("Remove", "Done", "Keep"))
         val old = dao.getTopics(course.id)
         val session = SessionEntity("session", course.id, 20, 600, "C", 0, 100, 100, result = SessionResult.DONE)
@@ -106,7 +106,6 @@ class TopicListRepositoryTest {
         timestamp = 200
         val saved = repository.saveTopicList(course.id, "Keep\nNew")
         assertEquals(completion, dao.getTopic(old[1].id))
-        assertEquals(completion, dao.getTopic(old[1].id)?.takeIf { it.isCompleted })
         assertEquals(session, dao.getSession(session.id))
         assertNull(dao.getTopic(old[0].id))
         assertEquals(listOf("Keep", "Done", "New"), saved.map { it.title })
@@ -123,17 +122,16 @@ class TopicListRepositoryTest {
         dao.updateTopic(original[0].copy(isCompleted = true))
         assertEquals(listOf(original[0].copy(isCompleted = true)), repository.saveTopicList(course.id, " "))
         assertNull(dao.getTopic(original[1].id))
-        val empty = repository.createCourse("Empty", 1)
-        assertTrue(repository.saveTopicList(empty.id, "").isEmpty())
-    }
-
-    @Test fun scheduledListMayBeEmptiedWithoutCreatingCalendarRecords() = runBlocking {
-        val course = repository.createCourse("C", 0, topics = listOf("Remove"))
-        val original = dao.getTopics(course.id).single()
-        assertTrue(repository.saveTopicList(course.id, "").isEmpty())
-        assertNull(dao.getTopic(original.id))
         assertTrue(dao.getSessions(course.id).isEmpty())
         assertNull(dao.getSchedule(course.id))
+        val empty = repository.createCourse("Empty", 1)
+        assertTrue(repository.saveTopicList(empty.id, "").isEmpty())
+        val removable = repository.createCourse("Removable", 2, topics = listOf("Remove"))
+        val lastTopic = dao.getTopics(removable.id).single()
+        assertTrue(repository.saveTopicList(removable.id, "").isEmpty())
+        assertNull(dao.getTopic(lastTopic.id))
+        assertTrue(dao.getSessions(removable.id).isEmpty())
+        assertNull(dao.getSchedule(removable.id))
     }
 
     @Test fun saveRechecksCompletionAfterDraftWasPreparedAndReportsSourceLines() = runBlocking {
@@ -152,15 +150,6 @@ class TopicListRepositoryTest {
         assertEquals(original.map { if (it.id == completion.id) completion else it }, dao.getTopics(course.id))
         assertEquals(course, dao.getCourse(course.id))
         assertEquals(completion, dao.getTopic(original[0].id)?.takeIf { it.isCompleted })
-    }
-
-    @Test fun cancellingDraftWritesNothingIncludingCourseTimestamp() = runBlocking {
-        val course = repository.createCourse("C", 0, topics = listOf("Original"))
-        val original = dao.getTopics(course.id)
-        timestamp = 200
-        TopicListEditor.plan("Replacement", repository.getTopicEditorTopics(course.id))
-        assertEquals(original, dao.getTopics(course.id))
-        assertEquals(course, dao.getCourse(course.id))
     }
 
     @Test fun unchangedTextSaveDoesNotChangeTimestampOrIds() = runBlocking {
@@ -185,7 +174,7 @@ class TopicListRepositoryTest {
         assertEquals(200L, dao.getCourse(course.id)?.updatedAt)
     }
 
-    @Test fun savedListAndArchivedHistorySurviveDatabaseReopen() = runBlocking {
+    @Test fun savedTopicsAndSessionResultSurviveDatabaseReopen() = runBlocking {
         val name = "topic-list-${java.util.UUID.randomUUID()}.db"
         var stored = TrackerDatabase.open(context, name)
         try {

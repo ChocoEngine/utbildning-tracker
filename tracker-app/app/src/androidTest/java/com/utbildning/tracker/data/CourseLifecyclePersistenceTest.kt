@@ -14,10 +14,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MvpScenarioTest {
+class CourseLifecyclePersistenceTest {
     @Test fun homeworkLecturesPracticeAndSelfStudySurviveEditingReopenAndLifecycle() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        val databaseName = "mvp-scenario.db"
+        val databaseName = "course-lifecycle-persistence.db"
         context.deleteDatabase(databaseName)
         var db = TrackerDatabase.open(context, databaseName)
         var timestamp = Instant.parse("2026-09-28T10:00:00Z").toEpochMilli()

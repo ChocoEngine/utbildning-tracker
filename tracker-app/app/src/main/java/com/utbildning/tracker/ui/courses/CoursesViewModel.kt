@@ -36,7 +36,6 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     var showAll by mutableStateOf(false)
     var busy by mutableStateOf(false); private set
     var error by mutableStateOf<String?>(null); private set
-    var deleteCategory by mutableStateOf<CategoryEntity?>(null); private set
     var lifecycleAction by mutableStateOf<String?>(null); private set
     var creating by mutableStateOf(false); private set
     private val writes = Mutex()
@@ -108,6 +107,11 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     fun commitName() = commitField("name")
     fun commitCategory() = commitField("category")
     fun selectCategory(value: String) { change { it.copy(category = value) }; commitCategory() }
+    fun addCategory(value: String) = work { repository.addCategory(value) }
+    fun removeCategory(category: CategoryEntity) = work {
+        repository.deleteCategory(category.id, confirmed = true)
+        change { if (it.category.trim().equals(category.name.trim(), true)) it.copy(category = "") else it }
+    }
     fun selectColor(value: Int) { change { it.copy(color = value) }; commitField("color") }
     private fun commitField(field: String) {
         val snapshot = draft ?: return
@@ -208,16 +212,6 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
         val current = draft ?: return@work
         repository.toggleTopicCompletion(current.id ?: return@work, id)
     }
-    fun removeCategory(category: CategoryEntity, confirmed: Boolean = false) = work {
-        try { repository.deleteCategory(category.id, confirmed) }
-        catch (failure: RepositoryException) {
-            if (failure.error == RepositoryError.CATEGORY_IN_USE) { deleteCategory = category; return@work }
-            throw failure
-        }
-        change { if (it.category.trim().equals(category.name.trim(), true)) it.copy(category = "") else it }
-        deleteCategory = null
-    }
-    fun dismissCategoryDelete() { deleteCategory = null }
     private fun work(block: suspend () -> Unit) {
         pendingWrites++; busy = true
         viewModelScope.launch {

@@ -74,10 +74,7 @@ class CourseDraftRecreationTest {
         compose.onNodeWithTag("course_category").performTextReplacement("New category")
         click("course_continue")
         compose.waitUntil(5_000) { original?.draft?.id != null }
-        click("course_category_open")
-        waitForTag("course_category")
-        compose.onNodeWithTag("course_category").assertTextContains("New category")
-        compose.onNodeWithText(compose.activity.getString(R.string.topics_apply)).performClick()
+        compose.onNodeWithTag("course_category_value").assertTextContains("New category")
         click("topics_edit")
         compose.waitUntil(5_000) { compose.onAllNodesWithTag("topics_input").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("topics_input").performTextReplacement("Pointers\nArrays")
@@ -110,8 +107,12 @@ class CourseDraftRecreationTest {
         click("course_category_open")
         waitForTag("course_category")
         compose.onNodeWithTag("course_category").performTextReplacement("Background category")
-        assertStoredWhileStopped { runBlocking { repository.getCourseDetails(course.id)?.category?.name == "Background category" } }
-        compose.onNodeWithText(compose.activity.getString(R.string.topics_apply)).performClick()
+        assertStoredWhileStopped { runBlocking { repository.getCourseDetails(course.id)?.category == null } }
+        click("category_add")
+        compose.waitUntil(5_000) { runBlocking { repository.observeCategories().first() }.any { it.name == "Background category" } }
+        val category = runBlocking { repository.observeCategories().first() }.single { it.name == "Background category" }
+        compose.selectCategoryOption("category_option_${category.id}")
+        compose.waitUntil(5_000) { runBlocking { repository.getCourseDetails(course.id)?.category?.name == "Background category" } }
         click("topics_edit")
         compose.onNodeWithTag("topics_input").performTextReplacement("Unapplied arrays")
         compose.activityRule.scenario.moveToState(Lifecycle.State.CREATED)

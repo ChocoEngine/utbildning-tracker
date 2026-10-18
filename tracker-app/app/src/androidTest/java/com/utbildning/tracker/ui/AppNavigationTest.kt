@@ -24,6 +24,7 @@ import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertEquals
 
@@ -94,13 +95,13 @@ class AppNavigationTest {
             openSchedule()
             compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
             compose.onNodeWithTag("back").performClick()
-            assert(runBlocking { repository.getSchedule(course.id) == null })
+            assertTrue(runBlocking { repository.getSchedule(course.id) == null })
             openSchedule()
             compose.onNodeWithTag("schedule_day_1").performScrollTo().performClick()
             compose.onNodeWithTag("schedule_save").performClick()
             compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
             val countBeforeRestart = runBlocking { repository.observeSessions().first().count { it.courseId == course.id } }
-            assert(countBeforeRestart > 0)
+            assertTrue(countBeforeRestart > 0)
             scenario!!.recreate()
             compose.waitUntil(10_000) { runCatching { runBlocking { repository.getSchedule(course.id) != null } }.getOrDefault(false) }
             runBlocking { repository.synchronize() }
@@ -194,7 +195,7 @@ class AppNavigationTest {
     }
 
     @Test
-    fun existingScheduledCourseWithoutScheduleCanBeConfigured() {
+    fun existingCourseWithoutTopicsCanBeScheduled() {
         val repository = AppContainer.repository(context)
         val course = runBlocking {
             repository.createCourse("Existing schedule flow ${System.currentTimeMillis()}", repository.availableColors().first())
@@ -208,17 +209,17 @@ class AppNavigationTest {
             compose.onNodeWithTag("schedule_day_2").performScrollTo().performClick()
             compose.onNodeWithTag("schedule_save").performClick()
             compose.waitUntil(10_000) { runBlocking { repository.getSchedule(course.id) != null } }
-            assert(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
+            assertTrue(runBlocking { repository.observeSessions().first().any { it.courseId == course.id } })
         } finally {
             closeActivity()
             runBlocking { repository.deleteCourse(course.id) }
         }
     }
 
-    @Test fun unscheduledCourseCanCancelEnableAndEditThroughPencil() {
+    @Test fun unscheduledCourseCanCancelEnableAndEditThroughCalendarButton() {
         val repository = AppContainer.repository(context)
         val course = runBlocking {
-            repository.createCourse("Mode flow ${System.currentTimeMillis()}", repository.availableColors().first(), topics = listOf("C basics"))
+            repository.createCourse("Schedule flow ${System.currentTimeMillis()}", repository.availableColors().first(), topics = listOf("C basics"))
         }
         launch()
         try {

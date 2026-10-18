@@ -1,0 +1,44 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:processDebugNavigationResources
+> Task :app:generateDebugResValues
+> Task :app:compileDebugNavigationResources
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:mergeDebugResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebugUnitTest
+> Task :app:javaPreCompileDebug
+> Task :app:processDebugResources
+> Task :app:kspDebugKotlin
+
+> Task :app:compileDebugKotlin
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/backup/BackupArchive.kt:199:91 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Long'.
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/backup/BackupArchive.kt:202:51 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Long'.
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/backup/BackupArchive.kt:202:98 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Long'.
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/backup/BackupArchive.kt:213:25 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Long'.
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/notifications/ReminderScheduler.kt:138:38 'fun addAction(p0: Int, p1: CharSequence!, p2: PendingIntent!): Notification.Builder!' is deprecated. Deprecated in Java.
+w: file:///Users/alxshvarts/svenska/utbildning_tracker/tracker-app/app/src/main/java/com/utbildning/tracker/notifications/ReminderScheduler.kt:139:38 'fun addAction(p0: Int, p1: CharSequence!, p2: PendingIntent!): Notification.Builder!' is deprecated. Deprecated in Java.
+
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:kspDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:copyRoomSchemas NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+> Task :app:testDebugUnitTest
+
+BUILD SUCCESSFUL in 16s
+26 actionable tasks: 26 executed

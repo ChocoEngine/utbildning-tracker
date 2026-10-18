@@ -13,7 +13,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 /** Default run checks recovery idempotence. Explicit phases allow a real adb reboot between runs. */
-class RecoveryProbeTest {
+class ReminderRecoveryTest {
     @Test fun recoveryAndPermissionIndependence() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val repository = AppContainer.repository(context)

@@ -47,7 +47,7 @@ class TrackerRepositoryTest {
         assertTrue(dao.observeTopics(course.id).first().filter { it.isCompleted }.isEmpty())
     }
 
-    @Test fun invalidInputLeavesNoCourseCategoryOrColorReservation() = runBlocking {
+    @Test fun invalidInputLeavesNoCourseCategoryOrOccupiedColor() = runBlocking {
         rejects(RepositoryError.EMPTY_NAME) { repository.createCourse(" \n ", 0, "New") }
         for (color in listOf(-1, 10)) {
             rejects(RepositoryError.INVALID_COLOR) { repository.createCourse("C", color, "New") }
@@ -91,6 +91,34 @@ class TrackerRepositoryTest {
         assertEquals(2, repository.observeCategories().first().size)
     }
 
+    @Test fun addingCategoryDoesNotAssignItAndIsIdempotent() = runBlocking {
+        val course = repository.createCourse("C", 0)
+        val added = repository.addCategory(" Новая категория ")
+        val repeated = repository.addCategory("новая категория")
+
+        assertEquals(added.id, repeated.id)
+        assertEquals("Новая категория", added.name)
+        assertNull(repository.getCourseDetails(course.id)?.category)
+        assertEquals(listOf(added), repository.observeCategories().first())
+    }
+
+    @Test fun categoryNameIsLimitedToTwentyUnicodeCodePoints() = runBlocking {
+        val twentyEmoji = "😀".repeat(20)
+        val course = repository.createCourse("C", 0, twentyEmoji)
+        assertEquals(twentyEmoji, repository.getCourseDetails(course.id)?.category?.name)
+
+        rejects(RepositoryError.CATEGORY_NAME_TOO_LONG) {
+            repository.updateCourse(course.id, "C", 0, "😀".repeat(21))
+        }
+        rejects(RepositoryError.CATEGORY_NAME_TOO_LONG) {
+            repository.createCourse("Long category", 1, "A".repeat(21))
+        }
+        rejects(RepositoryError.CATEGORY_NAME_TOO_LONG) {
+            repository.renameCategory(requireNotNull(course.categoryId), "A".repeat(21))
+        }
+        assertEquals(twentyEmoji, repository.getCourseDetails(course.id)?.category?.name)
+    }
+
     @Test fun explicitCategoryRenamePreservesLinksAndRejectsConflicts() = runBlocking {
         val first = repository.createCourse("C", 0, "Учёба")
         val second = repository.createCourse("Практика", 1, "Учёба")
@@ -120,7 +148,7 @@ class TrackerRepositoryTest {
         assertEquals(10, repository.observeCourses().first().count { !it.isCompleted })
     }
 
-    @Test fun failedEditPreservesOriginalCourseCategoryAndReservation() = runBlocking {
+    @Test fun failedEditPreservesOriginalCourseCategoryAndColor() = runBlocking {
         val first = repository.createCourse("C", 0, "Original")
         repository.createCourse("Other", 1)
         rejects(RepositoryError.COLOR_UNAVAILABLE) { repository.updateCourse(first.id, "Changed", 1, "New") }
@@ -132,7 +160,7 @@ class TrackerRepositoryTest {
         assertEquals(listOf(0) + (2..9).toList(), repository.availableColors(first.id))
     }
 
-    @Test fun editMovesReservationAndPreservesProgressWithCurrentCourseMetadata() = runBlocking {
+    @Test fun editChangesOccupiedColorAndPreservesProgressWithCurrentCourseMetadata() = runBlocking {
         val course = repository.createCourse("C", 0, topics = listOf("Pointers"))
         val topic = dao.getTopics(course.id).single()
         val session = SessionEntity("session", course.id, 20, 600, "C", 0, 100, 100, result = SessionResult.DONE)
