@@ -7,6 +7,7 @@
     <string name="schedule_add_end">Add end time</string>
     <string name="schedule_remove_end">Remove end time</string>
     <string name="schedule_until">Course end date</string>
+    <string name="schedule_time">Time</string>
     <string name="schedule_choose_date">Choose end date</string>
     <string name="schedule_clear_date">Remove end date</string>
     <string name="schedule_next_day">Next day</string>

@@ -100,6 +100,30 @@ class ScheduleScreenTest {
         compose.runOnIdle { assertNull(saved); assertEquals(3, calls) }
     }
 
+    @Test fun endDatePickerDisablesPastDatesAndAllowsTodayAndFuture() {
+        val today = LocalDate.of(2026, 10, 15)
+        var saved: Long? = null
+        var calls = 0
+        compose.setContent { TrackerTheme { ScheduleContent(
+            initialEnd = today.minusDays(1).toEpochDay(), today = today,
+            onSave = { _, date -> saved = date; calls++ },
+        ) } }
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.runOnIdle { assertEquals(0, calls) }
+        compose.onNodeWithTag("schedule_date").performClick()
+        compose.onNodeWithTag("schedule_date_apply").assertIsNotEnabled()
+        compose.onNode(hasText("14", substring = true) and hasClickAction()).assertIsNotEnabled()
+        compose.onNode(hasText("15", substring = true) and hasClickAction()).assertIsEnabled().performClick()
+        compose.onNodeWithTag("schedule_date_apply").assertIsEnabled().performClick()
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.runOnIdle { assertEquals(today.toEpochDay(), saved); assertEquals(1, calls) }
+        compose.onNodeWithTag("schedule_date").performClick()
+        compose.onNode(hasText("16", substring = true) and hasClickAction()).assertIsEnabled().performClick()
+        compose.onNodeWithTag("schedule_date_apply").performClick()
+        compose.onNodeWithTag("schedule_save").performClick()
+        compose.runOnIdle { assertEquals(today.plusDays(1).toEpochDay(), saved); assertEquals(2, calls) }
+    }
+
     @Test fun noWeekdaysAndNoDateSavesUnscheduledAndSelectingDayEnablesSchedule() {
         var saved: List<WeeklyRule>? = null
         compose.setContent { TrackerTheme { ScheduleContent(onSave = { rules, _ -> saved = rules }) } }

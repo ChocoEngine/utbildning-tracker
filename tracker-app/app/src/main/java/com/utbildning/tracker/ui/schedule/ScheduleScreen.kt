@@ -119,11 +119,13 @@ internal fun ScheduleContent(
                     TextButton(onClick = { endDate = null }, enabled = !readOnly && !saving, modifier = Modifier.testTag("schedule_clear_date")) { Text(stringResource(R.string.schedule_clear_date)) }
                 }
             }
-            HorizontalDivider()
+            HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.outline)
+            Text(stringResource(R.string.schedule_time), style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 12.dp))
         }
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)) {
             for (index in 0..6) {
-                Column {
+                Column(verticalArrangement = Arrangement.spacedBy((-12).dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy((-5).dp)) {
                         Checkbox(days[index], onCheckedChange = { checked -> days = days.copyOf().also { it[index] = checked } },
                             enabled = !readOnly && !saving, modifier = Modifier.testTag("schedule_day_${index + 1}"))
@@ -181,8 +183,8 @@ internal fun ScheduleContent(
                             }
                         }
                     }
-                    HorizontalDivider()
                 }
+                HorizontalDivider()
             }
             if (invalid || error) Text(stringResource(if (error) R.string.schedule_failed else R.string.schedule_invalid), color = MaterialTheme.colorScheme.error)
         }
@@ -192,11 +194,27 @@ internal fun ScheduleContent(
         }) { Text(stringResource(R.string.schedule_save)) }
     }
     if (dateDialog) {
-        val picker = rememberDatePickerState(initialSelectedDateMillis = endDate?.let { LocalDate.ofEpochDay(it).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli() })
+        val selectableDates = remember(today) {
+            object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+                    Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneOffset.UTC).toLocalDate() >= today
+
+                override fun isSelectableYear(year: Int): Boolean = year >= today.year
+            }
+        }
+        val picker = rememberDatePickerState(
+            initialSelectedDateMillis = endDate?.let { LocalDate.ofEpochDay(it).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli() },
+            selectableDates = selectableDates,
+        )
+        val selectedDate = picker.selectedDateMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate()
+        }
         DatePickerDialog(onDismissRequest = { dateDialog = false }, confirmButton = {
-            TextButton(onClick = {
-                picker.selectedDateMillis?.let { endDate = Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate().toEpochDay() }
-                dateDialog = false
+            TextButton(enabled = selectedDate != null && selectedDate >= today, onClick = {
+                if (selectedDate != null && selectedDate >= today) {
+                    endDate = selectedDate.toEpochDay()
+                    dateDialog = false
+                }
             }, modifier = Modifier.testTag("schedule_date_apply")) { Text(stringResource(R.string.schedule_save)) }
         }, dismissButton = { TextButton(onClick = { dateDialog = false }, modifier = Modifier.testTag("schedule_date_cancel")) { Text(stringResource(R.string.schedule_cancel)) } }) { DatePicker(picker) }
     }

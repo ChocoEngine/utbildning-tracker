@@ -7,6 +7,7 @@
     <string name="schedule_add_end">Добавить окончание</string>
     <string name="schedule_remove_end">Убрать окончание</string>
     <string name="schedule_until">Дата завершения курса</string>
+    <string name="schedule_time">Время</string>
     <string name="schedule_choose_date">Выбрать конечную дату</string>
     <string name="schedule_clear_date">Убрать конечную дату</string>
     <string name="schedule_next_day">Следующий день</string>

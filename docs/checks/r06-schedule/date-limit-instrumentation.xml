@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.utbildning.tracker.ui.ScheduleScreenTest" tests="12" failures="0" errors="0" skipped="0" time="12.744" timestamp="2026-10-18T18:42:16" hostname="localhost">
+  <properties>
+    <property name="device" value="ScheduleReturnFix(AVD) - 16" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="addingEndNearMidnightSuggestsEndOfDay" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="4.39" />
+  <testcase name="endDateWithoutWeekdaysCanBeSavedAndCleared" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.88" />
+  <testcase name="savedInstanceRestorationRetainsChangedDaysAndClearedDate" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.848" />
+  <testcase name="dateDialogCancelPreservesDateApplyKeepsSelectionAndClearRemovesLimit" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="1.153" />
+  <testcase name="repositoryChangesRefreshWarningsInOpenScreen" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.383" />
+  <testcase name="noWeekdaysAndNoDateSavesUnscheduledAndSelectingDayEnablesSchedule" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.59" />
+  <testcase name="defaultHourWarnsAndUncheckingDayRemovesWarning" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.359" />
+  <testcase name="addingEndSuggestsHourButCancelKeepsItAbsent" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.89" />
+  <testcase name="overnightWarningDisappearsAfterRemovingEndAndDoesNotBlockSaving" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.678" />
+  <testcase name="endDatePickerDisablesPastDatesAndAllowsTodayAndFuture" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="1.313" />
+  <testcase name="completedCourseScheduleIsReadOnly" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.335" />
+  <testcase name="customTuesdayAndSaturdayTimesArePassedToSaveUnchanged" classname="com.utbildning.tracker.ui.ScheduleScreenTest" time="0.416" />
+</testsuite>
