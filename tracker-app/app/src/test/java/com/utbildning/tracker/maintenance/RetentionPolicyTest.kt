@@ -4,6 +4,8 @@ import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -11,6 +13,23 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RetentionPolicyTest {
+    @Test
+    fun retainedDatesMatchElapsedLocalDaysAcrossMonthAndYearBoundaries() {
+        val seed = 20261024
+        val random = Random(seed)
+        repeat(250) { case ->
+            val today = LocalDate.of(2022, 1, 1).plusDays(random.nextInt(1800).toLong())
+            val days = random.nextInt(RetentionPolicy.MIN_DAYS, RetentionPolicy.MAX_DAYS + 1)
+            val session = today.plusDays(random.nextInt(-3700, 31).toLong())
+            val policy = RetentionPolicy(days)
+            val age = ChronoUnit.DAYS.between(session, today)
+            assertEquals("seed=$seed case=$case today=$today session=$session days=$days age=$age",
+                age > days, policy.shouldDelete(session, today))
+            assertEquals("seed=$seed case=$case today=$today days=$days boundary", false,
+                policy.shouldDelete(today.minusDays(days.toLong()), today))
+        }
+    }
+
     @Test
     fun boundaryDayIsKeptAndOnlyEarlierSessionsAreDeleted() {
         val policy = RetentionPolicy(30)

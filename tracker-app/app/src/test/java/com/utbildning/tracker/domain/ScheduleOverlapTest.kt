@@ -68,8 +68,9 @@ class ScheduleOverlapTest {
     }
 
     @Test fun boundedWeeklyCalculationMatchesExplicitCalendarIntervals() {
-        val random = kotlin.random.Random(20261001)
-        repeat(1000) {
+        val seed = 20261001
+        val random = kotlin.random.Random(seed)
+        repeat(1000) { case ->
             fun rule(): WeeklyRule {
                 val start = random.nextInt(48) * 30
                 return WeeklyRule(random.nextInt(1, 8), start, if (random.nextBoolean()) null else random.nextInt(48) * 30)
@@ -77,9 +78,9 @@ class ScheduleOverlapTest {
             val draft = rule()
             val other = rule()
             val from = monday.plusDays(random.nextInt(14).toLong())
-            val through = from.plusDays(random.nextInt(15).toLong())
+            val through = from.plusDays(random.nextInt(400).toLong())
             val otherFrom = monday.minusDays(7).plusDays(random.nextInt(28).toLong())
-            val otherThrough = otherFrom.plusDays(random.nextInt(15).toLong())
+            val otherThrough = otherFrom.plusDays(random.nextInt(400).toLong())
             fun intervals(rule: WeeklyRule, start: LocalDate, end: LocalDate): List<Pair<Long, Long>> {
                 val result = mutableListOf<Pair<Long, Long>>()
                 var date = start
@@ -98,7 +99,7 @@ class ScheduleOverlapTest {
                 intervals(other, otherFrom, otherThrough).any { b -> maxOf(a.first, b.first) < minOf(a.second, b.second) }
             }
             val actual = ScheduleOverlaps.find(draft, from, through, listOf(occupied(other, otherFrom, otherThrough))).isNotEmpty()
-            assertEquals("draft=$draft other=$other dates=$from..$through / $otherFrom..$otherThrough", expected, actual)
+            assertEquals("seed=$seed case=$case draft=$draft other=$other dates=$from..$through / $otherFrom..$otherThrough", expected, actual)
         }
     }
 }

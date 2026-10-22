@@ -3,11 +3,39 @@ package com.utbildning.tracker.domain
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import kotlin.random.Random
 import org.junit.Assert.*
 import org.junit.Test
 
 class ScheduleGeneratorTest {
     private fun date(value: String) = LocalDate.parse(value)
+
+    @Test fun generatedDatesMatchDayByDayCalendarAcrossMonthsAndYears() {
+        val seed = 20261022
+        val random = Random(seed)
+        repeat(250) { case ->
+            val start = date("2022-01-01").plusDays(random.nextInt(1800).toLong())
+            val end = if (random.nextBoolean()) null else start.plusDays(random.nextInt(400).toLong())
+            val from = start.minusDays(random.nextInt(45).toLong()).plusDays(random.nextInt(90).toLong())
+            val through = from.plusDays(random.nextInt(400).toLong())
+            val weekdays = (1..7).filter { random.nextBoolean() }
+            val rules = weekdays.map { WeeklyRule(it, random.nextInt(1440), if (random.nextBoolean()) null else random.nextInt(1440)) }
+            val expected = mutableListOf<ScheduledOccurrence>()
+            var day = from
+            while (day <= through) {
+                if (day >= start && (end == null || day <= end)) {
+                    rules.firstOrNull { it.dayOfWeek == day.dayOfWeek.value }?.let {
+                        expected += ScheduledOccurrence(day, it.startMinute, it.endMinute)
+                    }
+                }
+                day = day.plusDays(1)
+            }
+            val actual = ScheduleGenerator.generate(start, end, rules.reversed(), from, through)
+            val input = "seed=$seed case=$case start=$start end=$end window=$from..$through rules=$rules"
+            assertEquals(input, expected, actual)
+            assertEquals(input, actual.size, actual.map { it.date }.toSet().size)
+        }
+    }
 
     @Test fun differentTimesAndInclusiveBoundariesAcrossYear() {
         val rules = listOf(WeeklyRule(2, 1140), WeeklyRule(6, 660))
