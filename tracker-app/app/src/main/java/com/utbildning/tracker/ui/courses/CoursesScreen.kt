@@ -251,7 +251,7 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
     onChange: ((CourseDraft) -> CourseDraft) -> Unit, onSave: () -> Unit, onCancel: () -> Unit, onApply: () -> Unit,
     onToggle: (String) -> Unit, onSchedule: (String) -> Unit = {}, onLifecycle: (String) -> Unit = {},
     onCategorySelected: (String) -> Unit = {},
-    onCategoryAdded: (String) -> Unit = {}, onCategoryDeleted: (CategoryEntity) -> Unit = {},
+    onCategoryAdded: (String, () -> Unit) -> Unit = { _, _ -> }, onCategoryDeleted: (CategoryEntity) -> Unit = {},
     onColorSelected: (Int) -> Unit = { value -> onChange { it.copy(color = value) } },
     usedCategoryIds: Set<String> = emptySet()) {
     var paletteExpanded by rememberSaveable(draft.id) { mutableStateOf(draft.color == null) }
@@ -323,6 +323,8 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             onDismiss = { focus.clearFocus(); categoryOpen = false },
             onSelect = { value -> focus.clearFocus(); onCategorySelected(value); categoryOpen = false },
             onAdd = onCategoryAdded,
+            busy = busy,
+            error = error,
             onDelete = onCategoryDeleted,
             usedCategoryIds = usedCategoryIds,
         )
@@ -556,7 +558,7 @@ private fun CategoryField(value: String, categories: List<CategoryEntity>, onCha
 
 @Composable
 private fun CategoryPickerDialog(current: String, categories: List<CategoryEntity>, onDismiss: () -> Unit,
-    onSelect: (String) -> Unit, onAdd: (String) -> Unit, onDelete: (CategoryEntity) -> Unit,
+    onSelect: (String) -> Unit, onAdd: (String, () -> Unit) -> Unit, busy: Boolean, error: String?, onDelete: (CategoryEntity) -> Unit,
     usedCategoryIds: Set<String>) {
     var newCategory by rememberSaveable { mutableStateOf("") }
     var pendingDelete by remember { mutableStateOf<CategoryEntity?>(null) }
@@ -601,15 +603,16 @@ private fun CategoryPickerDialog(current: String, categories: List<CategoryEntit
                     textStyle = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.fillMaxWidth().testTag("course_category"),
                 )
+                if (error != null) Text(errorText(error), color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.testTag("category_add_error"))
             }
         },
         confirmButton = {
             TextButton(onClick = {
                     val value = newCategory
                     focus.clearFocus()
-                    newCategory = ""
-                    onAdd(value)
-                }, enabled = newCategory.isNotBlank(),
+                    onAdd(value) { if (newCategory == value) newCategory = "" }
+                }, enabled = newCategory.isNotBlank() && !busy,
                 modifier = Modifier.testTag("category_add")) {
                 Text(stringResource(R.string.category_add))
             }

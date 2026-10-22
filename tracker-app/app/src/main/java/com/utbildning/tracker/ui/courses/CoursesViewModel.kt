@@ -107,7 +107,10 @@ internal class CoursesViewModel(private val repository: TrackerRepository) : Vie
     fun commitName() = commitField("name")
     fun commitCategory() = commitField("category")
     fun selectCategory(value: String) { change { it.copy(category = value) }; commitCategory() }
-    fun addCategory(value: String) = work { repository.addCategory(value) }
+    fun addCategory(value: String, onSuccess: () -> Unit) = work {
+        repository.addCategory(value)
+        onSuccess()
+    }
     fun removeCategory(category: CategoryEntity) = work {
         repository.deleteCategory(category.id, confirmed = true)
         change { if (it.category.trim().equals(category.name.trim(), true)) it.copy(category = "") else it }

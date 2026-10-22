@@ -15,6 +15,7 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.AnnotatedString
 import androidx.room.Room
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -453,6 +454,27 @@ class CoursesScreenTest {
         click("course_color_toggle")
         click("color_3")
         waitFor { runBlocking { repository.getCourseDetails(course.id) }?.category?.name == "Programming practice" }
+    }
+
+    @Test fun failedCategoryAddKeepsInputAndAllowsRetryWithoutSelectingIt() {
+        val course = seed()
+        show(); click("course_row_${course.id}")
+        click("course_category_open")
+        text("course_category", "Retry category")
+        database.openHelper.writableDatabase.execSQL(
+            "CREATE TRIGGER reject_category_insert BEFORE INSERT ON categories BEGIN SELECT RAISE(ABORT, 'test write failure'); END")
+        click("category_add")
+        waitForTag("category_add_error")
+        compose.onNodeWithTag("course_category").assertTextContains("Retry category")
+        assertTrue(categories().isEmpty())
+        assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
+
+        database.openHelper.writableDatabase.execSQL("DROP TRIGGER reject_category_insert")
+        click("category_add")
+        waitFor { categories().any { it.name == "Retry category" } }
+        compose.onNodeWithTag("course_category").assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")))
+        assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
     }
 
     @Test fun categoryAndColorSaveIndependentlyWithoutLosingRapidChanges() {

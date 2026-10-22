@@ -1,8 +1,8 @@
 package com.utbildning.tracker.backup
 
-import android.util.JsonReader
-import android.util.JsonToken
-import android.util.JsonWriter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 import com.utbildning.tracker.data.local.CategoryEntity
 import com.utbildning.tracker.data.local.CourseEntity
 import com.utbildning.tracker.data.local.ScheduleEntity
@@ -139,7 +139,7 @@ object BackupArchive {
 
     private fun jsonBytes(block: (JsonWriter) -> Unit): ByteArray {
         val output = ByteArrayOutputStream()
-        JsonWriter(OutputStreamWriter(output, StandardCharsets.UTF_8)).use { writer ->
+        JsonWriter(OutputStreamWriter(output, StandardCharsets.UTF_8)).apply { serializeNulls = true }.use { writer ->
             block(writer)
         }
         return output.toByteArray()
@@ -196,6 +196,9 @@ object BackupArchive {
             }
             requireEnd(json)
         }
+        // v1 is a durable import contract. When adding newer formats, keep a v1
+        // reader and its saved-fixture test; dispatch newer major versions separately.
+        // databaseSchemaVersion is diagnostic and must not gate v1 imports.
         if (format != "utbildning-tracker-backup" || major != 1L || minor == null || minor!! < 0L || payloadPath != "data.json") {
             throw BackupFormatException("Unsupported backup format")
         }

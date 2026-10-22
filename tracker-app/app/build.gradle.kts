@@ -40,6 +40,7 @@ room {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(platform(libs.androidx.compose.bom))
