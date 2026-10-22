@@ -1,8 +1,0 @@
-^D
-com.utbildning.tracker.ui.CalendarTodayScreenTest:.
-
-Time: 7.527
-
-OK (1 test)
-
-

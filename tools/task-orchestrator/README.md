@@ -5,18 +5,18 @@
 можно передать любой файл и регулярное выражение идентификаторов задач.
 Для сборки используется JDK 17, как и для Android-проекта.
 
-## Запуск для очереди F
+## Проверка очереди открытых задач
 
 Из корня репозитория:
 
 ```bash
-tracker-app/gradlew -p tools/task-orchestrator run --args="--project ../.. --plan FEATURE_PLAN.md --task-pattern F\\d+ --commit-each"
+tracker-app/gradlew -p tools/task-orchestrator run --args="--project ../.. --plan docs/OPEN_WORK.md --task-pattern [UL][0-9]+ --dry-run"
 ```
 
-Сначала рекомендуется проверить рассчитанный порядок без запуска Codex:
+Для конкретной задачи можно ограничить очередь:
 
 ```bash
-tracker-app/gradlew -p tools/task-orchestrator run --args="--project ../.. --plan FEATURE_PLAN.md --task-pattern F\\d+ --dry-run"
+tracker-app/gradlew -p tools/task-orchestrator run --args="--project ../.. --plan docs/OPEN_WORK.md --task-pattern L0[1-5] --max-tasks 1 --dry-run"
 ```
 
 По умолчанию задачи выполняются строго по порядку в плане. Новый `codex exec`

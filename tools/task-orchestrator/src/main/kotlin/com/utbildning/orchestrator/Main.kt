@@ -157,7 +157,7 @@ private fun parseOptions(args: Array<String>): CliOptions {
         kotlin.system.exitProcess(0)
     }
     var project = Path.of("").absolute().normalize()
-    var plan = "FEATURE_PLAN.md"
+    var plan = "docs/OPEN_WORK.md"
     var pattern = "[A-Za-z][A-Za-z0-9_.-]*"
     var ordering = OrderingMode.ORDERED
     var parallelism = 1
@@ -260,7 +260,7 @@ private val USAGE = """
 
     Options:
       --project DIR              Project root (default: current directory)
-      --plan FILE                Markdown plan relative to project (default: FEATURE_PLAN.md)
+      --plan FILE                Markdown plan relative to project (default: docs/OPEN_WORK.md)
       --task-pattern REGEX       Full task-id regex
       --ordering MODE            ordered | dependencies (default: ordered)
       --parallelism N            Maximum tasks in one wave (default: 1)

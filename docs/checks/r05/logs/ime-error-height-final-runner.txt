@@ -1,8 +1,0 @@
-
-com.utbildning.tracker.ui.R05EditorReviewTest:..
-
-Time: 62.626
-
-OK (2 tests)
-
-

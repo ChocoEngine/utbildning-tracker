@@ -9,7 +9,7 @@ internal val MutedInk = Color(0xFF697367)
 internal val Panel = Color(0xFFF1EFE7)
 internal val Divider = Color(0xFFE5E5D9)
 
-/** Index is the stable color ID documented in design/mockups/PALETTE.md. */
+/** Index is the stable color ID documented in docs/PRODUCT_SPEC.md. */
 val CourseColors: List<Color> = listOf(
     Color(0xFF78AC80),
     Color(0xFFDC9475),

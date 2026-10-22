@@ -1,8 +1,0 @@
-
-com.utbildning.tracker.notifications.NotificationShadeResultTest:.
-
-Time: 34.215
-
-OK (1 test)
-
-

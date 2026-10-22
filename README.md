@@ -1,19 +1,19 @@
 # Utbildning Tracker
 
-An Android app for tracking self-paced online courses. Course data stays on the device.
+Локальное Android-приложение для учёта онлайн-курсов, тем и занятий. Данные
+хранятся на устройстве. Поддерживаются русский и английский.
 
-## Features
+- [Действующее ТЗ](docs/PRODUCT_SPEC.md) — возможности и согласованные правила.
+- [Открытая работа](docs/OPEN_WORK.md) — только невыполненные задачи и проверки.
+- [Уже проверено](docs/VERIFICATION_BASELINE.md) — короткая сводка результатов и ограничений.
+- [Контракт резервной копии](docs/BACKUP_CONTRACT.md) — формат ZIP+JSON v1.
+- [Сборка и тесты](tracker-app/README.md) — окружение и команды.
 
-- Track courses, topics, weekly schedules, and completed sessions.
-- View study history in a calendar and check upcoming sessions in Today.
-- Use the app in English or Russian.
-
-## Run
-
-Open `tracker-app/` in Android Studio, or build from that directory with:
+Открыть `tracker-app/` в Android Studio или собрать из этого каталога:
 
 ```sh
 ./gradlew :app:assembleDebug
 ```
 
-Requires JDK 17 and Android SDK 36. See [tracker-app/README.md](tracker-app/README.md) for setup details.
+Нужны JDK 17 и Android SDK 36. Минимальная версия устройства — Android 13.
+Подробные исторические отчёты доступны в Git-истории.

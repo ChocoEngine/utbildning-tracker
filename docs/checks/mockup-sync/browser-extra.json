@@ -1,9 +1,0 @@
-{
-  "checks": [
-    "pointer long press name/topic",
-    "category deletion confirmation reachable",
-    "topic editor cancel",
-    "preserve completed count in simplified courses editor"
-  ],
-  "errors": []
-}

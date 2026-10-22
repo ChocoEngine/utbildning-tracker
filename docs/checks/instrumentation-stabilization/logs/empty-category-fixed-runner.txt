@@ -1,8 +1,0 @@
-^D
-com.utbildning.tracker.ui.CoursesScreenTest:.
-
-Time: 9.765
-
-OK (1 test)
-
-
