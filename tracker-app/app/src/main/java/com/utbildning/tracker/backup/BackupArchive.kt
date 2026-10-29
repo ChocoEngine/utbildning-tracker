@@ -10,11 +10,11 @@ import com.utbildning.tracker.data.local.ScheduleRuleEntity
 import com.utbildning.tracker.data.local.SessionRecord
 import com.utbildning.tracker.data.local.SessionResult
 import com.utbildning.tracker.data.local.TopicEntity
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -32,17 +32,23 @@ object BackupArchive {
     private const val MAX_DATA_BYTES = 50 * 1024 * 1024
 
     fun write(snapshot: BackupSnapshot, target: File, metadata: BackupMetadata): ValidatedBackup {
-        val data = encodeData(snapshot)
-        require(data.size <= MAX_DATA_BYTES) { "Backup data is too large" }
-        val manifest = encodeManifest(metadata, data.size, sha256(data))
+        // Measure/hash a deterministic stream first: manifest precedes data in v1 archives.
+        val digest = MessageDigest.getInstance("SHA-256")
+        val measured = BoundedOutputStream(object : OutputStream() {
+            override fun write(value: Int) { digest.update(value.toByte()) }
+            override fun write(bytes: ByteArray, offset: Int, length: Int) { digest.update(bytes, offset, length) }
+        }, MAX_DATA_BYTES.toLong())
+        writeJson(measured) { encodeData(snapshot, it) }
+        val manifest = encodeManifest(metadata, measured.count, digest.digest().hex())
         require(manifest.size <= MAX_MANIFEST_BYTES) { "Backup manifest is too large" }
-        target.outputStream().buffered().use { output ->
+        BoundedOutputStream(target.outputStream().buffered(), MAX_ARCHIVE_BYTES).use { output ->
             ZipOutputStream(output).use { zip ->
                 writeEntry(zip, "manifest.json", manifest)
-                writeEntry(zip, "data.json", data)
+                zip.putNextEntry(ZipEntry("data.json").apply { time = 0L })
+                writeJson(zip) { encodeData(snapshot, it) }
+                zip.closeEntry()
             }
         }
-        if (target.length() > MAX_ARCHIVE_BYTES) throw BackupFormatException("Backup is too large")
         return validate(target)
     }
 
@@ -50,21 +56,29 @@ object BackupArchive {
         if (!file.isFile || file.length() > MAX_ARCHIVE_BYTES) throw BackupFormatException("Invalid backup size")
         try {
             ZipFile(file).use { zip ->
+                if (zip.size() != 2) throw BackupFormatException("Backup must contain exactly two entries")
                 val entries = zip.entries().toList()
-                if (entries.size != 2 || entries.any { it.isDirectory || '/' in it.name || '\\' in it.name }) {
-                    throw BackupFormatException("Backup must contain exactly manifest.json and data.json")
-                }
-                val names = entries.map { it.name }
-                if (names.toSet() != setOf("manifest.json", "data.json") || names.size != names.toSet().size) {
+                if (entries.any { it.isDirectory } || entries.map { it.name }.toSet() != setOf("manifest.json", "data.json")) {
                     throw BackupFormatException("Unexpected or duplicate backup entry")
                 }
-                val manifestBytes = readLimited(zip.getInputStream(zip.getEntry("manifest.json")), MAX_MANIFEST_BYTES)
-                val dataBytes = readLimited(zip.getInputStream(zip.getEntry("data.json")), MAX_DATA_BYTES)
-                val manifest = parseManifest(manifestBytes)
-                if (manifest.payloadBytes != dataBytes.size.toLong() || manifest.payloadHash != sha256(dataBytes)) {
+                val manifest = parseManifest(readLimited(zip.getInputStream(zip.getEntry("manifest.json")), MAX_MANIFEST_BYTES))
+                if (manifest.payloadBytes > MAX_DATA_BYTES) throw BackupFormatException("Backup entry is too large")
+                // Verify before parsing; neither pass retains the uncompressed JSON bytes.
+                val digest = MessageDigest.getInstance("SHA-256")
+                val count = BoundedInputStream(zip.getInputStream(zip.getEntry("data.json")), MAX_DATA_BYTES.toLong()).use { input ->
+                    val buffer = ByteArray(8192)
+                    while (true) {
+                        val length = input.read(buffer)
+                        if (length < 0) break
+                        digest.update(buffer, 0, length)
+                    }
+                    input.count
+                }
+                if (manifest.payloadBytes != count || manifest.payloadHash != digest.digest().hex()) {
                     throw BackupFormatException("Backup payload checksum does not match")
                 }
-                return ValidatedBackup(manifest.metadata, parseData(dataBytes), manifest.payloadHash)
+                val snapshot = BoundedInputStream(zip.getInputStream(zip.getEntry("data.json")), MAX_DATA_BYTES.toLong()).use(::parseData)
+                return ValidatedBackup(manifest.metadata, snapshot, manifest.payloadHash)
             }
         } catch (error: BackupFormatException) {
             throw error
@@ -79,7 +93,7 @@ object BackupArchive {
         zip.closeEntry()
     }
 
-    private fun encodeManifest(metadata: BackupMetadata, payloadBytes: Int, payloadHash: String): ByteArray = jsonBytes { json ->
+    private fun encodeManifest(metadata: BackupMetadata, payloadBytes: Long, payloadHash: String): ByteArray = jsonBytes { json ->
         json.beginObject()
         json.name("format").value("utbildning-tracker-backup")
         json.name("formatVersion").beginObject().name("major").value(1).name("minor").value(0).endObject()
@@ -96,7 +110,7 @@ object BackupArchive {
         json.endObject()
     }
 
-    private fun encodeData(snapshot: BackupSnapshot): ByteArray = jsonBytes { json ->
+    private fun encodeData(snapshot: BackupSnapshot, json: JsonWriter) {
         json.beginObject()
         json.name("settings").beginObject().name("languageTag").value(snapshot.languageTag).endObject()
         json.name("categories").beginArray()
@@ -139,9 +153,7 @@ object BackupArchive {
 
     private fun jsonBytes(block: (JsonWriter) -> Unit): ByteArray {
         val output = ByteArrayOutputStream()
-        JsonWriter(OutputStreamWriter(output, StandardCharsets.UTF_8)).apply { serializeNulls = true }.use { writer ->
-            block(writer)
-        }
+        writeJson(output, block)
         return output.toByteArray()
     }
 
@@ -218,7 +230,7 @@ object BackupArchive {
         )
     }
 
-    private fun parseData(bytes: ByteArray): BackupSnapshot {
+    private fun parseData(input: InputStream): BackupSnapshot {
         var languageTag: String? = null
         var categories: List<CategoryEntity>? = null
         var courses: List<CourseEntity>? = null
@@ -227,7 +239,7 @@ object BackupArchive {
         var rules: List<ScheduleRuleEntity>? = null
         var sessions: List<SessionRecord>? = null
         try {
-            reader(bytes).use { json ->
+            reader(input).use { json ->
                 readObject(json, setOf("settings", "categories", "courses", "topics", "schedules", "scheduleRules", "sessions")) { name ->
                     when (name) {
                         "settings" -> readObject(json, setOf("languageTag")) { field -> if (field == "languageTag") languageTag = readString(json) else json.skipValue() }
@@ -374,7 +386,39 @@ object BackupArchive {
     private fun readInt(json: JsonReader): Int = readLong(json).let { if (it in Int.MIN_VALUE..Int.MAX_VALUE) it.toInt() else throw BackupFormatException("Integer is out of range") }
     private fun readNullableLong(json: JsonReader): Long? = if (json.peek() == JsonToken.NULL) { json.nextNull(); null } else readLong(json)
     private fun readNullableInt(json: JsonReader): Int? = if (json.peek() == JsonToken.NULL) { json.nextNull(); null } else readInt(json)
-    private fun reader(bytes: ByteArray) = JsonReader(InputStreamReader(ByteArrayInputStream(bytes), StandardCharsets.UTF_8)).apply { isLenient = false }
+    private fun reader(bytes: ByteArray) = reader(bytes.inputStream())
+    private fun reader(input: InputStream) = JsonReader(InputStreamReader(input, StandardCharsets.UTF_8)).apply { isLenient = false }
+
+    private fun writeJson(output: OutputStream, block: (JsonWriter) -> Unit) {
+        // Flush without closing the enclosing ZIP entry/stream.
+        val writer = JsonWriter(OutputStreamWriter(output, StandardCharsets.UTF_8)).apply { serializeNulls = true }
+        block(writer)
+        writer.flush()
+    }
+
+    private class BoundedInputStream(private val input: InputStream, private val limit: Long) : InputStream() {
+        var count = 0L; private set
+        override fun read(): Int = input.read().also { if (it >= 0) record(1) }
+        override fun read(bytes: ByteArray, offset: Int, length: Int): Int =
+            input.read(bytes, offset, length).also { if (it > 0) record(it) }
+        private fun record(length: Int) {
+            count += length
+            if (count > limit) throw BackupFormatException("Backup entry is too large")
+        }
+        override fun close() = input.close()
+    }
+
+    private class BoundedOutputStream(private val output: OutputStream, private val limit: Long) : OutputStream() {
+        var count = 0L; private set
+        override fun write(value: Int) { record(1); output.write(value) }
+        override fun write(bytes: ByteArray, offset: Int, length: Int) { record(length); output.write(bytes, offset, length) }
+        private fun record(length: Int) {
+            if (length > limit - count) throw BackupFormatException("Backup is too large")
+            count += length
+        }
+        override fun flush() = output.flush()
+        override fun close() = output.close()
+    }
     private fun requireEnd(json: JsonReader) { if (json.peek() != JsonToken.END_DOCUMENT) throw BackupFormatException("Trailing JSON content") }
 
     private fun readLimited(input: InputStream, limit: Int): ByteArray = input.use { source ->
@@ -391,6 +435,5 @@ object BackupArchive {
         output.toByteArray()
     }
 
-    private fun sha256(bytes: ByteArray): String = MessageDigest.getInstance("SHA-256")
-        .digest(bytes).joinToString("") { "%02x".format(it) }
+    private fun ByteArray.hex(): String = joinToString("") { "%02x".format(it) }
 }

@@ -160,6 +160,49 @@ class BackupArchiveJvmTest {
         }
     }
 
+    @Test fun largeOptionalPayloadValidatesWithLimitedHeap() = withFixture { fixture ->
+        withTemp { target ->
+            val original = entry(fixture, "data.json")
+            val prefix = "{\"padding\":\"".toByteArray()
+            val suffix = "\",".toByteArray() + original.drop(1).toByteArray()
+            val chunk = ByteArray(8192) { 'x'.code.toByte() }
+            val digest = MessageDigest.getInstance("SHA-256")
+            digest.update(prefix)
+            repeat(5120) { digest.update(chunk) }
+            digest.update(suffix)
+            val manifest = entry(fixture, "manifest.json").toString(Charsets.UTF_8)
+                .replace(Regex("\"bytes\":[0-9]+"), "\"bytes\":${prefix.size + 40L * 1024 * 1024 + suffix.size}")
+                .replace(Regex("\"sha256\":\"[0-9a-f]{64}\""), "\"sha256\":\"${digest.digest().joinToString("") { "%02x".format(it) }}\"")
+            ZipOutputStream(target.outputStream()).use { zip ->
+                zip.putNextEntry(ZipEntry("manifest.json")); zip.write(manifest.toByteArray()); zip.closeEntry()
+                zip.putNextEntry(ZipEntry("data.json")); zip.write(prefix)
+                repeat(5120) { zip.write(chunk) }
+                zip.write(suffix); zip.closeEntry()
+            }
+            val classpath = listOf(BackupArchive::class.java, BackupMemoryProbe::class.java,
+                kotlin.Unit::class.java, com.google.gson.stream.JsonReader::class.java)
+                .map { File(it.protectionDomain.codeSource.location.toURI()).path }.distinct().joinToString(File.pathSeparator)
+            val process = ProcessBuilder("${System.getProperty("java.home")}/bin/java", "-Xmx64m", "-cp", classpath,
+                BackupMemoryProbe::class.java.name, target.path).redirectErrorStream(true).start()
+            try {
+                org.junit.Assert.assertTrue("Memory probe timed out", process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS))
+                assertEquals(process.inputStream.bufferedReader().readText(), 0, process.exitValue())
+            } finally { process.destroyForcibly() }
+        }
+    }
+
+    @Test fun oversizedExportIsRejectedBeforeWritingArchive() = withFixture { fixture ->
+        val original = BackupArchive.validate(fixture)
+        val title = "x".repeat(1024 * 1024)
+        val topics = List(51) { TopicEntity("large-$it", "active", it, title) }
+        withTemp { target ->
+            assertThrows(BackupFormatException::class.java) {
+                BackupArchive.write(original.snapshot.copy(topics = topics), target, metadata)
+            }
+            assertEquals(0L, target.length())
+        }
+    }
+
     private fun mutateManifest(file: File, before: String, after: String) = withTemp { target ->
         val manifest = entry(file, "manifest.json").toString(Charsets.UTF_8)
         check(before in manifest)
@@ -230,5 +273,12 @@ class BackupArchiveJvmTest {
     private fun withTemp(block: (File) -> Unit) {
         val file = File.createTempFile("backup-jvm-", BackupArchive.EXTENSION)
         try { block(file) } finally { file.delete() }
+    }
+}
+
+/** Runs outside the Gradle worker so the regression has a real, small heap limit. */
+object BackupMemoryProbe {
+    @JvmStatic fun main(args: Array<String>) {
+        check(BackupArchive.validate(File(args.single())).snapshot.courses.size == 3)
     }
 }
