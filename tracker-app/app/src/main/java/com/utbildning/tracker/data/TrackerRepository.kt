@@ -110,12 +110,16 @@ class TrackerRepository(
             val currentZone = zone()
             val instant = java.time.Instant.ofEpochMilli(now())
             val today = instant.atZone(currentZone).toLocalDate()
-            val sessions = dao.getAllSessions().groupBy { it.courseId }
             dao.getReminderCourses().mapNotNull { course ->
                 val schedule = dao.getSchedule(course.id) ?: return@mapNotNull null
+                val end = schedule.endsOn ?: return@mapNotNull null
+                val first = maxOf(today.toEpochDay(), schedule.startsOn)
+                if (first > end) return@mapNotNull null
                 val rules = dao.getScheduleRules(course.id).map { WeeklyRule(it.dayOfWeek, it.startMinute, it.endMinute) }
-                val remaining = dao.getTopics(course.id).count { !it.isCompleted }
-                val records = sessions[course.id].orEmpty()
+                if (rules.isEmpty()) return@mapNotNull null
+                val remaining = dao.countRemainingTopics(course.id)
+                if (remaining == 0) return@mapNotNull null
+                val records = dao.getTopicPaceSessions(course.id, first, end)
                 val unavailable = records.filter { it.result != SessionResult.PENDING }
                     .map { LocalDate.ofEpochDay(it.date) }.toMutableSet()
                 // A pending session remains actionable all day. Do not invent a past start

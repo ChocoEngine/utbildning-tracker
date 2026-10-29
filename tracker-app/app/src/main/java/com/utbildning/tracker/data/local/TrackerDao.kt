@@ -159,6 +159,12 @@ interface TrackerDao {
     @Query("SELECT * FROM courses WHERE isCompleted = 0 AND isPaused = 0 AND (NOT EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id) OR EXISTS(SELECT 1 FROM topics WHERE courseId = courses.id AND isCompleted = 0))")
     fun observeReminderCourses(): Flow<List<CourseEntity>>
 
+    @Query("SELECT COUNT(*) FROM topics WHERE courseId = :courseId AND isCompleted = 0")
+    suspend fun countRemainingTopics(courseId: String): Int
+
+    @Query("SELECT date, result FROM sessions WHERE courseId = :courseId AND date BETWEEN :firstDate AND :lastDate")
+    suspend fun getTopicPaceSessions(courseId: String, firstDate: Long, lastDate: Long): List<TopicPaceSession>
+
     @Query("SELECT * FROM topics WHERE courseId = :courseId ORDER BY position, id")
     suspend fun getTopics(courseId: String): List<TopicEntity>
 
@@ -190,3 +196,6 @@ interface TrackerDao {
     fun observeTopics(courseId: String): Flow<List<TopicEntity>>
 
 }
+
+/** Only the fields needed by pace calculation; never load names or the complete history. */
+data class TopicPaceSession(val date: Long, val result: SessionResult)

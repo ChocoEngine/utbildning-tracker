@@ -39,4 +39,31 @@ class TopicPaceRepositoryTest {
             assertFalse(repository.observeTopicPaces().first().containsKey(course.id))
         } finally { db.close() }
     }
+    @Test fun paceQueryExcludesOldOtherCourseAndOutOfScheduleSessions() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
+        try {
+            val date = LocalDate.of(2026, 10, 6)
+            val zone = ZoneId.of("UTC")
+            val repository = TrackerRepository(db, now = { date.atTime(12, 0).atZone(zone).toInstant().toEpochMilli() }, zone = { zone })
+            val course = repository.saveCourseForm(name = "Current", colorId = 0, topicText = "One\nTwo\nThree\nFour\nFive")
+            val other = repository.saveCourseForm(name = "Other", colorId = 1)
+            val first = date.toEpochDay()
+            val end = date.plusWeeks(1).toEpochDay()
+            repository.saveInitialSchedule(course.id, listOf(WeeklyRule(2, 1140)), end)
+            val dao = db.trackerDao()
+            repeat(1000) { index ->
+                dao.insertSessionRecord(SessionRecord("history-$index", course.id, first - index - 1, 600, 1, 1, result = SessionResult.DONE))
+                dao.insertSessionRecord(SessionRecord("other-$index", other.id, first + index, 600, 1, 1, result = SessionResult.SKIPPED))
+            }
+            dao.insertSessionRecord(SessionRecord("outside", course.id, end + 1, 600, 1, 1, result = SessionResult.SKIPPED))
+            assertEquals(listOf(first, end), dao.getTopicPaceSessions(course.id, first, end).map { it.date }.sorted())
+            assertEquals(5, dao.countRemainingTopics(course.id))
+            assertEquals(3, repository.observeTopicPaces().first()[course.id])
+            val today = dao.getAllSessions().first { it.courseId == course.id && it.date == first }
+            repository.setSessionResult(today.id, SessionResult.SKIPPED)
+            assertEquals(5, repository.observeTopicPaces().first()[course.id])
+        } finally { db.close() }
+    }
+
 }
