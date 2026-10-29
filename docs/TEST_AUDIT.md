@@ -54,7 +54,7 @@ Activity: выбранный язык мог оставаться `ru`, а эт�
 | Любое число тем при DONE, SKIPPED не отмечает темы, устаревшее действие не меняет результат | `SessionResultRepositoryTest`, `SessionScreenTest`, `ReminderTest`, `NotificationShadeResultTest` |
 | Настоящий alarm, RU/EN, тело открывает занятие, действия шторки и холодный запуск | `LocalizedReminderDeliveryTest`, `ReminderNavigationTest`, `NotificationShadeResultTest` |
 | Пауза/завершение/удаление/исчерпание отменяют напоминания; один переключатель и системные разрешения | `ReminderTest`, `ReminderRecoveryTest` (обычная фаза), `SettingsRestoreUiTest` |
-| История: 365 дней по умолчанию, 1–3650/отключено, строгая граница, сохранность остальных данных | `RetentionPolicyTest`, `CalendarCleanupTest`, `RetentionSettingsTest` |
+| История: 365 дней по умолчанию, 2–3650/отключено, строгая граница, сохранность остальных данных | `RetentionPolicyTest`, `CalendarCleanupTest`, `RetentionSettingsTest` |
 | ZIP+JSON v1, совместимость, повреждения, атомарная полная замена и продолжение после прерывания | `BackupArchiveJvmTest`, `BackupArchiveTest`, `BackupSnapshotTest`, `BackupImportTest`, `SettingsRestoreUiTest` |
 | Общая папка копий, фоновые копии, ротация только своих файлов, отказ провайдера | `AutomaticBackupTest`, `SettingsRestoreUiTest`, `SafBackupFolderTest` (локальная папка, отдельный системный запуск) |
 | Язык/гайд, навигация, сохранение черновиков и данных после recreation, узкий экран и геометрия | `LanguageSettingsTest`, `AppNavigationTest`, `CourseDraftRecreationTest`, UI-проверки ниже |

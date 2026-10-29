@@ -20,7 +20,7 @@ data class RetentionPolicy(val days: Int?) {
 
     companion object {
         const val DEFAULT_DAYS = 365
-        const val MIN_DAYS = 1
+        const val MIN_DAYS = 2
         const val MAX_DAYS = 3650
 
         val Default = RetentionPolicy(DEFAULT_DAYS)
@@ -36,7 +36,8 @@ class RetentionPreferences(context: Context) {
         val stored = preferences.getInt(KEY_DAYS, RetentionPolicy.DEFAULT_DAYS)
         return when {
             stored == DISABLED -> RetentionPolicy.Disabled
-            stored in RetentionPolicy.MIN_DAYS..RetentionPolicy.MAX_DAYS -> RetentionPolicy(stored)
+            // Preserve the shortest retention when upgrading from the former one-day minimum.
+            stored in 1..RetentionPolicy.MAX_DAYS -> RetentionPolicy(stored.coerceAtLeast(RetentionPolicy.MIN_DAYS))
             else -> RetentionPolicy.Default
         }
     }

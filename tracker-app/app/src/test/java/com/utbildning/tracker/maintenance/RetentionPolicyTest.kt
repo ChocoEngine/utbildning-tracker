@@ -16,8 +16,8 @@ import org.junit.Test
 class RetentionPolicyTest {
     @Test fun defaultsAndAllowedRangeMatchCalendarHistoryContract() {
         assertEquals(365, RetentionPolicy.Default.days)
-        for (days in listOf(1, 3650)) assertEquals(days, RetentionPolicy(days).days)
-        for (days in listOf(-1, 0, 3651)) {
+        for (days in listOf(2, 3650)) assertEquals(days, RetentionPolicy(days).days)
+        for (days in listOf(-1, 0, 1, 3651)) {
             assertThrows(IllegalArgumentException::class.java) { RetentionPolicy(days) }
         }
     }
@@ -54,11 +54,11 @@ class RetentionPolicyTest {
     @Test
     fun boundaryUsesCurrentLocalDateInRequestedTimeZone() {
         val clock = Clock.fixed(Instant.parse("2026-10-07T23:30:00Z"), ZoneId.of("UTC"))
-        val policy = RetentionPolicy(1)
+        val policy = RetentionPolicy(2)
 
-        assertEquals(LocalDate.of(2026, 10, 6), policy.cutoffDate(clock, ZoneId.of("UTC")))
-        assertEquals(LocalDate.of(2026, 10, 7), policy.cutoffDate(clock, ZoneId.of("Europe/Moscow")))
-        assertEquals(LocalDate.of(2026, 10, 6), policy.cutoffDate(clock, ZoneId.of("America/Los_Angeles")))
+        assertEquals(LocalDate.of(2026, 10, 5), policy.cutoffDate(clock, ZoneId.of("UTC")))
+        assertEquals(LocalDate.of(2026, 10, 6), policy.cutoffDate(clock, ZoneId.of("Europe/Moscow")))
+        assertEquals(LocalDate.of(2026, 10, 5), policy.cutoffDate(clock, ZoneId.of("America/Los_Angeles")))
     }
 
     @Test

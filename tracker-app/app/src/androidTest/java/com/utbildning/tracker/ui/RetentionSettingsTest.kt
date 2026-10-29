@@ -60,16 +60,16 @@ class RetentionSettingsTest {
         compose.onNodeWithTag("retention_current").performScrollTo().assertTextContains("365", substring = true)
 
         openEditor()
-        compose.onNodeWithTag("retention_days").performTextReplacement("0")
+        compose.onNodeWithTag("retention_days").performTextReplacement("1")
         compose.onNodeWithTag("retention_save").assertIsNotEnabled()
-        compose.onNodeWithText("Enter a whole number from 1 to 3650").assertIsDisplayed()
+        compose.onNodeWithText("Enter a whole number from 2 to 3650").assertIsDisplayed()
 
-        compose.onNodeWithTag("retention_days").performTextReplacement("30")
+        compose.onNodeWithTag("retention_days").performTextReplacement("2")
         compose.onNodeWithTag("retention_save").performClick()
         compose.onNodeWithText("Keep fewer calendar sessions?").assertIsDisplayed()
         compose.onNodeWithTag("retention_warning_confirm").performClick()
-        compose.onNodeWithTag("retention_current").assertTextContains("30", substring = true)
-        assertEquals(RetentionPolicy(30), RetentionPreferences(context).policy())
+        compose.onNodeWithTag("retention_current").assertTextContains("2 days", substring = true)
+        assertEquals(RetentionPolicy(2), RetentionPreferences(context).policy())
 
         openEditor()
         compose.onNodeWithTag("retention_days").performTextReplacement("60")
@@ -97,10 +97,17 @@ class RetentionSettingsTest {
     }
 
     @Test
+    fun formerOneDaySettingUsesNewMinimum() {
+        context.getSharedPreferences(RetentionPreferences.NAME, Context.MODE_PRIVATE)
+            .edit().putInt("days", 1).commit()
+        assertEquals(RetentionPolicy(2), RetentionPreferences(context).policy())
+    }
+
+    @Test
     fun retentionContractIsLocalizedInRussianAndEnglish() {
         val expected = listOf(
-            "en" to listOf("Calendar history", "365", "1–3650", "cleanup off"),
-            "ru" to listOf("История календаря", "365", "от 1 до 3650", "очистку"),
+            "en" to listOf("Calendar history", "365", "2–3650", "cleanup off"),
+            "ru" to listOf("История календаря", "365", "от 2 до 3650", "очистку"),
         )
         for ((language, fragments) in expected) {
             val localized = context.createConfigurationContext(
@@ -114,6 +121,17 @@ class RetentionSettingsTest {
             ).joinToString(" ")
             fragments.forEach { fragment ->
                 assertTrue("$language must contain $fragment: $text", text.contains(fragment, ignoreCase = true))
+            }
+            val dayForms = if (language == "ru") listOf(
+                2 to "дня", 3 to "дня", 4 to "дня", 5 to "дней",
+                11 to "дней", 12 to "дней", 14 to "дней", 21 to "день",
+                22 to "дня", 25 to "дней", 101 to "день", 111 to "дней",
+                112 to "дней", 114 to "дней", 121 to "день", 122 to "дня", 3650 to "дней",
+            ) else listOf(1 to "day", 2 to "days", 12 to "days", 21 to "days", 3650 to "days")
+            val prefix = if (language == "ru") "История занятий хранится" else "Session history is kept for"
+            dayForms.forEach { (days, form) ->
+                assertEquals("$language quantity=$days", "$prefix $days $form",
+                    localized.resources.getQuantityString(R.plurals.retention_current, days, days))
             }
         }
     }

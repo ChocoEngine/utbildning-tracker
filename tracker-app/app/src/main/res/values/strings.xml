@@ -12,15 +12,18 @@
     <string name="language_russian">Русский</string>
     <string name="language_english">English</string>
     <string name="retention_title">Calendar history</string>
-    <string name="retention_current">Session history is kept for %1$d days</string>
+    <plurals name="retention_current">
+        <item quantity="one">Session history is kept for %1$d day</item>
+        <item quantity="other">Session history is kept for %1$d days</item>
+    </plurals>
     <string name="retention_disabled">Session history is kept indefinitely</string>
     <string name="retention_configure">Change history period</string>
     <string name="retention_dialog_title">How long to keep sessions</string>
-    <string name="retention_dialog_explanation">The default is 365 days. Choose 1–3650 days, or turn cleanup off to keep all sessions.</string>
+    <string name="retention_dialog_explanation">The default is 365 days. Choose 2–3650 days, or turn cleanup off to keep all sessions.</string>
     <string name="retention_cleanup_enabled">Remove old sessions</string>
     <string name="retention_days_label">Previous days to keep</string>
-    <string name="retention_range">From 1 to 3650 days</string>
-    <string name="retention_invalid">Enter a whole number from 1 to 3650</string>
+    <string name="retention_range">From 2 to 3650 days</string>
+    <string name="retention_invalid">Enter a whole number from 2 to 3650</string>
     <string name="retention_disabled_explanation">All calendar sessions will be kept until cleanup is enabled again.</string>
     <string name="retention_save">Save</string>
     <string name="retention_cancel">Cancel</string>

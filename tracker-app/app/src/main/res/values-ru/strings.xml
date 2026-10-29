@@ -12,15 +12,20 @@
     <string name="language_russian">Русский</string>
     <string name="language_english">English</string>
     <string name="retention_title">История календаря</string>
-    <string name="retention_current">История занятий хранится %1$d дней</string>
+    <plurals name="retention_current">
+        <item quantity="one">История занятий хранится %1$d день</item>
+        <item quantity="few">История занятий хранится %1$d дня</item>
+        <item quantity="many">История занятий хранится %1$d дней</item>
+        <item quantity="other">История занятий хранится %1$d дня</item>
+    </plurals>
     <string name="retention_disabled">История занятий хранится без ограничения</string>
     <string name="retention_configure">Настроить срок хранения</string>
     <string name="retention_dialog_title">Срок хранения календаря</string>
-    <string name="retention_dialog_explanation">По умолчанию — 365 дней. Выберите от 1 до 3650 дней или выключите очистку, чтобы хранить все занятия.</string>
+    <string name="retention_dialog_explanation">По умолчанию — 365 дней. Выберите от 2 до 3650 дней или выключите очистку, чтобы хранить все занятия.</string>
     <string name="retention_cleanup_enabled">Удалять старые занятия</string>
     <string name="retention_days_label">Сколько предыдущих дней хранить</string>
-    <string name="retention_range">От 1 до 3650 дней</string>
-    <string name="retention_invalid">Введите целое число от 1 до 3650</string>
+    <string name="retention_range">От 2 до 3650 дней</string>
+    <string name="retention_invalid">Введите целое число от 2 до 3650</string>
     <string name="retention_disabled_explanation">Все занятия календаря будут храниться, пока очистка снова не будет включена.</string>
     <string name="retention_save">Сохранить</string>
     <string name="retention_cancel">Отмена</string>

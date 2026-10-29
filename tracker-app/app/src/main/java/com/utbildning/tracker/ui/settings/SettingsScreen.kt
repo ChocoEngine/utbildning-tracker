@@ -58,6 +58,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -386,7 +387,7 @@ internal fun SettingsContent(
             )
             Text(
                 if (retentionPolicy.days == null) stringResource(R.string.retention_disabled)
-                else stringResource(R.string.retention_current, retentionPolicy.days),
+                else pluralStringResource(R.plurals.retention_current, retentionPolicy.days, retentionPolicy.days),
                 style = itemStyle,
                 modifier = Modifier.padding(top = 16.dp).testTag("retention_current"),
             )
