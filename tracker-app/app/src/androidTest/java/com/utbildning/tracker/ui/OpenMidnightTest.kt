@@ -21,6 +21,7 @@ import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 /** Run near 23:59 on a dedicated RTC-shifted AVD; no synthetic TIME_SET broadcast. */
+@com.utbildning.tracker.SystemScenario
 class OpenMidnightTest {
     private fun texts(node: AccessibilityNodeInfo?): List<String> = if (node == null) emptyList() else
         listOfNotNull(node.text?.toString()) + (0 until node.childCount).flatMap { texts(node.getChild(it)) }

@@ -51,7 +51,7 @@ class ScheduleOverlapTest {
             occupied(WeeklyRule(1, 1290)).copy(courseId = "second"))
         assertEquals(2, ScheduleOverlaps.find(rule, monday, null, schedules).size)
     }
-    @Test fun emulatorThursdayElevenToFiveThirtyIncludesEveningCoursesButDaytimeDoesNot() {
+    @Test fun overnightIntervalIncludesEveningCoursesButDaytimeIntervalDoesNot() {
         val thursday = LocalDate.of(2026, 10, 1)
         val schedules = listOf(
             OccupiedSchedule("landscape", "Пейзажи", thursday, null, (1..7).map { WeeklyRule(it, 540) }),

@@ -23,28 +23,6 @@ import org.junit.runner.RunWith
 class BackupArchiveTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
-    @Test fun archiveRoundTripPreservesEveryPortableField() {
-        val snapshot = fullSnapshot()
-        val file = temp("round-trip")
-        try {
-            val validated = BackupArchive.write(snapshot, file, metadata())
-            assertEquals(metadata(), validated.metadata)
-            assertEquals(
-                snapshot.copy(
-                    categories = snapshot.categories.sortedBy { it.id },
-                    courses = snapshot.courses.sortedBy { it.id },
-                    topics = snapshot.topics.sortedBy { it.id },
-                    schedules = snapshot.schedules.sortedBy { it.courseId },
-                    scheduleRules = snapshot.scheduleRules.sortedWith(compareBy({ it.courseId }, { it.dayOfWeek })),
-                    sessions = snapshot.sessions.sortedBy { it.id },
-                ),
-                validated.snapshot,
-            )
-        } finally {
-            file.delete()
-        }
-    }
-
     @Test fun copiedArchiveIsCheckedAgainstTheCompletedSource() {
         val source = temp("source")
         val verification = temp("verification")

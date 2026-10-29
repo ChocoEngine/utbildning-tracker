@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 
 /** Explicit opt-in fixture for the emulator's real app database, never normal startup. */
 @RunWith(AndroidJUnit4::class)
+@com.utbildning.tracker.EmulatorFixture
 class EmulatorDemoSeedTest {
     @Test fun keepThreeDemoCourses() = runBlocking {
         assumeTrue(InstrumentationRegistry.getArguments().getString("keepThreeDemo") == "true")

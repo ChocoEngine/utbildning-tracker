@@ -15,20 +15,20 @@ class MarkdownTaskPlanTest {
             """
                 # Plan
 
-                - [x] **F01 — Done.** Already complete.
-                - [ ] **F02 — Work.** Main description.
+                - [x] **T01 — Done.** Already complete.
+                - [ ] **T02 — Work.** Main description.
                   More detail.
-                  <!-- codex-task: depends-on=F01; parallel-safe=true -->
-                - [ ] **OTHER — Ignored.** Not an F task.
+                  <!-- codex-task: depends-on=T01; parallel-safe=true -->
+                - [ ] **OTHER — Ignored.** Does not match the selected pattern.
             """.trimIndent(),
         )
 
-        val tasks = MarkdownTaskPlan(plan, Regex("F\\d+")).read()
+        val tasks = MarkdownTaskPlan(plan, Regex("T\\d+")).read()
 
-        assertEquals(listOf("F01", "F02"), tasks.map(PlanTask::id))
+        assertEquals(listOf("T01", "T02"), tasks.map(PlanTask::id))
         assertTrue(tasks[0].completed)
         assertFalse(tasks[1].completed)
-        assertEquals(setOf("F01"), tasks[1].dependencies)
+        assertEquals(setOf("T01"), tasks[1].dependencies)
         assertTrue(tasks[1].parallelSafe)
         assertTrue(tasks[1].body.contains("More detail."))
     }

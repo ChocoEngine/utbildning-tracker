@@ -25,6 +25,7 @@ import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@com.utbildning.tracker.SystemScenario
 class OvernightAlarmDeliveryTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val repository = AppContainer.repository(context)

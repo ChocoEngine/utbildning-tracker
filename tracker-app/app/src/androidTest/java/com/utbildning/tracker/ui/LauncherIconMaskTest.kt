@@ -54,7 +54,7 @@ class LauncherIconMaskTest {
             minX >= safeInset && minY >= safeInset && maxX < size - safeInset && maxY < size - safeInset,
         )
 
-        val output = File(checkNotNull(context.getExternalFilesDir(null)), "s24-rounded-square-api33.png")
+        val output = File(checkNotNull(context.getExternalFilesDir(null)), "launcher-rounded-square.png")
         output.outputStream().use { stream ->
             check(rendered.compress(Bitmap.CompressFormat.PNG, 100, stream))
         }

@@ -11,6 +11,7 @@ import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 /** Opt-in, idempotent fixture for the dedicated acceptance emulator. */
+@com.utbildning.tracker.EmulatorFixture
 class EmulatorAcceptanceSeedTest {
     @Test fun seedAcceptanceCourses() = runBlocking {
         assumeTrue(InstrumentationRegistry.getArguments().getString("seedAcceptance") == "true")

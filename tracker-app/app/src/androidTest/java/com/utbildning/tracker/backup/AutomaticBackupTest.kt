@@ -210,34 +210,6 @@ class AutomaticBackupTest {
         }
     }
 
-    @Test fun automaticArchiveCanBeValidatedAndRestored() = runBlocking {
-        val wanted = BackupSnapshot(
-            languageTag = "en",
-            categories = emptyList(),
-            courses = listOf(CourseEntity("automatic", "Automatic", 2, 10, 20)),
-            topics = emptyList(), schedules = emptyList(), scheduleRules = emptyList(), sessions = emptyList(),
-        )
-        repository.replaceBackup(wanted, "wanted")
-        val bytes = ByteArrayOutputStream()
-        BackupExporter(context, repository).export(
-            openOutput = { bytes },
-            openInput = { ByteArrayInputStream(bytes.toByteArray()) },
-        )
-        repository.replaceBackup(
-            wanted.copy(courses = listOf(CourseEntity("old", "Old", 1, 1, 1))),
-            "old",
-        )
-        val file = File.createTempFile("automatic-restore-", BackupArchive.EXTENSION, context.cacheDir)
-        try {
-            file.writeBytes(bytes.toByteArray())
-            val importer = BackupImporter(context, repository, postRestore = {})
-            importer.restore(importer.validate(file))
-            assertEquals(wanted, repository.createBackupSnapshot("en"))
-        } finally {
-            file.delete()
-        }
-    }
-
     @Test fun manualAndAutomaticExportsDoNotWriteConcurrently() = runBlocking {
         repository.replaceBackup(
             BackupSnapshot("en", emptyList(), listOf(CourseEntity("course", "Course", 0, 1, 1)), emptyList(), emptyList(), emptyList(), emptyList()),

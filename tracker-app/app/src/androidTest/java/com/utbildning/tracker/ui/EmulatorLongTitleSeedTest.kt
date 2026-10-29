@@ -16,6 +16,7 @@ import org.junit.runner.RunWith
 
 /** Additive, idempotent fixture for checking long course names on an emulator. */
 @RunWith(AndroidJUnit4::class)
+@com.utbildning.tracker.EmulatorFixture
 class EmulatorLongTitleSeedTest {
     @Test fun addLongTitleCourse() = runBlocking {
         assumeTrue(InstrumentationRegistry.getArguments().getString("seedLongTitle") == "true")

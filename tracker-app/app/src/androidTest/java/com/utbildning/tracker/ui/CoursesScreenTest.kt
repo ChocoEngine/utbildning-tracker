@@ -15,7 +15,6 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.AnnotatedString
 import androidx.room.Room
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -472,8 +471,12 @@ class CoursesScreenTest {
         database.openHelper.writableDatabase.execSQL("DROP TRIGGER reject_category_insert")
         click("category_add")
         waitFor { categories().any { it.name == "Retry category" } }
-        compose.onNodeWithTag("course_category").assert(
-            SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")))
+        // Room can publish the new row before the UI coroutine clears the input.
+        waitFor {
+            compose.onNodeWithTag("course_category").fetchSemanticsNode()
+                .config[SemanticsProperties.EditableText].text.isEmpty()
+        }
+        assertInputText("course_category", "")
         assertNull(runBlocking { dao.getCourse(course.id) }?.categoryId)
     }
 

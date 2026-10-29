@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+    jacoco
 }
 
 android {
@@ -17,6 +18,13 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        if (!providers.gradleProperty("includeAuxiliaryTests").map(String::toBoolean).getOrElse(false)) {
+            testInstrumentationRunnerArguments["notAnnotation"] = listOf(
+                "com.utbildning.tracker.SystemScenario",
+                "com.utbildning.tracker.EmulatorFixture",
+                "com.utbildning.tracker.ScreenshotCapture",
+            ).joinToString(",")
+        }
     }
 
     buildFeatures {
@@ -28,6 +36,26 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+// JVM coverage only: Android UI, Room and system services are verified on-device.
+tasks.register<JacocoReport>("jvmCoverageReport") {
+    dependsOn("testDebugUnitTest")
+    executionData(layout.buildDirectory.file("jacoco/testDebugUnitTest.exec"))
+    classDirectories.setFrom(fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+        include("com/utbildning/tracker/domain/**")
+        include("com/utbildning/tracker/backup/BackupArchive*.class")
+        include("com/utbildning/tracker/maintenance/RetentionPolicy*.class")
+    })
+    sourceDirectories.setFrom(files("src/main/java"))
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
     }
 }
 

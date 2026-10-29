@@ -28,7 +28,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/** F17 acceptance: one data set crosses every destructive feature and two restore points. */
+/** One data set crosses course lifecycle, cleanup and two restore points. */
 @RunWith(AndroidJUnit4::class)
 class BackupLifecycleIntegrationTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
@@ -37,7 +37,7 @@ class BackupLifecycleIntegrationTest {
     private var clock = Instant.parse("2026-10-05T10:00:00Z").toEpochMilli()
 
     @Test fun backupLifecycleCleanupAndTwoRestoresSurviveDatabaseRestartWithoutDuplicates() = runBlocking {
-        val name = "f17-acceptance.db"
+        val name = "backup-lifecycle-integration.db"
         context.deleteDatabase(name)
         context.getSharedPreferences("backup_restore", Context.MODE_PRIVATE).edit().clear().commit()
         val files = mutableListOf<File>()
@@ -155,7 +155,7 @@ class BackupLifecycleIntegrationTest {
     )
 
     private fun archive(snapshot: BackupSnapshot, metadata: BackupMetadata): File =
-        File.createTempFile("f17-", BackupArchive.EXTENSION, context.cacheDir).also {
+        File.createTempFile("backup-lifecycle-", BackupArchive.EXTENSION, context.cacheDir).also {
             BackupArchive.write(snapshot, it, metadata)
             assertEquals(snapshot.sorted(), BackupArchive.validate(it).snapshot.sorted())
         }

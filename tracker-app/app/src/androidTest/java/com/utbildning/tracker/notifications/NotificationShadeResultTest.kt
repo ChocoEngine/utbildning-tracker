@@ -3,6 +3,7 @@ package com.utbildning.tracker.notifications
 import android.app.LocaleManager
 import android.app.NotificationManager
 import android.content.Context
+import android.content.res.Configuration
 import android.os.LocaleList
 import android.os.ParcelFileDescriptor
 import android.view.accessibility.AccessibilityNodeInfo
@@ -31,6 +32,7 @@ class NotificationShadeResultTest {
     private fun shell(command: String) {
         ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(command)).use { it.readBytes() }
     }
+
     private suspend fun clickSystemText(text: String, reopenNotifications: Boolean = false, notificationTitle: String? = null) {
         val deadline = System.currentTimeMillis() + 10_000
         fun find(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {
@@ -112,19 +114,19 @@ class NotificationShadeResultTest {
         try {
             for (language in listOf("ru", "en")) {
                 locales.applicationLocales = LocaleList.forLanguageTags(language)
-                val deadline = System.currentTimeMillis() + 10_000
-                while (context.resources.configuration.locales[0].language != language && System.currentTimeMillis() < deadline) delay(50)
-                assertEquals(language, context.resources.configuration.locales[0].language)
+                assertEquals(language, locales.applicationLocales.toLanguageTags())
+                // This matrix posts a question directly to test SystemUI actions. Give
+                // that fixture explicit resources; real AlarmManager/receiver language
+                // propagation is independently covered by LocalizedReminderDeliveryTest.
+                // A cached Application Context can be reconfigured when topic Activities
+                // open/close, so it is not a stable source for this fixture's language.
+                val deliveryContext = context.createConfigurationContext(
+                    Configuration(context.resources.configuration).apply {
+                        setLocales(LocaleList.forLanguageTags(language))
+                    },
+                )
                 for (yesterday in listOf(false, true)) for (withTopics in listOf(false, true)) {
                     for (result in listOf(SessionResult.DONE, SessionResult.SKIPPED)) {
-                        // Opening the topic picker recreates app resources. Force a configuration
-                        // transition before the next independent matrix case instead of relying on
-                        // a previously cached application Context.
-                        locales.applicationLocales = LocaleList.getEmptyLocaleList()
-                        locales.applicationLocales = LocaleList.forLanguageTags(language)
-                        val resourceDeadline = System.currentTimeMillis() + 10_000
-                        while (context.resources.configuration.locales[0].language != language &&
-                            System.currentTimeMillis() < resourceDeadline) delay(50)
                         val course = repo.createCourse("Shade $language $yesterday $withTopics $result", repo.availableColors().first(),
                             topics = if (withTopics) listOf("First topic", "Second topic") else emptyList())
                         try {
@@ -140,9 +142,8 @@ class NotificationShadeResultTest {
                             dao.insertSession(SessionEntity(id, course.id, date.toEpochDay(), start,
                                 course.name, course.colorId, created, created, endMinute = minute))
                             assertEquals("App language before $result ${course.name}", language, locales.applicationLocales[0].language)
-                            assertEquals("Resource language before $result ${course.name}", language, context.resources.configuration.locales[0].language)
                             val actionId = id
-                            ReminderScheduler.receive(context, now.toInstant().toEpochMilli(), repo)
+                            ReminderScheduler.receive(deliveryContext, now.toInstant().toEpochMilli(), repo)
                             val postedDeadline = System.currentTimeMillis() + 10_000
                             while (manager.activeNotifications.none { it.tag == actionId } && System.currentTimeMillis() < postedDeadline) delay(50)
                             assertTrue("Notification posted: ${course.name} $actionId", manager.activeNotifications.any { it.tag == actionId })

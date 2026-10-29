@@ -10,9 +10,18 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class RetentionPolicyTest {
+    @Test fun defaultsAndAllowedRangeMatchCalendarHistoryContract() {
+        assertEquals(365, RetentionPolicy.Default.days)
+        for (days in listOf(1, 3650)) assertEquals(days, RetentionPolicy(days).days)
+        for (days in listOf(-1, 0, 3651)) {
+            assertThrows(IllegalArgumentException::class.java) { RetentionPolicy(days) }
+        }
+    }
+
     @Test
     fun retainedDatesMatchElapsedLocalDaysAcrossMonthAndYearBoundaries() {
         val seed = 20261024

@@ -6,11 +6,11 @@ import kotlin.test.assertEquals
 class TaskSchedulerTest {
     @Test
     fun orderedModeRunsOneTaskAfterItsPredecessor() {
-        val tasks = listOf(task("F01", completed = true), task("F02"), task("F03"))
+        val tasks = listOf(task("T01", completed = true), task("T02"), task("T03"))
 
         val wave = TaskScheduler(OrderingMode.ORDERED).nextWave(tasks, parallelism = 3)
 
-        assertEquals(listOf("F02"), wave.map(PlanTask::id))
+        assertEquals(listOf("T02"), wave.map(PlanTask::id))
     }
 
     @Test

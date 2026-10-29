@@ -87,6 +87,41 @@ class BackupArchiveJvmTest {
         mutateManifest(file, "\"major\":1", "\"major\":2")
     }
 
+    @Test fun unknownRequiredFeatureIsRejected() = withFixture { file ->
+        mutateManifest(file, "\"requiredFeatures\":[]", "\"requiredFeatures\":[\"future-feature\"]")
+    }
+
+    @Test fun newerMinorAndDiagnosticDatabaseSchemaRemainReadable() = withFixture { file ->
+        val manifest = entry(file, "manifest.json").toString(Charsets.UTF_8)
+            .replace("\"minor\":0", "\"minor\":99")
+            .replace(Regex("\"databaseSchemaVersion\":[0-9]+"), "\"databaseSchemaVersion\":999")
+        withTemp { target ->
+            rewrite(file, target, manifest = manifest.toByteArray())
+            assertEquals(BackupArchive.validate(file).snapshot, BackupArchive.validate(target).snapshot)
+        }
+    }
+
+    @Test fun unknownOptionalManifestAndDataFieldsAreIgnored() = withFixture { file ->
+        withTemp { target ->
+            val manifest = entry(file, "manifest.json").toString(Charsets.UTF_8)
+            rewrite(file, target, manifest = manifest.replaceFirst("{", "{\"future\":{\"nested\":[1,true]},").toByteArray())
+            assertEquals(BackupArchive.validate(file).snapshot, BackupArchive.validate(target).snapshot)
+        }
+        mutateData(file, "{", "{\"future\":{\"nested\":[1,true]},", expectValid = true)
+    }
+
+    @Test fun duplicateKnownJsonFieldIsRejectedEvenWithMatchingChecksum() = withFixture { file ->
+        mutateData(file, "\"languageTag\":\"ru\"", "\"languageTag\":\"ru\",\"languageTag\":\"en\"")
+    }
+
+    @Test fun invalidSessionResultIsRejectedEvenWithMatchingChecksum() = withFixture { file ->
+        mutateData(file, "\"result\":\"PENDING\"", "\"result\":\"UNKNOWN\"")
+    }
+
+    @Test fun missingRequiredDataFieldIsRejectedEvenWithMatchingChecksum() = withFixture { file ->
+        mutateData(file, "\"languageTag\":\"ru\"", "\"optionalLanguage\":\"ru\"")
+    }
+
     @Test fun incorrectPayloadSizeIsRejected() = withFixture { file ->
         val manifest = entry(file, "manifest.json").toString(Charsets.UTF_8)
         val bytes = Regex("\"bytes\":([0-9]+)").find(manifest)!!.groupValues[1]
@@ -132,7 +167,7 @@ class BackupArchiveJvmTest {
         rejects(target)
     }
 
-    private fun mutateData(file: File, before: String, after: String) = withTemp { target ->
+    private fun mutateData(file: File, before: String, after: String, expectValid: Boolean = false) = withTemp { target ->
         val data = entry(file, "data.json").toString(Charsets.UTF_8)
         check(before in data)
         val altered = data.replaceFirst(before, after).toByteArray()
@@ -140,7 +175,8 @@ class BackupArchiveJvmTest {
             .replace(Regex("\"bytes\":[0-9]+"), "\"bytes\":${altered.size}")
             .replace(Regex("\"sha256\":\"[0-9a-f]{64}\""), "\"sha256\":\"${sha256(altered)}\"")
         rewrite(file, target, manifest = manifest.toByteArray(), data = altered)
-        rejects(target)
+        if (expectValid) assertEquals(BackupArchive.validate(file).snapshot, BackupArchive.validate(target).snapshot)
+        else rejects(target)
     }
 
     private fun rewrite(source: File, target: File, manifest: ByteArray = entry(source, "manifest.json"),

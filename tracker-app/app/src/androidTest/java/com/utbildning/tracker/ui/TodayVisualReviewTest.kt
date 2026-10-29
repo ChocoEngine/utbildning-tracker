@@ -31,6 +31,7 @@ import org.junit.runner.RunWith
 
 /** Review artifacts, not golden-image assertions. Uses local state and no app database/services. */
 @RunWith(AndroidJUnit4::class)
+@com.utbildning.tracker.ScreenshotCapture
 class TodayVisualReviewTest {
     @get:Rule val compose = createComposeRule()
 
