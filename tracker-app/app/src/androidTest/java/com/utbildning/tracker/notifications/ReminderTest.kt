@@ -49,6 +49,23 @@ class ReminderTest {
         manager.cancelAll()
     }
 
+    @Test fun appSwitchStopsRemindersWithoutRevokingSystemGrants() {
+        val settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val wasSet = settings.contains("reminders_enabled")
+        val previous = settings.getBoolean("reminders_enabled", true)
+        try {
+            assertTrue(ReminderScheduler.allowed(context))
+            assertTrue(settings.edit().putBoolean("reminders_enabled", false).commit())
+            assertFalse(ReminderScheduler.allowed(context))
+            assertTrue(settings.edit().putBoolean("reminders_enabled", true).commit())
+            assertTrue(ReminderScheduler.allowed(context))
+        } finally {
+            val edit = settings.edit()
+            if (wasSet) edit.putBoolean("reminders_enabled", previous) else edit.remove("reminders_enabled")
+            edit.commit()
+        }
+    }
+
     @Test fun futureSessionRegistersAlarmBeforeItsDateBecomesEditable() = runBlocking {
         val db = Room.inMemoryDatabaseBuilder(context, TrackerDatabase::class.java).build()
         val local = TrackerRepository(db)

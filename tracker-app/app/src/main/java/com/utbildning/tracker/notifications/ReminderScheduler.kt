@@ -47,7 +47,8 @@ object ReminderScheduler {
         }
     }
 
-    fun allowed(context: Context): Boolean = context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED &&
+    fun allowed(context: Context): Boolean = context.getSharedPreferences("settings", Context.MODE_PRIVATE).getBoolean("reminders_enabled", true) &&
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED &&
         context.getSystemService(NotificationManager::class.java).areNotificationsEnabled() &&
         context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
 
@@ -88,7 +89,10 @@ object ReminderScheduler {
         if (delivered != savedDelivered) {
             preferences.edit().putStringSet("delivered", delivered).apply()
         }
-        if (!allowed(context)) return
+        if (!allowed(context)) {
+            notifications.cancelAll()
+            return
+        }
         val zone = ZoneId.systemDefault()
         val now = System.currentTimeMillis()
         // A concurrent refresh at the exact event time must not cancel a due, not-yet-delivered alarm.

@@ -122,17 +122,18 @@ class SettingsRestoreUiTest {
         compose.onNodeWithText("Restore backup").performScrollTo().assertIsDisplayed()
         assertEquals(true, base.createConfigurationContext(Configuration().apply {
             setLocales(LocaleList.forLanguageTags("en"))
-        }).getString(R.string.guide_backup).contains("confirm the full replacement"))
+        }).getString(R.string.restore_confirm_message).contains("fully replaced"))
         compose.runOnIdle { language = "ru" }
         compose.onNodeWithText("Восстановление").performScrollTo().assertIsDisplayed()
         assertEquals(true, base.createConfigurationContext(Configuration().apply {
             setLocales(LocaleList.forLanguageTags("ru"))
-        }).getString(R.string.guide_backup).contains("полную замену"))
+        }).getString(R.string.restore_confirm_message).contains("полностью заменены"))
     }
 
     @Test
-    fun weeklyBackupShowsToggleDestinationSuccessAndError() {
+    fun weeklyBackupHasOneToggleAndFolderSelection() {
         var enabled = false
+        var folderOpens = 0
         compose.setContent {
             TrackerTheme {
                 SettingsContent(
@@ -141,14 +142,38 @@ class SettingsRestoreUiTest {
                     onBack = {},
                     automaticBackup = AutomaticBackupStatus(enabled, android.net.Uri.parse("content://provider/tree/backups"), 1000L, 2000L),
                     onAutomaticBackupChanged = { enabled = it },
+                    onChooseBackupDestination = { folderOpens++ },
                 )
             }
         }
 
+        compose.onNodeWithTag("automatic_backup_destination").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("backup_folder", useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithTag("automatic_backup_destination").performClick()
+        assertEquals(1, folderOpens)
         compose.onNodeWithTag("automatic_backup_switch").performScrollTo().assertIsDisplayed().performClick()
-        compose.onNodeWithTag("automatic_backup_success").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithTag("automatic_backup_error").performScrollTo().assertIsDisplayed()
         assertTrue(enabled)
+    }
+
+    @Test
+    fun remindersUseOneSwitchForBothSystemPermissions() {
+        var enabled by mutableStateOf(false)
+        compose.setContent {
+            TrackerTheme {
+                SettingsContent(
+                    selectedLanguage = "en",
+                    onLanguageSelected = {},
+                    onBack = {},
+                    remindersAllowed = enabled,
+                    onRemindersChanged = { enabled = it },
+                )
+            }
+        }
+
+        compose.onNodeWithTag("reminders_toggle").performScrollTo().performClick()
+        assertEquals(true, enabled)
+        compose.onNodeWithTag("reminders_toggle").performClick()
+        assertEquals(false, enabled)
     }
 
     @Test

@@ -79,7 +79,7 @@ class RetentionSettingsTest {
         openEditor()
         compose.onNodeWithTag("retention_enabled").performClick()
         compose.onNodeWithTag("retention_save").performClick()
-        compose.onNodeWithTag("retention_current").assertTextContains("Cleanup off", substring = true)
+        compose.onNodeWithTag("retention_current").assertTextContains("kept indefinitely", substring = true)
         assertEquals(RetentionPolicy.Disabled, RetentionPreferences(context).policy())
 
         openEditor()

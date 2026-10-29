@@ -162,10 +162,9 @@ class LanguageSettingsTest {
             repeat(2) {
                 compose.onNodeWithTag("guide_open").performScrollTo().performClick()
                 compose.onNodeWithText(localized.getString(R.string.guide_title)).assertIsDisplayed()
-                for (paragraph in listOf(R.string.guide_courses, R.string.guide_categories,
-                    R.string.guide_topics, R.string.guide_gestures, R.string.guide_schedule,
-                    R.string.guide_results, R.string.guide_calendar, R.string.guide_retention, R.string.guide_lifecycle,
-                    R.string.guide_notifications)) {
+                for (paragraph in listOf(R.string.guide_courses, R.string.guide_topics,
+                    R.string.guide_schedule, R.string.guide_results, R.string.guide_lifecycle,
+                    R.string.guide_backup)) {
                     compose.onNodeWithText(localized.getString(paragraph)).performScrollTo().assertIsDisplayed()
                 }
                 compose.onNodeWithText(localized.getString(R.string.back)).performScrollTo().performClick()
