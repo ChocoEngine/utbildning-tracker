@@ -307,3 +307,12 @@ debug/androidTest собраны. На `F17_API_36` (`emulator-5554`, API 36) н
 Команда: `:app:connectedDebugAndroidTest` с перечисленными классами в
 `-Pandroid.testInstrumentationRunnerArguments.class`. Принудительное убийство
 процесса во время копирования и облачный SAF отдельно не воспроизводились.
+
+Поверх `8cb5919` для release включены R8 и shrinkResources со стандартным
+`proguard-android-optimize.txt`. `:app:assembleRelease :app:lintRelease` на
+JDK 17 прошли. APK: 3 150 995 байт (3,01 МиБ), против 24 400 514 байт
+до shrinking (уменьшение на 87,1%). На `F17_API_36` release подписан только
+тестовым debug-ключом вне репозитория и установлен через `adb install -r`
+без очистки: холодный запуск, экран настроек и ручное сохранение копии через
+UI завершились успешно (`Backup saved`). Это smoke-проверка уменьшенного
+release, не полный release instrumentation и не пользовательская приёмка.
