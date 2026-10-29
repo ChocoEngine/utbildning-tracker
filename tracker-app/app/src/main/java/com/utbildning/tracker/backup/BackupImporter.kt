@@ -34,8 +34,7 @@ class BackupImporter(
 
     /** Copies a picker URI into private storage so validation never depends on a long-lived URI grant. */
     suspend fun validate(uri: Uri): ValidatedBackup = withContext(Dispatchers.IO) {
-        val staged = File.createTempFile("study-tracker-import-", BackupArchive.EXTENSION, app.cacheDir)
-        try {
+        BackupTemporaryFiles.withFile(app.cacheDir, "study-tracker-import-") { staged ->
             app.contentResolver.openInputStream(uri)?.use { input ->
                 staged.outputStream().buffered().use { output ->
                     val buffer = ByteArray(8192)
@@ -50,8 +49,6 @@ class BackupImporter(
                 }
             } ?: throw IOException("Backup cannot be read")
             BackupArchive.validate(staged)
-        } finally {
-            staged.delete()
         }
     }
 

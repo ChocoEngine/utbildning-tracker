@@ -44,25 +44,22 @@ class BackupExporter(
         openInput: () -> InputStream,
     ) {
         withContext(Dispatchers.IO) {
-            val archive = File.createTempFile("study-tracker-export-", BackupArchive.EXTENSION, context.cacheDir)
-            val verification = File.createTempFile("study-tracker-verify-", BackupArchive.EXTENSION, context.cacheDir)
-            try {
-                val snapshot = consistentSnapshot()
-                val app = context.packageManager.getPackageInfo(context.packageName, 0)
-                BackupArchive.write(
-                    snapshot,
-                    archive,
-                    BackupMetadata(newId(), Instant.ofEpochMilli(now()).toString(), app.longVersionCode, app.versionName.orEmpty()),
-                )
-                copyAndValidate(
-                    archive,
-                    verification,
-                    openOutput = openOutput,
-                    openInput = openInput,
-                )
-            } finally {
-                archive.delete()
-                verification.delete()
+            BackupTemporaryFiles.withFile(context.cacheDir, "study-tracker-export-") { archive ->
+                BackupTemporaryFiles.withFile(context.cacheDir, "study-tracker-verify-") { verification ->
+                    val snapshot = consistentSnapshot()
+                    val app = context.packageManager.getPackageInfo(context.packageName, 0)
+                    BackupArchive.write(
+                        snapshot,
+                        archive,
+                        BackupMetadata(newId(), Instant.ofEpochMilli(now()).toString(), app.longVersionCode, app.versionName.orEmpty()),
+                    )
+                    copyAndValidate(
+                        archive,
+                        verification,
+                        openOutput = openOutput,
+                        openInput = openInput,
+                    )
+                }
             }
         }
     }

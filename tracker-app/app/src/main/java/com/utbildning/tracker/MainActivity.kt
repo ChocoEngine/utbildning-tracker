@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import com.utbildning.tracker.notifications.ReminderScheduler
+import com.utbildning.tracker.backup.BackupTemporaryFiles
 import com.utbildning.tracker.backup.BackupImporter
 import com.utbildning.tracker.backup.AutomaticBackupManager
 import com.utbildning.tracker.maintenance.CalendarCleanupManager
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
         CalendarCleanupManager(applicationContext).reconcile()
         lifecycleScope.launch(Dispatchers.IO) {
             try {
+                BackupTemporaryFiles.cleanup(cacheDir)
                 BackupImporter(applicationContext, repository).recoverInterruptedRestore()
             } catch (cancel: CancellationException) {
                 throw cancel
