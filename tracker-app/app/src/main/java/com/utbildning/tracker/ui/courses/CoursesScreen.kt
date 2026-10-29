@@ -14,6 +14,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -136,17 +138,19 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
             }
         }
         val shown = courses.filter { showAll || !it.isCompleted }
-        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).testTag("course_list_scroll"), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-            if (shown.isEmpty()) Text(stringResource(R.string.courses_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
-            shown.groupBy { it.categoryId }.forEach { (categoryId, group) ->
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        LazyColumn(Modifier.weight(1f).fillMaxWidth().testTag("course_list_scroll")) {
+            if (shown.isEmpty()) item { Text(stringResource(R.string.courses_empty), color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            shown.groupBy { it.categoryId }.entries.forEachIndexed { groupIndex, (categoryId, group) ->
+                item(key = categoryId?.let { "category:id:$it" } ?: "category:null", contentType = "category") {
+                    Row(Modifier.padding(top = if (groupIndex == 0) 0.dp else 18.dp),
+                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Text((categories.find { it.id == categoryId }?.name ?: stringResource(R.string.course_no_category)).uppercase(locale),
                             style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 1.3.sp), color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(vertical = 6.dp).widthIn(max = LocalConfiguration.current.screenWidthDp.dp - 84.dp))
                         HorizontalDivider(Modifier.weight(1f), color = MaterialTheme.colorScheme.outlineVariant)
                     }
-                    group.sortedBy { it.isCompleted }.forEachIndexed { index, course ->
+                }
+                itemsIndexed(group.sortedBy { it.isCompleted }, key = { _, course -> "course:${course.id}" }, contentType = { _, _ -> "course" }) { index, course ->
                         Surface(onClick = { onOpen(course.id) }, modifier = Modifier.fillMaxWidth().testTag("course_row_${course.id}"), color = MaterialTheme.colorScheme.surface) {
                             Row(Modifier.heightIn(min = 76.dp).padding(vertical = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 if (course.isCompleted) Text("✓", modifier = Modifier.width(22.dp).padding(top = 3.dp))
@@ -196,7 +200,6 @@ internal fun CourseListContent(courses: List<CourseEntity>, categories: List<Cat
                             }
                         }
                         if (index < group.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                    }
                 }
             }
         }
@@ -378,8 +381,8 @@ internal fun CourseEditorContent(draft: CourseDraft, categories: List<CategoryEn
             LinearProgressIndicator(progress = { completed.size.toFloat() / total }, color = courseColor(draft.color), trackColor = courseColor(draft.color).copy(alpha = .16f), modifier = Modifier.fillMaxWidth())
         }
 
-        Column(Modifier.weight(1f).fillMaxWidth().padding(vertical = 6.dp).verticalScroll(rememberScrollState()).testTag("course_topics_scroll")) {
-            draft.topics.sortedBy { it.position }.forEachIndexed { index, topic ->
+        LazyColumn(Modifier.weight(1f).fillMaxWidth().padding(vertical = 6.dp).testTag("course_topics_scroll")) {
+            itemsIndexed(draft.topics.sortedBy { it.position }, key = { _, topic -> topic.id }) { index, topic ->
                 TopicStatusRow(
                     topic.id,
                     topic.title,

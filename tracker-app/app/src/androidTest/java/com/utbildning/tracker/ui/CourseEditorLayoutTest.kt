@@ -46,7 +46,7 @@ class CourseEditorLayoutTest {
         compose.onNodeWithTag("topics_input").assertExists()
     }
     @Test fun longTopicListScrollsWithoutMovingHeaderOrActionsAt320dp() {
-        val topics = (1..60).map { EditableTopic("topic-$it", "Topic $it", it - 1) }
+        val topics = (1..500).map { EditableTopic("topic-$it", "Topic $it", it - 1) }
         val draft = CourseDraft(id = "course", name = "C", topics = topics,
             text = topics.joinToString("\n") { it.title })
         compose.setContent {
@@ -57,7 +57,9 @@ class CourseEditorLayoutTest {
         }
         val title = compose.onNodeWithTag("course_title").fetchSemanticsNode().boundsInRoot
         val actions = compose.onNodeWithTag("course_actions").fetchSemanticsNode().boundsInRoot
-        compose.onNodeWithTag("topic_topic-60").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("topic_topic-500").assertDoesNotExist()
+        compose.onNodeWithTag("course_topics_scroll").performScrollToNode(hasTestTag("topic_topic-500"))
+        compose.onNodeWithTag("topic_topic-500").assertIsDisplayed()
         assertEquals(title, compose.onNodeWithTag("course_title").fetchSemanticsNode().boundsInRoot)
         assertEquals(actions, compose.onNodeWithTag("course_actions").fetchSemanticsNode().boundsInRoot)
         compose.onNodeWithTag("course_complete").assertIsDisplayed()

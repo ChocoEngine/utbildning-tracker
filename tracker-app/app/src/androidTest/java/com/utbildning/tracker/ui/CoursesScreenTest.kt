@@ -559,7 +559,11 @@ class CoursesScreenTest {
         val active = (0..9).map { seed(name = "C $it", color = it) }
         runBlocking { dao.insertCourse(CourseEntity("completed", "Completed", null, 1, 2, isCompleted = true, completedAt = 2)) }
         show()
-        waitFor { active.all { compose.onAllNodesWithTag("course_row_${it.id}").fetchSemanticsNodes().isNotEmpty() } }
+        waitForTag("course_row_${active.first().id}")
+        active.forEach { course ->
+            scrollTo("course_row_${course.id}")
+            compose.onNodeWithTag("course_row_${course.id}").assertIsDisplayed()
+        }
         compose.onNodeWithTag("course_add").assertDoesNotExist()
         click("courses_filter"); scrollTo("course_row_completed")
         compose.onNodeWithTag("course_row_completed").assertIsDisplayed()
@@ -723,8 +727,10 @@ class CoursesScreenTest {
         compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
     }
     private fun click(tag: String) {
-        waitForTag(tag)
-        if (!tag.startsWith("category_delete_")) scrollTo(tag)
+        val lazyRow = tag.startsWith("course_row_") || tag.startsWith("topic_")
+        if (lazyRow) waitFor { runCatching { scrollTo(tag); compose.onNodeWithTag(tag).assertIsDisplayed() }.isSuccess }
+        else waitForTag(tag)
+        if (!lazyRow && !tag.startsWith("category_delete_")) scrollTo(tag)
         compose.onNodeWithTag(tag).performClick()
     }
     private fun text(tag: String, value: String) {
@@ -734,6 +740,14 @@ class CoursesScreenTest {
 
     }
     private fun scrollTo(tag: String) {
+        if (tag.startsWith("course_row_")) {
+            compose.onNodeWithTag("course_list_scroll").performScrollToNode(hasTestTag(tag))
+            return
+        }
+        if (tag.startsWith("topic_")) {
+            compose.onNodeWithTag("course_topics_scroll").performScrollToNode(hasTestTag(tag))
+            return
+        }
         val node = compose.onNodeWithTag(tag)
         if (node.fetchSemanticsNode().parent != null) runCatching { node.performScrollTo() }
     }

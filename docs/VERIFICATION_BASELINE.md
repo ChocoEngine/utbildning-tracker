@@ -325,3 +325,22 @@ release, не полный release instrumentation и не пользовате�
 на `F17_API_36` (API 36): 4/4 без failures/skips, включая 2 000 посторонних
 записей, границы выборки, изменение результата и RU/EN-отображение.
 Это проверка результата и SQL-выборки, не замер Android heap/GC.
+
+Поверх `bfc2993` списки курсов и тем переведены на `LazyColumn` со стабильными
+ключами, группировкой курсов и прежними неподвижными действиями. На
+`F17_API_36` (API 36) прошли проверки 500 курсов/500 тем, прокрутки, открытия
+курса и долгого нажатия; RU/EN-геометрия на 320 dp и четыре свежих снимка
+просмотрены, наложений текста и процентов не обнаружено. Первый направленный
+набор: 39/40, один старый тест ожидал наличие невидимой строки в композиции.
+Хелперы адаптированы к lazy-прокрутке с сохранением проверок поведения.
+Повторный набор `CoursesScreenTest,CourseLifecycleScreenTest,AppNavigationTest`:
+46/46, 0 failures/errors/skips. Остальные десять тестов первого набора
+(`CourseListAppearanceTest`, `CourseEditorLayoutTest`,
+`CourseListGeometryReviewTest`, `CourseTopicPaceTest`) прошли.
+
+Итоговая команда на JDK 17: `:app:testDebugUnitTest :app:lintDebug
+:app:assembleRelease :app:connectedDebugAndroidTest` с тремя классами выше в
+`-Pandroid.testInstrumentationRunnerArguments.class`. JVM: 68/68 без пропусков;
+lint: 0 ошибок, 50 предупреждений; итоговый release APK: 3 150 995 байт.
+Полный R07, API 33, длительное Android heap-профилирование и приёмка на
+личных курсах этим направленным аудитом не заменяются.

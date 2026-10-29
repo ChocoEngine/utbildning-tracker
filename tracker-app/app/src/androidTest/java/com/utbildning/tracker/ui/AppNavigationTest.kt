@@ -10,6 +10,8 @@ import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performTextInput
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
@@ -262,9 +264,12 @@ class AppNavigationTest {
     private fun openCourse(id: String) {
         waitForDisplayedTag("screen_courses")
         compose.waitUntil(10_000) {
-            compose.onAllNodesWithTag("course_row_$id", useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+            runCatching {
+                compose.onNodeWithTag("course_list_scroll").performScrollToNode(hasTestTag("course_row_$id"))
+                compose.onNodeWithTag("course_row_$id", useUnmergedTree = true).assertIsDisplayed()
+            }.isSuccess
         }
-        compose.onNodeWithTag("course_row_$id", useUnmergedTree = true).performScrollTo().assertIsDisplayed().performClick()
+        compose.onNodeWithTag("course_row_$id", useUnmergedTree = true).performClick()
         compose.waitForIdle()
     }
 

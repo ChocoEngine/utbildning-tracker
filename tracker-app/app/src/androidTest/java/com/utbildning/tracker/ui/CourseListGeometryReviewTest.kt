@@ -69,7 +69,7 @@ class CourseListGeometryReviewTest {
         }
         compose.runOnIdle { longNames.value = true }
         percentages.forEachIndexed { index, percent ->
-            compose.onNodeWithTag("course_row_review-$percent").performScrollTo()
+            compose.onNodeWithTag("course_list_scroll").performScrollToNode(hasTestTag("course_row_review-$percent"))
             val titleNode = compose.onNodeWithText(names[index], useUnmergedTree = true)
             titleNode.assertIsDisplayed()
             val title = titleNode.fetchSemanticsNode()
@@ -85,7 +85,7 @@ class CourseListGeometryReviewTest {
             println("LIST_GEOMETRY language=$language percent=$percent length=${names[index].length} lines=${layouts.single().lineCount} title=${title.boundsInRoot} percentBounds=${number.boundsInRoot}")
         }
         capture(context, "${language}_long_names_bottom.png")
-        compose.onNodeWithTag("course_row_review-9").performScrollTo()
+        compose.onNodeWithTag("course_list_scroll").performScrollToNode(hasTestTag("course_row_review-9"))
         capture(context, "${language}_long_names_top.png")
     }
 

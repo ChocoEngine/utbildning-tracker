@@ -53,14 +53,18 @@ class CourseListAppearanceTest {
     }
 
     @Test fun scrollingCoursesKeepsAddAndSummaryInPlace() {
-        val courses = (0..15).map { index ->
+        var opened: String? = null
+        val courses = (0..499).map { index ->
             if (index < 8) CourseEntity("course-$index", "C $index", index, 1, 1)
             else CourseEntity("course-$index", "C $index", null, 1, 1, isCompleted = true, completedAt = 1)
         }
-        compose.setContent { TrackerTheme { Surface { CourseListContent(courses, emptyList(), emptyMap(), true, {}, {}) } } }
+        compose.setContent { TrackerTheme { Surface { CourseListContent(courses, emptyList(), emptyMap(), true, {}, { opened = it }) } } }
         val addBounds = compose.onNodeWithTag("course_add").fetchSemanticsNode().boundsInRoot
         val filterBounds = compose.onNodeWithTag("courses_filter").fetchSemanticsNode().boundsInRoot
-        compose.onNodeWithTag("course_row_course-15").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("course_row_course-499").assertDoesNotExist()
+        compose.onNodeWithTag("course_list_scroll").performScrollToNode(hasTestTag("course_row_course-499"))
+        compose.onNodeWithTag("course_row_course-499").assertIsDisplayed().performClick()
+        compose.runOnIdle { org.junit.Assert.assertEquals("course-499", opened) }
         org.junit.Assert.assertEquals(addBounds, compose.onNodeWithTag("course_add").fetchSemanticsNode().boundsInRoot)
         org.junit.Assert.assertEquals(filterBounds, compose.onNodeWithTag("courses_filter").fetchSemanticsNode().boundsInRoot)
     }
